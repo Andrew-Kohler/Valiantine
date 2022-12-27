@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Uses old input system; I'd like to try the new one on my own project
+        // Uses old input system; I'd like to try the new one on my next project
 
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
@@ -46,8 +46,10 @@ public class PlayerMovement : MonoBehaviour
             direction = "Down";
         }
 
-        Debug.Log(direction);
+        //Debug.Log(direction);
 
     }   // End of Update()
+
+
 
 }
