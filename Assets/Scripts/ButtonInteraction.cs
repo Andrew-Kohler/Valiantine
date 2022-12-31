@@ -4,17 +4,6 @@ using UnityEngine;
 
 public class ButtonInteraction : MonoBehaviour
 {
-    // While we are touching it, we want to be able to interact with it by hitting a button
-    /*private void OnCollisionStay(Collision collision)
-    {
-        if (Input.GetButtonDown("Interact"))
-        {
-            if (collision.gameObject.CompareTag("Interactable")){
-            
-                collision.gameObject.transform.Translate(0f, 1f, 0f);
-            }
-        }
-    }*/
     bool interact = false;
     Transform chest;
 
