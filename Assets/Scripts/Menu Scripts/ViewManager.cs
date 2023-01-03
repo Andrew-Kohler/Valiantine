@@ -75,7 +75,7 @@ public class ViewManager : MonoBehaviour
     // ---------------------------
     private void Awake()
     {
-        _instance = this;
+       _instance = this;
     }
 
     private void Start()

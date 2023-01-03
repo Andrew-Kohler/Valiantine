@@ -4,29 +4,33 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager _instance = new GameManager();   // Look at this again, b/c I'm pretty sure awake should be doing this?
-    //private static GameManager _instance;
+    private static GameManager _instance; // = new GameManager();   // Look at this again, b/c I'm pretty sure awake should be doing this?
 
-    private bool _isGameOver;
-    private bool _isMenu;
-    // States of interest
-    // isExplore
-    // isBattle
-    // isMenu
+    private bool _isGameOver;   // Has the player been defeated?
+    private bool _isMenu;       // Are we in a menu?
+    private bool _isTransition; // Are we in a scene transition?
+    private bool _isInteraction;// Are we in some kind of dialogue interaction (opening a chest, healing at a statue)?
+    private bool _isBattle;     // Are we in a battle?
+    // Other potential states of interest
     // isMainMenu
 
     private GameManager()
     {
         _isGameOver = false;
         _isMenu = false;
-        Debug.Log("Instance is created");
+        _isTransition = false;
+        _isInteraction = false;
+        _isBattle = false;
     }
 
     public static GameManager Instance
     {
         get {
-            /*if (_instance == null)
-                Debug.LogError("GameManager instance is null!");*/
+            if (_instance == null)
+            {
+                GameObject managerHolder = new GameObject("[Game Manager]");
+                managerHolder.AddComponent<GameManager>();
+            }
     
             return _instance; 
         }
@@ -34,6 +38,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        //DontDestroyOnLoad(this.gameObject);
     }
 
     public void GameOver(bool flag) // Setter and getter for state of player defeat
@@ -54,13 +59,20 @@ public class GameManager : MonoBehaviour
         return _isMenu;
     }
 
-    // So, player presses esc, and this sets menu to true. We have the menu check for when menu is true, and that's when it's visible
-    // It seems good practice is to manage menuing in here? Maybe I'll do that
+    public void Transition(bool flag)
+    {
+        _isTransition = flag;
+    }
 
-    // Step 1: Make a script where pressing esc toggles the menu on and off, and attatch it to the player
-    // Step 2: Go into playerMovement and make it so that when a menu is open, they can't move
-        // Step 2a: Also make it so that they can't interact with chests and stuff
-    // Step 3:
+    public bool isTransition()
+    {
+        return _isTransition;
+    }
+
+    public bool canMove()   // If we can move, nothing else should be going on
+    {
+        return !_isGameOver && !_isMenu && !_isBattle && !_isTransition && !_isInteraction;
+    }
 }
 
 

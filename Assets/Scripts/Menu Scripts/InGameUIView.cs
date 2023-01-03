@@ -13,6 +13,7 @@ public class InGameUIView : View
     {
         if (GameManager.Instance.isMenu())
         {
+            Debug.Log("We should see the menu now");
             ViewManager.Show<PlayerMenuView>(true);
         }
     }

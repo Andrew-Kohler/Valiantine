@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         
-        if (!GameManager.Instance.isMenu()) // We are only allowed to move if the menu is closed
+        if (GameManager.Instance.canMove()) // If we are allowed to move
         {
             // Uses old input system; I'd like to try the new one on my next project
             float horizontalInput = Input.GetAxis("Horizontal");
@@ -46,6 +46,10 @@ public class PlayerMovement : MonoBehaviour
             }
 
             //Debug.Log(direction);
+        }
+        else // Freezes the player if something else is going on, like entering a menu
+        {
+            rb.velocity = new Vector3(0f, 0f, 0f);
         }
 
 
