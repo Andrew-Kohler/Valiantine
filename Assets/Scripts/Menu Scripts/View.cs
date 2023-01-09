@@ -1,3 +1,10 @@
+/*
+View
+Used on:    ---
+For:    Establishes the basic methods inherent to a "View" - one GameObject holding all the components that
+        compose one distinct menu
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

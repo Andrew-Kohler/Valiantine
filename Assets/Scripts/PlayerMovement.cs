@@ -1,3 +1,9 @@
+/*
+Player Movement
+Used on:    Player
+For:    Allows for keyboard control of player while exploring
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

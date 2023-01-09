@@ -1,3 +1,9 @@
+/*
+Gateway
+Used on:    Scene transition objects ("Gateways")
+For:    When the player enters a gateway, start the proper scene transition
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

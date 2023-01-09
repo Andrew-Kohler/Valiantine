@@ -1,3 +1,9 @@
+/*
+Unfade
+Used on:    Black panel in in-game UI
+For:    Fades from black to current scene, used in scene transitions
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

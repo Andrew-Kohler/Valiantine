@@ -1,3 +1,9 @@
+/*
+Game Manager
+Used on:    ---
+For:    Manages the state of the game and tells everything else what's going on
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -59,7 +65,7 @@ public class GameManager : MonoBehaviour
         return _isMenu;
     }
 
-    public void Transition(bool flag)
+    public void Transition(bool flag)   // Getter and setter for state of a scene transition in progress
     {
         _isTransition = flag;
     }
@@ -67,6 +73,16 @@ public class GameManager : MonoBehaviour
     public bool isTransition()
     {
         return _isTransition;
+    }
+
+    public void Battle(bool flag)   // Setter and getter for if we are in battle!
+    {
+        _isBattle = flag;
+    }
+
+    public bool isBattle()
+    {
+        return _isBattle;
     }
 
     public bool canMove()   // If we can move, nothing else should be going on

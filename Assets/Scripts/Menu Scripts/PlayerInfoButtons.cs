@@ -1,3 +1,9 @@
+/*
+Player Info Buttons
+Used on:  Button  
+For:    Maps functionality to buttons in the player info tab
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

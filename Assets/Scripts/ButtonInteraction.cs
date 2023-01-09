@@ -1,3 +1,10 @@
+/*
+Button Interaction
+Used on:    Player
+For:    Allows the player to interact with certain objects by pressing a button (REWRITE W/ DISTANCE + CHANGE 
+        WHAT THIS IS APPLIED TO)
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -1,3 +1,9 @@
+/*
+Fade
+Used on:    Black panel in In-Game UI Menu
+For:    Fading the screen to black during transitions
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -1,3 +1,9 @@
+/*
+Settings Menu View
+Used on:    GameObject
+For:    Marks a game object as the main menu version of the game's settings menu
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

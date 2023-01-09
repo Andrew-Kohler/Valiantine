@@ -1,3 +1,9 @@
+/*
+Camera Follow
+Used on:    Main Camera
+For:    Tells the main camera to follow the player around the scene, within pre-defined and adjustable boundaries
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

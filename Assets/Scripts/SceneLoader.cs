@@ -1,3 +1,10 @@
+/*
+Scene Loader
+Used on:    ---
+For:    A singleton that handles how scene transitions play out and contains methods for facilitating
+        such a purpose
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

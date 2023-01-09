@@ -1,3 +1,10 @@
+/*
+Player Inventory
+Used on:    Player
+For:    Currently, only cares about the material of the player for testing purposes. Later revisions will transform it
+        into the player's inventory.
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

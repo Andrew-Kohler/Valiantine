@@ -1,3 +1,9 @@
+/*
+Player Menu View
+Used on:    GameObject
+For:    Marks a game object as the player menu opened using "esc", and sets up that menu's basic contents
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

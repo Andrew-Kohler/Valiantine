@@ -1,3 +1,9 @@
+/*
+Player Menu Toggle
+Used on:    Player
+For:    Allows the player to open and close the menu with "esc"
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

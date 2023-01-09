@@ -1,3 +1,9 @@
+/*
+In-Game UI View
+Used on:    Objects interactable by touch
+For:    Triggers an interaction when the player touches the object
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

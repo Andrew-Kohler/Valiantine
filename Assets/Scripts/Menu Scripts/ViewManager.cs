@@ -1,3 +1,9 @@
+/*
+ViewManager
+Used on:    GameObject
+For:    Defines methods inherent to a View and shows the chosen View at the start of the game
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
