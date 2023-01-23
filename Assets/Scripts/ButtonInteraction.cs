@@ -1,8 +1,7 @@
 /*
 Button Interaction
 Used on:    Player
-For:    Allows the player to interact with certain objects by pressing a button (REWRITE W/ DISTANCE + CHANGE 
-        WHAT THIS IS APPLIED TO)
+For:    Allows the player to interact with certain objects by pressing a button
 */
 
 using System.Collections;

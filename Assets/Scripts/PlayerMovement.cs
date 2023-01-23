@@ -12,8 +12,9 @@ public class PlayerMovement : MonoBehaviour
 {
     Rigidbody rb;
 
-    float movementSpeed = 10f;
-    string direction = "Right";
+    float movementSpeed = 7f;
+    float horizontalInput;
+    float verticalInput;
 
     // Start is called before the first frame update
     void Start()
@@ -24,34 +25,14 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         if (GameManager.Instance.canMove()) // If we are allowed to move
         {
             // Uses old input system; I'd like to try the new one on my next project
-            float horizontalInput = Input.GetAxis("Horizontal");
-            float verticalInput = Input.GetAxis("Vertical");
+            horizontalInput = Input.GetAxis("Horizontal");
+            verticalInput = Input.GetAxis("Vertical");
 
             rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
 
-            // Code for determining the direction the player is facing
-            if (horizontalInput > 0 && verticalInput == 0)
-            {
-                direction = "Right";
-            }
-            else if (horizontalInput < 0 && verticalInput == 0)
-            {
-                direction = "Left";
-            }
-            else if (horizontalInput == 0 && verticalInput > 0)
-            {
-                direction = "Up";
-            }
-            else if (horizontalInput == 0 && verticalInput < 0)
-            {
-                direction = "Down";
-            }
-
-            //Debug.Log(direction);
         }
         else // Freezes the player if something else is going on, like entering a menu
         {
