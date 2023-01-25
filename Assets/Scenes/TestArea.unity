@@ -403,6 +403,8 @@ GameObject:
   m_Component:
   - component: {fileID: 36373229}
   - component: {fileID: 36373230}
+  - component: {fileID: 36373231}
+  - component: {fileID: 36373232}
   m_Layer: 5
   m_Name: Battle UI
   m_TagString: Untagged
@@ -442,6 +444,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 431c7d65b068f0e40bd8c35fadc93947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!225 &36373231
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36373228}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &36373232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36373228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3990249524d2a644a8c91df970fb7e3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &37464097
@@ -498,6 +524,7 @@ GameObject:
   - component: {fileID: 39347364}
   - component: {fileID: 39347367}
   - component: {fileID: 39347368}
+  - component: {fileID: 39347369}
   m_Layer: 0
   m_Name: Enemy (Rand/Chase)
   m_TagString: Enemy
@@ -554,7 +581,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0f5c468d7978fc04997e59e734278bfd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -649,6 +676,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LVL: 1
+--- !u!114 &39347369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39347359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73701fce7f5cbb44a957a9e9e532106c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &47889962
 GameObject:
   m_ObjectHideFlags: 0
@@ -2053,6 +2092,7 @@ GameObject:
   - component: {fileID: 668637582}
   - component: {fileID: 668637581}
   - component: {fileID: 668637584}
+  - component: {fileID: 668637585}
   m_Layer: 0
   m_Name: Enemy (Static)
   m_TagString: Enemy
@@ -2152,6 +2192,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LVL: 1
+--- !u!114 &668637585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668637579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73701fce7f5cbb44a957a9e9e532106c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &679287417
 GameObject:
   m_ObjectHideFlags: 0
@@ -5123,6 +5175,7 @@ GameObject:
   - component: {fileID: 1691525563}
   - component: {fileID: 1691525564}
   - component: {fileID: 1691525565}
+  - component: {fileID: 1691525567}
   m_Layer: 0
   m_Name: Enemy (Path/Chase)
   m_TagString: Enemy
@@ -5279,6 +5332,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &1691525567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691525557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73701fce7f5cbb44a957a9e9e532106c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1860170936
 GameObject:
   m_ObjectHideFlags: 0

@@ -33,6 +33,8 @@ public class BattleManager : MonoBehaviour
     Camera cam;
     CameraFollow camController;
 
+    GameObject battleUI;
+
     private BattleManager()
     {
         battleIntro = true;
@@ -147,9 +149,21 @@ public class BattleManager : MonoBehaviour
         {
             if (enemy.name != show.name)
             {
-                enemy.SetActive(false);
+                enemy.GetComponent<FadeEnemy>().FadeOut();
+                
             }
         }
+
+        // Problem being that this just starts all the coroutines and then goes ahead and deactivates all the enemies
+
+        /*foreach (GameObject enemy in enemies)
+        {
+            if (enemy.name != show.name)
+            {
+                enemy.SetActive(false);
+
+            }
+        }*/
     }
 
     private void BattleRecoil() // Launches the player and enemy up like they recoil from each other on battle start
@@ -201,6 +215,9 @@ public class BattleManager : MonoBehaviour
         enemyRb.velocity = new Vector3(0f, 0f, 0f);
 
         ViewManager.Show<BattleUIView>(true);
+        battleUI = GameObject.Find("Battle UI");
+        battleUI.GetComponent<FadeUI>().BattleFadeIn();
+        // We wanna start the coroutine right here
 
         battleIntro = false;                        // Set battleIntro to false and battleActive to true 
         battleActive = true;
