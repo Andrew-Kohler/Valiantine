@@ -23,8 +23,10 @@ public class BattleManager : MonoBehaviour
     // Instances of all other necessary classes
     GameObject currentEnemy;
     GameObject player;
+    GameObject actInds;
     PlayerStats playerStats;
     EnemyStats enemyStats;
+    IndicatorMovement indMovement;
     Stats[] turnArray;
 
     Rigidbody playerRb;
@@ -90,7 +92,11 @@ public class BattleManager : MonoBehaviour
                     playerRb = player.GetComponent<Rigidbody>();
                     enemyRb = currentEnemy.GetComponent<Rigidbody>();
 
-                    // Correctly position the camera (currently done by just leaving it in the middle)  
+                    actInds = GameObject.Find("Action Indicators");
+                    actInds.gameObject.SetActive(true);
+                    indMovement = actInds.GetComponent<IndicatorMovement>();
+
+                    
                     HideEnemies(currentEnemy);    // Hide all other enemies
 
                     // Determine turn order
@@ -153,17 +159,6 @@ public class BattleManager : MonoBehaviour
                 
             }
         }
-
-        // Problem being that this just starts all the coroutines and then goes ahead and deactivates all the enemies
-
-        /*foreach (GameObject enemy in enemies)
-        {
-            if (enemy.name != show.name)
-            {
-                enemy.SetActive(false);
-
-            }
-        }*/
     }
 
     private void BattleRecoil() // Launches the player and enemy up like they recoil from each other on battle start

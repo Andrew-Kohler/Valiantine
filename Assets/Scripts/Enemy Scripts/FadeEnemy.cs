@@ -16,7 +16,6 @@ public class FadeEnemy : MonoBehaviour
         {
             Color objColor = this.GetComponent<Renderer>().material.color;
             float fadeAmt = objColor.a - (fadeSpeed * Time.deltaTime);
-            Debug.Log(objColor.a);
 
             objColor = new Color(objColor.r, objColor.g, objColor.b, fadeAmt);
             this.GetComponent<Renderer>().material.color = objColor;

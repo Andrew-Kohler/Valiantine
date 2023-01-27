@@ -97,13 +97,10 @@ public class CameraFollow : MonoBehaviour
     {
         battleX = camX;
         battleZ = camZ - zConstant;
-        Debug.Log(camX);
-        Debug.Log(battleZ);
     }
 
     IEnumerator DoBattlePos()
     {
-        Debug.Log("Running it");
         coruotineRun = true;
         Vector3 targetPos = new Vector3(battleX, yValue, battleZ);
         float step = .1f;
