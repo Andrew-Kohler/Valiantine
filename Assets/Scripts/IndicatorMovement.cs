@@ -22,6 +22,10 @@ public class IndicatorMovement : MonoBehaviour
     [SerializeField] float moveSpeed = .04f;
     float moveSpeed2;
 
+    [SerializeField] float rotationSpeed;
+    float rotationSpeed2;
+    float rotationStep;
+
     float horizontalInput;
     bool activeCoroutine;
     bool keepGoingCheck;
@@ -38,17 +42,23 @@ public class IndicatorMovement : MonoBehaviour
 
         activeCoroutine = false;
         keepGoingCheck = true;
+        moveSpeed2 = moveSpeed * 1.582f;
+        rotationSpeed = 360f * moveSpeed / 3.5f;
+        rotationSpeed2 = 360f * moveSpeed / 3.5f;
+        rotationStep = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        moveSpeed2 = moveSpeed * 1.582f;
-        SetRotations();
+        
+        //SetRotations();
+        SetColors();
         horizontalInput = Input.GetAxis("Horizontal");
 
         if (GameManager.Instance.isBattle() && !activeCoroutine) // TODO: We can worry about revealing these at a correct time later
         {
+            
             SetPositions();
             //SetRotations(); // TODO: Find a way to keep this enabled for everything except the front one during the coroutine
             
@@ -81,13 +91,27 @@ public class IndicatorMovement : MonoBehaviour
         indicators[3].transform.position = threePos;
     }
 
-    void SetRotations() // Ensures that the indicators are always facing the camera
+    /*void SetRotations() // Ensures that the indicators are always facing the camera
     {
         // Have the y value of each one face towards the camera
         for (int i = 0; i < 4; i++)
         {
-            indicators[i].transform.LookAt(new Vector3(indicators[i].transform.position.x, indicators[i].transform.position.y, Camera.main.transform.position.z));
-            // I still don't want it to rotate at all along x, only y - figure this out plz
+            //indicators[i].transform.LookAt(new Vector3(indicators[i].transform.position.x, indicators[i].transform.position.y, Camera.main.transform.position.z));
+        }
+    }*/
+
+    void SetColors()
+    {
+        for (int i = 0; i < indicators.Length; i++)
+        {
+            if(i != 0)
+            {
+                indicators[i].GetComponent<SpriteRenderer>().color = new Color(.7f, .7f, .7f); 
+            }
+            else
+            {
+                indicators[i].GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f);
+            }
         }
     }
 
@@ -114,6 +138,10 @@ public class IndicatorMovement : MonoBehaviour
             indicators[1].transform.position = Vector3.MoveTowards(indicators[1].transform.position, twoPos, moveSpeed);
             indicators[2].transform.position = Vector3.MoveTowards(indicators[2].transform.position, threePos, moveSpeed2);
             indicators[3].transform.position = Vector3.MoveTowards(indicators[3].transform.position, zeroPos, moveSpeed);
+
+            indicators[3].transform.rotation = Quaternion.Euler(0f, indicators[3].transform.rotation.y + rotationStep, 0f);
+            rotationStep += rotationSpeed;
+
             yield return null;
         }
 
@@ -123,6 +151,9 @@ public class IndicatorMovement : MonoBehaviour
             indicators[i + 1] = indicators[i];
         }
         indicators[0] = temp;
+
+        indicators[0].transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        rotationStep = 0f;
 
         if (keepGoingCheck)
         {
@@ -146,6 +177,10 @@ public class IndicatorMovement : MonoBehaviour
             indicators[1].transform.position = Vector3.MoveTowards(indicators[1].transform.position, zeroPos, moveSpeed2);
             indicators[2].transform.position = Vector3.MoveTowards(indicators[2].transform.position, onePos, moveSpeed);
             indicators[3].transform.position = Vector3.MoveTowards(indicators[3].transform.position, twoPos, moveSpeed2);
+
+            indicators[1].transform.rotation = Quaternion.Euler(0f, indicators[1].transform.rotation.y + rotationStep, 0f);
+            rotationStep += rotationSpeed2;
+
             yield return null;
         }
 
@@ -155,6 +190,9 @@ public class IndicatorMovement : MonoBehaviour
             indicators[i - 1] = indicators[i];
         }
         indicators[3] = temp;
+
+        indicators[0].transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        rotationStep = 0f;
 
         if (keepGoingCheck)
         {
@@ -179,14 +217,3 @@ public class IndicatorMovement : MonoBehaviour
         activeCoroutine = false;
     }
 }
-
-// Ok, so, the problem:
-// Adding a time delay just makes it so much less FUN. That's a no-go.
-// It's not a camera issue, our perspective is actually pretty aces.
-// Adding a snapback system in the most simple way just breaks things.
-
-// Let's try adding a snapback system: If at any time DURING the rotation,
-// horizontal input becomes zero, we skip ahead to the end.
-
-// Do one. Start another coroutine that waits a half-second. When it finishes, it prevents itself from being run again.
-// If horizontal input is 0, it re-enables itself. If horizontal input is 1, we are now allowed to go bananas.
