@@ -10,6 +10,8 @@ public class IndicatorMovement : MonoBehaviour
     Vector3 threePos;
 
     GameObject[] indicators;
+    SpriteRenderer[] sr;
+    WhiteIndicatorMovement flash;
 
     [SerializeField] float xOffset1 = 1.5f;
     [SerializeField] float xOffset2 = 2.5f;
@@ -26,6 +28,9 @@ public class IndicatorMovement : MonoBehaviour
     float rotationSpeed2;
     float rotationStep;
 
+    float alpha;
+    float alphaStep;
+
     float horizontalInput;
     bool activeCoroutine;
     bool keepGoingCheck;
@@ -35,9 +40,14 @@ public class IndicatorMovement : MonoBehaviour
     {
        
         indicators = new GameObject[4];
-        for(int i = 0; i < 4; i++)  // Get all of the indicator boxes within this parent
+        sr = new SpriteRenderer[4];
+        flash = GameObject.Find("Flash").GetComponent<WhiteIndicatorMovement>();
+
+        for(int i = 0; i < 4; i++)  // Get all of the indicator boxes within this parent and by default set them to be transparent
         {
             indicators[i] = this.gameObject.transform.GetChild(i).gameObject;
+            sr[i] = indicators[i].GetComponent<SpriteRenderer>();
+            sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, 0f);
         }
 
         activeCoroutine = false;
@@ -46,21 +56,21 @@ public class IndicatorMovement : MonoBehaviour
         rotationSpeed = 360f * moveSpeed / 3.5f;
         rotationSpeed2 = 360f * moveSpeed / 3.5f;
         rotationStep = 0;
+        alphaStep = flash.GetAlphaStep();
+
+        SetPositions();
+
+        enabled = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
-        //SetRotations();
         SetColors();
         horizontalInput = Input.GetAxis("Horizontal");
 
         if (GameManager.Instance.isBattle() && !activeCoroutine) // TODO: We can worry about revealing these at a correct time later
-        {
-            
+        {          
             SetPositions();
-            //SetRotations(); // TODO: Find a way to keep this enabled for everything except the front one during the coroutine
             
             if(horizontalInput > 0) // Indicates a rightward movement
             {
@@ -216,4 +226,29 @@ public class IndicatorMovement : MonoBehaviour
         }
         activeCoroutine = false;
     }
+
+    public IEnumerator DoFlashIn()
+    {
+        activeCoroutine = true;
+        flash.enabled = true;
+        StartCoroutine(flash.DoFlashOut());
+
+        alpha = 0;
+        while (alpha <= 1)
+        {
+            for (int i = 0; i < 4; i++)  // And now move them towards 1f
+            {
+                sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
+            }
+            alpha += alphaStep;
+            yield return null;
+        }
+
+        enabled = true;
+        activeCoroutine = false;
+
+        yield return null;
+    }
 }
+
+// Ok. So. Battle manager is going to call DoFlashIn, and DoFlashIn is going to call DoFlashOut.

@@ -24,9 +24,11 @@ public class BattleManager : MonoBehaviour
     GameObject currentEnemy;
     GameObject player;
     GameObject actInds;
+
     PlayerStats playerStats;
     EnemyStats enemyStats;
     IndicatorMovement indMovement;
+
     Stats[] turnArray;
 
     Rigidbody playerRb;
@@ -45,7 +47,7 @@ public class BattleManager : MonoBehaviour
         loss = false;
         activeCoroutine = false;
         currentTurn = 0;
-        
+
     }
 
     public static BattleManager Instance
@@ -75,6 +77,9 @@ public class BattleManager : MonoBehaviour
         cam = Camera.main;
         camController = cam.GetComponent<CameraFollow>();
 
+        actInds = GameObject.Find("Action Indicators");
+        indMovement = actInds.GetComponent<IndicatorMovement>();
+
     }
 
     private void Update()
@@ -92,11 +97,10 @@ public class BattleManager : MonoBehaviour
                     playerRb = player.GetComponent<Rigidbody>();
                     enemyRb = currentEnemy.GetComponent<Rigidbody>();
 
-                    actInds = GameObject.Find("Action Indicators");
-                    actInds.gameObject.SetActive(true);
-                    indMovement = actInds.GetComponent<IndicatorMovement>();
-
                     
+                    //actInds.gameObject.SetActive(true);
+                    
+
                     HideEnemies(currentEnemy);    // Hide all other enemies
 
                     // Determine turn order
@@ -120,9 +124,16 @@ public class BattleManager : MonoBehaviour
 
             else if (battleActive)  // Primary turn loop
             {
-                if (!turnArray[currentTurn].getDowned())
+                if (!turnArray[currentTurn].getDowned()) // If the current turn taker is not downed/dead
                 {
+                    if(turnArray[currentTurn].name == player.name)  // Currently we're only dealing with 1v1s, so that's how we'll code
+                    {
 
+                    }
+                    else // If not the player (an enemy)
+                    {
+
+                    }
                 }
 
             } // End of primary turn loop
@@ -212,7 +223,7 @@ public class BattleManager : MonoBehaviour
         ViewManager.Show<BattleUIView>(true);
         battleUI = GameObject.Find("Battle UI");
         battleUI.GetComponent<FadeUI>().BattleFadeIn();
-        // We wanna start the coroutine right here
+        StartCoroutine(indMovement.DoFlashIn());    // Flash our action indicators in
 
         battleIntro = false;                        // Set battleIntro to false and battleActive to true 
         battleActive = true;
