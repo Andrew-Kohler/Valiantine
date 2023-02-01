@@ -1,122 +1,70 @@
+/*
+Indicator Action
+Used on:    GameObject - Action indicator group
+For:    Control class for the action indicators in battle
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IndicatorMovement : MonoBehaviour
+public class IndicatorAction : Indicator
 {
-    Vector3 zeroPos;
-    Vector3 onePos;
-    Vector3 twoPos;
-    Vector3 threePos;
+    [SerializeField] float delay = .2f;         // 
+    [SerializeField] float moveSpeed = .04f;    // How fast the indicators move over the shorter side of the rectangle
+    float moveSpeed2;                           // How fast the indicators move over the longer side of the rectangle
 
-    GameObject[] indicators;
-    SpriteRenderer[] sr;
-    WhiteIndicatorMovement flash;
+    [SerializeField] float rotationSpeed;       // How fast a rectangle spins when it moves to the front/bottom position
+    float rotationStep;                         // The value that gets incremented by rotation speed       
 
-    [SerializeField] float xOffset1 = 1.5f;
-    [SerializeField] float xOffset2 = 2.5f;
-    [SerializeField] float yOffset1 = 4.75f;
-    [SerializeField] float yOffset2 = 5.1f;
-    [SerializeField] float yOffset3 = 5.5f;
-    [SerializeField] float zOffset = 3f;
+    float horizontalInput;                      // Horizontal input from the player
+    bool activeCoroutine;                       // Tells us if a coroutine is active so we don't try and start it every update loop
+    bool keepGoingCheck;                        // Boolean that allows us to check if the player has kept holding the horizontal input because they want to spin the indicators
 
-    [SerializeField] float delay = .2f;
-    [SerializeField] float moveSpeed = .04f;
-    float moveSpeed2;
-
-    [SerializeField] float rotationSpeed;
-    float rotationSpeed2;
-    float rotationStep;
-
-    float alpha;
-    float alphaStep;
-
-    float horizontalInput;
-    bool activeCoroutine;
-    bool keepGoingCheck;
-
-    // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
-       
-        indicators = new GameObject[4];
-        sr = new SpriteRenderer[4];
-        flash = GameObject.Find("Flash").GetComponent<WhiteIndicatorMovement>();
-
-        for(int i = 0; i < 4; i++)  // Get all of the indicator boxes within this parent and by default set them to be transparent
-        {
-            indicators[i] = this.gameObject.transform.GetChild(i).gameObject;
-            sr[i] = indicators[i].GetComponent<SpriteRenderer>();
-            sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, 0f);
-        }
-
         activeCoroutine = false;
         keepGoingCheck = true;
-        moveSpeed2 = moveSpeed * 1.582f;
-        rotationSpeed = 360f * moveSpeed / 3.5f;
-        rotationSpeed2 = 360f * moveSpeed / 3.5f;
+        moveSpeed2 = moveSpeed * 1.582f;    // The long side of the 'rectangle' the indicators form is 1.582 times longer than the short side, so to travel it in a way
+                                            // that looks proportional, indicators must travel 1.582 times as fast
+        rotationSpeed = 360f * moveSpeed / 3.5f; // Establishes rotation speed as proportional to moveSpeed so that only one full rotation occurs (that's why the 3.5 is there)
         rotationStep = 0;
-        alphaStep = flash.GetAlphaStep();
 
-        SetPositions();
-
-        enabled = false;
+        base.Start();
     }
 
+    // Update is called once per frame
     void Update()
     {
         SetColors();
         horizontalInput = Input.GetAxis("Horizontal");
 
-        if (GameManager.Instance.isBattle() && !activeCoroutine) // TODO: We can worry about revealing these at a correct time later
-        {          
+        if (GameManager.Instance.isBattle() && !activeCoroutine)
+        {
             SetPositions();
-            
-            if(horizontalInput > 0) // Indicates a rightward movement
+
+            if (horizontalInput > 0) // Indicates a rightward movement
             {
                 StartCoroutine(RightCoroutine());
             }
-            else if(horizontalInput < 0) // Indicates a leftward movement
+            else if (horizontalInput < 0) // Indicates a leftward movement
             {
                 StartCoroutine(LeftCoroutine());
             }
-            if(horizontalInput == 0)
+            if (horizontalInput == 0)
             {
                 keepGoingCheck = true;
             }
-
         }
     }
 
-    void SetPositions() // Sets the coordinate positions of the squares based on their array positions
-    {
-        zeroPos = new Vector3(this.gameObject.transform.parent.position.x + xOffset1, this.gameObject.transform.parent.position.y + yOffset1, this.gameObject.transform.parent.position.z - zOffset);
-        onePos = new Vector3(this.gameObject.transform.parent.position.x - xOffset2, this.gameObject.transform.parent.position.y + yOffset2, this.gameObject.transform.parent.position.z);
-        twoPos = new Vector3(this.gameObject.transform.parent.position.x - xOffset1, this.gameObject.transform.parent.position.y + yOffset3, this.gameObject.transform.parent.position.z + zOffset);
-        threePos = new Vector3(this.gameObject.transform.parent.position.x + xOffset2, this.gameObject.transform.parent.position.y + yOffset2, this.gameObject.transform.parent.position.z);
-
-        indicators[0].transform.position = zeroPos;
-        indicators[1].transform.position = onePos;
-        indicators[2].transform.position = twoPos;
-        indicators[3].transform.position = threePos;
-    }
-
-    /*void SetRotations() // Ensures that the indicators are always facing the camera
-    {
-        // Have the y value of each one face towards the camera
-        for (int i = 0; i < 4; i++)
-        {
-            //indicators[i].transform.LookAt(new Vector3(indicators[i].transform.position.x, indicators[i].transform.position.y, Camera.main.transform.position.z));
-        }
-    }*/
-
-    void SetColors()
+    void SetColors()    // If an indicator is in the front, it is set to its normal brightness; otherwise, it is greyed out to highlight the current selection
     {
         for (int i = 0; i < indicators.Length; i++)
         {
-            if(i != 0)
+            if (i != 0)
             {
-                indicators[i].GetComponent<SpriteRenderer>().color = new Color(.7f, .7f, .7f); 
+                indicators[i].GetComponent<SpriteRenderer>().color = new Color(.7f, .7f, .7f);
             }
             else
             {
@@ -125,7 +73,7 @@ public class IndicatorMovement : MonoBehaviour
         }
     }
 
-    public string GetLeadBox()
+    public string GetLeadBox()  // Method used by BattleManager and the Battle UI View to determine which action is being considered
     {
         if (activeCoroutine)
         {
@@ -135,7 +83,7 @@ public class IndicatorMovement : MonoBehaviour
         {
             return indicators[0].name;
         }
-        
+
     }
 
     IEnumerator LeftCoroutine() // The timed sequence which rotates the indicators a quarter-circle left
@@ -155,7 +103,7 @@ public class IndicatorMovement : MonoBehaviour
             yield return null;
         }
 
-        GameObject temp = indicators[3];    // Formally assing the indicators their new positions
+        GameObject temp = indicators[3];    // Formally assigning the indicators their new positions
         for (int i = indicators.Length - 2; i >= 0; i--)
         {
             indicators[i + 1] = indicators[i];
@@ -173,7 +121,7 @@ public class IndicatorMovement : MonoBehaviour
         {
             activeCoroutine = false;
         }
-        
+
         yield return null;
     }
 
@@ -189,7 +137,7 @@ public class IndicatorMovement : MonoBehaviour
             indicators[3].transform.position = Vector3.MoveTowards(indicators[3].transform.position, twoPos, moveSpeed2);
 
             indicators[1].transform.rotation = Quaternion.Euler(0f, indicators[1].transform.rotation.y + rotationStep, 0f);
-            rotationStep += rotationSpeed2;
+            rotationStep -= rotationSpeed;
 
             yield return null;
         }
@@ -213,14 +161,14 @@ public class IndicatorMovement : MonoBehaviour
             activeCoroutine = false;
         }
 
-        
+
         yield return null;
     }
 
     IEnumerator KeepGoingCheckCoroutine()
     {
         yield return new WaitForSeconds(delay);
-        if(horizontalInput != 0)
+        if (horizontalInput != 0)
         {
             keepGoingCheck = false;
         }
@@ -229,26 +177,27 @@ public class IndicatorMovement : MonoBehaviour
 
     public IEnumerator DoFlashIn()
     {
+        IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
+
         activeCoroutine = true;
         flash.enabled = true;
-        StartCoroutine(flash.DoFlashOut());
+        StartCoroutine(flash.DoFlashOut()); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
 
-        alpha = 0;
+        alpha = 0;              // In order to always have this coroutine flash the indicators in, reset alpha to 0
         while (alpha <= 1)
         {
-            for (int i = 0; i < 4; i++)  // And now move them towards 1f
+            for (int i = 0; i < 4; i++)  // Move the indicators towards full opacity
             {
                 sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
             alpha += alphaStep;
+            Debug.Log("Action alpha step:" + alphaStep);
             yield return null;
         }
 
-        enabled = true;
+        enabled = true; // Enable this script (for when you first enter the battle)
         activeCoroutine = false;
 
         yield return null;
     }
 }
-
-// Ok. So. Battle manager is going to call DoFlashIn, and DoFlashIn is going to call DoFlashOut.

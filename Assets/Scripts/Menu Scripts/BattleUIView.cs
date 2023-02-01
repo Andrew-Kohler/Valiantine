@@ -1,3 +1,9 @@
+/*
+Battle UI View
+Used on:    GameObject
+For:    Marks a game object as the in-game battle user interface
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,13 +13,13 @@ public class BattleUIView : View
 {
     [SerializeField] TextMeshProUGUI battleText;
     [SerializeField] GameObject actionIndicators;
-    IndicatorMovement indicatorInfo;
+    IndicatorAction indicatorInfo;
     
     public override void Initialize()
     {
         //throw new System.NotImplementedException();
         battleText.text = "And so it begins!";
-        indicatorInfo = actionIndicators.GetComponent<IndicatorMovement>();
+        indicatorInfo = actionIndicators.GetComponent<IndicatorAction>();
     }
 
     private void Update()

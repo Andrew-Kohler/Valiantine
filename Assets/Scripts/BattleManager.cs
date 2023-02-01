@@ -1,3 +1,9 @@
+/*
+Battle Manager
+Used on:    ---
+For:    Overarching manager for turns, states, and actions in battle
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,7 +33,7 @@ public class BattleManager : MonoBehaviour
 
     PlayerStats playerStats;
     EnemyStats enemyStats;
-    IndicatorMovement indMovement;
+    IndicatorAction indAction;
 
     Stats[] turnArray;
 
@@ -78,7 +84,7 @@ public class BattleManager : MonoBehaviour
         camController = cam.GetComponent<CameraFollow>();
 
         actInds = GameObject.Find("Action Indicators");
-        indMovement = actInds.GetComponent<IndicatorMovement>();
+        indAction = actInds.GetComponent<IndicatorAction>();
 
     }
 
@@ -223,7 +229,7 @@ public class BattleManager : MonoBehaviour
         ViewManager.Show<BattleUIView>(true);
         battleUI = GameObject.Find("Battle UI");
         battleUI.GetComponent<FadeUI>().BattleFadeIn();
-        StartCoroutine(indMovement.DoFlashIn());    // Flash our action indicators in
+        StartCoroutine(indAction.DoFlashIn());    // Flash our action indicators in
 
         battleIntro = false;                        // Set battleIntro to false and battleActive to true 
         battleActive = true;

@@ -2503,7 +2503,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 679152181}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5eddd865c44c3514cbf33e4c8b8d96d4, type: 3}
+  m_Script: {fileID: 11500000, guid: 6680423437491a6498374eb47ade237b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   xOffset1: 1.5
@@ -2512,9 +2512,10 @@ MonoBehaviour:
   yOffset2: 5.1
   yOffset3: 5.5
   zOffset: 3
+  alphaStep: 0.01
   delay: 0.2
   moveSpeed: 0.04
-  rotationSpeed: 1
+  rotationSpeed: 0
 --- !u!1 &679287417
 GameObject:
   m_ObjectHideFlags: 0
@@ -4494,16 +4495,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1310906393}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b05f8a219a1aa9846a77466354e04ec8, type: 3}
+  m_Script: {fileID: 11500000, guid: 9072a212fbd7e8c40adf4bfa8f720ffe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alphaStep: 0.01
   xOffset1: 1.5
   xOffset2: 2.5
   yOffset1: 4.75
   yOffset2: 5.1
   yOffset3: 5.5
   zOffset: 3
+  alphaStep: 0.01
 --- !u!1 &1332909015
 GameObject:
   m_ObjectHideFlags: 0
