@@ -43,6 +43,11 @@ public class Stats : MonoBehaviour
         }
     }
 
+    public int GetMaxHP()
+    {
+        return MaxHP;
+    }
+
     public int GetMP()  // Getter and setter for MP
     {
         return MP;
@@ -59,6 +64,11 @@ public class Stats : MonoBehaviour
         {
             MP = 0;
         }
+    }
+
+    public int GetMaxMP()
+    {
+        return MaxMP;
     }
 
     public float GetDEF()   // No setter because permanent DEF stat should never be changed outside this class

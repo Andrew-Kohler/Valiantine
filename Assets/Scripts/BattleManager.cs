@@ -21,7 +21,8 @@ public class BattleManager : MonoBehaviour
 
     private int currentTurn;
 
-    private enum activeMenu { Upper, Attack, Spell, Inventory};
+    public enum MenuStatus { Selecting, Attack, Spell, Inventory, Run, Inactive};
+    MenuStatus status;
 
     // The enemy in question
     string enemyName;
@@ -86,26 +87,23 @@ public class BattleManager : MonoBehaviour
         actInds = GameObject.Find("Action Indicators");
         indAction = actInds.GetComponent<IndicatorAction>();
 
+        status = MenuStatus.Inactive;
+        
+
     }
 
     private void Update()
     {
         if (GameManager.Instance.isBattle())
         {
-            if (battleIntro)    // The fun intro sequence that happens when the battle begins
+            if (battleIntro && !activeCoroutine)    // The fun intro sequence that happens when the battle begins
             {
-                if (!activeCoroutine)
-                {
                     // Get the instances of:
                     player = GameObject.Find("Player");                 // Player
                     playerStats = player.GetComponent<PlayerStats>();   // Player stats
                     enemyStats = currentEnemy.GetComponent<EnemyStats>(); // Enemy stats
                     playerRb = player.GetComponent<Rigidbody>();
                     enemyRb = currentEnemy.GetComponent<Rigidbody>();
-
-                    
-                    //actInds.gameObject.SetActive(true);
-                    
 
                     HideEnemies(currentEnemy);    // Hide all other enemies
 
@@ -122,19 +120,69 @@ public class BattleManager : MonoBehaviour
                         turnArray[0] = enemyStats;
                     }
                     currentTurn = 0;    // Set the current turn to 0 so the first actor goes
-                    StartCoroutine(DoBattleIntro());    // Use a coroutine to time visual elements (player motion, UI swap)
-                }
-                
-
+                    StartCoroutine(DoBattleIntro());    // Use a coroutine to time visual elements (player motion, UI swap)           
             } // End of battle intro
 
-            else if (battleActive)  // Primary turn loop
+            else if (battleActive && !activeCoroutine)  // Primary turn loop
             {
                 if (!turnArray[currentTurn].getDowned()) // If the current turn taker is not downed/dead
                 {
                     if(turnArray[currentTurn].name == player.name)  // Currently we're only dealing with 1v1s, so that's how we'll code
                     {
-
+                        if(status == MenuStatus.Inactive) // Show the action indicators
+                        {
+                            status = MenuStatus.Selecting;
+                            StartCoroutine(indAction.DoFlashIn());    // Flash our action indicators in
+                        }
+                        else if(status == MenuStatus.Selecting) // Handles all the conditionals for choosing an action
+                        {
+                            indAction.enabled = true;
+                            if (Input.GetButtonDown("Interact"))
+                            {
+                                if (indAction.GetLeadBox() == "ATK") 
+                                {
+                                    status = MenuStatus.Attack;
+                                }
+                                else if (indAction.GetLeadBox() == "SPL")
+                                {
+                                    status = MenuStatus.Spell;
+                                }
+                                else if (indAction.GetLeadBox() == "ITM")
+                                {
+                                    status = MenuStatus.Inventory;
+                                }
+                                else if (indAction.GetLeadBox() == "RUN")
+                                {
+                                    status = MenuStatus.Run;
+                                }
+                            }
+                        }
+                        else if(status == MenuStatus.Attack) // If the player has chosen to attack
+                        {
+                            indAction.enabled = false;
+                            if (Input.GetButtonDown("Cancel"))
+                            {
+                                status = MenuStatus.Selecting;
+                            }        
+                        }
+                        else if (status == MenuStatus.Spell) // If the player has chosen to cast a spell
+                        {
+                            indAction.enabled = false;
+                            StartCoroutine(indAction.DoFlashOut());
+                        }
+                        else if (status == MenuStatus.Inventory) // If the player has chosen to open the inventory
+                        {
+                            indAction.enabled = false;
+                            if (Input.GetButtonDown("Cancel"))
+                            {
+                                status = MenuStatus.Selecting;
+                            }
+                        }
+                        else if (status == MenuStatus.Run) // If the player has chosen to run
+                        {
+                            indAction.enabled = false;
+                            StartCoroutine(indAction.DoFlashOut());
+                        }
                     }
                     else // If not the player (an enemy)
                     {
@@ -162,6 +210,11 @@ public class BattleManager : MonoBehaviour
     public void SetTarget(GameObject enemy)
     {
         currentEnemy = enemy;
+    }
+
+    public MenuStatus GetPlayerStatus()
+    {
+        return status;
     }
 
     private void HideEnemies(GameObject show)
@@ -229,7 +282,6 @@ public class BattleManager : MonoBehaviour
         ViewManager.Show<BattleUIView>(true);
         battleUI = GameObject.Find("Battle UI");
         battleUI.GetComponent<FadeUI>().BattleFadeIn();
-        StartCoroutine(indAction.DoFlashIn());    // Flash our action indicators in
 
         battleIntro = false;                        // Set battleIntro to false and battleActive to true 
         battleActive = true;

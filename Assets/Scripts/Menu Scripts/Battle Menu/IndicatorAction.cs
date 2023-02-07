@@ -200,4 +200,30 @@ public class IndicatorAction : Indicator
 
         yield return null;
     }
+
+    public IEnumerator DoFlashOut()
+    {
+        IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
+
+        activeCoroutine = true;
+        flash.enabled = true;
+        StartCoroutine(flash.DoFlashOutFast()); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
+
+        alpha = 1;              // In order to always have this coroutine flash the indicators in, reset alpha to 0
+        while (alpha >= 0)
+        {
+            for (int i = 0; i < 4; i++)  // Move the indicators towards full opacity
+            {
+                sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
+            }
+            alpha -= 1;
+            Debug.Log("Action alpha step:" + alphaStep);
+            yield return null;
+        }
+
+        enabled = false; // Disable this script so that random inputs aren't moving the boxes
+        activeCoroutine = false;
+
+        yield return null;
+    }
 }

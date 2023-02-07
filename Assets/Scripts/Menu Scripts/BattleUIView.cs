@@ -13,13 +13,23 @@ public class BattleUIView : View
 {
     [SerializeField] TextMeshProUGUI battleText;
     [SerializeField] GameObject actionIndicators;
+    [SerializeField] GameObject healthBar;
+    [SerializeField] GameObject manaBar;
+    [SerializeField] GameObject player;
+
     IndicatorAction indicatorInfo;
+    PlayerStats playerStats;
+    HealthBar healthBarUI;
+    ManaBar manaBarUI;
     
     public override void Initialize()
     {
         //throw new System.NotImplementedException();
         battleText.text = "And so it begins!";
         indicatorInfo = actionIndicators.GetComponent<IndicatorAction>();
+        playerStats = player.GetComponent<PlayerStats>();
+        healthBarUI = healthBar.GetComponent<HealthBar>();
+        manaBarUI = manaBar.GetComponent<ManaBar>();
     }
 
     private void Update()
@@ -29,33 +39,63 @@ public class BattleUIView : View
         if (GameManager.Instance.isBattle())
         {
             updateText();
+            updateHPandMP();
         }
         
     }
 
-    void updateText()
+    void updateText() 
     {
         string currentBoxName = indicatorInfo.GetLeadBox();
-        if(currentBoxName == "ATK")
+        BattleManager.MenuStatus status = BattleManager.Instance.GetPlayerStatus();
+        if (status == BattleManager.MenuStatus.Selecting)
         {
-            battleText.text = "Attack an enemy for 100% damage.";
+            if (currentBoxName == "ATK")
+            {
+                battleText.text = "Attack an enemy for 100% damage.";
+            }
+            else if (currentBoxName == "SPL")
+            {
+                battleText.text = "Cast your gem spell. Equipped Spell: None (I haven't coded that yet, silly)";
+            }
+            else if (currentBoxName == "ITM")
+            {
+                battleText.text = "Use a health or mana potion to restore your strength.";
+            }
+            else if (currentBoxName == "RUN")
+            {
+                battleText.text = "Attempt to flee the battle.";
+            }
         }
-        else if(currentBoxName == "SPL")
+        else if (status == BattleManager.MenuStatus.Attack)
         {
-            battleText.text = "Cast your gem spell. Equipped Spell: None (I haven't coded that yet, silly)";
+            battleText.text = "Which enemy will you attack?";
         }
-        else if(currentBoxName == "ITM")
+        else if (status == BattleManager.MenuStatus.Spell)
         {
-            battleText.text = "Use a health or mana potion to restore your strength.";
+            battleText.text = "Can't you read? It says this isn't coded yet.";
         }
-        else if(currentBoxName == "RUN")
+        else if (status == BattleManager.MenuStatus.Inventory)
         {
-            battleText.text = "Attempt to flee the battle.";
+            battleText.text = "Item and gem descriptions will go here when the inventory actually opens.";
+        }
+        else if (status == BattleManager.MenuStatus.Run)
+        {
+            battleText.text = "I would let you run away, but I haven't coded that yet.";
         }
         else
         {
             battleText.text = "";
         }
+    }
+
+    void updateHPandMP()
+    {
+        healthBarUI.SetHealth(playerStats.GetHP());
+        healthBarUI.SetMaxHealth(playerStats.GetMaxHP());
+
+        manaBarUI.SetMana(playerStats.GetMP());
+        manaBarUI.SetMaxMana(playerStats.GetMaxMP());
     }
 
     

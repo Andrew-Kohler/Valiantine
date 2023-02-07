@@ -6,10 +6,10 @@ public class PlayerStats : Stats
 {
     public PlayerStats()
     {
-        HP = 1;
-        MaxHP = 1;
-        MP = 1;
-        MaxMP = 1;
+        HP = 22;
+        MaxHP = 33;
+        MP = 3;
+        MaxMP = 18;
         ATK = 1f;
         DEF = 1f;
         SPD = 2;
