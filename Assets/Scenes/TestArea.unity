@@ -2909,9 +2909,9 @@ MonoBehaviour:
   yOffset2: 5.1
   yOffset3: 5.5
   zOffset: 3
-  alphaStep: 0.01
+  alphaStep: 2
   delay: 0.2
-  moveSpeed: 0.04
+  moveSpeed: 12
   rotationSpeed: 0
 --- !u!1 &679287417
 GameObject:
@@ -5083,7 +5083,7 @@ MonoBehaviour:
   yOffset2: 5.1
   yOffset3: 5.5
   zOffset: 3
-  alphaStep: 0.01
+  alphaStep: 2
 --- !u!1 &1332909015
 GameObject:
   m_ObjectHideFlags: 0

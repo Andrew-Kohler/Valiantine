@@ -26,7 +26,7 @@ public class Indicator : MonoBehaviour
     [SerializeField] protected float zOffset = 3f;    // z offset of the top and bottom indicators
 
     protected float alpha;                                // The alpha value of the indicators (0-1)
-    [SerializeField] protected float alphaStep = .01f;                            // How fast the indicators fade in/out on battle entry/exit
+    [SerializeField] protected float alphaStep = 4f;                            // How fast the indicators fade in/out on battle entry/exit
 
     protected void Start()
     {

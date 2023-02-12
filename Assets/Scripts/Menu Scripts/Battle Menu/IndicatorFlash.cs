@@ -18,6 +18,7 @@ public class IndicatorFlash : Indicator
 
     public IEnumerator DoFlashOut() // Called by calling DoFlashIn in IndicatorAction
     {
+        Debug.Log("Flash Out Called");
         alpha = 1;
         while (alpha > 0)
         {
@@ -25,7 +26,7 @@ public class IndicatorFlash : Indicator
             {
                 sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
-            alpha -= alphaStep;
+            alpha -= alphaStep * Time.deltaTime;
             yield return null;
         }
 
@@ -41,7 +42,7 @@ public class IndicatorFlash : Indicator
             {
                 sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
-            alpha -= alphaStep * 1.25f;
+            alpha -= alphaStep * 1.25f * Time.deltaTime;
             yield return null;
         }
 

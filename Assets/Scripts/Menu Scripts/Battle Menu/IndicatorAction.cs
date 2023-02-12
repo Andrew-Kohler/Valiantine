@@ -11,7 +11,7 @@ using UnityEngine;
 public class IndicatorAction : Indicator
 {
     [SerializeField] float delay = .2f;         // 
-    [SerializeField] float moveSpeed = .04f;    // How fast the indicators move over the shorter side of the rectangle
+    [SerializeField] float moveSpeed = 12f;     // How fast the indicators move over the shorter side of the rectangle
     float moveSpeed2;                           // How fast the indicators move over the longer side of the rectangle
 
     [SerializeField] float rotationSpeed;       // How fast a rectangle spins when it moves to the front/bottom position
@@ -27,7 +27,7 @@ public class IndicatorAction : Indicator
         keepGoingCheck = true;
         moveSpeed2 = moveSpeed * 1.582f;    // The long side of the 'rectangle' the indicators form is 1.582 times longer than the short side, so to travel it in a way
                                             // that looks proportional, indicators must travel 1.582 times as fast
-        rotationSpeed = 360f * moveSpeed / 3.5f; // Establishes rotation speed as proportional to moveSpeed so that only one full rotation occurs (that's why the 3.5 is there)
+        rotationSpeed = moveSpeed * 360f / 3.5f;  // Establishes rotation speed as proportional to moveSpeed so that only one full rotation occurs (that's why the 3.5 is there)
         rotationStep = 0;
 
         base.Start();
@@ -92,13 +92,13 @@ public class IndicatorAction : Indicator
 
         while (Vector3.Distance(indicators[0].transform.position, onePos) > .01)    // Move the indicators towards their positions to make it feel natural
         {
-            indicators[0].transform.position = Vector3.MoveTowards(indicators[0].transform.position, onePos, moveSpeed2);
-            indicators[1].transform.position = Vector3.MoveTowards(indicators[1].transform.position, twoPos, moveSpeed);
-            indicators[2].transform.position = Vector3.MoveTowards(indicators[2].transform.position, threePos, moveSpeed2);
-            indicators[3].transform.position = Vector3.MoveTowards(indicators[3].transform.position, zeroPos, moveSpeed);
+            indicators[0].transform.position = Vector3.MoveTowards(indicators[0].transform.position, onePos, moveSpeed2 * Time.deltaTime);
+            indicators[1].transform.position = Vector3.MoveTowards(indicators[1].transform.position, twoPos, moveSpeed * Time.deltaTime);
+            indicators[2].transform.position = Vector3.MoveTowards(indicators[2].transform.position, threePos, moveSpeed2 * Time.deltaTime);
+            indicators[3].transform.position = Vector3.MoveTowards(indicators[3].transform.position, zeroPos, moveSpeed * Time.deltaTime);
 
             indicators[3].transform.rotation = Quaternion.Euler(0f, indicators[3].transform.rotation.y + rotationStep, 0f);
-            rotationStep += rotationSpeed;
+            rotationStep += rotationSpeed * Time.deltaTime;
 
             yield return null;
         }
@@ -131,13 +131,13 @@ public class IndicatorAction : Indicator
 
         while (Vector3.Distance(indicators[0].transform.position, threePos) > .01)    // Move the indicators towards their positions to make it feel natural
         {
-            indicators[0].transform.position = Vector3.MoveTowards(indicators[0].transform.position, threePos, moveSpeed);
-            indicators[1].transform.position = Vector3.MoveTowards(indicators[1].transform.position, zeroPos, moveSpeed2);
-            indicators[2].transform.position = Vector3.MoveTowards(indicators[2].transform.position, onePos, moveSpeed);
-            indicators[3].transform.position = Vector3.MoveTowards(indicators[3].transform.position, twoPos, moveSpeed2);
+            indicators[0].transform.position = Vector3.MoveTowards(indicators[0].transform.position, threePos, moveSpeed * Time.deltaTime);
+            indicators[1].transform.position = Vector3.MoveTowards(indicators[1].transform.position, zeroPos, moveSpeed2 * Time.deltaTime);
+            indicators[2].transform.position = Vector3.MoveTowards(indicators[2].transform.position, onePos, moveSpeed * Time.deltaTime);
+            indicators[3].transform.position = Vector3.MoveTowards(indicators[3].transform.position, twoPos, moveSpeed2 * Time.deltaTime);
 
             indicators[1].transform.rotation = Quaternion.Euler(0f, indicators[1].transform.rotation.y + rotationStep, 0f);
-            rotationStep -= rotationSpeed;
+            rotationStep -= rotationSpeed * Time.deltaTime;
 
             yield return null;
         }
@@ -177,6 +177,7 @@ public class IndicatorAction : Indicator
 
     public IEnumerator DoFlashIn()
     {
+        Debug.Log("Do Flash In called for Action Indicators");
         IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
 
         activeCoroutine = true;
@@ -190,7 +191,7 @@ public class IndicatorAction : Indicator
             {
                 sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
-            alpha += alphaStep;
+            alpha += alphaStep * Time.deltaTime;
             yield return null;
         }
 
@@ -206,7 +207,7 @@ public class IndicatorAction : Indicator
 
         activeCoroutine = true;
         flash.enabled = true;
-        StartCoroutine(flash.DoFlashOutFast()); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
+        StartCoroutine(flash.DoFlashOut()); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
 
         alpha = 1;              // In order to always have this coroutine flash the indicators in, reset alpha to 0
         while (alpha >= 0)

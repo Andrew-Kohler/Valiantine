@@ -89,10 +89,10 @@ public class CameraFollow : MonoBehaviour
 
     public void setCamVals(float camX, float camZ)
     {
-        Debug.Log("New cam vals set");
+        //Debug.Log("New cam vals set");
         battleX = camX;
         battleZ = camZ - zConstant;
-        Debug.Log("Battle X: " + battleX + " Battle Z: " + battleZ);
+        //Debug.Log("Battle X: " + battleX + " Battle Z: " + battleZ);
         StartCoroutine(DoBattlePos());
     }
 
@@ -101,7 +101,7 @@ public class CameraFollow : MonoBehaviour
         float tempStep = step;  // Preserves step through the modifications made during coroutine for slowdown
         activeCoroutine = true;
         Vector3 targetPos = new Vector3(battleX, yValue, battleZ);
-        Debug.Log("Target X: " + targetPos.x + " Target Z: " + targetPos.z);
+        //Debug.Log("Target X: " + targetPos.x + " Target Z: " + targetPos.z);
         
         while (Vector3.Distance(transform.position, targetPos) > .05f)
         {

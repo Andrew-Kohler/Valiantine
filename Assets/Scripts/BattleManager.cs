@@ -99,29 +99,29 @@ public class BattleManager : MonoBehaviour
         {
             if (battleIntro && !activeCoroutine)    // The fun intro sequence that happens when the battle begins
             {
-                    // Get the instances of:
-                    player = GameObject.Find("Player");                 // Player
-                    playerStats = player.GetComponent<PlayerStats>();   // Player stats
-                    enemyStats = currentEnemy.GetComponent<EnemyStats>(); // Enemy stats
-                    playerRb = player.GetComponent<Rigidbody>();
-                    enemyRb = currentEnemy.GetComponent<Rigidbody>();
+                // Get the instances of:
+                player = GameObject.Find("Player");                 // Player
+                playerStats = player.GetComponent<PlayerStats>();   // Player stats
+                enemyStats = currentEnemy.GetComponent<EnemyStats>(); // Enemy stats
+                playerRb = player.GetComponent<Rigidbody>();
+                enemyRb = currentEnemy.GetComponent<Rigidbody>();
 
-                    HideEnemies(currentEnemy);    // Hide all other enemies
+                HideEnemies(currentEnemy);    // Hide all other enemies
 
-                    // Determine turn order
-                    turnArray = new Stats[2];  // This will make potential expansion of this system easier in the future
-                    if(playerStats.GetSpeed() >= enemyStats.GetSpeed()) // A very basic speed check
-                    {
-                        turnArray[0] = playerStats;
-                        turnArray[1] = enemyStats;
-                    }
-                    else
-                    {
-                        turnArray[1] = playerStats;
-                        turnArray[0] = enemyStats;
-                    }
-                    currentTurn = 0;    // Set the current turn to 0 so the first actor goes
-                    StartCoroutine(DoBattleIntro());    // Use a coroutine to time visual elements (player motion, UI swap)           
+                // Determine turn order
+                turnArray = new Stats[2];  // This will make potential expansion of this system easier in the future
+                if(playerStats.GetSpeed() >= enemyStats.GetSpeed()) // A very basic speed check
+                {
+                    turnArray[0] = playerStats;
+                    turnArray[1] = enemyStats;
+                }
+                else
+                {
+                    turnArray[1] = playerStats;
+                    turnArray[0] = enemyStats;
+                }
+                currentTurn = 0;    // Set the current turn to 0 so the first actor goes
+                StartCoroutine(DoBattleIntro());    // Use a coroutine to time visual elements (player motion, UI swap)           
             } // End of battle intro
 
             else if (battleActive && !activeCoroutine)  // Primary turn loop
@@ -244,7 +244,7 @@ public class BattleManager : MonoBehaviour
         {
             if (enemy.name != visible.name)
             {
-                Debug.Log("Called");
+                //Debug.Log("Called");
                 enemy.SetActive(true);
                 enemy.GetComponent<FadeEnemy>().FadeIn();
 
@@ -312,7 +312,7 @@ public class BattleManager : MonoBehaviour
         float camX = (enemyRb.position.x + playerRb.position.x) / 2;
         float camZ = playerRb.position.z;
         camController.setCamVals(camX, camZ);
-        Debug.Log("Cam X: " + camX + " Cam Z: " + camZ);
+        //Debug.Log("Cam X: " + camX + " Cam Z: " + camZ);
 
         BattleRecoil();                             // Correctly position the player and the enemy
         yield return new WaitForSeconds(.7f);       // Wait for Battle Recoil to finish
@@ -343,15 +343,15 @@ public class BattleManager : MonoBehaviour
 
         float camX = playerRb.position.x;
         float camZ = playerRb.position.z;
-        Debug.Log("Cam X: " + camX + " Cam Z: " + camZ);
+        //Debug.Log("Cam X: " + camX + " Cam Z: " + camZ);
         camController.setCamVals(camX, camZ);
 
         battleIntro = true;
         battleActive = false;
+        activeCoroutine = false;
 
         endResult = EndStatus.None;
-        status = MenuStatus.Selecting;
-        activeCoroutine = false;
+        status = MenuStatus.Inactive;
 
         GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle
 
