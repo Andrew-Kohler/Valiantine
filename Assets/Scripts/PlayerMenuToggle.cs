@@ -15,7 +15,7 @@ public class PlayerMenuToggle : MonoBehaviour
     {
         if (Input.GetButtonDown("Menu"))    // If the player presses esc, it should toggle the menu on and off
         {
-            GameManager.Instance.Menu(!GameManager.Instance.isMenu());
+            //GameManager.Instance.Menu(!GameManager.Instance.isMenu());
         }
     }
 }

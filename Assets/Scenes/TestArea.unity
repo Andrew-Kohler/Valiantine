@@ -4253,6 +4253,7 @@ MonoBehaviour:
   upperZ: {fileID: 1514909810}
   lowerZ: {fileID: 388552229}
   player: {fileID: 908275599}
+  step: 20
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -341,9 +341,10 @@ public class BattleManager : MonoBehaviour
         CombatantReenable();                                // Reenable combatant movement
         ShowEnemies(currentEnemy);                          // For all enemies that are not the current opposition, fade them back in
 
-        /*float camX = playerRb.position.x;
+        float camX = playerRb.position.x;
         float camZ = playerRb.position.z;
-        camController.setCamVals(camX, camZ);*/
+        Debug.Log("Cam X: " + camX + " Cam Z: " + camZ);
+        camController.setCamVals(camX, camZ);
 
         battleIntro = true;
         battleActive = false;

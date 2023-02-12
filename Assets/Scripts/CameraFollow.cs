@@ -26,11 +26,14 @@ public class CameraFollow : MonoBehaviour
     float zValue;               // Value of z distance between player and camera (liable to change)
     float zConstant = 18.34f;   // The maximum distance between the player and the camera
 
-    bool coruotineRun;
+    [SerializeField] float step = 20f;
+
     float battleX;
     float battleZ;
 
     Vector3 tempPos;
+
+    bool activeCoroutine;
 
     void Start()
     {
@@ -41,23 +44,20 @@ public class CameraFollow : MonoBehaviour
         upperZPos = upperZ.transform.position.z;
         lowerZPos = lowerZ.transform.position.z;
 
-        coruotineRun = false;
+        activeCoroutine = false;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.canMove())
+        if (GameManager.Instance.canMove() && !activeCoroutine)
         {
-            coruotineRun = false;
             tempPos = transform.position;
 
             xValue = player.transform.position.x;               // Initial position values which may or may not change every Update()
             yValue = transform.position.y;
             zValue = player.transform.position.z - zConstant;
-
-            //battleX = xValue;
-            //battleZ = zValue;
 
             if (xValue > upperXPos)  // If statements checking if the camera is trying to exit bounds which reposition it
             {
@@ -84,16 +84,7 @@ public class CameraFollow : MonoBehaviour
             tempPos.z = zValue;
 
             transform.position = tempPos;
-        }
-
-        else if (GameManager.Instance.isBattle())
-        {
-            /*if (!coruotineRun && battleX != 0)
-            {
-                StartCoroutine(DoBattlePos());
-            }*/
-        }
-        
+        }      
     }
 
     public void setCamVals(float camX, float camZ)
@@ -107,18 +98,20 @@ public class CameraFollow : MonoBehaviour
 
     IEnumerator DoBattlePos()
     {
-        coruotineRun = true;
+        float tempStep = step;  // Preserves step through the modifications made during coroutine for slowdown
+        activeCoroutine = true;
         Vector3 targetPos = new Vector3(battleX, yValue, battleZ);
         Debug.Log("Target X: " + targetPos.x + " Target Z: " + targetPos.z);
-        float step = .1f;
+        
         while (Vector3.Distance(transform.position, targetPos) > .05f)
         {
-            if((Vector3.Distance(transform.position, targetPos) < 1f)){
-                step = .05f;
-            }
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, step); // * Time.deltaTime
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, step * Time.deltaTime);  
             yield return null;
         }
+
+        step = tempStep;
+        activeCoroutine = false;
         yield return null;
     }
 }
+
