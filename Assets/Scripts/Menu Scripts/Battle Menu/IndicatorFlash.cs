@@ -10,10 +10,28 @@ using UnityEngine;
 
 public class IndicatorFlash : Indicator
 {
-    // No need for a start method, the parent class Indicator has everything we need
+    float zOffsetExtra = .01f;
+    private new void Start()
+    {
+        base.Start();
+        this.SetPositions();
+    }
     void Update()
     {
         
+    }
+
+    new void SetPositions()
+    {
+        zeroPos = new Vector3(this.gameObject.transform.parent.position.x + xOffset1, this.gameObject.transform.parent.position.y + yOffset1, this.gameObject.transform.parent.position.z - zOffset + zOffsetExtra);
+        onePos = new Vector3(this.gameObject.transform.parent.position.x - xOffset2, this.gameObject.transform.parent.position.y + yOffset2, this.gameObject.transform.parent.position.z + zOffsetExtra);
+        twoPos = new Vector3(this.gameObject.transform.parent.position.x - xOffset1, this.gameObject.transform.parent.position.y + yOffset3, this.gameObject.transform.parent.position.z + zOffset + zOffsetExtra);
+        threePos = new Vector3(this.gameObject.transform.parent.position.x + xOffset2, this.gameObject.transform.parent.position.y + yOffset2, this.gameObject.transform.parent.position.z + zOffsetExtra);
+
+        indicators[0].transform.position = zeroPos;
+        indicators[1].transform.position = onePos;
+        indicators[2].transform.position = twoPos;
+        indicators[3].transform.position = threePos;
     }
 
     public IEnumerator DoFlashOut() // Called by calling DoFlashIn in IndicatorAction

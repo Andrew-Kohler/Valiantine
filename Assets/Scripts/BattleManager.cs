@@ -301,6 +301,7 @@ public class BattleManager : MonoBehaviour
             Debug.Log("Player is right of the enemy");
             playerRb.velocity = new Vector3(10f, 3f, 0f);
             enemyRb.velocity = new Vector3(-10f, 3f, 0f);
+            // Nothing is currently configured to make this work
         }
     }
 
