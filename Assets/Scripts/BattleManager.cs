@@ -15,8 +15,6 @@ public class BattleManager : MonoBehaviour
     // The booleans, integers, and enumeration that control what position in the update loop we travel to
     private bool battleIntro;
     private bool battleActive;
-    private bool win;
-    private bool loss;
     private bool activeCoroutine;
 
     private int currentTurn;
@@ -24,11 +22,15 @@ public class BattleManager : MonoBehaviour
     public enum MenuStatus { Selecting, Attack, Spell, Inventory, Run, Inactive};
     MenuStatus status;
 
+    enum EndStatus { None, Win, Loss, Run};
+    EndStatus endResult;
+
     // The enemy in question
     string enemyName;
 
     // Instances of all other necessary classes
     GameObject currentEnemy;
+    GameObject[] enemies;
     GameObject player;
     GameObject actInds;
 
@@ -50,8 +52,6 @@ public class BattleManager : MonoBehaviour
     {
         battleIntro = true;
         battleActive = false;
-        win = false;
-        loss = false;
         activeCoroutine = false;
         currentTurn = 0;
 
@@ -88,6 +88,7 @@ public class BattleManager : MonoBehaviour
         indAction = actInds.GetComponent<IndicatorAction>();
 
         status = MenuStatus.Inactive;
+        endResult = EndStatus.None;
         
 
     }
@@ -182,6 +183,8 @@ public class BattleManager : MonoBehaviour
                         {
                             indAction.enabled = false;
                             StartCoroutine(indAction.DoFlashOut());
+                            endResult = EndStatus.Run;
+                            battleActive = false;
                         }
                     }
                     else // If not the player (an enemy)
@@ -192,17 +195,21 @@ public class BattleManager : MonoBehaviour
 
             } // End of primary turn loop
 
-            else if (!battleActive)
+            else if (!battleActive && !activeCoroutine)
             {
-                if (win)
+                if (endResult == EndStatus.Win)
                 {
 
                 }
-                else if (loss)
+                else if (endResult == EndStatus.Win)
                 {
 
                 }
-            } // End of win/loss conditions
+                else if(endResult == EndStatus.Run)
+                {
+                    StartCoroutine(DoBattleRun());
+                }
+            } // End of end conditions
 
         } // End of battle check
     }
@@ -219,7 +226,7 @@ public class BattleManager : MonoBehaviour
 
     private void HideEnemies(GameObject show)
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");   // Get all the components in Enemies
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");   // Get all the components in Enemies
 
         foreach (GameObject enemy in enemies)
         {
@@ -231,10 +238,24 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void BattleRecoil() // Launches the player and enemy up like they recoil from each other on battle start
-    { 
+    private void ShowEnemies(GameObject visible)
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy.name != visible.name)
+            {
+                Debug.Log("Called");
+                enemy.SetActive(true);
+                enemy.GetComponent<FadeEnemy>().FadeIn();
+
+            }
+        }
+    }
+
+    private void CombatantDisable()
+    {
         PlayerMovement playerM = player.GetComponent<PlayerMovement>();
-        EnemyChaseMovement enemyCM = currentEnemy.GetComponent <EnemyChaseMovement>();
+        EnemyChaseMovement enemyCM = currentEnemy.GetComponent<EnemyChaseMovement>();
 
         playerM.enabled = false;
         enemyCM.enabled = false;
@@ -242,10 +263,32 @@ public class BattleManager : MonoBehaviour
         {
             enemyPM.enabled = false;
         }
-        else if(currentEnemy.TryGetComponent(out EnemyRandomMovement enemyRM))
+        else if (currentEnemy.TryGetComponent(out EnemyRandomMovement enemyRM))
         {
             enemyRM.enabled = false;
         }
+    }
+
+    private void CombatantReenable()
+    {
+        PlayerMovement playerM = player.GetComponent<PlayerMovement>();
+        //EnemyChaseMovement enemyCM = currentEnemy.GetComponent<EnemyChaseMovement>();
+
+        playerM.enabled = true;
+        //enemyCM.enabled = true;
+        if (currentEnemy.TryGetComponent(out EnemyPathMovement enemyPM))
+        {
+            enemyPM.enabled = true;
+        }
+        else if (currentEnemy.TryGetComponent(out EnemyRandomMovement enemyRM))
+        {
+            enemyRM.enabled = true;
+        }
+    }
+
+    private void BattleRecoil() // Launches the player and enemy up like they recoil from each other on battle start
+    {
+        CombatantDisable();
 
         if (player.transform.position.x <= currentEnemy.transform.position.x)    // If the player is left of the enemy
         {
@@ -261,18 +304,15 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    // NEED A SHOW ENEMIES METHOD
-    // Need to reenable some scripts on battle end
-
     // Coroutines --------------------------------------------
     IEnumerator DoBattleIntro()
     {
         activeCoroutine = true;
 
-        // TODO: Arrange the camera in a better way
         float camX = (enemyRb.position.x + playerRb.position.x) / 2;
         float camZ = playerRb.position.z;
         camController.setCamVals(camX, camZ);
+        Debug.Log("Cam X: " + camX + " Cam Z: " + camZ);
 
         BattleRecoil();                             // Correctly position the player and the enemy
         yield return new WaitForSeconds(.7f);       // Wait for Battle Recoil to finish
@@ -286,6 +326,34 @@ public class BattleManager : MonoBehaviour
         battleIntro = false;                        // Set battleIntro to false and battleActive to true 
         battleActive = true;
         activeCoroutine = false;
+        yield return null;
+    }
+
+    IEnumerator DoBattleRun()
+    {
+        activeCoroutine = true;
+
+        yield return new WaitForSeconds(2f);                // Wait so the player can read the text box
+        battleUI.GetComponent<FadeUI>().BattleFadeOut();
+        yield return new WaitForSeconds(.2f);
+        ViewManager.ShowLast();                             // Switch views back to In-Game UI
+
+        CombatantReenable();                                // Reenable combatant movement
+        ShowEnemies(currentEnemy);                          // For all enemies that are not the current opposition, fade them back in
+
+        /*float camX = playerRb.position.x;
+        float camZ = playerRb.position.z;
+        camController.setCamVals(camX, camZ);*/
+
+        battleIntro = true;
+        battleActive = false;
+
+        endResult = EndStatus.None;
+        status = MenuStatus.Selecting;
+        activeCoroutine = false;
+
+        GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle
+
         yield return null;
     }
 }

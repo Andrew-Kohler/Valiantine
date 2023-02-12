@@ -10,6 +10,12 @@ public class FadeEnemy : MonoBehaviour
     {
         StartCoroutine(FadeOutEnemy());
     }
+
+    public void FadeIn()
+    {
+        StartCoroutine(FadeInEnemy());  
+    }
+
     IEnumerator FadeOutEnemy()
     {
         while(this.GetComponent<Renderer>().material.color.a > 0.01f)
@@ -27,6 +33,16 @@ public class FadeEnemy : MonoBehaviour
 
     IEnumerator FadeInEnemy()
     {
+        while (this.GetComponent<Renderer>().material.color.a <= 1f)
+        {
+            Color objColor = this.GetComponent<Renderer>().material.color;
+            float fadeAmt = objColor.a + (fadeSpeed * Time.deltaTime);
+
+            objColor = new Color(objColor.r, objColor.g, objColor.b, fadeAmt);
+            this.GetComponent<Renderer>().material.color = objColor;
+            yield return null;
+        }
+        
         yield return null;
     }
 }

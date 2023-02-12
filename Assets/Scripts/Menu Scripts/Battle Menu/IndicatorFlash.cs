@@ -11,7 +11,6 @@ using UnityEngine;
 public class IndicatorFlash : Indicator
 {
     // No need for a start method, the parent class Indicator has everything we need
-
     void Update()
     {
         
@@ -27,7 +26,6 @@ public class IndicatorFlash : Indicator
                 sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
             alpha -= alphaStep;
-            Debug.Log("Flash alpha:" + alpha);
             yield return null;
         }
 
@@ -44,7 +42,6 @@ public class IndicatorFlash : Indicator
                 sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
             alpha -= alphaStep * 1.25f;
-            Debug.Log("Flash alpha:" + alpha);
             yield return null;
         }
 

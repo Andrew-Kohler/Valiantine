@@ -56,6 +56,9 @@ public class CameraFollow : MonoBehaviour
             yValue = transform.position.y;
             zValue = player.transform.position.z - zConstant;
 
+            //battleX = xValue;
+            //battleZ = zValue;
+
             if (xValue > upperXPos)  // If statements checking if the camera is trying to exit bounds which reposition it
             {
                 xValue = upperXPos;
@@ -85,31 +88,35 @@ public class CameraFollow : MonoBehaviour
 
         else if (GameManager.Instance.isBattle())
         {
-            if (!coruotineRun && battleX != 0)
+            /*if (!coruotineRun && battleX != 0)
             {
                 StartCoroutine(DoBattlePos());
-            }
+            }*/
         }
         
     }
 
     public void setCamVals(float camX, float camZ)
     {
+        Debug.Log("New cam vals set");
         battleX = camX;
         battleZ = camZ - zConstant;
+        Debug.Log("Battle X: " + battleX + " Battle Z: " + battleZ);
+        StartCoroutine(DoBattlePos());
     }
 
     IEnumerator DoBattlePos()
     {
         coruotineRun = true;
         Vector3 targetPos = new Vector3(battleX, yValue, battleZ);
+        Debug.Log("Target X: " + targetPos.x + " Target Z: " + targetPos.z);
         float step = .1f;
         while (Vector3.Distance(transform.position, targetPos) > .05f)
         {
             if((Vector3.Distance(transform.position, targetPos) < 1f)){
                 step = .05f;
             }
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, step); // * Time.deltaTime
             yield return null;
         }
         yield return null;

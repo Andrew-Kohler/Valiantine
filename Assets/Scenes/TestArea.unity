@@ -532,7 +532,7 @@ GameObject:
   - component: {fileID: 39347367}
   - component: {fileID: 39347368}
   - component: {fileID: 39347369}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy (Rand/Chase)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -2744,7 +2744,7 @@ GameObject:
   - component: {fileID: 668637581}
   - component: {fileID: 668637584}
   - component: {fileID: 668637585}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy (Static)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -6375,7 +6375,7 @@ GameObject:
   - component: {fileID: 1691525564}
   - component: {fileID: 1691525565}
   - component: {fileID: 1691525567}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy (Path/Chase)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -6478,6 +6478,7 @@ MonoBehaviour:
   - {fileID: 859959095}
   - {fileID: 1263850988}
   - {fileID: 558727600}
+  movementSpeed: 6
 --- !u!114 &1691525563
 MonoBehaviour:
   m_ObjectHideFlags: 0

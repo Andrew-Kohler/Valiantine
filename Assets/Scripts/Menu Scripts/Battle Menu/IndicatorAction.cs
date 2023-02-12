@@ -191,7 +191,6 @@ public class IndicatorAction : Indicator
                 sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
             alpha += alphaStep;
-            Debug.Log("Action alpha step:" + alphaStep);
             yield return null;
         }
 
@@ -217,7 +216,6 @@ public class IndicatorAction : Indicator
                 sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
             alpha -= 1;
-            Debug.Log("Action alpha step:" + alphaStep);
             yield return null;
         }
 

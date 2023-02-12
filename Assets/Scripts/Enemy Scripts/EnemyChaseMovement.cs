@@ -20,6 +20,7 @@ public class EnemyChaseMovement : MonoBehaviour
     {
         chase = GetComponent<EnemyFollow>();    // previously in children
         player = GameObject.Find("Player");
+        enabled = false;
     }
 
     
@@ -29,6 +30,18 @@ public class EnemyChaseMovement : MonoBehaviour
         { 
             pursuitVector = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
             transform.position = Vector3.MoveTowards(transform.position, pursuitVector, speed * Time.deltaTime);
+        }
+        else // If we aren't chasing, we revert back to base behavior
+        {
+            if (TryGetComponent(out EnemyPathMovement enemyPM))
+            {
+                enemyPM.enabled = true;
+            }
+            else if (TryGetComponent(out EnemyRandomMovement enemyRM))
+            {
+                enemyRM.enabled = true;
+            }
+            enabled = false;
         }
     }
 }

@@ -10,7 +10,8 @@ using UnityEngine;
 
 public class EnemyRandomMovement : MonoBehaviour
 {
-    EnemyFollow chase;
+    EnemyFollow followCheck;
+    EnemyChaseMovement chaseMovement;
     Rigidbody rb;
     Transform center;
 
@@ -24,7 +25,8 @@ public class EnemyRandomMovement : MonoBehaviour
 
     void Start()
     {
-        chase = GetComponent<EnemyFollow>(); // previously in children
+        followCheck = GetComponent<EnemyFollow>(); 
+        chaseMovement = GetComponent<EnemyChaseMovement>();
         rb = GetComponent<Rigidbody>();
         center = GameObject.Find("Center E").transform;
 
@@ -34,15 +36,25 @@ public class EnemyRandomMovement : MonoBehaviour
 
     void Update()
     {
-        if (!chase.isFollow() && !coroutineRunning && GameManager.Instance.canMove())  // If we aren't chasing the player and the corutine isn't running, start it again
-        {   //&& GameManager.Instance.canMove()
+        if (!followCheck.isFollow() && !coroutineRunning && GameManager.Instance.canMove())  // If we aren't chasing the player and the corutine isn't running, start it again
+        {   
           StartCoroutine(behaviorLoop()); 
         }
-        else if (chase.isFollow())
+        else if (followCheck.isFollow()) // If we are chasing the player
         {
+            StopCoroutine(behaviorLoop());
+            coroutineRunning = false;
             count = 0;
             rb.velocity = new Vector3(0f, 0f, 0f);
+            chaseMovement.enabled = true;
+            this.enabled = false;
+        }
+        else if(!followCheck.isFollow() && !GameManager.Instance.canMove())// If we aren't chasing the player but the GameManager says we can't move (battle time)
+        {
             StopCoroutine(behaviorLoop());
+            coroutineRunning = false;
+            count = 0;
+            rb.velocity = new Vector3(0f, 0f, 0f);
         }
         
     }
@@ -50,9 +62,9 @@ public class EnemyRandomMovement : MonoBehaviour
     {
         
         coroutineRunning = true;
-        if (!chase.inBounds())  // If we somehow start the co-routine OOB
+        if (!followCheck.inBounds())  // If we somehow start the co-routine OOB
         {
-            while (!chase.inBounds())   // While we aren't in-bounds, move back towards being in-bounds
+            while (!followCheck.inBounds())   // While we aren't in-bounds, move back towards being in-bounds
             {
                 transform.position = Vector3.MoveTowards(transform.position, center.position, movementSpeed * Time.deltaTime);
                 yield return null;
@@ -96,7 +108,7 @@ public class EnemyRandomMovement : MonoBehaviour
                 }*/
                 if (goX)
                 {
-                    if (!chase.inBounds())
+                    if (!followCheck.inBounds())
                     {
                         turn = turn * -1; // This is the problem: if we are on the bounds line, we jitter
                     }
@@ -104,7 +116,7 @@ public class EnemyRandomMovement : MonoBehaviour
                 }
                 else
                 {
-                    if (!chase.inBounds())
+                    if (!followCheck.inBounds())
                     {
                         turn = turn * -1;
                     }
@@ -125,13 +137,13 @@ public class EnemyRandomMovement : MonoBehaviour
         coroutineRunning = false;
     }
 
-    /*private void OnCollisionEnter(Collision collision)  // This is where we check for if we touch another enemy and need to turn around
+    private void OnCollisionEnter(Collision collision)  // This is where we check for if we touch another enemy and need to turn around
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
             turn = turn * -1;
         }
-    }*/
+    }
 }
 
 // Ah, I see. No return mechanism like the path follower: it tries to continue its routine wherever

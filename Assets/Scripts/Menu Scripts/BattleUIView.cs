@@ -81,7 +81,7 @@ public class BattleUIView : View
         }
         else if (status == BattleManager.MenuStatus.Run)
         {
-            battleText.text = "I would let you run away, but I haven't coded that yet.";
+            battleText.text = "You got away, but just wait until I add speed checks in, you yellow-bellied ninny.";
         }
         else
         {
