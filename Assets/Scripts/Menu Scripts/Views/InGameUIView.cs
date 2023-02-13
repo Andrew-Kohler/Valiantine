@@ -17,10 +17,13 @@ public class InGameUIView : View
 
     void Update()
     {
-        if (GameManager.Instance.isMenu())
+        if (GameManager.Instance.isInventory())
         {
-            Debug.Log("We should see the menu now");
-            ViewManager.Show<PlayerMenuView>(true);
+            ViewManager.Show<InventoryMenuView>(true);
+        }
+        else if (GameManager.Instance.isSettings())
+        {
+            ViewManager.Show<SettingsMenuView>(true);
         }
     }
 }

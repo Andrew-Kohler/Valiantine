@@ -92,15 +92,47 @@ public class CameraFollow : MonoBehaviour
         //Debug.Log("New cam vals set");
         battleX = camX;
         battleZ = camZ - zConstant;
+        Vector3 targetPos = new Vector3(battleX, yValue, battleZ);
         //Debug.Log("Battle X: " + battleX + " Battle Z: " + battleZ);
-        StartCoroutine(DoBattlePos());
+        StartCoroutine(DoCamPosition(targetPos));
     }
 
-    IEnumerator DoBattlePos()
+    public void camReturnToPos()
+    {
+        // So, we just need this method to get the value that the update loop calculates, and pass it as a vector3
+        xValue = player.transform.position.x;               // Initial position values which may or may not change every Update()
+        yValue = transform.position.y;
+        zValue = player.transform.position.z - zConstant;
+
+        if (xValue > upperXPos)  // If statements checking if the camera is trying to exit bounds which reposition it
+        {
+            xValue = upperXPos;
+        }
+
+        if (xValue < lowerXPos)
+        {
+            xValue = lowerXPos;
+        }
+
+        if (zValue > upperZPos)
+        {
+            zValue = upperZPos;
+        }
+
+        if (zValue < lowerZPos)
+        {
+            zValue = lowerZPos;
+        }
+
+        Vector3 targetPos = new Vector3(xValue, yValue, zValue);
+        StartCoroutine(DoCamPosition(targetPos));
+    }
+
+    IEnumerator DoCamPosition(Vector3 targetPos)
     {
         float tempStep = step;  // Preserves step through the modifications made during coroutine for slowdown
         activeCoroutine = true;
-        Vector3 targetPos = new Vector3(battleX, yValue, battleZ);
+        
         //Debug.Log("Target X: " + targetPos.x + " Target Z: " + targetPos.z);
         
         while (Vector3.Distance(transform.position, targetPos) > .05f)
@@ -114,4 +146,6 @@ public class CameraFollow : MonoBehaviour
         yield return null;
     }
 }
+
+
 

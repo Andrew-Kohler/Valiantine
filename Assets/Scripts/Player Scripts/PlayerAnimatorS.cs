@@ -35,87 +35,93 @@ public class PlayerAnimatorS : MonoBehaviour
 
     private void Update()
     {
-        // The logic that determines what animation should be played
-        if (GameManager.Instance.canMove()) // Logic for idle and walk cycles that occur during normal exploration
-        {
-            animationSpeed = 8f;
-            horizontalInput = Input.GetAxis("Horizontal");
-            verticalInput = Input.GetAxis("Vertical");
-
-            if(isMoving(horizontalInput, verticalInput))
-            {
-                setDirection(horizontalInput, verticalInput);
-                if(direction == 0)
-                {
-                    animationIndex = walkRightIndex;
-                }
-                else if(direction == 1)
-                {
-                    animationIndex = walkLeftIndex;
-                }
-                else if (direction == 2)
-                {
-                    animationIndex = walkBackIndex;
-                }
-                else if (direction == 3)
-                {
-                    animationIndex = walkForwardsIndex;
-                }
-            }
-            else
-            {
-                animationSpeed = 5.4f;
-                if (direction == 0)
-                {
-                    animationIndex = idleRightIndex;
-                }
-                else if (direction == 1)
-                {
-                    animationIndex = idleLeftIndex;
-                }
-                else if (direction == 2)
-                {
-                    animationIndex = idleBackIndex;
-                }
-                else if (direction == 3)
-                {
-                    animationIndex = idleForwardsIndex;
-                }
-            }
-        }
-
-        else if (GameManager.Instance.isBattle())
-        {
-            animationSpeed = 5.4f;
-            animationIndex = idleRightIndex;
-
-        }
+        
 
         // The logic that plays the animation
         // Select shader property names
-        string clipKey, frameKey;
-        if(axis == AnimationAxis.Rows)
+        if (!GameManager.Instance.isSettings())
         {
-            clipKey = rowProperty;
-            frameKey = colProperty;
-        }
-        else
-        {
-            clipKey = colProperty;
-            frameKey = rowProperty;
-        }
+            // The logic that determines what animation should be played
+            if (GameManager.Instance.canMove()) // Logic for idle and walk cycles that occur during normal exploration
+            {
+                animationSpeed = 8f;
+                horizontalInput = Input.GetAxis("Horizontal");
+                verticalInput = Input.GetAxis("Vertical");
 
-        // Animate
-        int frame = (int)(deltaT * animationSpeed);
-        
-        deltaT += Time.deltaTime;
-        if(frame >= 8) // Might be messing with this soon!
-        {
-            deltaT = 0;
-            frame = 0;
+                if (isMoving(horizontalInput, verticalInput))
+                {
+                    setDirection(horizontalInput, verticalInput);
+                    if (direction == 0)
+                    {
+                        animationIndex = walkRightIndex;
+                    }
+                    else if (direction == 1)
+                    {
+                        animationIndex = walkLeftIndex;
+                    }
+                    else if (direction == 2)
+                    {
+                        animationIndex = walkBackIndex;
+                    }
+                    else if (direction == 3)
+                    {
+                        animationIndex = walkForwardsIndex;
+                    }
+                }
+                else
+                {
+                    animationSpeed = 5.4f;
+                    if (direction == 0)
+                    {
+                        animationIndex = idleRightIndex;
+                    }
+                    else if (direction == 1)
+                    {
+                        animationIndex = idleLeftIndex;
+                    }
+                    else if (direction == 2)
+                    {
+                        animationIndex = idleBackIndex;
+                    }
+                    else if (direction == 3)
+                    {
+                        animationIndex = idleForwardsIndex;
+                    }
+                }
+            }
+
+            else if (GameManager.Instance.isBattle())
+            {
+                animationSpeed = 5.4f;
+                animationIndex = idleRightIndex;
+
+            }
+
+            string clipKey, frameKey;
+            if (axis == AnimationAxis.Rows)
+            {
+                clipKey = rowProperty;
+                frameKey = colProperty;
+            }
+            else
+            {
+                clipKey = colProperty;
+                frameKey = rowProperty;
+            }
+
+            // Animate
+            int frame = (int)(deltaT * animationSpeed);
+
+            deltaT += Time.deltaTime;
+            if (frame >= 8) // Might be messing with this soon!
+            {
+                deltaT = 0;
+                frame = 0;
+            }
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
         }
-        meshRenderer.material.SetFloat(clipKey, animationIndex);
-        meshRenderer.material.SetFloat(frameKey, frame);
+        
     }
 
     private bool isMoving(float hInput, float vInput)

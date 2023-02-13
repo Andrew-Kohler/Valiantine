@@ -13,12 +13,12 @@ using UnityEngine.SceneManagement;
 public class FadeUI : MonoBehaviour
 {
     CanvasGroup canvasGroup;
-    public void BattleFadeIn()  // Methods used for the battle UI
+    public void UIFadeIn()  // Methods used for the battle UI
     {
         StartCoroutine(DoFadeInUI());
     }
 
-    public void BattleFadeOut()
+    public void UIFadeOut()
     {
         StartCoroutine(DoFadeOutUI());
     }

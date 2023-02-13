@@ -56,6 +56,13 @@ public class EnemyRandomMovement : MonoBehaviour
             count = 0;
             rb.velocity = new Vector3(0f, 0f, 0f);
         }
+        else if (!GameManager.Instance.canMove())
+        {
+            StopCoroutine(behaviorLoop());
+            coroutineRunning = false;
+            count = 0;
+            rb.velocity = new Vector3(0f, 0f, 0f);
+        }
         
     }
     IEnumerator behaviorLoop()
@@ -99,13 +106,12 @@ public class EnemyRandomMovement : MonoBehaviour
 
             while(count <= 60)  // Walk in our chosen direction for 1 second
             {
-                /*if (chase.isFollow())
+                if (!GameManager.Instance.canMove())
                 {
                     count = 0;
                     rb.velocity = new Vector3(0f, 0f, 0f);
-                    Debug.Log("Time to go");
                     yield break;
-                }*/
+                }
                 if (goX)
                 {
                     if (!followCheck.inBounds())
@@ -125,6 +131,7 @@ public class EnemyRandomMovement : MonoBehaviour
 
                 }
                 count++;
+                Debug.Log("Oh boy we goin");
                 yield return new WaitForSeconds(.017f);
             }
 

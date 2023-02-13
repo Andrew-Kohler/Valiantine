@@ -244,8 +244,7 @@ public class BattleManager : MonoBehaviour
         {
             if (enemy.name != visible.name)
             {
-                //Debug.Log("Called");
-                enemy.SetActive(true);
+               // enemy.SetActive(true);
                 enemy.GetComponent<FadeEnemy>().FadeIn();
 
             }
@@ -269,13 +268,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void CombatantReenable()
+    private void currentEnemyReenable()
     {
-        PlayerMovement playerM = player.GetComponent<PlayerMovement>();
-        //EnemyChaseMovement enemyCM = currentEnemy.GetComponent<EnemyChaseMovement>();
-
-        playerM.enabled = true;
-        //enemyCM.enabled = true;
+        
         if (currentEnemy.TryGetComponent(out EnemyPathMovement enemyPM))
         {
             enemyPM.enabled = true;
@@ -284,6 +279,26 @@ public class BattleManager : MonoBehaviour
         {
             enemyRM.enabled = true;
         }
+    }
+
+    private void allEnemyReenable(GameObject visible)
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy.name != visible.name)
+            {
+                enemy.SetActive(true);
+                //enemy.GetComponent<FadeEnemy>().FadeIn();
+
+            }
+        }
+    }
+
+    private void playerReenable()
+    {
+        PlayerMovement playerM = player.GetComponent<PlayerMovement>();
+
+        playerM.enabled = true;
     }
 
     private void BattleRecoil() // Launches the player and enemy up like they recoil from each other on battle start
@@ -322,7 +337,7 @@ public class BattleManager : MonoBehaviour
 
         ViewManager.Show<BattleUIView>(true);
         battleUI = GameObject.Find("Battle UI");
-        battleUI.GetComponent<FadeUI>().BattleFadeIn();
+        battleUI.GetComponent<FadeUI>().UIFadeIn();
 
         battleIntro = false;                        // Set battleIntro to false and battleActive to true 
         battleActive = true;
@@ -335,26 +350,28 @@ public class BattleManager : MonoBehaviour
         activeCoroutine = true;
 
         yield return new WaitForSeconds(2f);                // Wait so the player can read the text box
-        battleUI.GetComponent<FadeUI>().BattleFadeOut();
+        battleUI.GetComponent<FadeUI>().UIFadeOut();
         yield return new WaitForSeconds(.2f);
         ViewManager.ShowLast();                             // Switch views back to In-Game UI
 
-        CombatantReenable();                                // Reenable combatant movement
-        ShowEnemies(currentEnemy);                          // For all enemies that are not the current opposition, fade them back in
+        camController.camReturnToPos();
 
-        float camX = playerRb.position.x;
-        float camZ = playerRb.position.z;
+        GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle
+
+        playerReenable();                                   // Reenable combatant movement
+        allEnemyReenable(currentEnemy);
+        ShowEnemies(currentEnemy);                          // For all enemies that are not the current opposition, fade them back in
+        yield return new WaitForSeconds(2f);                // Wait for a few moments before letting all the enemies loose again
+        currentEnemyReenable();
+
         //Debug.Log("Cam X: " + camX + " Cam Z: " + camZ);
-        camController.setCamVals(camX, camZ);
 
         battleIntro = true;
         battleActive = false;
         activeCoroutine = false;
 
         endResult = EndStatus.None;
-        status = MenuStatus.Inactive;
-
-        GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle
+        status = MenuStatus.Inactive;  
 
         yield return null;
     }

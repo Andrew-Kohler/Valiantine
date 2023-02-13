@@ -177,7 +177,6 @@ public class IndicatorAction : Indicator
 
     public IEnumerator DoFlashIn()
     {
-        Debug.Log("Do Flash In called for Action Indicators");
         IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
 
         activeCoroutine = true;

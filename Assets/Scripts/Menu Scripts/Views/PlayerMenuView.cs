@@ -33,11 +33,11 @@ public class PlayerMenuView : View
 
     private void Update()
     {
-        if (!GameManager.Instance.isMenu()) // If esc is hit, go back out of the whole menu
+        /*if (!GameManager.Instance.isMenu()) // If esc is hit, go back out of the whole menu
         {
             Switch(playerInfoTab);
             ViewManager.ShowLast();
-        }
+        }*/
     }
 
     private void Switch(GameObject desiredSubmenu)  // A method that will switch the active sub-menu of the player menu

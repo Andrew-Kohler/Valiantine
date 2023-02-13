@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance; // = new GameManager();   // Look at this again, b/c I'm pretty sure awake should be doing this?
 
     private bool _isGameOver;   // Has the player been defeated?
-    private bool _isMenu;       // Are we in a menu?
+    private bool _isInventory;  // Are we in the inventory?
+    private bool _isSettings;   // Are we in settings?
     private bool _isTransition; // Are we in a scene transition?
     private bool _isInteraction;// Are we in some kind of dialogue interaction (opening a chest, healing at a statue)?
     private bool _isBattle;     // Are we in a battle?
@@ -23,7 +24,8 @@ public class GameManager : MonoBehaviour
     private GameManager()
     {
         _isGameOver = false;
-        _isMenu = false;
+        _isInventory = false;
+        _isSettings = false;
         _isTransition = false;
         _isInteraction = false;
         _isBattle = false;
@@ -56,13 +58,22 @@ public class GameManager : MonoBehaviour
         return _isGameOver;
     }
 
-    public void Menu(bool flag) // Setter and getter for state of player being in the menu
+    public void Inventory(bool flag) // Setter and getter for state of player being in the inventory menu
     {
-        _isMenu = flag;
+        _isInventory = flag;
     }
-    public bool isMenu()
+    public bool isInventory()
     {
-        return _isMenu;
+        return _isInventory;
+    }
+
+    public void Settings(bool flag) // Setter and getter for state of player being in the settings menu
+    {
+        _isSettings = flag;
+    }
+    public bool isSettings()
+    {
+        return _isSettings;
     }
 
     public void Transition(bool flag)   // Getter and setter for state of a scene transition in progress
@@ -87,7 +98,7 @@ public class GameManager : MonoBehaviour
 
     public bool canMove()   // If we can move, nothing else should be going on
     {
-        return !_isGameOver && !_isMenu && !_isBattle && !_isTransition && !_isInteraction;
+        return !_isGameOver && !_isInventory && !_isSettings && !_isBattle && !_isTransition && !_isInteraction;
     }
 }
 

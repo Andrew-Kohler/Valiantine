@@ -18,7 +18,7 @@ public class IndicatorFlash : Indicator
     }
     void Update()
     {
-        
+
     }
 
     new void SetPositions()
@@ -36,7 +36,6 @@ public class IndicatorFlash : Indicator
 
     public IEnumerator DoFlashOut() // Called by calling DoFlashIn in IndicatorAction
     {
-        Debug.Log("Flash Out Called");
         alpha = 1;
         while (alpha > 0)
         {
@@ -50,8 +49,9 @@ public class IndicatorFlash : Indicator
 
         yield return null;
     }
+}
 
-    public IEnumerator DoFlashOutFast() // Called by calling DoFlashOut in IndicatorAction
+    /*public IEnumerator DoFlashOutFast() // Called by calling DoFlashOut in IndicatorAction
     {
         alpha = 1;
         while (alpha > 0)
@@ -66,4 +66,4 @@ public class IndicatorFlash : Indicator
 
         yield return null;
     }
-}
+}*/
