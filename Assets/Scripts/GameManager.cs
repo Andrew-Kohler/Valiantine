@@ -101,6 +101,11 @@ public class GameManager : MonoBehaviour
         return !_isGameOver && !_isInventory && !_isSettings && !_isBattle && !_isTransition && !_isInteraction;
     }
 
+    public bool enemyCanMove()
+    {
+        return !_isGameOver && !_isSettings && !_isBattle && !_isTransition && !_isInteraction;
+    }
+
     public bool freeCam()
     {
         return !_isGameOver && !_isInventory && !_isSettings && !_isBattle && !_isInteraction;

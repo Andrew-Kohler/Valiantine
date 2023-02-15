@@ -97,6 +97,13 @@ public class PlayerAnimatorS : MonoBehaviour
 
             }
 
+            else if (GameManager.Instance.isInventory())
+            {
+                animationSpeed = 5.4f;
+                animationIndex = idleRightIndex;
+
+            }
+
             string clipKey, frameKey;
             if (axis == AnimationAxis.Rows)
             {

@@ -4,35 +4,51 @@ using UnityEngine;
 
 public class InventoryMenuView : View
 {
-    bool exit;
-
-   // Camera cam;
-    //CameraFollow camController;
-
+    [SerializeField] private GameObject itemsTab;
+    [SerializeField] private GameObject gemsTab;
     public override void Initialize()
     {
         //throw new System.NotImplementedException();
-        //cam = Camera.main;
-        //camController = cam.GetComponent<CameraFollow>();
+        itemsTab.SetActive(true);
+        gemsTab.SetActive(false);
     }
-
 
     private void Update()
     {
-        if (GameManager.Instance.isInventory())
+        
+        if(Input.GetButtonDown("Inv.Tab 1"))
         {
-            exit = true;
+            Switch(itemsTab);
         }
-        if (!GameManager.Instance.isInventory() && exit)
+        if (Input.GetButtonDown("Inv.Tab 2"))
         {
-            //camController.camReturnToPos();
-            GetComponent<FadeUI>().UIFadeOut();
-            exit = false;
+            Switch(gemsTab);
         }
 
-        if (GameManager.Instance.isSettings())
+        if (GameManager.Instance.isSettings())  // Considerations made for changing to other views
         {
             ViewManager.Show<SettingsMenuView>(true);
+        }
+        if (!GameManager.Instance.isInventory())
+        {
+            GetComponent<FadeUI>().UIFadeOut();
+        }
+        if (GameManager.Instance.isBattle())
+        {
+            GameManager.Instance.Inventory(false);
+        }
+    }
+
+    private void Switch(GameObject desiredSubmenu)  // A method that will switch the active sub-menu of the player menu
+    {
+        desiredSubmenu.SetActive(true);
+        if (itemsTab != desiredSubmenu)
+        {
+            itemsTab.SetActive(false);
+        }
+        if (gemsTab != desiredSubmenu)
+        {
+            gemsTab.SetActive(false);
         }
     }
 }

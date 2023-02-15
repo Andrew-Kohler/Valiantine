@@ -26,7 +26,7 @@ public class EnemyChaseMovement : MonoBehaviour
     
     void Update()
     {
-        if (chase.isFollow() && GameManager.Instance.canMove())   // If we are actively pursuing the player
+        if (chase.isFollow() && GameManager.Instance.enemyCanMove())   // If we are actively pursuing the player
         { 
             pursuitVector = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
             transform.position = Vector3.MoveTowards(transform.position, pursuitVector, speed * Time.deltaTime);

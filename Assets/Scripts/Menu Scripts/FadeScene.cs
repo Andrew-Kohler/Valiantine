@@ -44,7 +44,7 @@ public class FadeScene : MonoBehaviour
         while (canvasGroup.alpha > 0f)
         {     
             canvasGroup.alpha -= Time.deltaTime / 2f;
-            Debug.Log("Alpha:" + canvasGroup.alpha);
+            //Debug.Log("Alpha:" + canvasGroup.alpha);
             yield return null;
         }
         GameManager.Instance.Transition(false); // We are no longer in a transition state

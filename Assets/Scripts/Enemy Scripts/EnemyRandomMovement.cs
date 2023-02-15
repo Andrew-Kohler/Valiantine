@@ -36,7 +36,7 @@ public class EnemyRandomMovement : MonoBehaviour
 
     void Update()
     {
-        if (!followCheck.isFollow() && !coroutineRunning && GameManager.Instance.canMove())  // If we aren't chasing the player and the corutine isn't running, start it again
+        if (!followCheck.isFollow() && !coroutineRunning && GameManager.Instance.enemyCanMove())  // If we aren't chasing the player and the corutine isn't running, start it again
         {   
           StartCoroutine(behaviorLoop()); 
         }
@@ -49,14 +49,14 @@ public class EnemyRandomMovement : MonoBehaviour
             chaseMovement.enabled = true;
             this.enabled = false;
         }
-        else if(!followCheck.isFollow() && !GameManager.Instance.canMove())// If we aren't chasing the player but the GameManager says we can't move (battle time)
+        else if(!followCheck.isFollow() && !GameManager.Instance.enemyCanMove())// If we aren't chasing the player but the GameManager says we can't move (battle time)
         {
             StopCoroutine(behaviorLoop());
             coroutineRunning = false;
             count = 0;
             rb.velocity = new Vector3(0f, 0f, 0f);
         }
-        else if (!GameManager.Instance.canMove())
+        else if (!GameManager.Instance.enemyCanMove())
         {
             StopCoroutine(behaviorLoop());
             coroutineRunning = false;
@@ -106,7 +106,7 @@ public class EnemyRandomMovement : MonoBehaviour
 
             while(count <= 60)  // Walk in our chosen direction for 1 second
             {
-                if (!GameManager.Instance.canMove())
+                if (!GameManager.Instance.enemyCanMove())
                 {
                     count = 0;
                     rb.velocity = new Vector3(0f, 0f, 0f);

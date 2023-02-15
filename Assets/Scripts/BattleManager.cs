@@ -46,9 +46,6 @@ public class BattleManager : MonoBehaviour
     Rigidbody playerRb;
     Rigidbody enemyRb;
 
-    //Camera cam;
-    //CameraFollow camController;
-
     GameObject battleUI;
 
     private BattleManager()
@@ -84,8 +81,6 @@ public class BattleManager : MonoBehaviour
     {
         battleIntro = true;
         battleActive = false;
-        //cam = Camera.main;
-        //camController = cam.GetComponent<CameraFollow>();
 
         actInds = GameObject.Find("Action Indicators");
         indAction = actInds.GetComponent<IndicatorAction>();
@@ -341,17 +336,20 @@ public class BattleManager : MonoBehaviour
     {
         activeCoroutine = true;
 
-        //float camX = (enemyRb.position.x + playerRb.position.x) / 2;
-        //float camZ = playerRb.position.z;
-        //camController.setCamVals(camX, camZ);
-        //Debug.Log("Cam X: " + camX + " Cam Z: " + camZ);
-
         BattleRecoil();                             // Correctly position the player and the enemy
         yield return new WaitForSeconds(.7f);       // Wait for Battle Recoil to finish
         playerRb.velocity = new Vector3(0f, 0f, 0f);
         enemyRb.velocity = new Vector3(0f, 0f, 0f);
 
-        ViewManager.Show<BattleUIView>(true);
+        if (GameManager.Instance.isInventory())
+        {
+            ViewManager.Show<BattleUIView>(false); // Inventory gets closed; we always return to in-game UI after a battle
+        }
+        else
+        {
+            ViewManager.Show<BattleUIView>(true);
+        }
+        
         battleUI = GameObject.Find("Battle UI");
         battleUI.GetComponent<FadeUI>().UIFadeIn();
 
@@ -367,8 +365,6 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);                // Wait so the player can read the text box
         battleUI.GetComponent<FadeUI>().UIFadeOut();
-        
-        //camController.camReturnToPos();
 
         GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle
 
@@ -377,8 +373,6 @@ public class BattleManager : MonoBehaviour
         ShowEnemies(currentEnemy);                          // For all enemies that are not the current opposition, fade them back in
         yield return new WaitForSeconds(2f);                // Wait for a few moments before letting all the enemies loose again
         currentEnemyReenable();
-
-        //Debug.Log("Cam X: " + camX + " Cam Z: " + camZ);
 
         battleIntro = true;
         battleActive = false;

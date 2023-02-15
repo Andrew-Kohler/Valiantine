@@ -29,7 +29,8 @@ public class CameraControl : MonoBehaviour
     Vector3 tempPos;
 
     bool activeCoroutine;
-    bool activeSwitch;  // Ensures that perspective shifts for battle and such are only done once
+    bool activeInvSwitch;  // Ensures that perspective shifts for battle and such are only done once
+    bool activeBattleSwitch;
 
     void Start()
     {
@@ -45,10 +46,11 @@ public class CameraControl : MonoBehaviour
 
     void Update()
     {
-        if(GameManager.Instance.freeCam() && activeSwitch)
+        if(GameManager.Instance.freeCam() && (activeInvSwitch || activeBattleSwitch))
         {
             CamReset(battleStep);
-            activeSwitch = false;
+            activeInvSwitch = false;
+            activeBattleSwitch = false;
         }
 
         else if (GameManager.Instance.freeCam() && !activeCoroutine) // The code which allows the camera to track the player
@@ -86,15 +88,17 @@ public class CameraControl : MonoBehaviour
             transform.position = tempPos;
         }
 
-        else if (GameManager.Instance.isBattle() && !activeSwitch)
+        else if (GameManager.Instance.isBattle() && !activeBattleSwitch)
         {
             SetCamBattle();
-            activeSwitch = true;
+            activeBattleSwitch = true;
+            activeInvSwitch = false;
         }
-        else if (GameManager.Instance.isInventory() && !activeSwitch)
+        else if (GameManager.Instance.isInventory() && !activeInvSwitch)
         {
             SetCamInventory();
-            activeSwitch = true;
+            activeInvSwitch = true;
+            activeBattleSwitch = false;
         }
     } // End of update
 

@@ -47,9 +47,6 @@ public class FadeUI : MonoBehaviour
         ViewManager.ShowLast();
         yield return null;    
     }
-
-    // Ok, so aside from the problem of not fading out, we also have the problem of the .06 fade in at the start
-    // What is going on
 }
 
 

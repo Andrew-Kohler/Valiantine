@@ -39,7 +39,7 @@ public class EnemyPathMovement : MonoBehaviour
         }
         
 
-        if (!active && GameManager.Instance.canMove()) 
+        if (!active && GameManager.Instance.enemyCanMove()) 
         {
             // First, check if we're at a waypoint (that means we need to change target)
             if (Vector3.Distance(transform.position, waypoints[currentWaypointIndex].transform.position) < .1f)
@@ -54,7 +54,7 @@ public class EnemyPathMovement : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, waypoints[currentWaypointIndex].transform.position, movementSpeed * Time.deltaTime);
             // Time.deltaTime is the amount of time passed since the last frame, allows for framerate independence
         }
-        else if(active && GameManager.Instance.canMove()) // If chase has been enabled
+        else if(active && GameManager.Instance.enemyCanMove()) // If chase has been enabled
         {
             chaseMovement.enabled = true;
             this.enabled = false;
