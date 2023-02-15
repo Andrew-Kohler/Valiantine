@@ -10,16 +10,21 @@ using UnityEngine;
 
 public class InGameUIView : View
 {
+   // Camera cam;
+    //CameraFollow camController;
     public override void Initialize()
     {
         //throw new System.NotImplementedException();
+        //cam = Camera.main;
+        //camController = cam.GetComponent<CameraFollow>();
     }
 
     void Update()
     {
         if (GameManager.Instance.isInventory())
         {
-            ViewManager.Show<InventoryMenuView>(true);
+            ViewManager.ShowFade<InventoryMenuView>(true);
+            //camController.setCamInventory();
         }
         else if (GameManager.Instance.isSettings())
         {

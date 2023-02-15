@@ -10,7 +10,6 @@ using UnityEngine;
 
 public class PlayerMenuToggle : MonoBehaviour
 {
-
     void Update()
     {
         if (Input.GetButtonDown("Inventory"))    // If the player presses Q, it should toggle the inventory

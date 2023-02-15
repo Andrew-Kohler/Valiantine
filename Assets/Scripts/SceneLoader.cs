@@ -17,8 +17,7 @@ public class SceneLoader : MonoBehaviour
     private string lastGate;
 
     GameObject transitionPanel;
-    Fade fadeIn;
-    Unfade fadeOut;
+    FadeScene fade;
 
     public static SceneLoader Instance
     {
@@ -40,8 +39,8 @@ public class SceneLoader : MonoBehaviour
         GameManager.Instance.Transition(true);  // Informs the game manager we're in a transition state
 
         transitionPanel = GameObject.Find("Black Panel");   // Fade out to black before loading the next scene
-        fadeIn = transitionPanel.GetComponent<Fade>();
-        fadeIn.FadeIn(levelToLoad);
+        fade = transitionPanel.GetComponent<FadeScene>();
+        fade.SceneFadeIn(levelToLoad);
     }
 
     private void Awake()
@@ -76,17 +75,14 @@ public class SceneLoader : MonoBehaviour
                 player.transform.position = gateway.spawnPoint.position;  // player.transform.position = position of that gate's spawn point
             }
         }
-        // TODO: Un-fade to black
 
     }
 
     private void OnDisable()
-    {
+    {    
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-
-    
 }
 
 // https://answers.unity.com/questions/998780/how-do-i-spawn-player-in-certain-places-between-sc.html

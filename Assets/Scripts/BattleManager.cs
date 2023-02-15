@@ -19,14 +19,17 @@ public class BattleManager : MonoBehaviour
 
     private int currentTurn;
 
-    public enum MenuStatus { Selecting, Attack, Spell, Inventory, Run, Inactive};
+    public enum MenuStatus { Selecting, Attack, Spell, Inventory, Run, Inactive };
     MenuStatus status;
 
-    enum EndStatus { None, Win, Loss, Run};
+    enum EndStatus { None, Win, Loss, Run };
     EndStatus endResult;
 
     // The enemy in question
     string enemyName;
+
+    float camX;
+    float camZ;
 
     // Instances of all other necessary classes
     GameObject currentEnemy;
@@ -43,8 +46,8 @@ public class BattleManager : MonoBehaviour
     Rigidbody playerRb;
     Rigidbody enemyRb;
 
-    Camera cam;
-    CameraFollow camController;
+    //Camera cam;
+    //CameraFollow camController;
 
     GameObject battleUI;
 
@@ -81,15 +84,15 @@ public class BattleManager : MonoBehaviour
     {
         battleIntro = true;
         battleActive = false;
-        cam = Camera.main;
-        camController = cam.GetComponent<CameraFollow>();
+        //cam = Camera.main;
+        //camController = cam.GetComponent<CameraFollow>();
 
         actInds = GameObject.Find("Action Indicators");
         indAction = actInds.GetComponent<IndicatorAction>();
 
         status = MenuStatus.Inactive;
         endResult = EndStatus.None;
-        
+
 
     }
 
@@ -106,11 +109,14 @@ public class BattleManager : MonoBehaviour
                 playerRb = player.GetComponent<Rigidbody>();
                 enemyRb = currentEnemy.GetComponent<Rigidbody>();
 
+                camX = (enemyRb.position.x + playerRb.position.x) / 2;
+                camZ = playerRb.position.z;
+
                 HideEnemies(currentEnemy);    // Hide all other enemies
 
                 // Determine turn order
                 turnArray = new Stats[2];  // This will make potential expansion of this system easier in the future
-                if(playerStats.GetSpeed() >= enemyStats.GetSpeed()) // A very basic speed check
+                if (playerStats.GetSpeed() >= enemyStats.GetSpeed()) // A very basic speed check
                 {
                     turnArray[0] = playerStats;
                     turnArray[1] = enemyStats;
@@ -128,19 +134,19 @@ public class BattleManager : MonoBehaviour
             {
                 if (!turnArray[currentTurn].getDowned()) // If the current turn taker is not downed/dead
                 {
-                    if(turnArray[currentTurn].name == player.name)  // Currently we're only dealing with 1v1s, so that's how we'll code
+                    if (turnArray[currentTurn].name == player.name)  // Currently we're only dealing with 1v1s, so that's how we'll code
                     {
-                        if(status == MenuStatus.Inactive) // Show the action indicators
+                        if (status == MenuStatus.Inactive) // Show the action indicators
                         {
                             status = MenuStatus.Selecting;
                             StartCoroutine(indAction.DoFlashIn());    // Flash our action indicators in
                         }
-                        else if(status == MenuStatus.Selecting) // Handles all the conditionals for choosing an action
+                        else if (status == MenuStatus.Selecting) // Handles all the conditionals for choosing an action
                         {
                             indAction.enabled = true;
                             if (Input.GetButtonDown("Interact"))
                             {
-                                if (indAction.GetLeadBox() == "ATK") 
+                                if (indAction.GetLeadBox() == "ATK")
                                 {
                                     status = MenuStatus.Attack;
                                 }
@@ -158,13 +164,13 @@ public class BattleManager : MonoBehaviour
                                 }
                             }
                         }
-                        else if(status == MenuStatus.Attack) // If the player has chosen to attack
+                        else if (status == MenuStatus.Attack) // If the player has chosen to attack
                         {
                             indAction.enabled = false;
                             if (Input.GetButtonDown("Cancel"))
                             {
                                 status = MenuStatus.Selecting;
-                            }        
+                            }
                         }
                         else if (status == MenuStatus.Spell) // If the player has chosen to cast a spell
                         {
@@ -205,7 +211,7 @@ public class BattleManager : MonoBehaviour
                 {
 
                 }
-                else if(endResult == EndStatus.Run)
+                else if (endResult == EndStatus.Run)
                 {
                     StartCoroutine(DoBattleRun());
                 }
@@ -217,6 +223,16 @@ public class BattleManager : MonoBehaviour
     public void SetTarget(GameObject enemy)
     {
         currentEnemy = enemy;
+    }
+
+    public float GetCamX()
+    {
+        return camX;
+    }
+
+    public float GetCamZ()
+    {
+        return camZ;
     }
 
     public MenuStatus GetPlayerStatus()
@@ -325,9 +341,9 @@ public class BattleManager : MonoBehaviour
     {
         activeCoroutine = true;
 
-        float camX = (enemyRb.position.x + playerRb.position.x) / 2;
-        float camZ = playerRb.position.z;
-        camController.setCamVals(camX, camZ);
+        //float camX = (enemyRb.position.x + playerRb.position.x) / 2;
+        //float camZ = playerRb.position.z;
+        //camController.setCamVals(camX, camZ);
         //Debug.Log("Cam X: " + camX + " Cam Z: " + camZ);
 
         BattleRecoil();                             // Correctly position the player and the enemy
@@ -351,10 +367,8 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);                // Wait so the player can read the text box
         battleUI.GetComponent<FadeUI>().UIFadeOut();
-        yield return new WaitForSeconds(.2f);
-        ViewManager.ShowLast();                             // Switch views back to In-Game UI
-
-        camController.camReturnToPos();
+        
+        //camController.camReturnToPos();
 
         GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle
 

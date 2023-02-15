@@ -1,14 +1,8 @@
-/*
-Camera Follow
-Used on:    Main Camera
-For:    Tells the main camera to follow the player around the scene, within pre-defined and adjustable boundaries
-*/
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class CameraControl : MonoBehaviour
 {
     [SerializeField] GameObject upperX; // The boundary points that form the confining square of the camera
     [SerializeField] GameObject lowerX;
@@ -26,7 +20,8 @@ public class CameraFollow : MonoBehaviour
     float zValue;               // Value of z distance between player and camera (liable to change)
     float zConstant = 18.34f;   // The maximum distance between the player and the camera
 
-    [SerializeField] float step = 20f;
+    [SerializeField] float battleStep = 20f;
+    [SerializeField] float inventoryStep = 10f;
 
     float battleX;
     float battleZ;
@@ -34,6 +29,7 @@ public class CameraFollow : MonoBehaviour
     Vector3 tempPos;
 
     bool activeCoroutine;
+    bool activeSwitch;  // Ensures that perspective shifts for battle and such are only done once
 
     void Start()
     {
@@ -45,13 +41,17 @@ public class CameraFollow : MonoBehaviour
         lowerZPos = lowerZ.transform.position.z;
 
         activeCoroutine = false;
-
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.freeCam() && !activeCoroutine)
+        if(GameManager.Instance.freeCam() && activeSwitch)
+        {
+            CamReset(battleStep);
+            activeSwitch = false;
+        }
+
+        else if (GameManager.Instance.freeCam() && !activeCoroutine) // The code which allows the camera to track the player
         {
             tempPos = transform.position;
 
@@ -85,26 +85,32 @@ public class CameraFollow : MonoBehaviour
 
             transform.position = tempPos;
         }
+
+        else if (GameManager.Instance.isBattle() && !activeSwitch)
+        {
+            SetCamBattle();
+            activeSwitch = true;
+        }
+        else if (GameManager.Instance.isInventory() && !activeSwitch)
+        {
+            SetCamInventory();
+            activeSwitch = true;
+        }
+    } // End of update
+
+    private void SetCamBattle()
+    {
+        StartCoroutine(DoCamBattle());
     }
 
-    public void setCamInventory()
+    private void SetCamInventory()
     {
         Vector3 targetPos = new Vector3(xValue + 5f, yValue, zValue + 2f);
-        StartCoroutine(DoCamPosition(targetPos));
-    }
-    public void setCamVals(float camX, float camZ)
-    {
-        //Debug.Log("New cam vals set");
-        battleX = camX;
-        battleZ = camZ - zConstant;
-        Vector3 targetPos = new Vector3(battleX, yValue, battleZ);
-        //Debug.Log("Battle X: " + battleX + " Battle Z: " + battleZ);
-        StartCoroutine(DoCamPosition(targetPos));
+        StartCoroutine(DoCamPosition(targetPos, inventoryStep));
     }
 
-    public void camReturnToPos()
+    private void CamReset(float step)
     {
-        // So, we just need this method to get the value that the update loop calculates, and pass it as a vector3
         xValue = player.transform.position.x;               // Initial position values which may or may not change every Update()
         yValue = transform.position.y;
         zValue = player.transform.position.z - zConstant;
@@ -130,27 +136,33 @@ public class CameraFollow : MonoBehaviour
         }
 
         Vector3 targetPos = new Vector3(xValue, yValue, zValue);
-        StartCoroutine(DoCamPosition(targetPos));
+        StartCoroutine(DoCamPosition(targetPos, step));
     }
 
-    IEnumerator DoCamPosition(Vector3 targetPos)
+    IEnumerator DoCamBattle()
     {
-        float tempStep = step;  // Preserves step through the modifications made during coroutine for slowdown
+        yield return new WaitForEndOfFrame();
+        battleX = BattleManager.Instance.GetCamX();
+        battleZ = BattleManager.Instance.GetCamZ() - zConstant;
+        Vector3 targetPos = new Vector3(battleX, yValue, battleZ);
+        //Debug.Log("Battle X: " + battleX + " Battle Z: " + battleZ);
+        StartCoroutine(DoCamPosition(targetPos, battleStep));
+        yield return null;
+    }
+
+    IEnumerator DoCamPosition(Vector3 targetPos, float step)
+    {
         activeCoroutine = true;
-        
+
         //Debug.Log("Target X: " + targetPos.x + " Target Z: " + targetPos.z);
-        
+
         while (Vector3.Distance(transform.position, targetPos) > .05f)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, step * Time.deltaTime);  
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, step * Time.deltaTime);
             yield return null;
         }
 
-        step = tempStep;
         activeCoroutine = false;
         yield return null;
     }
 }
-
-
-

@@ -54,6 +54,29 @@ public class ViewManager : MonoBehaviour
         }                                                    
     }   // End of Show<T>
 
+    public static void ShowFade<T>(bool remember) where T : View // This was made as bool remember = true in the tutorial, so that half the time
+    {                                                       // you don't need to input the paramenter, but I'm doing it differently for
+        for (int i = 0; i < _instance.views.Length; i++)     // internal consistency
+        {                                                   // Method is used to hide the current view and show a new one
+            if (_instance.views[i] is T)
+            {
+                if (_instance.currentView != null)   // If the current view isn't null
+                {
+                    if (remember)   // If we marked that we want to remember the current view for later
+                    {
+                        _instance.history.Push(_instance.currentView);
+                    }
+
+                    _instance.currentView.Hide();   // Hide the current view if we need to
+                }
+
+                _instance.views[i].Show();          // Show the view we want shown, and make it the current view
+                _instance.currentView = _instance.views[i];
+                _instance.currentView.GetComponent<FadeUI>().UIFadeIn();
+            }
+        }
+    }   // End of Show<T>
+
     public static void Show(View view, bool remember)   // Same purpose as above, different implementation
     {
         if (_instance.currentView != null)   // If the current view isn't null
@@ -92,7 +115,7 @@ public class ViewManager : MonoBehaviour
             views[i].Hide();
         }
 
-        if(startingView != null)
+        if (startingView != null)
         {
             Show(startingView, true);
         }

@@ -1546,7 +1546,6 @@ GameObject:
   - component: {fileID: 184946903}
   - component: {fileID: 184946902}
   - component: {fileID: 184946901}
-  - component: {fileID: 184946905}
   - component: {fileID: 184946904}
   m_Layer: 5
   m_Name: Black Panel
@@ -1634,19 +1633,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 184946899}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a7c968a7c2163d40aae4dc494a9a2de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &184946905
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 184946899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 398c8ed44b6df88409883ab2fc57849b, type: 3}
+  m_Script: {fileID: 11500000, guid: d021de3ee8affa74c89499a3ebd08f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &265775578
@@ -4213,8 +4200,8 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
-  - component: {fileID: 963194229}
   - component: {fileID: 963194230}
+  - component: {fileID: 963194231}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4288,24 +4275,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 20.51, y: 0, z: 0}
---- !u!114 &963194229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d137fecea195bbb4e80c951e6ac5ee1e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  upperX: {fileID: 1643722319}
-  lowerX: {fileID: 808535954}
-  upperZ: {fileID: 1514909810}
-  lowerZ: {fileID: 388552229}
-  player: {fileID: 908275599}
-  step: 20
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4339,6 +4308,25 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &963194231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e746b711d12c545bd6ef6d8de7ee8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upperX: {fileID: 1643722319}
+  lowerX: {fileID: 808535954}
+  upperZ: {fileID: 1514909810}
+  lowerZ: {fileID: 388552229}
+  player: {fileID: 908275599}
+  battleStep: 20
+  inventoryStep: 10
 --- !u!1 &974384580
 GameObject:
   m_ObjectHideFlags: 0
@@ -5471,8 +5459,8 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1337694082}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
+  m_Alpha: 0
+  m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!114 &1337694085

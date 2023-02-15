@@ -131,7 +131,6 @@ public class EnemyRandomMovement : MonoBehaviour
 
                 }
                 count++;
-                Debug.Log("Oh boy we goin");
                 yield return new WaitForSeconds(.017f);
             }
 
