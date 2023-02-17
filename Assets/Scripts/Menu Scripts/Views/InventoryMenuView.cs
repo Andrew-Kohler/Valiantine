@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class InventoryMenuView : View
 {
     [SerializeField] private GameObject itemsTab;
     [SerializeField] private GameObject gemsTab;
+
+    [SerializeField] TextMeshProUGUI flavorText;
     public override void Initialize()
     {
         //throw new System.NotImplementedException();
@@ -15,7 +18,7 @@ public class InventoryMenuView : View
 
     private void Update()
     {
-        
+        UpdateText();
         if(Input.GetButtonDown("Inv.Tab 1"))
         {
             Switch(itemsTab);
@@ -51,4 +54,17 @@ public class InventoryMenuView : View
             gemsTab.SetActive(false);
         }
     }
+
+    private void UpdateText()
+    {
+        if (itemsTab.activeSelf)
+        {
+            flavorText.text = "Wow. You don't have any items. Loser.";
+        }
+        else
+        {
+            flavorText.text = "Gemless + no sword + 0 mana + ratio";
+        }
+    }
+
 }
