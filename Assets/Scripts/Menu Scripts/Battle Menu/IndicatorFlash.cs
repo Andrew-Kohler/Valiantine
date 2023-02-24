@@ -34,14 +34,20 @@ public class IndicatorFlash : Indicator
         indicators[3].transform.position = threePos;
     }
 
-    public IEnumerator DoFlashOut() // Called by calling DoFlashIn in IndicatorAction
+    public IEnumerator DoFlashOut(bool all) // Called by calling DoFlashIn in IndicatorAction
     {
+        int j = 1;
+        if (all)
+        {
+            j = 0;  // If all is true, we flash all of them in/out; if it isn't, we don't flash the front one
+        }
         alpha = 1;
         while (alpha > 0)
         {
-            for (int i = 0; i < 4; i++)  // Set these to 1f
+            for (int i = j; i < 4; i++)  // Set these to 1f
             {
-                sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
+                indicators[i].GetComponent<SpriteRenderer>().color = new Color(indicators[i].GetComponent<SpriteRenderer>().color.r, indicators[i].GetComponent<SpriteRenderer>().color.g, indicators[i].GetComponent<SpriteRenderer>().color.b, alpha);
+                //sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
             alpha -= alphaStep * Time.deltaTime;
             yield return null;

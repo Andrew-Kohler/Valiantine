@@ -40,6 +40,10 @@ public class BattleUIView : View
         {
             updateText();
             updateHPandMP();
+            if (GameManager.Instance.isSettings())  // Considerations made for changing to settings
+            {
+                ViewManager.Show<SettingsMenuView>(true);
+            }
         }
         
     }

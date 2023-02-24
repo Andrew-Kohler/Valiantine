@@ -134,7 +134,7 @@ public class BattleManager : MonoBehaviour
                         if (status == MenuStatus.Inactive) // Show the action indicators
                         {
                             status = MenuStatus.Selecting;
-                            StartCoroutine(indAction.DoFlashIn());    // Flash our action indicators in
+                            StartCoroutine(indAction.DoFlashIn(true));    // Flash our action indicators in
                         }
                         else if (status == MenuStatus.Selecting) // Handles all the conditionals for choosing an action
                         {
@@ -144,14 +144,17 @@ public class BattleManager : MonoBehaviour
                                 if (indAction.GetLeadBox() == "ATK")
                                 {
                                     status = MenuStatus.Attack;
+                                    StartCoroutine(indAction.DoFlashOut(false));
                                 }
                                 else if (indAction.GetLeadBox() == "SPL")
                                 {
                                     status = MenuStatus.Spell;
+                                    StartCoroutine(indAction.DoFlashOut(true));
                                 }
                                 else if (indAction.GetLeadBox() == "ITM")
                                 {
                                     status = MenuStatus.Inventory;
+                                    StartCoroutine(indAction.DoFlashOut(false));
                                 }
                                 else if (indAction.GetLeadBox() == "RUN")
                                 {
@@ -162,28 +165,30 @@ public class BattleManager : MonoBehaviour
                         else if (status == MenuStatus.Attack) // If the player has chosen to attack
                         {
                             indAction.enabled = false;
-                            if (Input.GetButtonDown("Cancel"))
+                            if (Input.GetButtonDown("Inventory"))
                             {
+                                StartCoroutine(indAction.DoFlashIn(false));
                                 status = MenuStatus.Selecting;
                             }
                         }
                         else if (status == MenuStatus.Spell) // If the player has chosen to cast a spell
                         {
                             indAction.enabled = false;
-                            StartCoroutine(indAction.DoFlashOut());
+                            
                         }
                         else if (status == MenuStatus.Inventory) // If the player has chosen to open the inventory
                         {
                             indAction.enabled = false;
-                            if (Input.GetButtonDown("Cancel"))
+                            if (Input.GetButtonDown("Inventory"))
                             {
+                                StartCoroutine(indAction.DoFlashIn(false));
                                 status = MenuStatus.Selecting;
                             }
                         }
                         else if (status == MenuStatus.Run) // If the player has chosen to run
                         {
                             indAction.enabled = false;
-                            StartCoroutine(indAction.DoFlashOut());
+                            StartCoroutine(indAction.DoFlashOut(true));
                             endResult = EndStatus.Run;
                             battleActive = false;
                         }

@@ -112,6 +112,7 @@ public class IndicatorAction : Indicator
 
         indicators[0].transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         rotationStep = 0f;
+        
 
         if (keepGoingCheck)
         {
@@ -175,20 +176,28 @@ public class IndicatorAction : Indicator
         activeCoroutine = false;
     }
 
-    public IEnumerator DoFlashIn()
+    public IEnumerator DoFlashIn(bool all)
     {
+        int j = 1;
+        bool k = false;
+        if (all)
+        {
+            j = 0;  // If all is true, we flash all of them in/out; if it isn't, we don't flash the front one
+            k = true;
+        }
         IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
 
         activeCoroutine = true;
         flash.enabled = true;
-        StartCoroutine(flash.DoFlashOut()); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
+        StartCoroutine(flash.DoFlashOut(k)); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
 
         alpha = 0;              // In order to always have this coroutine flash the indicators in, reset alpha to 0
         while (alpha <= 1)
         {
-            for (int i = 0; i < 4; i++)  // Move the indicators towards full opacity
+            for (int i = j; i < 4; i++)  // Move the indicators towards full opacity
             {
-                sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
+                indicators[i].GetComponent<SpriteRenderer>().color = new Color(indicators[i].GetComponent<SpriteRenderer>().color.r, indicators[i].GetComponent<SpriteRenderer>().color.g, indicators[i].GetComponent<SpriteRenderer>().color.b, alpha);
+                //sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
             alpha += alphaStep * Time.deltaTime;
             yield return null;
@@ -200,20 +209,29 @@ public class IndicatorAction : Indicator
         yield return null;
     }
 
-    public IEnumerator DoFlashOut()
+    public IEnumerator DoFlashOut(bool all)
     {
+        int j = 1;
+        bool k = false;
+        if (all)
+        {
+            j = 0;  // If all is true, we flash all of them in/out; if it isn't, we don't flash the front one
+            k = true;
+        }
+
         IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
 
         activeCoroutine = true;
         flash.enabled = true;
-        StartCoroutine(flash.DoFlashOut()); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
+        StartCoroutine(flash.DoFlashOut(k)); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
 
         alpha = 1;              // In order to always have this coroutine flash the indicators in, reset alpha to 0
         while (alpha >= 0)
         {
-            for (int i = 0; i < 4; i++)  // Move the indicators towards full opacity
+            for (int i = j; i < 4; i++)  // Move the indicators towards full opacity
             {
-                sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
+                indicators[i].GetComponent<SpriteRenderer>().color = new Color(indicators[i].GetComponent<SpriteRenderer>().color.r, indicators[i].GetComponent<SpriteRenderer>().color.g, indicators[i].GetComponent<SpriteRenderer>().color.b, alpha);
+                //sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
             alpha -= 1;
             yield return null;
