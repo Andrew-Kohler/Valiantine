@@ -14,6 +14,7 @@ public class Indicator : MonoBehaviour
     protected Vector3 onePos;     // Position of the left indicator
     protected Vector3 twoPos;     // Position of the top indicator
     protected Vector3 threePos;   // Position of the right indicator
+    protected Vector3 centerPos;
 
     protected GameObject[] indicators;    // Array of the 4 indicators
     protected SpriteRenderer[] sr;        // Array of each indicator's sprite renderer
@@ -50,6 +51,7 @@ public class Indicator : MonoBehaviour
         onePos = new Vector3(this.gameObject.transform.parent.position.x - xOffset2, this.gameObject.transform.parent.position.y + yOffset2, this.gameObject.transform.parent.position.z);
         twoPos = new Vector3(this.gameObject.transform.parent.position.x - xOffset1, this.gameObject.transform.parent.position.y + yOffset3, this.gameObject.transform.parent.position.z + zOffset);
         threePos = new Vector3(this.gameObject.transform.parent.position.x + xOffset2, this.gameObject.transform.parent.position.y + yOffset2, this.gameObject.transform.parent.position.z);
+        centerPos = new Vector3(this.gameObject.transform.parent.position.x, this.gameObject.transform.parent.position.y + yOffset2, this.gameObject.transform.parent.position.z);
 
         indicators[0].transform.position = zeroPos;
         indicators[1].transform.position = onePos;

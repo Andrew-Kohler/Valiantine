@@ -199,12 +199,17 @@ public class IndicatorAction : Indicator
                 indicators[i].GetComponent<SpriteRenderer>().color = new Color(indicators[i].GetComponent<SpriteRenderer>().color.r, indicators[i].GetComponent<SpriteRenderer>().color.g, indicators[i].GetComponent<SpriteRenderer>().color.b, alpha);
                 //sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
+            
+            
+
             alpha += alphaStep * Time.deltaTime;
             yield return null;
         }
 
+        
         enabled = true; // Enable this script (for when you first enter the battle)
         activeCoroutine = false;
+
 
         yield return null;
     }
@@ -225,7 +230,7 @@ public class IndicatorAction : Indicator
         flash.enabled = true;
         StartCoroutine(flash.DoFlashOut(k)); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
 
-        alpha = 1;              // In order to always have this coroutine flash the indicators in, reset alpha to 0
+        alpha = 1;              // In order to always have this coroutine flash the indicators out, reset alpha to 1
         while (alpha >= 0)
         {
             for (int i = j; i < 4; i++)  // Move the indicators towards full opacity
@@ -234,9 +239,20 @@ public class IndicatorAction : Indicator
                 //sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
             alpha -= 1;
+
             yield return null;
         }
 
+        /*if (!all)
+        {
+            while (indicators[0].transform.position.z > centerPos.z)
+            {
+              indicators[0].transform.position = Vector3.MoveTowards(indicators[0].transform.position, centerPos, alphaStep * Time.deltaTime);
+              yield return null;
+            }
+        }*/
+        
+        //indicators[0].transform.position = centerPos;
         enabled = false; // Disable this script so that random inputs aren't moving the boxes
         activeCoroutine = false;
 
