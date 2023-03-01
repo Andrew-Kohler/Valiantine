@@ -59,7 +59,7 @@ public class InventoryMenuView : View
     {
         if (itemsTab.activeSelf)
         {
-            flavorText.text = "Wow. You don't have any items. Loser.";
+            flavorText.text = "Well, now you have items, but you can't use them. Still a loser.";
         }
         else
         {

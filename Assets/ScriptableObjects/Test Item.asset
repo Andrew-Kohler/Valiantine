@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f4fcc24172e7d2438345952eeee2726, type: 3}
   m_Name: Test Item
   m_EditorClassIdentifier: 
-  Icon: {fileID: 0}
+  MenuIcon: {fileID: 1102718956, guid: a694df41fa2f4ad4c97d584be789ccb5, type: 3}
+  OverworldIcon: {fileID: -816985511, guid: a694df41fa2f4ad4c97d584be789ccb5, type: 3}
   MaxStackSize: 99
-  DisplayName: Unknown Item
-  InventoryDescription: A strange, formless portion of space.
-  UseDescription: It seems to have no use.
-  BattleUseDescription: It's not even better than nothing. It's worse than nothing,
-    quite honestly.
+  DisplayName: Fruit Punch
+  InventoryDescription: A cool glass of fruit punch.
+  UseDescription: It's cold and yummy when you drink it.
+  BattleUseDescription: It's just fruit punch. It's not going to summon the Kool-Aid
+    Man or anything.

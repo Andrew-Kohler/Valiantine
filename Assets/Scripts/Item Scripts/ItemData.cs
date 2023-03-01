@@ -5,7 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Inventory System/Item")]
 public class ItemData : ScriptableObject
 {
-    public Sprite Icon;
+    public Sprite MenuIcon;
+    public Sprite OverworldIcon;
     public int MaxStackSize;
     public string DisplayName;
 

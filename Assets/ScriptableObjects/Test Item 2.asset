@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f4fcc24172e7d2438345952eeee2726, type: 3}
   m_Name: Test Item 2
   m_EditorClassIdentifier: 
-  Icon: {fileID: 0}
+  MenuIcon: {fileID: 1691876170, guid: a694df41fa2f4ad4c97d584be789ccb5, type: 3}
+  OverworldIcon: {fileID: -1911681020, guid: a694df41fa2f4ad4c97d584be789ccb5, type: 3}
   MaxStackSize: 99
-  DisplayName: Strange Item
-  InventoryDescription: A formless, unknowable void that is nevertheless an item.
-  UseDescription: It has no apparent use.
-  BattleUseDescription: It is no more useful in battle than an imaginary foam sword.
-    Less useful, actually.
+  DisplayName: Melted Popsicle Juice
+  InventoryDescription: 'A vial of melted blueberry popsicle. '
+  UseDescription: It is unclear why someone would do this.
+  BattleUseDescription: Perhaps throwing it at the enemy would confuse them as much
+    as it confuses me.
