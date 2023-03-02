@@ -59,7 +59,14 @@ public class InventoryMenuView : View
     {
         if (itemsTab.activeSelf)
         {
-            flavorText.text = "Well, now you have items, but you can't use them. Still a loser.";
+            if (!itemsTab.GetComponent<StaticInventoryDisplay>().SelectedInventorySlot.CheckEmpty())
+            {
+                flavorText.text = itemsTab.GetComponent<StaticInventoryDisplay>().SelectedInventorySlot.AssignedInventorySlot.Data.InventoryDescription;
+            }
+            else
+            {
+                flavorText.text = "Courage is not an item to be carried; it lies within you.";
+            }
         }
         else
         {
