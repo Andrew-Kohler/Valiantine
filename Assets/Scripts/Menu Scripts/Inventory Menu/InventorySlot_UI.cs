@@ -35,8 +35,10 @@ public class InventorySlot_UI : MonoBehaviour
         {
             itemSprite.sprite = slot.Data.MenuIcon;
             itemSprite.color = Color.white;
+
             if (Selected) itemName.fontStyle = FontStyles.Underline;
             else itemName.fontStyle = FontStyles.Normal;
+
             itemName.text = slot.Data.DisplayName;
 
             if (slot.StackSize >= 1) itemCount.text = "x" + slot.StackSize.ToString();
@@ -60,6 +62,11 @@ public class InventorySlot_UI : MonoBehaviour
         itemSprite.color = Color.clear;
         itemName.text = "";
         itemCount.text = "";
+    }
+
+    public void UseItemInSlot()
+    {
+
     }
 
     public void OnUISlotClick() // Used in the tutorial for mouse interaction with an inventory slot, but I can coopt the structure for keyboard interaction

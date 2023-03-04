@@ -11,7 +11,6 @@ public class InventoryMenuView : View
     [SerializeField] TextMeshProUGUI flavorText;
     public override void Initialize()
     {
-        //throw new System.NotImplementedException();
         itemsTab.SetActive(true);
         gemsTab.SetActive(false);
     }
@@ -70,7 +69,7 @@ public class InventoryMenuView : View
         }
         else
         {
-            flavorText.text = "Gemless + no sword + 0 mana + ratio";
+            flavorText.text = "Ok, wait, hold on, you don't have to implement this buddy, we can ta-";
         }
     }
 
