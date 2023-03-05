@@ -42,7 +42,11 @@ public class InventorySlot_UI : MonoBehaviour
             itemName.text = slot.Data.DisplayName;
 
             if (slot.StackSize >= 1) itemCount.text = "x" + slot.StackSize.ToString();
-            else itemCount.text = "";
+            else
+            {
+                itemCount.text = "";
+                ClearSlot();
+            }
         }
         else
         {

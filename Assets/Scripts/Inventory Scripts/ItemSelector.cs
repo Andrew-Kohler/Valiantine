@@ -34,14 +34,7 @@ public class ItemSelector : MonoBehaviour
         if(!itemsTab.GetComponent<StaticInventoryDisplay>().SelectedInventorySlot.CheckEmpty()) // If we have at least one item
         {
             SetPosition();
-           /* if (Input.GetButtonDown("Interact"))
-            {
-                
-            }
-            else if (Input.GetButtonDown("Return"))
-            {
-                
-            }*/
+           // Ok, so if 
         }
         else // If we don't, flip the off switch
         {
@@ -67,8 +60,8 @@ public class ItemSelector : MonoBehaviour
 
     private void SetPosition()
     {
-        Vector3 selectedPosition = itemsTab.GetComponent<StaticInventoryDisplay>().SelectedInventorySlot.transform.position;
-        this.transform.position = new Vector3(selectedPosition.x - xOffset, selectedPosition.y, selectedPosition.z);
+         Vector3 selectedPosition = itemsTab.GetComponent<StaticInventoryDisplay>().SelectedInventorySlot.transform.position;
+         this.transform.position = new Vector3(selectedPosition.x - xOffset, selectedPosition.y, selectedPosition.z); 
     }
 
 }

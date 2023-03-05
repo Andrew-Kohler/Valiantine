@@ -30,7 +30,7 @@ public abstract class InventoryDisplay : MonoBehaviour // This is the one that a
         }
     }
 
-    public void SlotClicked(InventorySlot_UI clickedSlot) //Again, co-opting architecture
+    public void SlotClicked(InventorySlot_UI clickedSlot) // Again, co-opting architecture
     {
         Debug.Log("Slot clicked");
     }

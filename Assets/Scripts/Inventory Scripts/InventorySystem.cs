@@ -49,14 +49,34 @@ public class InventorySystem
         return false;
     }
 
+    public bool RemoveFromInventory(ItemData itemToRemove, int amountToRemove, int index) // Removes a given item from the inventory
+    {
+        if (ContainsItem(itemToRemove, out List<InventorySlot> invSlot)) // If the inventory contains the item
+        {
+            invSlot[0].RemoveFromStack(amountToRemove); // Remove the item
+            OnInventorySlotChanged?.Invoke(invSlot[0]);
+
+            Debug.Log(ContainsItem(itemToRemove, out List<InventorySlot> invSlot2));
+            if(!ContainsItem(itemToRemove, out List<InventorySlot> invSlot4)){   // If there are no more items in the slot
+                Debug.Log("Moving on up");
+                MoveItemsUp(index);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     public bool ContainsItem(ItemData itemToAdd, out List<InventorySlot> invSlot) // Check if our inventory contains an item
     {
         // Ok, so this is sort of like a 1 line for and if all in one
         // It goes through all the items, and if the item data in a slot == the item we're adding, it drops it in the list
         invSlot = InventorySlots.Where(i => i.Data == itemToAdd).ToList(); // Linq madness
 
-        return invSlot == null ? false : true; 
-        
+        //return invSlot == null ? false : true; 
+        return invSlot.Count == 0 ? false : true;
+
     }
 
     public bool HasFreeSlot(out InventorySlot freeSlot) // Check if we have a free empty slot
@@ -65,5 +85,14 @@ public class InventorySystem
 
         freeSlot = InventorySlots.FirstOrDefault(i => i.Data == null); // Gets the first empty slot
         return freeSlot == null ? false : true;
+    }
+
+    private void MoveItemsUp(int index) // Moves all items below the given index up one slot
+    {
+        for(int i = index + 1; i < inventorySlots.Count; i++)
+        { 
+            inventorySlots[i-1].UpdateInventorySlot(inventorySlots[i]);
+            inventorySlots[i].ClearSlot();
+        }
     }
 }

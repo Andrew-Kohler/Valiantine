@@ -8,17 +8,29 @@ public class InventoryMenuView : View
     [SerializeField] private GameObject itemsTab;
     [SerializeField] private GameObject gemsTab;
 
+    [SerializeField] GameObject healthBar;
+    [SerializeField] GameObject manaBar;
+    [SerializeField] GameObject player;
+    PlayerStats playerStats;
+    HealthBar healthBarUI;
+    ManaBar manaBarUI;
+
     [SerializeField] TextMeshProUGUI flavorText;
     public override void Initialize()
     {
         itemsTab.SetActive(true);
         gemsTab.SetActive(false);
+
+        playerStats = player.GetComponent<PlayerStats>();
+        healthBarUI = healthBar.GetComponent<HealthBar>();
+        manaBarUI = manaBar.GetComponent<ManaBar>();
     }
 
     private void Update()
     {
         UpdateText();
-        if(Input.GetButtonDown("Inv.Tab 1"))
+        updateHPandMP();
+        if (Input.GetButtonDown("Inv.Tab 1"))
         {
             Switch(itemsTab);
         }
@@ -58,9 +70,10 @@ public class InventoryMenuView : View
     {
         if (itemsTab.activeSelf)
         {
+
             if (!itemsTab.GetComponent<StaticInventoryDisplay>().SelectedInventorySlot.CheckEmpty())
             {
-                flavorText.text = itemsTab.GetComponent<StaticInventoryDisplay>().SelectedInventorySlot.AssignedInventorySlot.Data.InventoryDescription;
+                flavorText.text = itemsTab.GetComponent<StaticInventoryDisplay>().CurrentText;
             }
             else
             {
@@ -71,6 +84,15 @@ public class InventoryMenuView : View
         {
             flavorText.text = "Ok, wait, hold on, you don't have to implement this buddy, we can ta-";
         }
+    }
+
+    void updateHPandMP()
+    {
+        healthBarUI.SetHealth(playerStats.GetHP());
+        healthBarUI.SetMaxHealth(playerStats.GetMaxHP());
+
+        manaBarUI.SetMana(playerStats.GetMP());
+        manaBarUI.SetMaxMana(playerStats.GetMaxMP());
     }
 
 }

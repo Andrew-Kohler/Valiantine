@@ -11,10 +11,13 @@ public class StaticInventoryDisplay : InventoryDisplay //
     private float verticalInput;
     private int selectedSlot;
 
+    private string currentText;
+
     private bool activeCoroutine;
     private bool slotChosen;
 
     public InventorySlot_UI SelectedInventorySlot => slots[selectedSlot];
+    public string CurrentText => currentText;
 
     protected override void Start() // Fix my other inheritnece to work like this
     {
@@ -40,13 +43,18 @@ public class StaticInventoryDisplay : InventoryDisplay //
         {
             slots[selectedSlot].Selected = false;
             slots[selectedSlot].UpdateUISlot();
+            currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
         }
+
         
         selectedSlot = 0;
-        //slots[selectedSlot].Selected = true;
-        //slots[selectedSlot].UpdateUISlot();
         activeCoroutine = false;
         slotChosen = false;
+        if (!slots[selectedSlot].CheckEmpty())  
+        {
+            currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
+        }
+        
     }
 
     private void Update()
@@ -57,7 +65,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
 
             if (!slotChosen)    // If we haven't chosen a slot yet
             {
-                if (Input.GetButtonDown("Interact"))
+                if (Input.GetButtonDown("Interact")) 
                 {
                     selector.SelectorSwap();
                     slots[selectedSlot].Selected = true;
@@ -76,17 +84,29 @@ public class StaticInventoryDisplay : InventoryDisplay //
                     StartCoroutine(DoMoveDown());
                 }
             }
-            else
+
+            else // If we have selected an item
             {
-                if (Input.GetButtonDown("Interact"))
+                if (Input.GetButtonDown("Interact")) // If we choose to use that item
                 {
-                    // Ok, and now I actually have to use the item. TBH, I'd rather just do this right the first time, so we can 
-                    // call it tonight and do the consumable / nonconsumable split tomorrow
+                    currentText = slots[selectedSlot].AssignedInventorySlot.Data.UseDescription;
+                    if (slots[selectedSlot].AssignedInventorySlot.Data is ConsumableItemData) // If the item is consumable, we want to (a) carry out its effects and (b) remove it from the inventory
+                    {
+                        // (a) carry out effects
+                        // See, this is a GREAT place to use the event system
+                        // Trouble being, I have no idea how to do that.
+
+                        // (b) remove from inventory
+                        inventorySystem.RemoveFromInventory(slots[selectedSlot].AssignedInventorySlot.Data, 1, selectedSlot);
+                        UpdateSlotsBelow(selectedSlot);
+                    }
 
                     selector.SelectorSwap();
                     slots[selectedSlot].Selected = false;
                     slots[selectedSlot].UpdateUISlot();
                     slotChosen = false;
+
+                    // We need to update the text in the menu view with the "normal use" text of the item
                 }
                 else if (Input.GetButtonDown("Return"))
                 {
@@ -127,6 +147,14 @@ public class StaticInventoryDisplay : InventoryDisplay //
         return count;
     }
 
+    private void UpdateSlotsBelow(int index)   
+    {
+        for(int i = index; i < slots.Length; i++)
+        {
+            slots[i].UpdateUISlot();
+        }
+    }
+
     // Coroutines ----------------------------------
 
     IEnumerator DoMoveUp()
@@ -144,7 +172,8 @@ public class StaticInventoryDisplay : InventoryDisplay //
         }
 
         //slots[selectedSlot].Selected = true;
-       // slots[selectedSlot].UpdateUISlot();
+        // slots[selectedSlot].UpdateUISlot();
+        currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
         yield return new WaitForSeconds(.5f);
         activeCoroutine = false;
         yield return null;
@@ -164,7 +193,9 @@ public class StaticInventoryDisplay : InventoryDisplay //
         {
             selectedSlot = selectedSlot + 1;
         }
-       // slots[selectedSlot].Selected = true;
+
+        currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
+        // slots[selectedSlot].Selected = true;
         //slots[selectedSlot].UpdateUISlot();
         yield return new WaitForSeconds(.5f);
         activeCoroutine = false;
