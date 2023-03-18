@@ -8,8 +8,12 @@ public class InventoryMenuView : View
     [SerializeField] private GameObject itemsTab;
     [SerializeField] private GameObject gemsTab;
 
+    [SerializeField] GameObject itemsTabIndicator;
+    [SerializeField] GameObject gemsTabIndicator;
+
     [SerializeField] GameObject healthBar;
     [SerializeField] GameObject manaBar;
+
     [SerializeField] GameObject player;
     PlayerStats playerStats;
     HealthBar healthBarUI;
@@ -56,13 +60,17 @@ public class InventoryMenuView : View
     private void Switch(GameObject desiredSubmenu)  // A method that will switch the active sub-menu of the player menu
     {
         desiredSubmenu.SetActive(true);
-        if (itemsTab != desiredSubmenu)
-        {
-            itemsTab.SetActive(false);
-        }
-        if (gemsTab != desiredSubmenu)
+        if (itemsTab == desiredSubmenu)
         {
             gemsTab.SetActive(false);
+            gemsTabIndicator.GetComponent<MenuTabIcon>().Deselect();
+            itemsTabIndicator.GetComponent<MenuTabIcon>().Select();
+        }
+        if (gemsTab == desiredSubmenu)
+        {
+            itemsTab.SetActive(false);
+            itemsTabIndicator.GetComponent<MenuTabIcon>().Deselect();
+            gemsTabIndicator.GetComponent<MenuTabIcon>().Select();
         }
     }
 
