@@ -10,6 +10,10 @@ public class ItemData : ScriptableObject
     public int MaxStackSize;
     public string DisplayName;
 
+    public bool Consumable;
+    public int HPRestore;
+    public int MPRestore;
+
     [TextArea(1, 4)] public string InventoryDescription;
     [TextArea(1, 4)] public string UseDescription;
     [TextArea(1, 4)] public string BattleUseDescription;

@@ -90,11 +90,11 @@ public class StaticInventoryDisplay : InventoryDisplay //
                 if (Input.GetButtonDown("Interact")) // If we choose to use that item
                 {
                     currentText = slots[selectedSlot].AssignedInventorySlot.Data.UseDescription;
-                    if (slots[selectedSlot].AssignedInventorySlot.Data is ConsumableItemData) // If the item is consumable, we want to (a) carry out its effects and (b) remove it from the inventory
+                    if (slots[selectedSlot].AssignedInventorySlot.Data.Consumable) // If the item is consumable, we want to (a) carry out its effects and (b) remove it from the inventory
                     {
                         // (a) carry out effects
-                        // See, this is a GREAT place to use the event system
-                        // Trouble being, I have no idea how to do that.
+                        PlayerManager.Instance.PlayerStats().SetHP(slots[selectedSlot].AssignedInventorySlot.Data.HPRestore);
+                        PlayerManager.Instance.PlayerStats().SetMP(slots[selectedSlot].AssignedInventorySlot.Data.MPRestore);
 
                         // (b) remove from inventory
                         inventorySystem.RemoveFromInventory(slots[selectedSlot].AssignedInventorySlot.Data, 1, selectedSlot);

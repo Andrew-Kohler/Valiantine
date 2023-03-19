@@ -14,7 +14,7 @@ public class InventoryMenuView : View
     [SerializeField] GameObject healthBar;
     [SerializeField] GameObject manaBar;
 
-    [SerializeField] GameObject player;
+    //[SerializeField] GameObject player;
     PlayerStats playerStats;
     HealthBar healthBarUI;
     ManaBar manaBarUI;
@@ -25,7 +25,8 @@ public class InventoryMenuView : View
         itemsTab.SetActive(true);
         gemsTab.SetActive(false);
 
-        playerStats = player.GetComponent<PlayerStats>();
+        //playerStats = player.GetComponent<PlayerStats>();
+        playerStats = PlayerManager.Instance.PlayerStats();
         healthBarUI = healthBar.GetComponent<HealthBar>();
         manaBarUI = manaBar.GetComponent<ManaBar>();
     }

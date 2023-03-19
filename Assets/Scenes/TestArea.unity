@@ -319,7 +319,6 @@ MonoBehaviour:
   actionIndicators: {fileID: 679152181}
   healthBar: {fileID: 164898728}
   manaBar: {fileID: 1064274361}
-  player: {fileID: 908275599}
 --- !u!225 &36373231
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -4426,6 +4425,7 @@ GameObject:
   - component: {fileID: 908275603}
   - component: {fileID: 908275602}
   - component: {fileID: 908275601}
+  - component: {fileID: 908275612}
   - component: {fileID: 908275609}
   - component: {fileID: 908275608}
   - component: {fileID: 908275606}
@@ -4613,6 +4613,18 @@ MonoBehaviour:
   inventorySize: 8
   inventorySystem:
     inventorySlots: []
+--- !u!114 &908275612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 908275599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7cfe61039fefad43b4fd3dcfe74838e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &916574457
 GameObject:
   m_ObjectHideFlags: 0
@@ -6578,7 +6590,6 @@ MonoBehaviour:
   gemsTabIndicator: {fileID: 1035039618}
   healthBar: {fileID: 220115149}
   manaBar: {fileID: 1551225945}
-  player: {fileID: 908275599}
   flavorText: {fileID: 817671617}
 --- !u!1 &1342732191
 GameObject:

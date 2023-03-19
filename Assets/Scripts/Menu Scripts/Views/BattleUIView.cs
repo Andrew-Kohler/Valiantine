@@ -15,7 +15,7 @@ public class BattleUIView : View
     [SerializeField] GameObject actionIndicators;
     [SerializeField] GameObject healthBar;
     [SerializeField] GameObject manaBar;
-    [SerializeField] GameObject player;
+    //[SerializeField] GameObject player;
 
     IndicatorAction indicatorInfo;
     PlayerStats playerStats;
@@ -24,10 +24,10 @@ public class BattleUIView : View
     
     public override void Initialize()
     {
-        //throw new System.NotImplementedException();
-        battleText.text = "And so it begins!";
+        battleText.text = "";
         indicatorInfo = actionIndicators.GetComponent<IndicatorAction>();
-        playerStats = player.GetComponent<PlayerStats>();
+        //playerStats = player.GetComponent<PlayerStats>();
+        playerStats = PlayerManager.Instance.PlayerStats();
         healthBarUI = healthBar.GetComponent<HealthBar>();
         manaBarUI = manaBar.GetComponent<ManaBar>();
     }
