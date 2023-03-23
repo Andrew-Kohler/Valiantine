@@ -43,16 +43,15 @@ public class StaticInventoryDisplay : InventoryDisplay //
         {
             slots[selectedSlot].Selected = false;
             slots[selectedSlot].UpdateUISlot();
-            currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
         }
 
-        
         selectedSlot = 0;
         activeCoroutine = false;
         slotChosen = false;
+
         if (!slots[selectedSlot].CheckEmpty())  
         {
-            currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
+            slots[selectedSlot].UpdateUISlot();         
         }
         
     }
@@ -65,6 +64,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
 
             if (!slotChosen)    // If we haven't chosen a slot yet
             {
+                currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
                 if (Input.GetButtonDown("Interact")) 
                 {
                     selector.SelectorSwap();

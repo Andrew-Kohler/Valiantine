@@ -34,7 +34,6 @@ public class ItemSelector : MonoBehaviour
         if(!itemsTab.GetComponent<StaticInventoryDisplay>().SelectedInventorySlot.CheckEmpty()) // If we have at least one item
         {
             SetPosition();
-           // Ok, so if 
         }
         else // If we don't, flip the off switch
         {

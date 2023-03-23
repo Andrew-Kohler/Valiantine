@@ -46,6 +46,16 @@ public class PlayerManager : MonoBehaviour
         return this.transform;
     }
 
+    public string PlayerName()
+    {
+        return this.name;
+    }
+
+    public PlayerMovement PlayerMovement()
+    {
+        return GetComponent<PlayerMovement>();
+    }
+
 
 
     /*// Start is called before the first frame update

@@ -23,6 +23,7 @@ public class InventoryMenuView : View
     public override void Initialize()
     {
         itemsTab.SetActive(true);
+        itemsTabIndicator.GetComponent<MenuTabIcon>().Select();
         gemsTab.SetActive(false);
 
         //playerStats = player.GetComponent<PlayerStats>();

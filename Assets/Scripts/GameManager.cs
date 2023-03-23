@@ -76,6 +76,16 @@ public class GameManager : MonoBehaviour
         return _isSettings;
     }
 
+    public void Interaction(bool flag)
+    {
+        _isInteraction = true;
+    }
+
+    public bool isInteraction()
+    {
+        return _isInteraction;
+    }
+
     public void Transition(bool flag)   // Getter and setter for state of a scene transition in progress
     {
         _isTransition = flag;

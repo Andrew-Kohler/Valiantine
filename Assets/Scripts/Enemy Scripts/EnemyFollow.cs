@@ -30,14 +30,14 @@ public class EnemyFollow : MonoBehaviour
         upperZ = GameObject.Find("Upper ZE").transform;
         lowerZ = GameObject.Find("Lower ZE").transform;
 
-        player = GameObject.Find("Player").transform;
+        //player = GameObject.Find("Player").transform;
 
         follow = false;
     }
 
     private void Update()
     {
-        if(Vector3.Distance(transform.position, player.position) <= trackingDist && inBounds())
+        if(Vector3.Distance(transform.position, PlayerManager.Instance.PlayerTransform().position) <= trackingDist && inBounds())
         {
             follow = true;
         }

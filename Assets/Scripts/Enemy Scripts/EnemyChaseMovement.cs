@@ -19,7 +19,7 @@ public class EnemyChaseMovement : MonoBehaviour
     void Start()
     {
         chase = GetComponent<EnemyFollow>();    // previously in children
-        player = GameObject.Find("Player");
+        //player = GameObject.Find("Player");
         enabled = false;
     }
 
@@ -27,8 +27,9 @@ public class EnemyChaseMovement : MonoBehaviour
     void Update()
     {
         if (chase.isFollow() && GameManager.Instance.enemyCanMove())   // If we are actively pursuing the player
-        { 
-            pursuitVector = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+        {
+            Transform playerTransform = PlayerManager.Instance.PlayerTransform();
+            pursuitVector = new Vector3(playerTransform.position.x, transform.position.y, playerTransform.position.z);
             transform.position = Vector3.MoveTowards(transform.position, pursuitVector, speed * Time.deltaTime);
         }
         else // If we aren't chasing, we revert back to base behavior

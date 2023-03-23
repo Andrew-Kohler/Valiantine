@@ -34,5 +34,16 @@ public class PlayerMenuToggle : MonoBehaviour
                 GameManager.Instance.Settings(false);
             }
         }
+        else if (Input.GetButtonDown("Return") && !GameManager.Instance.isTransition()) // If the player presses Esc, it should toggle the settings
+        {
+            if (!GameManager.Instance.isInteraction())
+            {
+                GameManager.Instance.Interaction(true);
+            }
+            else
+            {
+                GameManager.Instance.Interaction(false);
+            }
+        }
     }
 }

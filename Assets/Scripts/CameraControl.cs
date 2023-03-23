@@ -10,6 +10,8 @@ public class CameraControl : MonoBehaviour
     [SerializeField] GameObject lowerZ;
     [SerializeField] GameObject player; // The player, whose x and z positions are rather important
 
+    Transform playerTransform;
+
     float upperXPos;
     float lowerXPos;
     float upperZPos;
@@ -55,11 +57,12 @@ public class CameraControl : MonoBehaviour
 
         else if (GameManager.Instance.freeCam() && !activeCoroutine) // The code which allows the camera to track the player
         {
+            playerTransform = PlayerManager.Instance.PlayerTransform();
             tempPos = transform.position;
 
-            xValue = player.transform.position.x;               // Initial position values which may or may not change every Update()
+            xValue = playerTransform.position.x;               // Initial position values which may or may not change every Update()
             yValue = transform.position.y;
-            zValue = player.transform.position.z - zConstant;
+            zValue = playerTransform.position.z - zConstant;
 
             if (xValue > upperXPos)  // If statements checking if the camera is trying to exit bounds which reposition it
             {
@@ -109,15 +112,16 @@ public class CameraControl : MonoBehaviour
 
     private void SetCamInventory()
     {
-        Vector3 targetPos = new Vector3(xValue + 5f, yValue, zValue + 2f);
+        //Vector3 targetPos = new Vector3(xValue + 5f, yValue, zValue + 2f);
+        Vector3 targetPos = new Vector3(playerTransform.position.x + 5f, yValue, playerTransform.position.z - zConstant + 2f);
         StartCoroutine(DoCamPosition(targetPos, inventoryStep));
     }
 
     private void CamReset(float step)
     {
-        xValue = player.transform.position.x;               // Initial position values which may or may not change every Update()
+        xValue = playerTransform.position.x;               // Initial position values which may or may not change every Update()
         yValue = transform.position.y;
-        zValue = player.transform.position.z - zConstant;
+        zValue = playerTransform.position.z - zConstant;
 
         if (xValue > upperXPos)  // If statements checking if the camera is trying to exit bounds which reposition it
         {

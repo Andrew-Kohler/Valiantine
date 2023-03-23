@@ -39,8 +39,8 @@ public class InventorySystem
             
         }
 
-        if(HasFreeSlot(out InventorySlot freeSlot)) // If it doesn't contain the item but DOES have a free slot
-        {
+        if(HasFreeSlot(out InventorySlot freeSlot) && !ContainsItem(itemToAdd, out List<InventorySlot> invSlot2)) // If it doesn't contain the item but DOES have a free slot
+        {   // The ContainsItem here is present to allow an item to be picked up, but to prevent a new stack from being made
             freeSlot.UpdateInventorySlot(itemToAdd, amountToAdd);
             OnInventorySlotChanged?.Invoke(freeSlot);
             return true;
@@ -56,9 +56,9 @@ public class InventorySystem
             invSlot[0].RemoveFromStack(amountToRemove); // Remove the item
             OnInventorySlotChanged?.Invoke(invSlot[0]);
 
-            Debug.Log(ContainsItem(itemToRemove, out List<InventorySlot> invSlot2));
+            //Debug.Log(ContainsItem(itemToRemove, out List<InventorySlot> invSlot2));
             if(!ContainsItem(itemToRemove, out List<InventorySlot> invSlot4)){   // If there are no more items in the slot
-                Debug.Log("Moving on up");
+               // Debug.Log("Moving on up");
                 MoveItemsUp(index);
             }
 
@@ -67,6 +67,7 @@ public class InventorySystem
 
         return false;
     }
+    
 
     public bool ContainsItem(ItemData itemToAdd, out List<InventorySlot> invSlot) // Check if our inventory contains an item
     {

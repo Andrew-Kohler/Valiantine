@@ -98,10 +98,10 @@ public class BattleManager : MonoBehaviour
             if (battleIntro && !activeCoroutine)    // The fun intro sequence that happens when the battle begins
             {
                 // Get the instances of:
-                player = GameObject.Find("Player");                 // Player
-                playerStats = player.GetComponent<PlayerStats>();   // Player stats
+                //player = GameObject.Find("Player");                 // Player
+                playerStats = PlayerManager.Instance.PlayerStats();   // Player stats
                 enemyStats = currentEnemy.GetComponent<EnemyStats>(); // Enemy stats
-                playerRb = player.GetComponent<Rigidbody>();
+                playerRb = PlayerManager.Instance.PlayerRigidbody();
                 enemyRb = currentEnemy.GetComponent<Rigidbody>();
 
                 camX = (enemyRb.position.x + playerRb.position.x) / 2;
@@ -129,7 +129,7 @@ public class BattleManager : MonoBehaviour
             {
                 if (!turnArray[currentTurn].getDowned()) // If the current turn taker is not downed/dead
                 {
-                    if (turnArray[currentTurn].name == player.name)  // Currently we're only dealing with 1v1s, so that's how we'll code
+                    if (turnArray[currentTurn].name == PlayerManager.Instance.PlayerName())  // Currently we're only dealing with 1v1s, so that's how we'll code
                     {
                         if (status == MenuStatus.Inactive) // Show the action indicators
                         {
@@ -269,7 +269,7 @@ public class BattleManager : MonoBehaviour
 
     private void CombatantDisable()
     {
-        PlayerMovement playerM = player.GetComponent<PlayerMovement>();
+        PlayerMovement playerM = PlayerManager.Instance.PlayerMovement();
         EnemyChaseMovement enemyCM = currentEnemy.GetComponent<EnemyChaseMovement>();
 
         playerM.enabled = false;
@@ -312,7 +312,7 @@ public class BattleManager : MonoBehaviour
 
     private void playerReenable()
     {
-        PlayerMovement playerM = player.GetComponent<PlayerMovement>();
+        PlayerMovement playerM = PlayerManager.Instance.PlayerMovement();
 
         playerM.enabled = true;
     }
@@ -321,7 +321,7 @@ public class BattleManager : MonoBehaviour
     {
         CombatantDisable();
 
-        if (player.transform.position.x <= currentEnemy.transform.position.x)    // If the player is left of the enemy
+        if (PlayerManager.Instance.PlayerTransform().position.x <= currentEnemy.transform.position.x)    // If the player is left of the enemy
         {
             Debug.Log("Player is left of the enemy");
             playerRb.velocity = new Vector3(-10f, 3f, 0f);
