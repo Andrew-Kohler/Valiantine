@@ -10,6 +10,10 @@ public class CameraControl : MonoBehaviour
     [SerializeField] GameObject lowerZ;
     [SerializeField] GameObject player; // The player, whose x and z positions are rather important
 
+    [SerializeField] float inventoryX = 3.5f;
+    [SerializeField] float inventoryY = -3f;
+    [SerializeField] float inventoryZ = 8f;
+
     Transform playerTransform;
 
     float upperXPos;
@@ -20,6 +24,7 @@ public class CameraControl : MonoBehaviour
     float xValue;
     float yValue;
     float zValue;               // Value of z distance between player and camera (liable to change)
+    float yConstant = 6.23f;
     float zConstant = 18.34f;   // The maximum distance between the player and the camera
 
     [SerializeField] float battleStep = 20f;
@@ -43,6 +48,8 @@ public class CameraControl : MonoBehaviour
         upperZPos = upperZ.transform.position.z;
         lowerZPos = lowerZ.transform.position.z;
 
+        
+
         activeCoroutine = false;
     }
 
@@ -61,7 +68,7 @@ public class CameraControl : MonoBehaviour
             tempPos = transform.position;
 
             xValue = playerTransform.position.x;               // Initial position values which may or may not change every Update()
-            yValue = transform.position.y;
+            yValue = playerTransform.position.y + yConstant;
             zValue = playerTransform.position.z - zConstant;
 
             if (xValue > upperXPos)  // If statements checking if the camera is trying to exit bounds which reposition it
@@ -113,14 +120,15 @@ public class CameraControl : MonoBehaviour
     private void SetCamInventory()
     {
         //Vector3 targetPos = new Vector3(xValue + 5f, yValue, zValue + 2f);
-        Vector3 targetPos = new Vector3(playerTransform.position.x + 5f, yValue, playerTransform.position.z - zConstant + 2f);
+
+        Vector3 targetPos = new Vector3(playerTransform.position.x + inventoryX, playerTransform.position.y + yConstant + inventoryY, playerTransform.position.z - zConstant + inventoryZ);
         StartCoroutine(DoCamPosition(targetPos, inventoryStep));
     }
 
     private void CamReset(float step)
     {
         xValue = playerTransform.position.x;               // Initial position values which may or may not change every Update()
-        yValue = transform.position.y;
+        yValue = playerTransform.position.y + yConstant;
         zValue = playerTransform.position.z - zConstant;
 
         if (xValue > upperXPos)  // If statements checking if the camera is trying to exit bounds which reposition it
