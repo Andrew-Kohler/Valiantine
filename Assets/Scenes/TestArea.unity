@@ -5282,11 +5282,11 @@ MonoBehaviour:
   upperZ: {fileID: 1514909810}
   lowerZ: {fileID: 388552229}
   player: {fileID: 908275599}
-  inventoryX: 5
-  inventoryY: 0
-  inventoryZ: 2
+  inventoryX: 3.5
+  inventoryY: -3
+  inventoryZ: 8
   battleStep: 20
-  inventoryStep: 10
+  inventoryStep: 20
 --- !u!1 &972503892
 GameObject:
   m_ObjectHideFlags: 0

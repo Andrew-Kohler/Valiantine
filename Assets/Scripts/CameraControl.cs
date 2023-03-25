@@ -11,7 +11,7 @@ public class CameraControl : MonoBehaviour
     [SerializeField] GameObject player; // The player, whose x and z positions are rather important
 
     [SerializeField] float inventoryX = 3.5f;
-    [SerializeField] float inventoryY = -3f;
+    [SerializeField] float inventoryY = -2.7f;
     [SerializeField] float inventoryZ = 8f;
 
     Transform playerTransform;

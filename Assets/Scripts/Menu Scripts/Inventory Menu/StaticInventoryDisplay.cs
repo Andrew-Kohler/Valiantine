@@ -51,9 +51,12 @@ public class StaticInventoryDisplay : InventoryDisplay //
 
         if (!slots[selectedSlot].CheckEmpty())  
         {
-            slots[selectedSlot].UpdateUISlot();         
+            slots[selectedSlot].UpdateUISlot();
+            currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
         }
+
         
+
     }
 
     private void Update()
@@ -64,7 +67,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
 
             if (!slotChosen)    // If we haven't chosen a slot yet
             {
-                currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
+               // currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
                 if (Input.GetButtonDown("Interact")) 
                 {
                     selector.SelectorSwap();
@@ -106,7 +109,6 @@ public class StaticInventoryDisplay : InventoryDisplay //
                     slots[selectedSlot].UpdateUISlot();
                     slotChosen = false;
 
-                    // We need to update the text in the menu view with the "normal use" text of the item
                 }
                 else if (Input.GetButtonDown("Return"))
                 {
