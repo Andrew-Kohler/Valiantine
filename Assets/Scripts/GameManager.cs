@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     private bool _isBattle;     // Are we in a battle?
     // Other potential states of interest
     // isMainMenu
+    private bool _canInteract;
 
     private GameManager()
     {
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
         _isTransition = false;
         _isInteraction = false;
         _isBattle = false;
+        _canInteract = false;
     }
 
     public static GameManager Instance
@@ -104,6 +106,16 @@ public class GameManager : MonoBehaviour
     public bool isBattle()
     {
         return _isBattle;
+    }
+
+    public void CanInteract(bool flag)   // Setter and getter for if we are in battle!
+    {
+        _canInteract = flag;
+    }
+
+    public bool isCanInteract()
+    {
+        return _canInteract;
     }
 
     public bool canMove()   // If we can move, nothing else should be going on

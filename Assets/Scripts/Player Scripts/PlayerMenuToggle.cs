@@ -10,6 +10,17 @@ using UnityEngine;
 
 public class PlayerMenuToggle : MonoBehaviour
 {
+
+    private void OnEnable()
+    {
+        PlayerMovement.onInteractButton += StartInteraction;
+    }
+
+    private void OnDisable()
+    {
+        PlayerMovement.onInteractButton -= StartInteraction;
+    }
+
     void Update()
     {
         if (Input.GetButtonDown("Inventory") )    // If the player presses Q, it should toggle the inventory
@@ -34,16 +45,21 @@ public class PlayerMenuToggle : MonoBehaviour
                 GameManager.Instance.Settings(false);
             }
         }
-        else if (Input.GetButtonDown("Return") && !GameManager.Instance.isTransition()) // If the player presses Esc, it should toggle the settings
+        /*else if (GameManager.Instance.isCanInteract() && ) // If the player presses Esc, it should toggle the settings
         {
-            if (!GameManager.Instance.isInteraction())
-            {
-                GameManager.Instance.Interaction(true);
-            }
-            else
-            {
-                GameManager.Instance.Interaction(false);
-            }
+            
+        }*/
+    }
+
+    private void StartInteraction()
+    {
+        if(GameManager.Instance.isCanInteract() && !GameManager.Instance.isTransition())
+        {
+            GameManager.Instance.Interaction(true);
+        }
+        else if (GameManager.Instance.isInteraction())
+        {
+            GameManager.Instance.Interaction(false);
         }
     }
 }

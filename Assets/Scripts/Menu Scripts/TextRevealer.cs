@@ -31,5 +31,6 @@ public class TextRevealer : MonoBehaviour
 
 			yield return new WaitForSeconds(0.07f);
 		}
+		ViewManager.GetView<InGameUIView>().textReadout = true;
 	}
 }

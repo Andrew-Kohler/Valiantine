@@ -10,6 +10,7 @@ public class UsePromptActivation : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            GameManager.Instance.CanInteract(true);
             usePrompt.GetComponent<UsePrompt>().FadeIn();
         }
 
@@ -19,6 +20,7 @@ public class UsePromptActivation : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            GameManager.Instance.CanInteract(false);
             usePrompt.GetComponent<UsePrompt>().FadeOut();
         }
 

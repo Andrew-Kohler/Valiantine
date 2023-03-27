@@ -16,6 +16,9 @@ public class PlayerMovement : MonoBehaviour
     float horizontalInput;
     float verticalInput;
 
+    public delegate void OnInteractButton();
+    public static event OnInteractButton onInteractButton;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +40,11 @@ public class PlayerMovement : MonoBehaviour
         else // Freezes the player if something else is going on, like entering a menu
         {
             rb.velocity = new Vector3(0f, 0f, 0f);
+        }
+
+        if (Input.GetButtonDown("Interact"))
+        {
+            onInteractButton?.Invoke();
         }
 
 

@@ -69,10 +69,5 @@ public class UsePrompt : MonoBehaviour
         yield return null;
     }
 
-    // Ok, so we have this, and we show it when the player enters the trigger, and hide it when the player
-    // (a) leaves da trigger
-    // (b) actually interacts with the thing
-    // Let's start with (a)
-    // Ok, (a) works GREAT
-    // Now b...
+    // Still needs to fade away when the player chooses to interact
 }

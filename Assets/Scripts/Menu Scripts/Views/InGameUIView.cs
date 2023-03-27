@@ -13,10 +13,23 @@ public class InGameUIView : View
     [SerializeField] GameObject interactionMenu;
 
     bool menuOpen;
+    bool activeCoroutine;
+    public bool textReadout;
+
+    //Testing only
+    string line1 = "This is smoke and mirrors; there's currently no relation between this readout and the statue.";
+    string line2 = "However, it's still very cool, and the first step towards the looming task of systems integrations.";
+    List<string> lines = new List<string>();
+    
+
     public override void Initialize()
     {
         //throw new System.NotImplementedException();
         menuOpen = false;
+        activeCoroutine = false;
+        textReadout = false;
+        lines.Add(line1);
+        lines.Add(line2);
     }
 
     void Update()
@@ -34,7 +47,7 @@ public class InGameUIView : View
             if (!menuOpen)
             {
                 menuOpen = true;
-                StartCoroutine(interactionStart("When the text gets read out it should go beepeepeepedeepeep or boodooloodooldooloo like all the best RPGSs"));
+                StartCoroutine(interactionStart(lines));
             }
             
         }
@@ -47,39 +60,25 @@ public class InGameUIView : View
         // Really, we should re-evaluate a lot of the player menu-ing to perhaps be more event based
     }
 
-    IEnumerator interactionStart(string textToRead)
+    IEnumerator interactionStart(List<string> lines)
     {
+        activeCoroutine = true;
         interactionMenu.GetComponent<FadeUI>().UIFadeIn();
         yield return new WaitForSeconds(.5f);
-        interactionMenu.GetComponent<TextRevealer>().ReadOutText(textToRead);
+        foreach (string line in lines)
+        {
+            textReadout = false;
+            interactionMenu.GetComponent<TextRevealer>().ReadOutText(line);
+            yield return new WaitUntil(() => textReadout);
+            yield return new WaitForSeconds(1f);
+        }
+
+        activeCoroutine = false;
         yield return null;
     }
 
-    // We also need an interaction escape, AND some coe in update for what is actually done during an interaction
+    // We also need an interaction escape, AND some code in update for what is actually done during an interaction
 }
-
-// Ok, so what we need is this:
-    // When the player is within the "interact zone," they should be able to hit a button and open a menu related to what
-    // they're interacting with
-    // So, for each of these different types of interactables, perhaps it makes sense to include a progammer's toggle
-    // for what they actually are.
-    // Then I can check for "Statue" or "Chest," and gather the appropriate info
-
-// Ok
-    // It looks like, the way I have this structured, it would be best to have a "Can Interact" bool in GM
-    // Then, if we press E and we Can Interact, we can start the process of interacting
-    // So the question now is how do we have each of the interactables communicate to this menu their essential data
-
-// Except to keep the code nice, I don't want this menu to be adding things to the player's inventory or healing them,
-// this is just text
-
-// So, player components and currentView components are both publicly interactable for anywhere, very clever past me
-// But how do we set off the menu and the deets of the interaction itself?
-// Ahh, we have pressing E at ANY time in the world broadcast an "Interact" event
-// We have entering a trigger activate the "Can Interact" bool in GM
-// With these two things combined...we would activate everything in the scene.
-// Since the trigger will always be the child of the object of interest, we could beam a reference of that object to the GM
-// This feels like I'm overcomplicating things
 
 // Chain of events:
     // Player enters trigger, we tell GameManager Player is allowed to interact with [object]. Simple, done, step 1.
@@ -97,3 +96,14 @@ public class InGameUIView : View
         // I'll be darned - you know you're in the weeds when you HAVE to start scripting sequences.
 
 // Before all of that, I do still need to figure out how to have text advance to the next "slide" based on a button press.
+// Now the problem becomes:
+//  When the player hits "E" and the text is reading, how do we advance it to the end?
+//  When we CAN tell, how do we advance to the next one when the player hits E?
+
+// The problem sort of extends from having no good place to put the "E" press. If ONLY there was a way to broadcast that...
+// Yeah, events.
+
+// Oh my god, past Andrew is a genius and so sexy and I would kiss him if I could.
+// So, we make this event delegate, call it Press E or whatever. Heck, let's make it an action, why not.
+// If we're within an interaction, we subscribe an "Advance Text" function to the E press event.
+// Then, that function can carry out the possibilities 
