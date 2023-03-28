@@ -8,6 +8,20 @@ public class TextRevealer : MonoBehaviour
 {
 
 	[SerializeField] TextMeshProUGUI text;
+	bool skipToEnd;
+	bool activeCoroutine;
+
+	private void OnEnable()
+	{
+		skipToEnd = false;
+		activeCoroutine = false;
+		PlayerMovement.onInteractButton += AdvanceText;
+	}
+
+	private void OnDisable()
+	{
+		PlayerMovement.onInteractButton -= AdvanceText;
+	}
 
 	public void ReadOutText(string textToRead)
 	{
@@ -16,6 +30,7 @@ public class TextRevealer : MonoBehaviour
 
 	IEnumerator RevealText(string textToReveal)
 	{
+		activeCoroutine = true;
 		var originalString = textToReveal;
 		text.text = "";
 
@@ -27,10 +42,28 @@ public class TextRevealer : MonoBehaviour
 
 			++numCharsRevealed;
 
+            if (skipToEnd)
+            {
+				skipToEnd = false;
+				text.text = originalString;
+				break;
+
+			}
+
 			text.text = originalString.Substring(0, numCharsRevealed);
 
 			yield return new WaitForSeconds(0.07f);
 		}
 		ViewManager.GetView<InGameUIView>().textReadout = true;
+		activeCoroutine = false;
 	}
+
+	private void AdvanceText()
+    {
+        if (activeCoroutine)
+        {
+			skipToEnd = true;
+		}
+		
+    }
 }

@@ -12,13 +12,17 @@ public class InGameUIView : View
 {
     [SerializeField] GameObject interactionMenu;
 
-    bool menuOpen;
-    bool activeCoroutine;
-    public bool textReadout;
+    bool menuOpen;              // Whether or not the interaction sub-menu is open
+    bool activeCoroutine;       // Whether or not a coroutine is active
+    public bool textReadout;    // Whether or not TextRevealer has finished reading the current text block
+    bool textAdvance;           // Whether or not the player has given the go-ahead to advance to the next text block/close the window
+
+    public delegate void OnInteractionEnd();
+    public static event OnInteractionEnd onInteractionEnd;
 
     //Testing only
-    string line1 = "This is smoke and mirrors; there's currently no relation between this readout and the statue.";
-    string line2 = "However, it's still very cool, and the first step towards the looming task of systems integrations.";
+    string line1 = "The statue stands empty of data, hollow of the purpose it shall one day serve.";
+    string line2 = "We'll get there together, you and I. One day, this statue will save us all.";
     List<string> lines = new List<string>();
     
 
@@ -28,8 +32,19 @@ public class InGameUIView : View
         menuOpen = false;
         activeCoroutine = false;
         textReadout = false;
+        textAdvance = false;
         lines.Add(line1);
         lines.Add(line2);
+    }
+
+    private void OnEnable()
+    {
+        PlayerMovement.onInteractButton += AdvanceText;
+    }
+
+    private void OnDisable()
+    {
+        PlayerMovement.onInteractButton -= AdvanceText;
     }
 
     void Update()
@@ -44,40 +59,56 @@ public class InGameUIView : View
         }
         else if (GameManager.Instance.isInteraction())
         {
-            if (!menuOpen)
+            if (!menuOpen && !activeCoroutine)
             {
                 menuOpen = true;
-                StartCoroutine(interactionStart(lines));
+                StartCoroutine(interactionText(lines));
             }
             
         }
-
-        // If this gets an event that something is interacted with
-            // Fade in the text box
-            // Depending on the event, reveal a different bit of text / make the window behave differently
-
-        // The player pressing a key during this should send out an event from the controller that triggers the text advancing
-        // Really, we should re-evaluate a lot of the player menu-ing to perhaps be more event based
     }
 
-    IEnumerator interactionStart(List<string> lines)
+    private void AdvanceText()
+    {
+        if (menuOpen && textReadout)    // We can only advance to the next bit if it's all read out
+        {
+            textAdvance = true;
+        }
+        
+    }
+
+    IEnumerator interactionText(List<string> lines) // Fades in the text box and reads out each line of text given
     {
         activeCoroutine = true;
         interactionMenu.GetComponent<FadeUI>().UIFadeIn();
         yield return new WaitForSeconds(.5f);
+
         foreach (string line in lines)
         {
             textReadout = false;
+            textAdvance = false;
             interactionMenu.GetComponent<TextRevealer>().ReadOutText(line);
-            yield return new WaitUntil(() => textReadout);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitUntil(() => textReadout);  // Wait for the text to be done reading out
+            yield return new WaitUntil(() => textAdvance);  // Wait for the player to give the go-ahead to advance
         }
 
-        activeCoroutine = false;
+        StartCoroutine(interactionEnd());
         yield return null;
     }
 
-    // We also need an interaction escape, AND some code in update for what is actually done during an interaction
+    IEnumerator interactionEnd()    // Fades out the text box
+    {
+        GameManager.Instance.Interaction(false);
+        activeCoroutine = true;
+        interactionMenu.GetComponent<FadeUI>().UIFadeOut();
+        yield return new WaitForSeconds(.5f);
+        interactionMenu.GetComponent<TextRevealer>().ReadOutText("");
+
+        menuOpen = false;
+        activeCoroutine = false;
+        onInteractionEnd?.Invoke();
+    }
+
 }
 
 // Chain of events:
@@ -97,13 +128,4 @@ public class InGameUIView : View
 
 // Before all of that, I do still need to figure out how to have text advance to the next "slide" based on a button press.
 // Now the problem becomes:
-//  When the player hits "E" and the text is reading, how do we advance it to the end?
 //  When we CAN tell, how do we advance to the next one when the player hits E?
-
-// The problem sort of extends from having no good place to put the "E" press. If ONLY there was a way to broadcast that...
-// Yeah, events.
-
-// Oh my god, past Andrew is a genius and so sexy and I would kiss him if I could.
-// So, we make this event delegate, call it Press E or whatever. Heck, let's make it an action, why not.
-// If we're within an interaction, we subscribe an "Advance Text" function to the E press event.
-// Then, that function can carry out the possibilities 

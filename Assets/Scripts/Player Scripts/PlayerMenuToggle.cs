@@ -14,6 +14,7 @@ public class PlayerMenuToggle : MonoBehaviour
     private void OnEnable()
     {
         PlayerMovement.onInteractButton += StartInteraction;
+        InGameUIView.onInteractionEnd += AllowStartInteraction;
     }
 
     private void OnDisable()
@@ -51,15 +52,27 @@ public class PlayerMenuToggle : MonoBehaviour
         }*/
     }
 
-    private void StartInteraction()
+    private void StartInteraction() // If we are in an interactable zone and all is well, we trigger the interaction
     {
-        if(GameManager.Instance.isCanInteract() && !GameManager.Instance.isTransition())
+        if(GameManager.Instance.isCanInteract() && GameManager.Instance.canMove())
         {
+            PlayerMovement.onInteractButton -= StartInteraction;
             GameManager.Instance.Interaction(true);
         }
-        else if (GameManager.Instance.isInteraction())
+        /*else if (GameManager.Instance.isInteraction())
         {
             GameManager.Instance.Interaction(false);
-        }
+        }*/
+
+        // Hmmm... this is acting up as soon as it can, sticking us in an endless interaction loop.
+        // If we get rid of the listener in StartInteraction and only re-apply it at the end of an interaction...
+        // But how do we do that
+        // I need some way to inform this class that the interaction has conclude - oh.
+        // Event #2.
+    }
+
+    private void AllowStartInteraction()
+    {
+        PlayerMovement.onInteractButton += StartInteraction;
     }
 }

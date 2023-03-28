@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
 
     public void Interaction(bool flag)
     {
-        _isInteraction = true;
+        _isInteraction = flag;
     }
 
     public bool isInteraction()
