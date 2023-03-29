@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     // isMainMenu
     private bool _canInteract;
 
+    private GameObject currentInteractable;
+
     private GameManager()
     {
         _isGameOver = false;
@@ -31,6 +33,7 @@ public class GameManager : MonoBehaviour
         _isInteraction = false;
         _isBattle = false;
         _canInteract = false;
+        currentInteractable = null;
     }
 
     public static GameManager Instance
@@ -81,6 +84,10 @@ public class GameManager : MonoBehaviour
     public void Interaction(bool flag)
     {
         _isInteraction = flag;
+        if(_isInteraction == true)  // Start the interaction
+        {
+            currentInteractable.GetComponent<Interactable>().Interact();
+        }
     }
 
     public bool isInteraction()
@@ -111,6 +118,20 @@ public class GameManager : MonoBehaviour
     public void CanInteract(bool flag)   // Setter and getter for if we are in battle!
     {
         _canInteract = flag;
+        if(_canInteract == false)
+        {
+            currentInteractable = null;
+        }
+    }
+
+    public void CurrentInteractable(GameObject interactable)
+    {
+        currentInteractable = interactable;
+    }
+
+    public GameObject getCurrentInteractable()
+    {
+        return currentInteractable;
     }
 
     public bool isCanInteract()

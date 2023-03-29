@@ -21,9 +21,9 @@ public class InGameUIView : View
     public static event OnInteractionEnd onInteractionEnd;
 
     //Testing only
-    string line1 = "The statue stands empty of data, hollow of the purpose it shall one day serve.";
-    string line2 = "We'll get there together, you and I. One day, this statue will save us all.";
-    List<string> lines = new List<string>();
+   // string line1 = "The statue stands empty of data, hollow of the purpose it shall one day serve.";
+    //string line2 = "We'll get there together, you and I. One day, this statue will save us all.";
+    //List<string> lines = new List<string>();
     
 
     public override void Initialize()
@@ -33,8 +33,8 @@ public class InGameUIView : View
         activeCoroutine = false;
         textReadout = false;
         textAdvance = false;
-        lines.Add(line1);
-        lines.Add(line2);
+        //lines.Add(line1);
+        //lines.Add(line2);
     }
 
     private void OnEnable()
@@ -57,7 +57,7 @@ public class InGameUIView : View
         {
             ViewManager.Show<SettingsMenuView>(true);
         }
-        else if (GameManager.Instance.isInteraction())
+        /*else if (GameManager.Instance.isInteraction())
         {
             if (!menuOpen && !activeCoroutine)
             {
@@ -65,12 +65,17 @@ public class InGameUIView : View
                 StartCoroutine(interactionText(lines));
             }
             
-        }
+        }*/
+    }
+
+    public void startInteractionText(List<string> lines)
+    {
+        StartCoroutine(interactionText(lines));
     }
 
     private void AdvanceText()
     {
-        if (menuOpen && textReadout)    // We can only advance to the next bit if it's all read out
+        if (textReadout)    // We can only advance to the next bit if it's all read out
         {
             textAdvance = true;
         }
@@ -89,6 +94,7 @@ public class InGameUIView : View
             textAdvance = false;
             interactionMenu.GetComponent<TextRevealer>().ReadOutText(line);
             yield return new WaitUntil(() => textReadout);  // Wait for the text to be done reading out
+            Debug.Log("Text is read");
             yield return new WaitUntil(() => textAdvance);  // Wait for the player to give the go-ahead to advance
         }
 
