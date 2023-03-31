@@ -5,15 +5,14 @@ using UnityEngine;
 public class UsePromptActivation : MonoBehaviour
 {
     [SerializeField] GameObject usePrompt;
-
-    public delegate void OnPossibleInteraction();
-    public static event OnPossibleInteraction onPossibleInteraction;    // Event for when player enters interaction zone
+    [SerializeField] GameObject interactable;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            onPossibleInteraction?.Invoke();
+            //onPossibleInteraction?.Invoke();
+            interactable.GetComponent<Interactable>().possibleInteraction();
             GameManager.Instance.CanInteract(true);
             usePrompt.GetComponent<UsePrompt>().FadeIn();
         }
