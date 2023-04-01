@@ -98,7 +98,6 @@ public class BattleManager : MonoBehaviour
             if (battleIntro && !activeCoroutine)    // The fun intro sequence that happens when the battle begins
             {
                 // Get the instances of:
-                //player = GameObject.Find("Player");                 // Player
                 playerStats = PlayerManager.Instance.PlayerStats();   // Player stats
                 enemyStats = currentEnemy.GetComponent<EnemyStats>(); // Enemy stats
                 playerRb = PlayerManager.Instance.PlayerRigidbody();
@@ -122,6 +121,7 @@ public class BattleManager : MonoBehaviour
                     turnArray[0] = enemyStats;
                 }
                 currentTurn = 0;    // Set the current turn to 0 so the first actor goes
+                //StopAllCoroutines();
                 StartCoroutine(DoBattleIntro());    // Use a coroutine to time visual elements (player motion, UI swap)           
             } // End of battle intro
 
@@ -377,6 +377,8 @@ public class BattleManager : MonoBehaviour
         allEnemyReenable(currentEnemy);
         ShowEnemies(currentEnemy);                          // For all enemies that are not the current opposition, fade them back in
         yield return new WaitForSeconds(2f);                // Wait for a few moments before letting all the enemies loose again
+        // Here's the problem! I'm picking a fight when the enemies can't actually move.
+        // I'm pretty sure an event refactor will either fix this or make it a more parsable problem. So. Uh. Done for today, nerds.
         currentEnemyReenable();
 
         battleIntro = true;

@@ -94,7 +94,6 @@ public class InGameUIView : View
             textAdvance = false;
             interactionMenu.GetComponent<TextRevealer>().ReadOutText(line);
             yield return new WaitUntil(() => textReadout);  // Wait for the text to be done reading out
-            Debug.Log("Text is read");
             yield return new WaitUntil(() => textAdvance);  // Wait for the player to give the go-ahead to advance
         }
 

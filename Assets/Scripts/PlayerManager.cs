@@ -46,6 +46,11 @@ public class PlayerManager : MonoBehaviour
         return this.transform;
     }
 
+    public InventoryHolder PlayerInventory()
+    {
+        return GetComponent<InventoryHolder>();
+    }
+
     public string PlayerName()
     {
         return this.name;

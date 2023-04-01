@@ -80,6 +80,17 @@ public class InventorySystem
 
     }
 
+    public bool ContainsItem(ItemData itemToCheck) // Check if our inventory contains an item
+    {
+        // Ok, so this is sort of like a 1 line for and if all in one
+        // It goes through all the items, and if the item data in a slot == the item we're adding, it drops it in the list
+        List<InventorySlot> invSlot = InventorySlots.Where(i => i.Data == itemToCheck).ToList(); // Linq madness
+
+        //return invSlot == null ? false : true; 
+        return invSlot.Count == 0 ? false : true;
+
+    }
+
     public bool HasFreeSlot(out InventorySlot freeSlot) // Check if we have a free empty slot
     {
         // So, I think this "out" notation is kind of like a cheat free extra return?

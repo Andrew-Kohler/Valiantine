@@ -21,8 +21,9 @@ public class UsePrompt : MonoBehaviour
         backing.GetComponent<SpriteRenderer>().material.color = backingColor;
     }
 
+    
     public void FadeOut()
-    {
+    {  
         StartCoroutine(FadeOutPrompt());
     }
 
@@ -35,6 +36,7 @@ public class UsePrompt : MonoBehaviour
     {
         while (text.GetComponent<SpriteRenderer>().material.color.a > 0.01f)
         {
+            Debug.Log("Fading out");
             Color textColor = text.GetComponent<SpriteRenderer>().material.color;
             Color backingColor = backing.GetComponent<SpriteRenderer>().material.color;
             float fadeAmt = textColor.a - (fadeSpeed * Time.deltaTime);
@@ -54,6 +56,7 @@ public class UsePrompt : MonoBehaviour
     {
         while (text.GetComponent<SpriteRenderer>().material.color.a <= 1f)
         {
+            Debug.Log("Fading in");
             Color textColor = text.GetComponent<SpriteRenderer>().material.color;
             Color backingColor = backing.GetComponent<SpriteRenderer>().material.color;
             float fadeAmt = textColor.a + (fadeSpeed * Time.deltaTime);
