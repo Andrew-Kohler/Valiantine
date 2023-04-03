@@ -10,6 +10,8 @@ public class UsePrompt : MonoBehaviour
 
     float fadeSpeed = 3f;
 
+    bool stopFadeIn;
+
     private void Start()
     {
         Color textColor = text.GetComponent<SpriteRenderer>().material.color;
@@ -21,7 +23,16 @@ public class UsePrompt : MonoBehaviour
         backing.GetComponent<SpriteRenderer>().material.color = backingColor;
     }
 
-    
+    private void Update()
+    {
+        if (stopFadeIn)
+        {
+            StopCoroutine(FadeInPrompt());
+            stopFadeIn = false;
+        }
+    }
+
+
     public void FadeOut()
     {  
         StartCoroutine(FadeOutPrompt());
@@ -36,7 +47,9 @@ public class UsePrompt : MonoBehaviour
     {
         while (text.GetComponent<SpriteRenderer>().material.color.a > 0.01f)
         {
+            stopFadeIn = true;
             Debug.Log("Fading out");
+
             Color textColor = text.GetComponent<SpriteRenderer>().material.color;
             Color backingColor = backing.GetComponent<SpriteRenderer>().material.color;
             float fadeAmt = textColor.a - (fadeSpeed * Time.deltaTime);
@@ -56,7 +69,11 @@ public class UsePrompt : MonoBehaviour
     {
         while (text.GetComponent<SpriteRenderer>().material.color.a <= 1f)
         {
-            Debug.Log("Fading in");
+            //Debug.Log("Fading in");
+            if (stopFadeIn)
+            {
+                break;
+            }
             Color textColor = text.GetComponent<SpriteRenderer>().material.color;
             Color backingColor = backing.GetComponent<SpriteRenderer>().material.color;
             float fadeAmt = textColor.a + (fadeSpeed * Time.deltaTime);
@@ -72,5 +89,6 @@ public class UsePrompt : MonoBehaviour
         yield return null;
     }
 
-    // Still needs to fade away when the player chooses to interact
+    // Oy vey. These two get started on the exact same frame
+
 }
