@@ -16,8 +16,12 @@ MonoBehaviour:
   OverworldIcon: {fileID: -819735131, guid: a694df41fa2f4ad4c97d584be789ccb5, type: 3}
   MaxStackSize: 99
   DisplayName: Old Key
+  Consumable: 0
+  HPRestore: 0
+  MPRestore: 0
   InventoryDescription: The key to the inner courtyard. It is a beautiful artefact.
   UseDescription: The blue stone at its center is well-polished. It shines with the
     light of better days.
   BattleUseDescription: The lock of battle is the chest of the enemy; the key is
     your sword.
+  SingleObtainDescription: You found an Old Key! Perhaps it fits in an old lock...

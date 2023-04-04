@@ -16,6 +16,11 @@ MonoBehaviour:
   OverworldIcon: {fileID: -2080025946, guid: a694df41fa2f4ad4c97d584be789ccb5, type: 3}
   MaxStackSize: 1
   DisplayName: Bird Doll
+  Consumable: 0
+  HPRestore: 0
+  MPRestore: 0
   InventoryDescription: A whimsical bird plush.
-  UseDescription: The plush is lovingly stitched by hand, if a little imperfectly.
+  UseDescription: The plush is lovingly and imperfectly hand-stitched.
   BattleUseDescription: Looking at the bird makes you want to dance, for some reason.
+  SingleObtainDescription: You found a Bird Doll! It has an air of destiny about
+    it.

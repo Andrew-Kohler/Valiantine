@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class GateInteractable : Interactable
 {
-    [SerializeField] GameObject leftGate;
+    [SerializeField] GameObject leftGate;       // The gates, their pivot points, and the interaction trigger
     [SerializeField] GameObject leftGatePivot;
     [SerializeField] GameObject rightGate;
     [SerializeField] GameObject rightGatePivot;
     [SerializeField] GameObject trigger;
 
-    [SerializeField] ItemData key;
+    [SerializeField] ItemData key;  // The item required to open the gates
 
-    [SerializeField] float gateOpenSpeed;
+    [SerializeField] float gateOpenSpeed;   // Speed at which the gates open
 
     bool validKey;
     bool validInteraction;
@@ -26,12 +26,6 @@ public class GateInteractable : Interactable
     {
         InGameUIView.onInteractionEnd -= GateCheck;
     }
-
-    /*private void Start()
-    {
-        lines.Add("The gates seem as though they won't budge.");
-        lines.Add("Perhaps if someone programmed in a rotation sequence cutscene, they would open.");
-    }*/
 
     public override void Interact()
     {
@@ -68,7 +62,7 @@ public class GateInteractable : Interactable
         yield return null;
     }
 
-    private IEnumerator DoGateOpen()
+    private IEnumerator DoGateOpen() // Opens the gates by rotating them
     {
         trigger.SetActive(false);   // Disable the ability to interact with the gate; it's open, we're done
         float count = 0;

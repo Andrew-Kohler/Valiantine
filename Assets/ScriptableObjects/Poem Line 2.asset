@@ -16,7 +16,12 @@ MonoBehaviour:
   OverworldIcon: {fileID: 1120161341, guid: a694df41fa2f4ad4c97d584be789ccb5, type: 3}
   MaxStackSize: 99
   DisplayName: Poem Line 2
+  Consumable: 0
+  HPRestore: 0
+  MPRestore: 0
   InventoryDescription: A line from an ancient poem. It reads, "..."
   UseDescription: Why it has been broken is a mystery. Perhaps one of the monsters
     disliked it.
   BattleUseDescription: A fine sentiment, but it doesn't mean much out of context.
+  SingleObtainDescription: You found the second line of a poem! It looks like the
+    rest is missing.

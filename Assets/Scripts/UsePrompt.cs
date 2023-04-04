@@ -48,7 +48,6 @@ public class UsePrompt : MonoBehaviour
         while (text.GetComponent<SpriteRenderer>().material.color.a > 0.01f)
         {
             stopFadeIn = true;
-            Debug.Log("Fading out");
 
             Color textColor = text.GetComponent<SpriteRenderer>().material.color;
             Color backingColor = backing.GetComponent<SpriteRenderer>().material.color;

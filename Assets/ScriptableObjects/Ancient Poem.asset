@@ -16,7 +16,12 @@ MonoBehaviour:
   OverworldIcon: {fileID: -1955886924, guid: a694df41fa2f4ad4c97d584be789ccb5, type: 3}
   MaxStackSize: 99
   DisplayName: Ancient Poem
+  Consumable: 0
+  HPRestore: 0
+  MPRestore: 0
   InventoryDescription: An old verse found within the castle. It reads, "..."
   UseDescription: The author is unknown, as is the subject.
   BattleUseDescription: The appreciation of such artistry has long been absent from
     these walls.
+  SingleObtainDescription: You completed the Ancient Poem! The poem fragments form
+    a full verse.

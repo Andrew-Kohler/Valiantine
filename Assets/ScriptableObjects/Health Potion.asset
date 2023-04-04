@@ -22,3 +22,5 @@ MonoBehaviour:
   InventoryDescription: Restores 20 HP. Tastes like cherries.
   UseDescription: Restored 20 HP!
   BattleUseDescription: Restored 20 HP!
+  SingleObtainDescription: You found a Health Potion! You can use it to restore your
+    HP.

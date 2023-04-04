@@ -16,6 +16,11 @@ MonoBehaviour:
   OverworldIcon: {fileID: 1120161341, guid: a694df41fa2f4ad4c97d584be789ccb5, type: 3}
   MaxStackSize: 99
   DisplayName: Poem Line 1
+  Consumable: 0
+  HPRestore: 0
+  MPRestore: 0
   InventoryDescription: A line from an ancient poem. It reads, "..."
   UseDescription: Why it has been broken is a mystery. It seems like a fine poem.
   BattleUseDescription: A charming sentiment, but not very effective out of context.
+  SingleObtainDescription: You found the first line of a poem! It looks like the
+    rest is somewhere else.

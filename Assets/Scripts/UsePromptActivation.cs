@@ -11,11 +11,22 @@ public class UsePromptActivation : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            //onPossibleInteraction?.Invoke();
-            Debug.Log("Enter");
-            interactable.GetComponent<Interactable>().possibleInteraction();
-            GameManager.Instance.CanInteract(true);
-            usePrompt.GetComponent<UsePrompt>().FadeIn();
+            /*if(interactable.GetComponent<ChestInteractable>() != null)  // Chests can only be used once, so we gotta check
+            {
+                if (!interactable.GetComponent<ChestInteractable>().Opened)
+                {
+                    interactable.GetComponent<Interactable>().possibleInteraction();
+                    GameManager.Instance.CanInteract(true);
+                    usePrompt.GetComponent<UsePrompt>().FadeIn();
+                }
+            }
+            else
+            {*/
+                interactable.GetComponent<Interactable>().possibleInteraction();
+                GameManager.Instance.CanInteract(true);
+                usePrompt.GetComponent<UsePrompt>().FadeIn();
+            //}
+            
         }
 
     }
@@ -24,7 +35,6 @@ public class UsePromptActivation : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Exit");
             GameManager.Instance.CanInteract(false);
             usePrompt.GetComponent<UsePrompt>().FadeOut();
         }

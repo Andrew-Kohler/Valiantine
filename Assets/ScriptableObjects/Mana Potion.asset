@@ -23,3 +23,5 @@ MonoBehaviour:
     is from the dilution process that makes it drinkable.
   UseDescription: Restored 20 MP!
   BattleUseDescription: Restored 20 MP!
+  SingleObtainDescription: You found a Mana Potion! You can use it to restore your
+    MP.
