@@ -24,6 +24,14 @@ public class GameManager : MonoBehaviour
 
     private GameObject currentInteractable;
 
+    // All the events that broadcast when a moment of change occurs (currently used primarily for camera)
+    public delegate void OnInventoryStateChange();
+    public static event OnInventoryStateChange onInventoryStateChange;
+    public delegate void OnBattleStateChange();
+    public static event OnBattleStateChange onBattleStateChange;
+    public delegate void OnSaveStatueStateChange();
+    public static event OnSaveStatueStateChange onSaveStatueStateChange;
+
     private GameManager()
     {
         _isGameOver = false;
@@ -65,7 +73,14 @@ public class GameManager : MonoBehaviour
 
     public void Inventory(bool flag) // Setter and getter for state of player being in the inventory menu
     {
+        
+        bool former = _isInventory; 
         _isInventory = flag;
+        if (flag != former)
+        {
+            onInventoryStateChange?.Invoke();
+        }
+
     }
     public bool isInventory()
     {
@@ -82,12 +97,18 @@ public class GameManager : MonoBehaviour
     }
 
     public void Interaction(bool flag)
-    {
+    { 
+        bool former = _isInteraction;
         _isInteraction = flag;
         if(_isInteraction == true)  // Start the interaction
         {
             currentInteractable.GetComponent<Interactable>().Interact();
         }
+        if (currentInteractable.CompareTag("Save Statue") && flag != former)
+        {
+            onSaveStatueStateChange?.Invoke();
+        }
+
     }
 
     public bool isInteraction()
@@ -107,7 +128,14 @@ public class GameManager : MonoBehaviour
 
     public void Battle(bool flag)   // Setter and getter for if we are in battle!
     {
+        
+        bool former = _isBattle;    
         _isBattle = flag;
+        if (flag != former)
+        {
+            onBattleStateChange?.Invoke();
+        }
+
     }
 
     public bool isBattle()

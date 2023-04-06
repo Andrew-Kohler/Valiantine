@@ -5,6 +5,7 @@ using UnityEngine;
 public class SaveStatueInteractable : Interactable
 {
     
+
     private void Start()
     {
         lines.Add("The statue's inscription reads, 'Here stands a guardian of Aleyssia. May her gaze ever meet the eyes of the valiant.'");
@@ -12,6 +13,7 @@ public class SaveStatueInteractable : Interactable
     }
     public override void Interact()
     {
+
         StartCoroutine(DoInteraction());
     }
 
