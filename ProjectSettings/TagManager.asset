@@ -11,11 +11,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Level Geometry
   - Water
   - UI
   - Enemies
-  - 
+  - Only Affected by Level Geometry
   - 
   - 
   - 

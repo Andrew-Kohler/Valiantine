@@ -4,14 +4,26 @@ using UnityEngine;
 
 public class CardinalController : MonoBehaviour
 {
-    public bool flyingAway;
-    private bool activeCoroutine;
-    private CardinalAnimatorS cardinalAnimator;
-    private CardinalStateChange cardinalStateChange;
     [SerializeField] private GameObject cardinalSprite;
     [SerializeField] private Collider trigger;
+
+    private CardinalAnimatorS cardinalAnimator;
+    private CardinalStateChange cardinalStateChange;
+    
     Rigidbody rb;
+    
+    public bool flyingAway;
+
+    private bool activeCoroutine;
     private float dir;
+
+    private float xHopVelocity = 1f;    // Speeds governing how fast/high the cardinal hops and flies away
+    private float yHopVelocity = 2f;
+    private float xFlightVelocity = 6f;
+    private float yFlightVelocity;      // Starting value for y flight velocty
+    private float yVelocityMultiplier = 1.4f;   // Rate at which y velocity increases
+    private float maxYVelocity = 15f;   // Cap on growth of y velocity
+    private float flightTime = 4.5f;    // Time the cardinal flies for in seconds before deloading
 
     void Start()
     {
@@ -20,6 +32,8 @@ public class CardinalController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         cardinalAnimator = cardinalSprite.GetComponent<CardinalAnimatorS>();
         cardinalStateChange = trigger.GetComponent<CardinalStateChange>();
+
+        yFlightVelocity = 1.2f;
     }
 
     void Update()
@@ -36,8 +50,6 @@ public class CardinalController : MonoBehaviour
         {
             if (!flyingAway)
             {
-                // Hop back and forth errantly
-                // Randomly pick left or right and hop in that direction, and communicate that direction to the animator
                 StartCoroutine(DoHop());
                 
             }
@@ -48,22 +60,26 @@ public class CardinalController : MonoBehaviour
     IEnumerator DoHop() // Hopping about routine
     {
         activeCoroutine = true;
-        dir = Random.Range(0, 2);
+
+        yield return new WaitForSeconds(Random.Range(0f, 1f)); // Randomizes hop time to de-sync groups of birds
+
+        dir = Random.Range(0, 2);   // Randomly decide between left and right
         if(dir == 0)    // Right
         {
             cardinalAnimator.dir = 0;
-            rb.velocity = new Vector3(1f, 2f, 0f);
+            rb.velocity = new Vector3(xHopVelocity, yHopVelocity, 0f);
         }
         else // Left
         {
             cardinalAnimator.dir = 1;
-            rb.velocity = new Vector3(-1f, 2f, 0f);
+            rb.velocity = new Vector3(-xHopVelocity, yHopVelocity, 0f);
         }
         yield return new WaitForSeconds(.5f);
         rb.velocity = new Vector3(0f, 0f, 0f);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(Random.Range(2f, 6f));    // Randomizes hop time to de-sync groups of birds
 
-        activeCoroutine=false;
+
+        activeCoroutine = false;
         yield return null;
     }
     IEnumerator DoFlyAway() // Flying away routine
@@ -74,25 +90,26 @@ public class CardinalController : MonoBehaviour
         if (dir == 0)    // Right
         {
             cardinalAnimator.dir = 0;
-
-            //rb.velocity = new Vector3(2f, 4f, 0f);
         }
         else // Left
         {
             cardinalAnimator.dir = 1;
             signF = -1f;
-            //rb.velocity = new Vector3(-2f, 4f, 0f);
         }
 
-        int count = 90;
-        while(count > 0)
+        float count = flightTime / .05f;
+        yFlightVelocity = 1.2f;
+
+        while (count > 0) // Flies the cardinal away until it's out of camera view and good to de-load
         {
-            rb.velocity = new Vector3(4f *signF, 10f, 0f);
+            rb.velocity = new Vector3(xFlightVelocity * signF, yFlightVelocity, 0f);
+            
+            if(yFlightVelocity < maxYVelocity)
+                yFlightVelocity = yFlightVelocity * yVelocityMultiplier;
+
             count--;
             yield return new WaitForSeconds(.05f);
         }
-
-        //yield return new WaitForSeconds(5f);
         activeCoroutine = false;
         this.gameObject.SetActive(false);
         
