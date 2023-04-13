@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
     public static event OnBattleStateChange onBattleStateChange;
     public delegate void OnSaveStatueStateChange();
     public static event OnSaveStatueStateChange onSaveStatueStateChange;
+    public delegate void OnChestStateChange();
+    public static event OnChestStateChange onChestStateChange;
 
     private GameManager()
     {
@@ -108,6 +110,11 @@ public class GameManager : MonoBehaviour
         {
             onSaveStatueStateChange?.Invoke();
         }
+        if (currentInteractable.CompareTag("Chest") && flag != former)
+        {
+            onChestStateChange?.Invoke();
+        }
+        // Ok, write it down now -> diff event for each type of interactable, they all do the same stuff for initial pos in animator but all do diff stuff to cam
 
     }
 

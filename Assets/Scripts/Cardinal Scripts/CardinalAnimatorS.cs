@@ -76,7 +76,7 @@ public class CardinalAnimatorS : MonoBehaviour
             int frame = (int)(deltaT * animationSpeed);
 
             deltaT += Time.deltaTime;
-            if (frame >= frameLoop) // Might be messing with this soon!
+            if (frame >= frameLoop) 
             {
                 deltaT = 0;
                 frame = frameReset;

@@ -27,6 +27,21 @@ public class PlayerAnimatorS : MonoBehaviour
     private int walkForwardsIndex = 1;
     private int walkBackIndex = 0;
 
+    // All of the event controls that trigger special animations
+    private void OnEnable()
+    {
+        GameManager.onSaveStatueStateChange += faceAway;
+        GameManager.onChestStateChange += faceAway;
+        ChestAnimatorS.onChestOpen += faceTowards;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.onSaveStatueStateChange -= faceAway;
+        GameManager.onChestStateChange -= faceAway;
+        ChestAnimatorS.onChestOpen -= faceTowards;
+    }
+
     private void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
@@ -35,8 +50,6 @@ public class PlayerAnimatorS : MonoBehaviour
 
     private void Update()
     {
-        
-
         // The logic that plays the animation
         // Select shader property names
         if (!GameManager.Instance.isSettings())
@@ -161,6 +174,22 @@ public class PlayerAnimatorS : MonoBehaviour
         {
             direction = 3;
         }
+    }
+
+    // Animation control methods
+
+    private void faceAway() // Faces the player in their idle stance away from the camera
+    {
+        direction = 2;
+        animationIndex = idleBackIndex;
+        GameManager.onChestStateChange -= faceAway; // Prevents from turning back around on next state change; will probably change 
+    }
+
+    private void faceTowards() // Faces the player in their idle stance towards the camera
+    {
+        Debug.Log("Go");
+        direction = 3;
+        animationIndex = idleForwardsIndex;
     }
 }
 

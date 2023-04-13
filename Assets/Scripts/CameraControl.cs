@@ -169,7 +169,7 @@ public class CameraControl : MonoBehaviour
         StartCoroutine(DoCamReset2(step, standardAngle));
     }
 
-    IEnumerator DoCamReset2(float step, Vector3 targetRotation)
+    IEnumerator DoCamReset2(float step, Vector3 targetRotation) // The sequel to the original camera reset method (this one is better)
     {
         activeCoroutine = true;
 

@@ -46,7 +46,7 @@ public class CardinalController : MonoBehaviour
         }
             
 
-        if (!activeCoroutine)
+        if (!activeCoroutine && !GameManager.Instance.isSettings())
         {
             if (!flyingAway)
             {
