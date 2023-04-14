@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3007380695790069114}
   - component: {fileID: 3007380695790069117}
   - component: {fileID: 3007380695790069110}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cardinal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 3007380696421182704}
   - component: {fileID: 3007380696421182707}
   - component: {fileID: 3007380696421182705}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cardinal Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -5908,9 +5908,11 @@ MonoBehaviour:
   inventoryY: -6
   inventoryZ: 8
   saveStatuePos: {x: 5, y: -9, z: 12}
+  chestPos: {x: 0, y: -3, z: 2}
   standardAngle: {x: 20.51, y: 0, z: 0}
   inventoryAngle: {x: 0, y: 0, z: 0}
   saveStatueAngle: {x: -20, y: -20, z: 0}
+  chestAngle: {x: 10, y: 0, z: 0}
   battleStep: 0.25
   inventoryStep: 0.5
 --- !u!1 &972503892

@@ -26,7 +26,7 @@ public class ChestInteractable : Interactable
         chestAnimator = chestSprite.GetComponent<ChestAnimatorS>();
         chestItemDisplay = itemSprite.GetComponent<ChestItemDisplay>();
 
-        chestItemDisplay.setItemSprite(chestItem.OverworldIcon);
+        
 
         if(numItems == 1)
         {
@@ -45,7 +45,9 @@ public class ChestInteractable : Interactable
 
     protected override IEnumerator DoInteraction()
     {
+        chestItemDisplay.setItemSprite(chestItem.OverworldIcon);
         prompt.FadeOut(); // Fades out the little indicator
+        yield return new WaitForSeconds(1f);
 
         PlayerManager.Instance.PlayerInventory().InventorySystem.AddToInventory(chestItem, numItems); // Give the player the item
         chestAnimator.PlayOpenAnimation(); // Open the chest and wait for it to open
