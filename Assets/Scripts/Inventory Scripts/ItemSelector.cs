@@ -18,11 +18,13 @@ public class ItemSelector : MonoBehaviour
         Arrow.color = Color.white;
         Backboard.color = Color.clear;
         useText.text = "";
+        SetPosition();
         this.gameObject.SetActive(false);
     }
 
     private void OnEnable()
     {
+        SetPosition();
         Arrow.color = Color.white;
         Backboard.color = Color.clear;
         useText.text = "";
@@ -31,7 +33,7 @@ public class ItemSelector : MonoBehaviour
 
     void Update()
     {
-        if(!itemsTab.GetComponent<StaticInventoryDisplay>().SelectedInventorySlot.CheckEmpty()) // If we have at least one item
+        if(!itemsTab.GetComponent<StaticInventoryDisplay>().SelectedInventorySlot.CheckEmpty() && itemsTab.activeInHierarchy) // If we have at least one item
         {
             SetPosition();
         }

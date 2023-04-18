@@ -77,7 +77,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
                     slotChosen = true;
                 }
 
-                verticalInput = Input.GetAxis("Vertical");
+                /*verticalInput = Input.GetAxis("Vertical");
                 if (verticalInput > 0)
                 {
                     StartCoroutine(DoMoveUp());
@@ -85,7 +85,16 @@ public class StaticInventoryDisplay : InventoryDisplay //
                 else if (verticalInput < 0)
                 {
                     StartCoroutine(DoMoveDown());
+                }*/
+                if (Input.GetButtonDown("Inventory Up")) 
+                {
+                    StartCoroutine(DoMoveUp());
                 }
+                else if (Input.GetButtonDown("Inventory Down"))
+                {
+                    StartCoroutine(DoMoveDown());
+                }
+                
             }
 
             else // If we have selected an item
@@ -176,7 +185,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
         //slots[selectedSlot].Selected = true;
         // slots[selectedSlot].UpdateUISlot();
         currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
-        yield return new WaitForSeconds(.5f);
+        //yield return new WaitForSeconds(.5f);
         activeCoroutine = false;
         yield return null;
     }
@@ -199,7 +208,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
         currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
         // slots[selectedSlot].Selected = true;
         //slots[selectedSlot].UpdateUISlot();
-        yield return new WaitForSeconds(.5f);
+        //yield return new WaitForSeconds(.5f);
         activeCoroutine = false;
         yield return null;
     }
