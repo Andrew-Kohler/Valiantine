@@ -116,7 +116,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GemSpritesheet_0
+      name: Container
       rect:
         serializedVersion: 2
         x: 1
@@ -124,7 +124,7 @@ TextureImporter:
         width: 19
         height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -137,7 +137,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_1
+      name: Will_Hilt
       rect:
         serializedVersion: 2
         x: 26
@@ -145,7 +145,7 @@ TextureImporter:
         width: 7
         height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -158,7 +158,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_2
+      name: Patience_Hilt
       rect:
         serializedVersion: 2
         x: 35
@@ -166,7 +166,7 @@ TextureImporter:
         width: 7
         height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -179,7 +179,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_3
+      name: Courage_Hilt
       rect:
         serializedVersion: 2
         x: 44
@@ -187,7 +187,7 @@ TextureImporter:
         width: 7
         height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -200,7 +200,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_4
+      name: Heart_Hilt
       rect:
         serializedVersion: 2
         x: 53
@@ -208,7 +208,7 @@ TextureImporter:
         width: 7
         height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -221,7 +221,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_5
+      name: Cunning_Hilt
       rect:
         serializedVersion: 2
         x: 62
@@ -229,7 +229,7 @@ TextureImporter:
         width: 7
         height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -242,7 +242,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_6
+      name: Great Patience_Hilt
       rect:
         serializedVersion: 2
         x: 71
@@ -250,7 +250,7 @@ TextureImporter:
         width: 7
         height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -263,7 +263,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_7
+      name: Consitution_Hilt
       rect:
         serializedVersion: 2
         x: 80
@@ -271,7 +271,7 @@ TextureImporter:
         width: 7
         height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -284,7 +284,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_8
+      name: Will_Overworld
       rect:
         serializedVersion: 2
         x: 22
@@ -292,7 +292,7 @@ TextureImporter:
         width: 9
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -305,7 +305,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_9
+      name: Patience_Overworld
       rect:
         serializedVersion: 2
         x: 33
@@ -313,7 +313,7 @@ TextureImporter:
         width: 9
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -326,7 +326,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_10
+      name: Courage_Overworld
       rect:
         serializedVersion: 2
         x: 44
@@ -334,7 +334,7 @@ TextureImporter:
         width: 9
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -347,7 +347,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_11
+      name: Heart_Overworld
       rect:
         serializedVersion: 2
         x: 55
@@ -355,7 +355,7 @@ TextureImporter:
         width: 9
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -368,7 +368,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_12
+      name: Cunning_Overworld
       rect:
         serializedVersion: 2
         x: 66
@@ -376,7 +376,7 @@ TextureImporter:
         width: 9
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -389,7 +389,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_13
+      name: Great Patience_Overworld
       rect:
         serializedVersion: 2
         x: 77
@@ -397,7 +397,7 @@ TextureImporter:
         width: 9
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -410,7 +410,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_14
+      name: Constitution_Overworld
       rect:
         serializedVersion: 2
         x: 88
@@ -418,7 +418,7 @@ TextureImporter:
         width: 9
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -431,7 +431,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_15
+      name: Will
       rect:
         serializedVersion: 2
         x: 2
@@ -439,7 +439,7 @@ TextureImporter:
         width: 15
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -452,7 +452,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_16
+      name: Patience
       rect:
         serializedVersion: 2
         x: 15
@@ -460,7 +460,7 @@ TextureImporter:
         width: 15
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -473,7 +473,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_17
+      name: Courage
       rect:
         serializedVersion: 2
         x: 28
@@ -481,7 +481,7 @@ TextureImporter:
         width: 15
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -494,7 +494,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_18
+      name: Constitution
       rect:
         serializedVersion: 2
         x: 41
@@ -502,7 +502,7 @@ TextureImporter:
         width: 15
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -515,7 +515,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_19
+      name: Cunning
       rect:
         serializedVersion: 2
         x: 54
@@ -523,7 +523,7 @@ TextureImporter:
         width: 15
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -536,7 +536,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_20
+      name: Great Patience
       rect:
         serializedVersion: 2
         x: 67
@@ -544,7 +544,7 @@ TextureImporter:
         width: 15
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -557,7 +557,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GemSpritesheet_21
+      name: Heart
       rect:
         serializedVersion: 2
         x: 80
@@ -565,7 +565,7 @@ TextureImporter:
         width: 15
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -586,7 +586,7 @@ TextureImporter:
         width: 92
         height: 26
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -609,29 +609,29 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      GemSpritesheet_0: 314064727
-      GemSpritesheet_6: 1334284528
-      GemSpritesheet_11: -1320754836
-      GemSpritesheet_13: -1277060505
-      GemSpritesheet_3: 927013100
-      GemSpritesheet_14: 292771691
-      GemSpritesheet_5: -332137938
+      Heart_Hilt: 1266101228
+      Cunning_Hilt: -332137938
+      Great Patience_Hilt: 1334284528
+      Container: 314064727
+      Will_Hilt: 76920469
+      Constitution: 1090139044
+      Will_Overworld: -1412314193
+      Heart: 394601667
+      Patience_Overworld: -1653824679
       GemSpritesheet_22: -1524813834
-      GemSpritesheet_15: 715052046
-      GemSpritesheet_21: 394601667
-      GemSpritesheet_4: 1266101228
-      GemSpritesheet_10: -500413447
-      GemSpritesheet_7: 425327381
-      GemSpritesheet_9: -1653824679
-      GemSpritesheet_18: 1090139044
-      GemSpritesheet_1: 76920469
-      GemSpritesheet_2: 1396939117
-      GemSpritesheet_19: 1342553640
-      GemSpritesheet_12: -1161043497
-      GemSpritesheet_20: 405816583
-      GemSpritesheet_17: 1861205388
-      GemSpritesheet_8: -1412314193
-      GemSpritesheet_16: -2058348285
+      Constitution_Overworld: 292771691
+      Will: 715052046
+      Patience_Hilt: 1396939117
+      Patience: -2058348285
+      Courage_Overworld: -500413447
+      Great Patience: 405816583
+      Cunning: 1342553640
+      Heart_Overworld: -1320754836
+      Consitution_Hilt: 425327381
+      Courage: 1861205388
+      Cunning_Overworld: -1161043497
+      Courage_Hilt: 927013100
+      Great Patience_Overworld: -1277060505
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

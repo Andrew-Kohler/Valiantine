@@ -92,7 +92,7 @@ public class InventoryMenuView : View
         }
         else
         {
-            flavorText.text = "Ok, wait, hold on, you don't have to implement this buddy, we can ta-";
+            flavorText.text = gemsTab.GetComponent<GemInventoryDisplay>().CurrentText;
         }
     }
 

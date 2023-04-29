@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f4fcc24172e7d2438345952eeee2726, type: 3}
+  m_Name: Heart
+  m_EditorClassIdentifier: 
+  MenuIcon: {fileID: 394601667, guid: 9f4dd97014b2cb041bb30e028b6ba0c9, type: 3}
+  OverworldIcon: {fileID: -1320754836, guid: 9f4dd97014b2cb041bb30e028b6ba0c9, type: 3}
+  MaxStackSize: 1
+  DisplayName: Gem of Heart
+  Consumable: 0
+  HPRestore: -1
+  MPRestore: 6
+  InventoryDescription: 'HEART: HP and MP are combined into a single stat.'
+  UseDescription: 'SPELL: Take Heart - The next time you would be hurt, heal for
+    the damage dealt to you.'
+  BattleUseDescription: 
+  SingleObtainDescription: You found the Gem of Heart! It looks like it fits perfectly
+    in the hilt of your sword.

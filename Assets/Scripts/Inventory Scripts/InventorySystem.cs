@@ -14,6 +14,9 @@ public class InventorySystem
 
     public UnityAction<InventorySlot> OnInventorySlotChanged;
 
+    public delegate void OnGemObtain(ItemData data);
+    public static event OnGemObtain onGemObtain;
+
     public InventorySystem(int size)
     {
         inventorySlots = new List<InventorySlot>(size);
@@ -41,9 +44,19 @@ public class InventorySystem
 
         if(HasFreeSlot(out InventorySlot freeSlot) && !ContainsItem(itemToAdd, out List<InventorySlot> invSlot2)) // If it doesn't contain the item but DOES have a free slot
         {   // The ContainsItem here is present to allow an item to be picked up, but to prevent a new stack from being made
-            freeSlot.UpdateInventorySlot(itemToAdd, amountToAdd);
-            OnInventorySlotChanged?.Invoke(freeSlot);
+            if(itemToAdd.HPRestore != -1)   // If the item isn't a gem
+            {
+                freeSlot.UpdateInventorySlot(itemToAdd, amountToAdd);
+                OnInventorySlotChanged?.Invoke(freeSlot);
+                
+            }
+            else
+            {
+                Debug.Log(itemToAdd.DisplayName);
+                onGemObtain?.Invoke(itemToAdd);
+            }
             return true;
+
         }
 
         return false;

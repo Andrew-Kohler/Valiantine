@@ -77,15 +77,6 @@ public class StaticInventoryDisplay : InventoryDisplay //
                     slotChosen = true;
                 }
 
-                /*verticalInput = Input.GetAxis("Vertical");
-                if (verticalInput > 0)
-                {
-                    StartCoroutine(DoMoveUp());
-                }
-                else if (verticalInput < 0)
-                {
-                    StartCoroutine(DoMoveDown());
-                }*/
                 if (Input.GetButtonDown("Inventory Up")) 
                 {
                     StartCoroutine(DoMoveUp());
@@ -171,8 +162,6 @@ public class StaticInventoryDisplay : InventoryDisplay //
     IEnumerator DoMoveUp()
     {
         activeCoroutine = true;
-        //slots[selectedSlot].Selected = false;
-        //slots[selectedSlot].UpdateUISlot();
         if (selectedSlot == 0)
         {   
             selectedSlot = GetFullSlotCount() - 1;
@@ -182,10 +171,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
             selectedSlot = selectedSlot - 1;
         }
 
-        //slots[selectedSlot].Selected = true;
-        // slots[selectedSlot].UpdateUISlot();
         currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
-        //yield return new WaitForSeconds(.5f);
         activeCoroutine = false;
         yield return null;
     }
@@ -193,11 +179,8 @@ public class StaticInventoryDisplay : InventoryDisplay //
     IEnumerator DoMoveDown()
     {
         activeCoroutine = true;
-        //slots[selectedSlot].Selected = false;
-        //slots[selectedSlot].UpdateUISlot();
         if (selectedSlot == GetFullSlotCount() - 1)
         {
-           // Debug.Log(GetFullSlotCount());
             selectedSlot = 0;
         }
         else
@@ -206,9 +189,6 @@ public class StaticInventoryDisplay : InventoryDisplay //
         }
 
         currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
-        // slots[selectedSlot].Selected = true;
-        //slots[selectedSlot].UpdateUISlot();
-        //yield return new WaitForSeconds(.5f);
         activeCoroutine = false;
         yield return null;
     }

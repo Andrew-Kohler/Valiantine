@@ -61,6 +61,10 @@ public class PlayerManager : MonoBehaviour
         return GetComponent<PlayerMovement>();
     }
 
+    public GemSystem GemSystem()
+    {
+        return GetComponent<GemSystem>();
+    }
 
 
     /*// Start is called before the first frame update
