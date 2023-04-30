@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b34a9ba8c9616234782e7ef090ba1a6f, type: 3}
   m_Name: Courage
   m_EditorClassIdentifier: 
-  ATKMod: 0.4
-  DEFMod: 0.4
-  HPMod: 0.4
-  MPMod: 0.4
-  SPDMod: 0.4
+  ATKMod: 1.3
+  DEFMod: 0.6
+  HPMod: 0.7
+  MPMod: 1.2
+  SPDMod: 1
   targetType: 1
   gemName: Courage
-  ActiveATKMod: 0.4
+  ActiveATKMod: 2.5

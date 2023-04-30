@@ -10,9 +10,9 @@ public class PlayerStats : Stats
         MaxHP = 33;
         MP = 3;
         MaxMP = 18;
-        ATK = 1f;
-        DEF = 1f;
-        SPD = 2;
+        ATK = 10f;
+        DEF = 10f;
+        SPD = 20;
         LVL = 1;
         XP = 1;
         XPThreshold = 2;

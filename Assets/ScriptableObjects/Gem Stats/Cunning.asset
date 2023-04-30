@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ATKMod: 0.7
   DEFMod: 0.7
-  HPMod: 0.7
-  MPMod: 0.7
-  SPDMod: 0.7
+  HPMod: 1
+  MPMod: 1
+  SPDMod: 1
   targetType: 1
   gemName: Cunning
-  ActiveATKMod: 0.7
+  ActiveATKMod: 1

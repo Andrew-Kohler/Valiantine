@@ -71,12 +71,17 @@ public class Stats : MonoBehaviour
         return MaxMP;
     }
 
+    public float GetATK()   // No setter because permanent ATK stat should never be changed outside this class
+    {
+        return ATK;
+    }
+
     public float GetDEF()   // No setter because permanent DEF stat should never be changed outside this class
     {
         return DEF;
     }
 
-    public int GetSpeed()   // No setter for same reason as DEF
+    public int GetSPD()   // No setter for same reason as DEF
     {
         return SPD;
     }

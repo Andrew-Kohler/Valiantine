@@ -46,6 +46,7 @@ public class GemSystem : MonoBehaviour
     private void Start()
     {
         heldGemList = new ItemData[7];
+        currentGem = gemStats[0];
     }
 
 
@@ -54,7 +55,7 @@ public class GemSystem : MonoBehaviour
         heldGemList[data.MPRestore] = data;
     }
 
-    /*public void equipGem()  // Method for changing which gem is equipped
+    /*public void equipGem(int index)  // Method for changing which gem is equipped
     {
 
     }*/

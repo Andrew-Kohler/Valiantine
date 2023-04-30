@@ -110,7 +110,7 @@ public class BattleManager : MonoBehaviour
 
                 // Determine turn order
                 turnArray = new Stats[2];  // This will make potential expansion of this system easier in the future
-                if (playerStats.GetSpeed() >= enemyStats.GetSpeed()) // A very basic speed check
+                if (playerStats.GetSPD() >= enemyStats.GetSPD()) // A very basic speed check
                 {
                     turnArray[0] = playerStats;
                     turnArray[1] = enemyStats;

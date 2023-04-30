@@ -6,6 +6,7 @@ public class GemInventoryDisplay : MonoBehaviour
 {
     [SerializeField] private List<GameObject> gemDisplays;   // A list of all gem displays for easy access
     [SerializeField] private GemSystem gemSystem;
+    [SerializeField] private StatDisplay statDisplay;
     [SerializeField] private GameObject indicator;
     [SerializeField] float yOffset = 10f;
 
@@ -23,35 +24,38 @@ public class GemInventoryDisplay : MonoBehaviour
     // Great Patience
     // Heart
 
+    public delegate void OnSelectedGemChange();
+    public static event OnSelectedGemChange onSelectedGemChange;
+
     private void OnEnable()
     {
         for(int i = 0; i < gemSystem.HeldGemList.Length; i++)
         {
             if(gemSystem.HeldGemList[i] != null)
             {
-                Debug.Log("Gem shown");
                 gemDisplays[i].GetComponent<GemDisplay>().showGem();
             }
         }
         selectedSlot = 0;
         UpdateText();
         UpdatePointer();
+        UpdateStatDisplay();
+        onSelectedGemChange?.Invoke();
     }
 
     private void Start()
     {
-        Debug.Log("Start has happened");
         for (int i = 0; i < gemSystem.HeldGemList.Length; i++)
         {
             if (gemSystem.HeldGemList[i] != null)
             {
-                Debug.Log("Gem shown");
                 gemDisplays[i].GetComponent<GemDisplay>().showGem();
             }
         }
         selectedSlot = 0;
         UpdateText();
         UpdatePointer();
+        UpdateStatDisplay();
     }
 
     private void Update()
@@ -61,10 +65,12 @@ public class GemInventoryDisplay : MonoBehaviour
             if (Input.GetButtonDown("Inventory Left"))
             {
                 StartCoroutine(DoMoveLeft());
+                onSelectedGemChange?.Invoke();
             }
             else if (Input.GetButtonDown("Inventory Right"))
             {
                 StartCoroutine(DoMoveRight());
+                onSelectedGemChange?.Invoke();
             }
         }
         
@@ -80,7 +86,7 @@ public class GemInventoryDisplay : MonoBehaviour
         }
         else
         {
-            currentText = "Perhaps this blade holds secrets yet.";
+            currentText = "Perhaps this blade holds secrets yet...";
         }
     }
 
@@ -88,6 +94,17 @@ public class GemInventoryDisplay : MonoBehaviour
     {
         Vector3 selectedPosition = gemDisplays[selectedSlot].transform.position;
         indicator.transform.position = new Vector3(selectedPosition.x, selectedPosition.y + yOffset, selectedPosition.z);
+    }
+    private void UpdateStatDisplay()
+    {
+        if (gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemHeld)
+        {
+            statDisplay.SetRelevantGemStats(gemSystem.CurrentGem, gemSystem.GemStats[selectedSlot]);
+        }
+        else
+        {
+            statDisplay.SetRelevantGemStats(gemSystem.CurrentGem, gemSystem.CurrentGem);
+        }
     }
 
     // Coroutines ----------------------------------
@@ -106,7 +123,8 @@ public class GemInventoryDisplay : MonoBehaviour
 
         UpdateText();
         UpdatePointer();
-        
+        UpdateStatDisplay();
+
         activeCoroutine = false;
         yield return null;
     }
@@ -125,6 +143,7 @@ public class GemInventoryDisplay : MonoBehaviour
 
         UpdateText();
         UpdatePointer();
+        UpdateStatDisplay();
 
         activeCoroutine = false;
         yield return null;
