@@ -7,10 +7,15 @@ public class GemInventoryDisplay : MonoBehaviour
     [SerializeField] private List<GameObject> gemDisplays;   // A list of all gem displays for easy access
     [SerializeField] private GemSystem gemSystem;
     [SerializeField] private StatDisplay statDisplay;
+
     [SerializeField] private GameObject indicator;
+    [SerializeField] private GameObject tabIndicator;
+
+
     [SerializeField] float yOffset = 10f;
 
     bool activeCoroutine;
+    bool showSpell;
     string currentText;
     public string CurrentText => currentText;
     int selectedSlot;
@@ -37,6 +42,7 @@ public class GemInventoryDisplay : MonoBehaviour
             }
         }
         selectedSlot = 0;
+        showSpell = false;
         UpdateText();
         UpdatePointer();
         UpdateStatDisplay();
@@ -72,6 +78,18 @@ public class GemInventoryDisplay : MonoBehaviour
                 StartCoroutine(DoMoveRight());
                 onSelectedGemChange?.Invoke();
             }
+            else if(Input.GetButtonDown("Inventory Up") && showSpell)
+            {
+                showSpell = false;
+                UpdateText();
+                tabIndicator.transform.Rotate(new Vector3(0, 0, 180));
+            }
+            else if (Input.GetButtonDown("Inventory Down") && !showSpell)
+            {
+                showSpell = true;
+                UpdateText();
+                tabIndicator.transform.Rotate(new Vector3(0, 0, 180));
+            }
         }
         
     }
@@ -82,7 +100,15 @@ public class GemInventoryDisplay : MonoBehaviour
     {
         if (gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemHeld)
         {
-            currentText = gemSystem.HeldGemList[selectedSlot].InventoryDescription;
+            if (showSpell)
+            {
+                currentText = gemSystem.HeldGemList[selectedSlot].UseDescription;
+            }
+            else
+            {
+                currentText = gemSystem.HeldGemList[selectedSlot].InventoryDescription;
+            }
+            
         }
         else
         {
