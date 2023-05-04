@@ -16,9 +16,11 @@ public class GemInventoryDisplay : MonoBehaviour
 
     bool activeCoroutine;
     bool showSpell;
+    bool gemChosen;
     string currentText;
     public string CurrentText => currentText;
     int selectedSlot;
+    int equippedSlot;
 
     // Current order in these lists: 
     // Will (starter)
@@ -59,6 +61,7 @@ public class GemInventoryDisplay : MonoBehaviour
             }
         }
         selectedSlot = 0;
+        equippedSlot = -1;
         UpdateText();
         UpdatePointer();
         UpdateStatDisplay();
@@ -68,28 +71,74 @@ public class GemInventoryDisplay : MonoBehaviour
     {
         if (!activeCoroutine)
         {
-            if (Input.GetButtonDown("Inventory Left"))
+            if (!gemChosen)
             {
-                StartCoroutine(DoMoveLeft());
-                onSelectedGemChange?.Invoke();
+                if (Input.GetButtonDown("Inventory Left"))  // Move the selection arrow left
+                {
+                    StartCoroutine(DoMoveLeft());
+                    onSelectedGemChange?.Invoke();
+                }
+                else if (Input.GetButtonDown("Inventory Right")) // Move the selection arrow right
+                {
+                    StartCoroutine(DoMoveRight());
+                    onSelectedGemChange?.Invoke();
+                }
+                else if (Input.GetButtonDown("Inventory Up") && showSpell && gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemHeld)  // Change descriptive text
+                {
+                    showSpell = false;
+                    UpdateText();
+                    tabIndicator.transform.Rotate(new Vector3(0, 0, 180));
+                }
+                else if (Input.GetButtonDown("Inventory Down") && !showSpell && gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemHeld)
+                {
+                    showSpell = true;
+                    UpdateText();
+                    tabIndicator.transform.Rotate(new Vector3(0, 0, 180));
+                }
+                else if (Input.GetButtonDown("Interact"))   // Start the thing where we ask if they player wants to equip the gem
+                {
+                    if (gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemHeld && !gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemEquipped)
+                    {
+                        gemChosen = true;
+                        // Change the indicator to a "Equip?" prompt similar to the one in the other inventory
+                    }
+                    else
+                    {
+                        // In the far, far future, this will make a sound play.
+
+                        // So, MP is still broken, but it looks like that's it.
+                    }
+
+
+                }
+
             }
-            else if (Input.GetButtonDown("Inventory Right"))
+            else    // If we have selected a gem
             {
-                StartCoroutine(DoMoveRight());
-                onSelectedGemChange?.Invoke();
+                if (Input.GetButtonDown("Interact")) // If we choose to equip that gem
+                { 
+                    if(equippedSlot != -1) // TODO: Find a way to give the player the Gem of Will and have it equipped already when the game begins
+                    {
+                        gemDisplays[equippedSlot].GetComponent<GemDisplay>().equipGem(false); // Turn off the outline on the old selected one
+                    }
+                    gemSystem.equipGem(selectedSlot);                                       // Alert the backend gem system that a change has been made
+                    gemDisplays[selectedSlot].GetComponent<GemDisplay>().equipGem(true);    // Turn on the outline on the new selected one
+                    equippedSlot = selectedSlot;   
+                    UpdateStatDisplay();                                                    // Alert the stat display that a change has been made
+
+                    // Alert the itty bitty gem that a change has been made
+                    // Revert the changes made to the indicator
+
+                    gemChosen = false;
+
+                }
+                else if (Input.GetButtonDown("Return"))
+                {
+                    // Revert the changes made to the indicator
+                    gemChosen = false;
+                }
             }
-            else if(Input.GetButtonDown("Inventory Up") && showSpell)
-            {
-                showSpell = false;
-                UpdateText();
-                tabIndicator.transform.Rotate(new Vector3(0, 0, 180));
-            }
-            else if (Input.GetButtonDown("Inventory Down") && !showSpell)
-            {
-                showSpell = true;
-                UpdateText();
-                tabIndicator.transform.Rotate(new Vector3(0, 0, 180));
-            }
+            
         }
         
     }
@@ -100,6 +149,7 @@ public class GemInventoryDisplay : MonoBehaviour
     {
         if (gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemHeld)
         {
+            tabIndicator.SetActive(true);
             if (showSpell)
             {
                 currentText = gemSystem.HeldGemList[selectedSlot].UseDescription;
@@ -112,6 +162,7 @@ public class GemInventoryDisplay : MonoBehaviour
         }
         else
         {
+            tabIndicator.SetActive(false);
             currentText = "Perhaps this blade holds secrets yet...";
         }
     }
@@ -121,7 +172,7 @@ public class GemInventoryDisplay : MonoBehaviour
         Vector3 selectedPosition = gemDisplays[selectedSlot].transform.position;
         indicator.transform.position = new Vector3(selectedPosition.x, selectedPosition.y + yOffset, selectedPosition.z);
     }
-    private void UpdateStatDisplay()
+    private void UpdateStatDisplay()    // Feeds the stat display the relevant data from making stat predictions
     {
         if (gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemHeld)
         {

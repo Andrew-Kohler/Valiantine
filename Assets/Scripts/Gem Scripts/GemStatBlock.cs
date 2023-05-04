@@ -10,6 +10,7 @@ public class GemStatBlock : ScriptableObject
     public float HPMod;
     public float MPMod;
     public float SPDMod;
+    public float XPMod;
 
     public int targetType;  // 1 = Single target, 2 = Multi-target, 3 = Self-target/non-offensive
     public string gemName;

@@ -19,8 +19,8 @@ MonoBehaviour:
   Consumable: 0
   HPRestore: -1
   MPRestore: 2
-  InventoryDescription: 'PATIENCE: Reduces all player stats in exchange for greater
-    victory yields; lowers the penalty for fleeing a battle.'
+  InventoryDescription: 'PATIENCE: Reduces player stats in exchange for greater victory
+    yields; lowers penalty for fleeing a battle.'
   UseDescription: 'SPELL: Good Things Come - The turn after next, all stats are double
     their normal values; if you use an item that turn, it is applied doubly.'
   BattleUseDescription: 

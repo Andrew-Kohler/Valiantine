@@ -33,6 +33,8 @@ public class GemSystem : MonoBehaviour
     [SerializeField] ItemData[] heldGemList;
     public ItemData[] HeldGemList => heldGemList;
 
+    PlayerStats playerStats;
+
     private void OnEnable()
     {
         InventorySystem.onGemObtain += obtainGem;
@@ -47,6 +49,7 @@ public class GemSystem : MonoBehaviour
     {
         heldGemList = new ItemData[7];
         currentGem = gemStats[0];
+        playerStats = PlayerManager.Instance.PlayerStats();
     }
 
 
@@ -55,9 +58,15 @@ public class GemSystem : MonoBehaviour
         heldGemList[data.MPRestore] = data;
     }
 
-    /*public void equipGem(int index)  // Method for changing which gem is equipped
+    public void equipGem(int index)  // Method for changing which gem is equipped
     {
-
-    }*/
+        currentGem = gemStats[index];
+        // TODO: Update Player Stats with all its new mods
+        playerStats.SetATKMod(currentGem.ATKMod);
+        playerStats.SetDEFMod(currentGem.DEFMod);
+        playerStats.SetSPDMod(currentGem.SPDMod);
+        playerStats.SetMaxHPMod(currentGem.HPMod);
+        playerStats.SetMaxMPMod(currentGem.MPMod);
+    }
 
 }

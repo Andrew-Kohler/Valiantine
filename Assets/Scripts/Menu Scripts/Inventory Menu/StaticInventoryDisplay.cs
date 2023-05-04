@@ -55,8 +55,6 @@ public class StaticInventoryDisplay : InventoryDisplay //
             currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
         }
 
-        
-
     }
 
     private void Update()

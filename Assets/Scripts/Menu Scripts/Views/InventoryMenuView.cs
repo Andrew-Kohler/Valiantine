@@ -13,13 +13,18 @@ public class InventoryMenuView : View
 
     [SerializeField] GameObject healthBar;
     [SerializeField] GameObject manaBar;
+    [SerializeField] GameObject XPIndicator;
 
     //[SerializeField] GameObject player;
     PlayerStats playerStats;
     HealthBar healthBarUI;
     ManaBar manaBarUI;
+    XPDisplay xpUI;
 
     [SerializeField] TextMeshProUGUI flavorText;
+
+    public delegate void OnTabSwitch();
+    public static event OnTabSwitch onTabSwitch;
     public override void Initialize()
     {
         itemsTab.SetActive(true);
@@ -30,12 +35,13 @@ public class InventoryMenuView : View
         playerStats = PlayerManager.Instance.PlayerStats();
         healthBarUI = healthBar.GetComponent<HealthBar>();
         manaBarUI = manaBar.GetComponent<ManaBar>();
+        xpUI = XPIndicator.GetComponent<XPDisplay>();
     }
 
     private void Update()
     {
         UpdateText();
-        updateHPandMP();
+        updateHPMPXP();
         if (Input.GetButtonDown("Inv.Tab 1"))
         {
             Switch(itemsTab);
@@ -74,6 +80,7 @@ public class InventoryMenuView : View
             itemsTabIndicator.GetComponent<MenuTabIcon>().Deselect();
             gemsTabIndicator.GetComponent<MenuTabIcon>().Select();
         }
+        onTabSwitch?.Invoke();
     }
 
     private void UpdateText()
@@ -96,13 +103,16 @@ public class InventoryMenuView : View
         }
     }
 
-    void updateHPandMP()
+    void updateHPMPXP()
     {
         healthBarUI.SetHealth(playerStats.GetHP());
         healthBarUI.SetMaxHealth(playerStats.GetMaxHP());
 
         manaBarUI.SetMana(playerStats.GetMP());
         manaBarUI.SetMaxMana(playerStats.GetMaxMP());
+
+        xpUI.SetXP(playerStats.GetXP(), playerStats.GetXPThreshold());
+        xpUI.SetLVL(playerStats.GetLVL());
     }
 
 }

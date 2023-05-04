@@ -17,6 +17,7 @@ MonoBehaviour:
   HPMod: 1
   MPMod: 1
   SPDMod: 1
+  XPMod: 1
   targetType: 1
   gemName: Cunning
   ActiveATKMod: 1

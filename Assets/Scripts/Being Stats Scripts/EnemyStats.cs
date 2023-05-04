@@ -16,8 +16,8 @@ public class EnemyStats : Stats
         LVL = 1;
         XP = 1;
         XPThreshold = 2;
-        ATKBoost = 0f;
-        DEFBoost = 0f;
+        ATKMod = 1f;
+        DEFMod = 1f;
         down = false;
 
     }

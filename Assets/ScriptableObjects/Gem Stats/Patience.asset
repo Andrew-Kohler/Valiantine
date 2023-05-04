@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b34a9ba8c9616234782e7ef090ba1a6f, type: 3}
   m_Name: Patience
   m_EditorClassIdentifier: 
-  ATKMod: 1.2
-  DEFMod: 1.2
-  HPMod: 1.2
-  MPMod: 1.2
-  SPDMod: 1.2
+  ATKMod: 0.8
+  DEFMod: 0.8
+  HPMod: 0.8
+  MPMod: 0.8
+  SPDMod: 0.8
+  XPMod: 2
   targetType: 1
   gemName: Patience
   ActiveATKMod: 1.2

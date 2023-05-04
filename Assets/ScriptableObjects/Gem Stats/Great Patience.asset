@@ -17,6 +17,7 @@ MonoBehaviour:
   HPMod: 0.6
   MPMod: 0.6
   SPDMod: 0.6
+  XPMod: 3
   targetType: 1
   gemName: Great Patience
   ActiveATKMod: 0.6

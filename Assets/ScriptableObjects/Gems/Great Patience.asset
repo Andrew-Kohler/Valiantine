@@ -19,7 +19,7 @@ MonoBehaviour:
   Consumable: 0
   HPRestore: -1
   MPRestore: 5
-  InventoryDescription: 'GREAT PATIENCE: Greatly reduces all player stats in exchange
+  InventoryDescription: 'GREAT PATIENCE: Greatly reduces player stats in exchange
     for fantastic victory yield; negates the penalty for fleeing a battle.'
   UseDescription: 'SPELL: Great Things Come - The turn after next, all stats are
     quadruple their normal values; if you use an item that turn, it is applied triply.'

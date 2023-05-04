@@ -10,14 +10,22 @@ public class PlayerStats : Stats
         MaxHP = 33;
         MP = 3;
         MaxMP = 18;
+
         ATK = 10f;
         DEF = 10f;
         SPD = 20;
+
         LVL = 1;
-        XP = 1;
-        XPThreshold = 2;
-        ATKBoost = 0f;
-        DEFBoost = 0f;
+        XP = 2;
+        XPThreshold = 15;
+
+        ATKMod = 1f;
+        DEFMod = 1f;
+        SPDMod = 1f;
+        MaxMPMod = 1f;
+        MaxHPMod = 1f;
+        XPMod = 1f;
+
         down = false;
 
     }

@@ -4,25 +4,29 @@ using UnityEngine;
 
 public class Stats : MonoBehaviour
 {
-    protected int HP;
-    protected int MaxHP;
-    protected int MP;
-    protected int MaxMP;
+    protected float HP;
+    protected float MaxHP;
+    protected float MP;
+    protected float MaxMP;
     protected float ATK;
     protected float DEF;
-    protected int SPD;
+    protected float SPD;
     [SerializeField] protected int LVL;
     protected int XP;
     protected int XPThreshold;
 
-    protected float ATKBoost;
-    protected float DEFBoost;
+    protected float ATKMod;
+    protected float DEFMod;
+    protected float SPDMod;
+    protected float MaxHPMod;
+    protected float MaxMPMod;
+    protected float XPMod;
 
     protected bool down;
 
     public int GetHP()  // Getter and setter for HP
     {
-        return HP;
+        return (int)HP;
     }
 
     public void SetHP(int changeVal)
@@ -45,12 +49,17 @@ public class Stats : MonoBehaviour
 
     public int GetMaxHP()
     {
-        return MaxHP;
+        return (int)(MaxHP * MaxHPMod);
+    }
+
+    public int GetMaxHPRaw()
+    {
+        return (int)MaxHP;
     }
 
     public int GetMP()  // Getter and setter for MP
     {
-        return MP;
+        return (int)MP;
     }
 
     public void SetMP(int changeVal)
@@ -68,37 +77,72 @@ public class Stats : MonoBehaviour
 
     public int GetMaxMP()
     {
-        return MaxMP;
+        return (int)(MaxMP * MaxMPMod);
+    }
+
+    public int GetMaxMPRaw()
+    {
+        return (int)MaxMP;
     }
 
     public float GetATK()   // No setter because permanent ATK stat should never be changed outside this class
+    {
+        return ATK * ATKMod;
+    }
+
+    public float GetATKRaw()
     {
         return ATK;
     }
 
     public float GetDEF()   // No setter because permanent DEF stat should never be changed outside this class
     {
+        return DEF * DEFMod;
+    }
+
+    public float GetDEFRaw()
+    {
         return DEF;
     }
 
     public int GetSPD()   // No setter for same reason as DEF
     {
-        return SPD;
+        return (int)(SPD * SPDMod);
     }
 
-    public void SetATKBoost(float changeVal)   // No getter because temp ATK boost will never be referenced outside this class
+    public int GetSPDRaw()
     {
-        ATKBoost += changeVal;
+        return (int)SPD;
     }
 
-    public float GetDEFBoost()
+    public void SetATKMod(float changeVal)   // No getter because temp ATK boost will never be referenced outside this class
     {
-        return DEFBoost;
+        ATKMod = changeVal;
     }
 
-    public void SetDEFBoost(float changeVal)
+    public float GetDEFMod()
     {
-        DEFBoost += changeVal;
+        return DEFMod;
+    }
+
+    public void SetDEFMod(float changeVal)
+    {
+        DEFMod = changeVal;
+    }
+
+    public void SetSPDMod(float changeVal)
+    {
+        SPDMod = changeVal;
+    }
+
+    public void SetMaxHPMod(float changeVal)
+    {
+        MaxHPMod = changeVal;
+    }
+
+    public void SetMaxMPMod(float changeVal)
+    {
+        MaxMPMod = changeVal;
     }
 
     public int GetLVL() // No setter because level changes are triggered by the XP setter method
@@ -116,6 +160,11 @@ public class Stats : MonoBehaviour
     public int GetXP()
     {
         return XP;
+    }
+
+    public int GetXPThreshold()
+    {
+        return XPThreshold;
     }
 
     public void SetXP(int changeVal)
