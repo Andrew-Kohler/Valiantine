@@ -31,6 +31,19 @@ public class StatDisplay : MonoBehaviour
     private void OnDisable()
     {
         GemInventoryDisplay.onSelectedGemChange -= UpdateStatPreviews;
+        if(XPMult != null && equippedGemStatBlock != null)
+        {
+            XPMult.color = Color.white;
+            if (equippedGemStatBlock.XPMod == 0 || equippedGemStatBlock.XPMod == 1)
+            {
+                XPMult.text = "";
+            }
+            else
+            {
+                XPMult.text = "x" + equippedGemStatBlock.XPMod + " XP gain";
+            }
+        }
+        
     }
 
     private void Start()

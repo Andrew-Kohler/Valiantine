@@ -67,6 +67,15 @@ public class GemSystem : MonoBehaviour
         playerStats.SetSPDMod(currentGem.SPDMod);
         playerStats.SetMaxHPMod(currentGem.HPMod);
         playerStats.SetMaxMPMod(currentGem.MPMod);
+
+        if (playerStats.GetHP() > playerStats.GetMaxHP())   // Lowers HP and MP if maxes are lowered beyond previous full
+        {
+            playerStats.SetHP(-(playerStats.GetHP() - playerStats.GetMaxHP()));
+        }
+        if (playerStats.GetMP() > playerStats.GetMaxMP())
+        {
+            playerStats.SetMP(-(playerStats.GetMP() - playerStats.GetMaxMP()));
+        }
     }
 
 }

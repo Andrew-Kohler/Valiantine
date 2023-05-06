@@ -13,8 +13,12 @@ public class GemDisplay : MonoBehaviour
 
     [SerializeField] Image gemImage;
     [SerializeField] Image equipOutline;
+    [SerializeField] Image shine;
+
+    Animator shineAnimator;
     private void Start()
     {
+        shine.color = Color.clear;  
         if (!gemHeld)
         {
             gemImage.color = Color.clear;
@@ -23,6 +27,7 @@ public class GemDisplay : MonoBehaviour
         {
             equipOutline.color = Color.clear;
         }
+        shineAnimator = shine.GetComponent<Animator>();
         
     }
 
@@ -44,6 +49,20 @@ public class GemDisplay : MonoBehaviour
             gemEquipped = false;
             equipOutline.color = Color.clear;
         }
+    }
+
+    public void shineGem()
+    {
+        StartCoroutine(DoGemShine());
+    }
+
+    IEnumerator DoGemShine()
+    {
+        shine.color = Color.white;
+        shineAnimator.Play("GemShine", 0, 0);
+        yield return new WaitForSeconds(.33f);
+        shine.color = Color.clear;
+        yield return null;
     }
 
     

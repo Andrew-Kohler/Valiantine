@@ -5,11 +5,13 @@ using TMPro;
 
 public class InventoryMenuView : View
 {
-    [SerializeField] private GameObject itemsTab;
+    [SerializeField] private GameObject itemsTab;   // The two tabs that contain all of their tab's things
     [SerializeField] private GameObject gemsTab;
 
-    [SerializeField] GameObject itemsTabIndicator;
+    [SerializeField] GameObject itemsTabIndicator;  // The two tab icons
     [SerializeField] GameObject gemsTabIndicator;
+    [SerializeField] GameObject selectedTabIndicator;   // The line under them
+    SelectedTabIndicator selectionLine;
 
     [SerializeField] GameObject healthBar;
     [SerializeField] GameObject manaBar;
@@ -21,6 +23,8 @@ public class InventoryMenuView : View
     ManaBar manaBarUI;
     XPDisplay xpUI;
 
+    [SerializeField] private float tabIndicatorStep = .1f;
+
     [SerializeField] TextMeshProUGUI flavorText;
 
     public delegate void OnTabSwitch();
@@ -28,7 +32,6 @@ public class InventoryMenuView : View
     public override void Initialize()
     {
         itemsTab.SetActive(true);
-        itemsTabIndicator.GetComponent<MenuTabIcon>().Select();
         gemsTab.SetActive(false);
 
         //playerStats = player.GetComponent<PlayerStats>();
@@ -36,6 +39,11 @@ public class InventoryMenuView : View
         healthBarUI = healthBar.GetComponent<HealthBar>();
         manaBarUI = manaBar.GetComponent<ManaBar>();
         xpUI = XPIndicator.GetComponent<XPDisplay>();
+    }
+
+    private void Start()
+    {
+        selectionLine = selectedTabIndicator.GetComponent<SelectedTabIndicator>();
     }
 
     private void Update()
@@ -71,14 +79,12 @@ public class InventoryMenuView : View
         if (itemsTab == desiredSubmenu)
         {
             gemsTab.SetActive(false);
-            gemsTabIndicator.GetComponent<MenuTabIcon>().Deselect();
-            itemsTabIndicator.GetComponent<MenuTabIcon>().Select();
+            selectionLine.moveLine(new Vector2(itemsTabIndicator.transform.position.x, selectedTabIndicator.transform.position.y), tabIndicatorStep);
         }
         if (gemsTab == desiredSubmenu)
         {
             itemsTab.SetActive(false);
-            itemsTabIndicator.GetComponent<MenuTabIcon>().Deselect();
-            gemsTabIndicator.GetComponent<MenuTabIcon>().Select();
+            selectionLine.moveLine(new Vector2(gemsTabIndicator.transform.position.x, selectedTabIndicator.transform.position.y), tabIndicatorStep);
         }
         onTabSwitch?.Invoke();
     }
@@ -87,7 +93,6 @@ public class InventoryMenuView : View
     {
         if (itemsTab.activeSelf)
         {
-
             if (!itemsTab.GetComponent<StaticInventoryDisplay>().SelectedInventorySlot.CheckEmpty())
             {
                 flavorText.text = itemsTab.GetComponent<StaticInventoryDisplay>().CurrentText;
