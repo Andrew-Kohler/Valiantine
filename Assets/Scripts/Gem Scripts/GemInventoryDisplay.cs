@@ -12,22 +12,26 @@ public class GemInventoryDisplay : MonoBehaviour
     [SerializeField] private GemSystem gemSystem;
     [SerializeField] private StatDisplay statDisplay;
 
-    [SerializeField] private GameObject indicator;          // The little arrow that shows what gem you have selected
-    [SerializeField] private GameObject equipTag;          // The little arrow that shows what gem you have selected
+    /*[SerializeField] private GameObject indicator;          // The little arrow that shows what gem you have selected
+    [SerializeField] private GameObject equipTag;          // The little arrow that shows what gem you have selected*/
+    [SerializeField] private GameObject selectArrow;
     [SerializeField] private GameObject textTabIndicator;   // The little arrow that shows which way to scroll in the text box
 
+    InventoryArrow selectorArrow;
 
+    [SerializeField] float arrowSpeed = .5f;
     [SerializeField] float yOffset = 10f;
-    float waitReset = 7.0f;
-    float waitTime;
+    private float waitReset = 7.0f;
+    private float waitTime;
 
-    bool activeCoroutine;
-    bool showSpell;
-    bool gemChosen;
-    string currentText;
+    private bool activeCoroutine;
+    private bool showSpell;
+    private bool gemChosen;
+    private bool pointerUpdated;
+    private string currentText;
     public string CurrentText => currentText;
-    int selectedSlot;
-    int equippedSlot;
+    private int selectedSlot;
+    private int equippedSlot;
 
     // Current order in these lists: 
     // Will (starter)
@@ -41,41 +45,32 @@ public class GemInventoryDisplay : MonoBehaviour
     public delegate void OnSelectedGemChange();
     public static event OnSelectedGemChange onSelectedGemChange;
 
-    private void OnEnable()
-    {
-        for(int i = 0; i < gemSystem.HeldGemList.Length; i++)
-        {
-            if(gemSystem.HeldGemList[i] != null)
-            {
-                gemDisplays[i].GetComponent<GemDisplay>().showGem();
-            }
-        }
-        selectedSlot = 0;
-        waitTime = waitReset;
-        gemChosen = false;
-        showSpell = false;
-        equipTag.SetActive(false);
-        UpdateText();
-        UpdatePointer();
-        UpdateStatDisplay();
-        onSelectedGemChange?.Invoke();
-    }
-
     private void Start()
     {
-        for (int i = 0; i < gemSystem.HeldGemList.Length; i++)
-        {
-            if (gemSystem.HeldGemList[i] != null)
-            {
-                gemDisplays[i].GetComponent<GemDisplay>().showGem();
-            }
-        }
+        selectorArrow = selectArrow.GetComponent<InventoryArrow>();
+        Init();
+        
         selectedSlot = 0;
         equippedSlot = -1;
         UpdateText();
-        UpdatePointer();
         UpdateStatDisplay();
         currentIttyBitty.sprite = ittyBitty[0];
+    }
+    private void OnEnable()
+    {
+        selectedSlot = 0;
+        waitTime = waitReset;
+        gemChosen = false;
+        if (showSpell)
+        {
+            textTabIndicator.transform.Rotate(new Vector3(0, 0, 180));
+        }
+        showSpell = false;
+        pointerUpdated = false;
+        UpdateText();
+        UpdateStatDisplay();
+        Init();
+        onSelectedGemChange?.Invoke();
     }
 
     private void Update()
@@ -84,6 +79,12 @@ public class GemInventoryDisplay : MonoBehaviour
         {
             if (!gemChosen)
             {
+                if (!pointerUpdated)
+                {
+                    UpdatePointerFast();
+                    pointerUpdated = true;
+                }
+
                 if (Input.GetButtonDown("Inventory Left"))  // Move the selection arrow left
                 {
                     StartCoroutine(DoMoveLeft());
@@ -113,8 +114,9 @@ public class GemInventoryDisplay : MonoBehaviour
                     if (gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemHeld && !gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemEquipped)
                     {
                         gemChosen = true;
-                        equipTag.SetActive(true);
+                        // equipTag.SetActive(true);
                         // Change the indicator to a "Equip?" prompt similar to the one in the other inventory
+                        selectorArrow.selectorSwap();
                     }
                     else
                     {
@@ -141,14 +143,14 @@ public class GemInventoryDisplay : MonoBehaviour
                     currentIttyBitty.sprite = ittyBitty[equippedSlot];      // Alert the itty bitty gem that a change has been made
 
                     // Revert the changes made to the indicator
-                    equipTag.SetActive(false);
+                    selectorArrow.selectorSwap();
                     gemChosen = false;
 
                 }
                 else if (Input.GetButtonDown("Return"))
                 {
                     // Revert the changes made to the indicator
-                    equipTag.SetActive(false);
+                    selectorArrow.selectorSwap();
                     gemChosen = false;
                 }
             }
@@ -190,7 +192,13 @@ public class GemInventoryDisplay : MonoBehaviour
     private void UpdatePointer()
     {
         Vector3 selectedPosition = gemDisplays[selectedSlot].transform.position;
-        indicator.transform.position = new Vector3(selectedPosition.x, selectedPosition.y + yOffset, selectedPosition.z);
+        selectorArrow.moveArrow(new Vector2(selectedPosition.x, selectedPosition.y + yOffset), arrowSpeed, true);
+    }
+
+    private void UpdatePointerFast()
+    {
+        Vector3 selectedPosition = gemDisplays[selectedSlot].transform.position;
+        selectorArrow.moveArrow(new Vector2(selectedPosition.x, selectedPosition.y + yOffset), .001f, false);
     }
     private void UpdateStatDisplay()    // Feeds the stat display the relevant data from making stat predictions
     {
@@ -201,6 +209,22 @@ public class GemInventoryDisplay : MonoBehaviour
         else
         {
             statDisplay.SetRelevantGemStats(gemSystem.CurrentGem, gemSystem.CurrentGem);
+        }
+    }
+
+    private void obtainGem(ItemData data)
+    {
+        gemDisplays[data.MPRestore].GetComponent<GemDisplay>().showGem();
+    }
+
+    private void Init()
+    {
+        for (int i = 0; i < gemSystem.HeldGemList.Length; i++)
+        {
+            if (gemSystem.HeldGemList[i] != null)
+            {
+                gemDisplays[i].GetComponent<GemDisplay>().showGem();
+            }
         }
     }
 
@@ -256,6 +280,10 @@ public class GemInventoryDisplay : MonoBehaviour
             if (gemDisplays[i].GetComponent<GemDisplay>().GemHeld)
             {
                 gemDisplays[i].GetComponent<GemDisplay>().shineGem();
+            }
+            if(i == selectedSlot)   // Spin the pointer in time with the shine!
+            {
+                UpdatePointer();
             }
             yield return new WaitForSeconds(.16f);
         }

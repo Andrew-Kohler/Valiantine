@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Stats : MonoBehaviour
 {
-    protected float HP;
-    protected float MaxHP;
-    protected float MP;
-    protected float MaxMP;
-    protected float ATK;
-    protected float DEF;
-    protected float SPD;
+    protected int HP;
+    protected int MaxHP;
+    protected int MP;
+    protected int MaxMP;
+    protected int ATK;
+    protected int DEF;
+    protected int SPD;
     [SerializeField] protected int LVL;
     protected int XP;
     protected int XPThreshold;
@@ -26,7 +26,7 @@ public class Stats : MonoBehaviour
 
     public int GetHP()  // Getter and setter for HP
     {
-        return (int)HP;
+        return HP;
     }
 
     public void SetHP(int changeVal)
@@ -54,12 +54,12 @@ public class Stats : MonoBehaviour
 
     public int GetMaxHPRaw()
     {
-        return (int)MaxHP;
+        return MaxHP;
     }
 
     public int GetMP()  // Getter and setter for MP
     {
-        return (int)MP;
+        return MP;
     }
 
     public void SetMP(int changeVal)
@@ -82,25 +82,25 @@ public class Stats : MonoBehaviour
 
     public int GetMaxMPRaw()
     {
-        return (int)MaxMP;
+        return MaxMP;
     }
 
-    public float GetATK()   // No setter because permanent ATK stat should never be changed outside this class
+    public int GetATK()   // No setter because permanent ATK stat should never be changed outside this class
     {
-        return ATK * ATKMod;
+        return (int)(ATK * ATKMod);
     }
 
-    public float GetATKRaw()
+    public int GetATKRaw()
     {
         return ATK;
     }
 
-    public float GetDEF()   // No setter because permanent DEF stat should never be changed outside this class
+    public int GetDEF()   // No setter because permanent DEF stat should never be changed outside this class
     {
-        return DEF * DEFMod;
+        return (int)(DEF * DEFMod);
     }
 
-    public float GetDEFRaw()
+    public int GetDEFRaw()
     {
         return DEF;
     }
@@ -112,17 +112,12 @@ public class Stats : MonoBehaviour
 
     public int GetSPDRaw()
     {
-        return (int)SPD;
+        return SPD;
     }
 
     public void SetATKMod(float changeVal)   // No getter because temp ATK boost will never be referenced outside this class
     {
         ATKMod = changeVal;
-    }
-
-    public float GetDEFMod()
-    {
-        return DEFMod;
     }
 
     public void SetDEFMod(float changeVal)

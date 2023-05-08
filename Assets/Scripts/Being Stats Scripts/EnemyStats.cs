@@ -10,8 +10,8 @@ public class EnemyStats : Stats
         MaxHP = 1;
         MP = 1;
         MaxMP = 1;
-        ATK = 1f;
-        DEF = 1f;
+        ATK = 1;
+        DEF = 1;
         SPD = 1;
         LVL = 1;
         XP = 1;

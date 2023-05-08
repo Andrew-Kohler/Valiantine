@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+// The little arrow in the inventory tab
 
 public class ItemSelector : MonoBehaviour
 {

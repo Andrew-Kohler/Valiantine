@@ -80,12 +80,12 @@ public class StatDisplay : MonoBehaviour
         }
         else if (playerStats.GetATKRaw() * equippedGemStatBlock.ATKMod >= playerStats.GetATKRaw() * selectedGemStatBlock.ATKMod)
         {
-            ATKChange.text = "(-" + (playerStats.GetATKRaw() * equippedGemStatBlock.ATKMod - playerStats.GetATKRaw() * selectedGemStatBlock.ATKMod) + ")";
+            ATKChange.text = "(-" + ((int)(playerStats.GetATKRaw() * equippedGemStatBlock.ATKMod) - (int)(playerStats.GetATKRaw() * selectedGemStatBlock.ATKMod)) + ")";
             ATKChange.color = Color.red;
         }
         else if (playerStats.GetATK() * equippedGemStatBlock.ATKMod <= playerStats.GetATKRaw() * selectedGemStatBlock.ATKMod)
         {
-            ATKChange.text = "(+" + (playerStats.GetATKRaw() * selectedGemStatBlock.ATKMod - playerStats.GetATKRaw() * equippedGemStatBlock.ATKMod) + ")";
+            ATKChange.text = "(+" + ((int)(playerStats.GetATKRaw() * selectedGemStatBlock.ATKMod) - (int)(playerStats.GetATKRaw() * equippedGemStatBlock.ATKMod)) + ")";
             ATKChange.color = Color.green;
         }
 
@@ -95,12 +95,12 @@ public class StatDisplay : MonoBehaviour
         }
         else if (playerStats.GetDEFRaw() * equippedGemStatBlock.DEFMod >= playerStats.GetDEFRaw() * selectedGemStatBlock.DEFMod)
         {
-            DEFChange.text = "(-" + (playerStats.GetDEFRaw() * equippedGemStatBlock.DEFMod - playerStats.GetDEFRaw() * selectedGemStatBlock.DEFMod) + ")";
+            DEFChange.text = "(-" + ((int)(playerStats.GetDEFRaw() * equippedGemStatBlock.DEFMod) - (int)(playerStats.GetDEFRaw() * selectedGemStatBlock.DEFMod)) + ")";
             DEFChange.color = Color.red;
         }
         else if (playerStats.GetDEF() * equippedGemStatBlock.DEFMod <= playerStats.GetDEFRaw() * selectedGemStatBlock.DEFMod)
         {
-            DEFChange.text = "(+" + (playerStats.GetDEFRaw() * selectedGemStatBlock.DEFMod - playerStats.GetDEFRaw() * equippedGemStatBlock.DEFMod) + ")";
+            DEFChange.text = "(+" + ((int)(playerStats.GetDEFRaw() * selectedGemStatBlock.DEFMod) - (int)(playerStats.GetDEFRaw() * equippedGemStatBlock.DEFMod)) + ")";
             DEFChange.color = Color.green;
         }
 

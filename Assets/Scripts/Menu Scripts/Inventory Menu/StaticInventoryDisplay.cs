@@ -6,7 +6,12 @@ public class StaticInventoryDisplay : InventoryDisplay //
 {
     [SerializeField] private InventoryHolder inventoryHolder;
     [SerializeField] private InventorySlot_UI[] slots;
-    [SerializeField] ItemSelector selector;
+    //[SerializeField] ItemSelector selector;
+    [SerializeField] GameObject selectArrow;
+    InventoryArrow selectorArrow;
+
+    [SerializeField] float arrowSpeed = .1f;
+    float arrowXOffset = 330;
 
     private float verticalInput;
     private int selectedSlot;
@@ -15,6 +20,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
 
     private bool activeCoroutine;
     private bool slotChosen;
+    private bool pointerUpdated;
 
     public InventorySlot_UI SelectedInventorySlot => slots[selectedSlot];
     public string CurrentText => currentText;
@@ -35,6 +41,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
 
         AssignSlot(inventorySystem);
         selectedSlot = 0;
+        selectorArrow = selectArrow.GetComponent<InventoryArrow>();
     }
 
     private void OnEnable()
@@ -48,27 +55,40 @@ public class StaticInventoryDisplay : InventoryDisplay //
         selectedSlot = 0;
         activeCoroutine = false;
         slotChosen = false;
+        pointerUpdated = false;
 
         if (!slots[selectedSlot].CheckEmpty())  
         {
             slots[selectedSlot].UpdateUISlot();
             currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
         }
+    }
 
+    private void OnDisable()
+    {
+        selectArrow.SetActive(false);
     }
 
     private void Update()
-    {
+    {       
         if (!activeCoroutine && !slots[0].CheckEmpty()) // If there isn't an active coroutine and if we have at least 1 item
         {
-            selector.gameObject.SetActive(true);
+            selectArrow.SetActive(true);
+            if (!pointerUpdated)
+            {
+                UpdatePointerFast();
+                currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
+                pointerUpdated = true;
+            }
+
+            //currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
 
             if (!slotChosen)    // If we haven't chosen a slot yet
             {
                // currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
                 if (Input.GetButtonDown("Interact")) 
                 {
-                    selector.SelectorSwap();
+                    selectorArrow.selectorSwap();
                     slots[selectedSlot].Selected = true;
                     slots[selectedSlot].UpdateUISlot();
 
@@ -100,9 +120,20 @@ public class StaticInventoryDisplay : InventoryDisplay //
                         // (b) remove from inventory
                         inventorySystem.RemoveFromInventory(slots[selectedSlot].AssignedInventorySlot.Data, 1, selectedSlot);
                         UpdateSlotsBelow(selectedSlot);
+                        if (slots[selectedSlot].CheckEmpty())   // Accounting for what happens if a slot empties out
+                        {
+                            if(selectedSlot == 0)
+                            {
+                                selectArrow.SetActive(false);
+                            }
+                            else
+                            {
+                                StartCoroutine(DoMoveUp());
+                            }
+                        }
                     }
 
-                    selector.SelectorSwap();
+                    selectorArrow.selectorSwap();
                     slots[selectedSlot].Selected = false;
                     slots[selectedSlot].UpdateUISlot();
                     slotChosen = false;
@@ -110,13 +141,17 @@ public class StaticInventoryDisplay : InventoryDisplay //
                 }
                 else if (Input.GetButtonDown("Return"))
                 {
-                    selector.SelectorSwap();                // Back out of the selection sub-menu
+                    selectorArrow.selectorSwap();                // Back out of the selection sub-menu
                     slots[selectedSlot].Selected = false;
                     slots[selectedSlot].UpdateUISlot();
                     slotChosen = false;
                 }
             }
             
+        }
+        else
+        {
+            selectArrow.SetActive(false);
         }
         
     }
@@ -155,6 +190,18 @@ public class StaticInventoryDisplay : InventoryDisplay //
         }
     }
 
+    private void UpdatePointer()
+    {
+        Vector3 selectedPosition = SelectedInventorySlot.transform.position;
+        selectorArrow.moveArrow(new Vector2(selectedPosition.x - arrowXOffset, selectedPosition.y), arrowSpeed, true);
+    }
+
+    private void UpdatePointerFast()
+    {
+        Vector3 selectedPosition = SelectedInventorySlot.transform.position;
+        selectorArrow.moveArrow(new Vector2(selectedPosition.x - arrowXOffset, selectedPosition.y), .001f, false);
+    }
+
     // Coroutines ----------------------------------
 
     IEnumerator DoMoveUp()
@@ -170,6 +217,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
         }
 
         currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
+        UpdatePointer();  // Call a movement on the arrow
         activeCoroutine = false;
         yield return null;
     }
@@ -187,6 +235,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
         }
 
         currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
+        UpdatePointer(); // Call a movement on the arrow
         activeCoroutine = false;
         yield return null;
     }

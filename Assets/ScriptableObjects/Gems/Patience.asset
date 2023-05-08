@@ -20,9 +20,9 @@ MonoBehaviour:
   HPRestore: -1
   MPRestore: 2
   InventoryDescription: 'PATIENCE: Reduces player stats in exchange for greater victory
-    yields; lowers penalty for fleeing a battle.'
-  UseDescription: 'SPELL: Good Things Come - The turn after next, all stats are double
-    their normal values; if you use an item that turn, it is applied doubly.'
+    yields.'
+  UseDescription: 'SPELL: Good Things Come - The turn after next, all stats are x2
+    their normal values and items are applied doubly.'
   BattleUseDescription: 
   SingleObtainDescription: You found the Gem of Patience! It looks like it fits in
     the hilt of your sword...

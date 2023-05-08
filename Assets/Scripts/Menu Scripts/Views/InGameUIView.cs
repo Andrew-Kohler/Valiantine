@@ -12,25 +12,19 @@ public class InGameUIView : View
 {
     [SerializeField] GameObject interactionMenu;
 
-    bool menuOpen;              // Whether or not the interaction sub-menu is open
-    bool activeCoroutine;       // Whether or not a coroutine is active
+    //bool menuOpen;              // Whether or not the interaction sub-menu is open
+    //bool activeCoroutine;       // Whether or not a coroutine is active
     public bool textReadout;    // Whether or not TextRevealer has finished reading the current text block
     bool textAdvance;           // Whether or not the player has given the go-ahead to advance to the next text block/close the window
 
     public delegate void OnInteractionEnd();
-    public static event OnInteractionEnd onInteractionEnd;
-
-    //Testing only
-   // string line1 = "The statue stands empty of data, hollow of the purpose it shall one day serve.";
-    //string line2 = "We'll get there together, you and I. One day, this statue will save us all.";
-    //List<string> lines = new List<string>();
-    
+    public static event OnInteractionEnd onInteractionEnd;  
 
     public override void Initialize()
     {
         //throw new System.NotImplementedException();
-        menuOpen = false;
-        activeCoroutine = false;
+        //menuOpen = false;
+        //activeCoroutine = false;
         textReadout = false;
         textAdvance = false;
         //lines.Add(line1);
@@ -84,7 +78,7 @@ public class InGameUIView : View
 
     IEnumerator interactionText(List<string> lines) // Fades in the text box and reads out each line of text given
     {
-        activeCoroutine = true;
+        //activeCoroutine = true;
         interactionMenu.GetComponent<FadeUI>().UIFadeIn();
         yield return new WaitForSeconds(.5f);
 
@@ -104,13 +98,13 @@ public class InGameUIView : View
     IEnumerator interactionEnd()    // Fades out the text box
     {
         GameManager.Instance.Interaction(false);
-        activeCoroutine = true;
+        //activeCoroutine = true;
         interactionMenu.GetComponent<FadeUI>().UIFadeOut();
         yield return new WaitForSeconds(.5f);
         interactionMenu.GetComponent<TextRevealer>().ReadOutText("");
 
-        menuOpen = false;
-        activeCoroutine = false;
+        //menuOpen = false;
+        //activeCoroutine = false;
         onInteractionEnd?.Invoke();
     }
 

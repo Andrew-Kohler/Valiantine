@@ -50,9 +50,9 @@ public class InventorySystem
                 OnInventorySlotChanged?.Invoke(freeSlot);
                 
             }
-            else
+            else // If the item IS a gem
             {
-                Debug.Log(itemToAdd.DisplayName);
+                //Debug.Log(itemToAdd.DisplayName);
                 onGemObtain?.Invoke(itemToAdd);
             }
             return true;

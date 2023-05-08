@@ -11,8 +11,8 @@ public class PlayerStats : Stats
         MP = 3;
         MaxMP = 18;
 
-        ATK = 10f;
-        DEF = 10f;
+        ATK = 10;
+        DEF = 10;
         SPD = 20;
 
         LVL = 1;

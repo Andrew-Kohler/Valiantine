@@ -20,9 +20,9 @@ MonoBehaviour:
   HPRestore: -1
   MPRestore: 5
   InventoryDescription: 'GREAT PATIENCE: Greatly reduces player stats in exchange
-    for fantastic victory yield; negates the penalty for fleeing a battle.'
-  UseDescription: 'SPELL: Great Things Come - The turn after next, all stats are
-    quadruple their normal values; if you use an item that turn, it is applied triply.'
+    for fantastic victory yields.'
+  UseDescription: 'SPELL: Great Things Come - Next turn, all stats are x4 their normal
+    values and items are applied triply.'
   BattleUseDescription: 
   SingleObtainDescription: You found the Gem of Great Patience! It looks like it
     fits in the hilt of your sword...
