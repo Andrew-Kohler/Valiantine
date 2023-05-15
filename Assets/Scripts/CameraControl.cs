@@ -20,6 +20,7 @@ public class CameraControl : MonoBehaviour
 
     // X, Y, and Z camera angles for different interactions in the game
     [SerializeField] Vector3 standardAngle = new Vector3(20.51f, 0f, 0f);
+    [SerializeField] Vector3 battleAngle = new Vector3(20.51f, 0f, 0f);
     [SerializeField] Vector3 inventoryAngle = new Vector3(0f, 0f, 0f);
     [SerializeField] Vector3 saveStatueAngle = new Vector3(-20f, -20f, 0f);
     [SerializeField] Vector3 chestAngle = new Vector3(10f, 0f, 0f);
@@ -41,7 +42,9 @@ public class CameraControl : MonoBehaviour
     [SerializeField] float inventoryStep = .5f; // Previously 10f; now a time (sec) value
 
     float battleX;
+    [SerializeField] float battleYOffset = 0f;
     float battleZ;
+    [SerializeField] float battleZOffset = 0f;
 
     Vector3 tempPos;
 
@@ -136,15 +139,21 @@ public class CameraControl : MonoBehaviour
     private void SetCamInventory()
     {
         StopAllCoroutines();
-        if (GameManager.Instance.isInventory())
+        if (!GameManager.Instance.isBattle())
         {
-            Vector3 targetPos = new Vector3(playerTransform.position.x + inventoryX, playerTransform.position.y + yConstant + inventoryY, playerTransform.position.z - zConstant + inventoryZ);
-            StartCoroutine(DoCamPosition(targetPos, inventoryStep, inventoryAngle));
+            if (GameManager.Instance.isInventory())
+            {
+                // This only happens if we're looking at the inventory when we aren't in battle
+                // Otherwise, we keep the battle camera angle in battle, which is great
+                Vector3 targetPos = new Vector3(playerTransform.position.x + inventoryX, playerTransform.position.y + yConstant + inventoryY, playerTransform.position.z - zConstant + inventoryZ);
+                StartCoroutine(DoCamPosition(targetPos, inventoryStep, inventoryAngle));
+            }
+            else
+            {
+                CamReset(battleStep);
+            }
         }
-        else
-        {
-            CamReset(battleStep);
-        }
+        
         
     }
 
@@ -163,7 +172,7 @@ public class CameraControl : MonoBehaviour
         
     }
 
-    private void SetCamChest() // How I hope for the day I get to dust you off, love.
+    private void SetCamChest() 
     {
         StopAllCoroutines();
         if (GameManager.Instance.isInteraction())
@@ -220,9 +229,9 @@ public class CameraControl : MonoBehaviour
         yield return new WaitForEndOfFrame();   // Why do I have this?
         battleX = BattleManager.Instance.GetCamX();
         battleZ = BattleManager.Instance.GetCamZ() - zConstant;
-        Vector3 targetPos = new Vector3(battleX, yValue, battleZ);
+        Vector3 targetPos = new Vector3(battleX, yValue - battleYOffset, battleZ + battleZOffset);
         //Debug.Log("Battle X: " + battleX + " Battle Z: " + battleZ);
-        StartCoroutine(DoCamPosition(targetPos, battleStep, standardAngle));
+        StartCoroutine(DoCamPosition(targetPos, battleStep, battleAngle));
         yield return null;
     }
 

@@ -29,7 +29,8 @@ public class FadeUI : MonoBehaviour
         canvasGroup = GetComponent<CanvasGroup>();
 
         while (canvasGroup.alpha < 1f)
-        { 
+        {
+          //  Debug.Log("Right foot in");
             canvasGroup.alpha += Time.deltaTime * 3f;
             yield return null;
         }
@@ -41,6 +42,7 @@ public class FadeUI : MonoBehaviour
 
         while (canvasGroup.alpha > 0f)
         {
+           // Debug.Log("Right foot out");
             canvasGroup.alpha -= Time.deltaTime * 3f;
             yield return null;
         }

@@ -207,7 +207,7 @@ public class BattleManager : MonoBehaviour
                 {
 
                 }
-                else if (endResult == EndStatus.Win)
+                else if (endResult == EndStatus.Loss)
                 {
 
                 }
@@ -334,6 +334,11 @@ public class BattleManager : MonoBehaviour
             enemyRb.velocity = new Vector3(-10f, 3f, 0f);
             // Nothing is currently configured to make this work
         }
+    }
+
+    private void EndTurn()
+    {
+        currentTurn++;
     }
 
     // Coroutines --------------------------------------------

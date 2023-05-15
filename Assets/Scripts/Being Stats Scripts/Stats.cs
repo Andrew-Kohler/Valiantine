@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stats : MonoBehaviour
+public abstract class Stats : MonoBehaviour
 {
     protected int HP;
     protected int MaxHP;
@@ -13,7 +13,8 @@ public class Stats : MonoBehaviour
     protected int SPD;
     [SerializeField] protected int LVL;
     protected int XP;
-    protected int XPThreshold;
+    protected int baseXPThreshold;
+    protected float LVLExponent;
 
     protected float ATKMod;
     protected float DEFMod;
@@ -23,6 +24,15 @@ public class Stats : MonoBehaviour
     protected float XPMod;
 
     protected bool down;
+
+    private void Start()    // As always, note this with the caveat that problems may occur on scene transitions
+    {
+        for(int i = 1; i < LVL; i++)
+        {
+            LVLUp();
+            //Debug.Log("LVL Up"); 
+        }
+    }
 
     public int GetHP()  // Getter and setter for HP
     {
@@ -146,11 +156,12 @@ public class Stats : MonoBehaviour
         // Get this before and after we set XP in BM if we win so we know if we need to tell the player they levelled up
     }
 
-    private void LVLUp()    // Contains the logic for levelling up
-    {
+    protected abstract void LVLUp();    // Contains the logic for levelling up
+    /*{
         // This is a separate Trello card and a wholly separate topic from just writing this class
         // Potentially abstract?
-    }
+        // Def abstract
+    }*/
 
     public int GetXP()
     {
@@ -159,16 +170,18 @@ public class Stats : MonoBehaviour
 
     public int GetXPThreshold()
     {
-        return XPThreshold;
+        ///return baseXPThreshold;
+        return (int)Mathf.Floor(baseXPThreshold * Mathf.Pow(LVL, LVLExponent)); 
     }
 
     public void SetXP(int changeVal)
     {
         XP += changeVal;
-        if(XP > XPThreshold)    // If it's time to level up
+        if(XP > GetXPThreshold())    // If it's time to level up
         {
-            int leftover = XP - XPThreshold;
+            int leftover = XP - GetXPThreshold();
             XP = 0;
+            LVL += 1;
             LVLUp();
             SetXP(leftover);
         }

@@ -15,10 +15,43 @@ public class EnemyStats : Stats
         SPD = 1;
         LVL = 1;
         XP = 1;
-        XPThreshold = 2;
+        baseXPThreshold = 2;
+        LVLExponent = 1.4f;
         ATKMod = 1f;
         DEFMod = 1f;
+        SPDMod = 1f;
+        MaxMPMod = 1f;
+        MaxHPMod = 1f;
+        XPMod = 1f;
         down = false;
 
+    }
+
+    protected override void LVLUp()
+    {
+        // These should probably change between enemies? E.g. Petal Golems level DEF faster 
+        int dont = Random.Range(1, 6);  // Randomly choose which stat to not level
+        if (dont != 1)
+        {
+            ATK += 1;
+        }
+        if (dont != 2)
+        {
+            DEF += 1;
+        }
+        if (dont != 3)
+        {
+            SPD += 1;
+        }
+        if (dont != 4)
+        {
+            HP += 2;
+            MaxHP += 2;
+        }
+        if (dont != 5)
+        {
+            MP += 2;
+            MaxMP += 2;
+        }
     }
 }

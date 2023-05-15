@@ -110,7 +110,15 @@ public class StaticInventoryDisplay : InventoryDisplay //
             {
                 if (Input.GetButtonDown("Interact")) // If we choose to use that item
                 {
-                    currentText = slots[selectedSlot].AssignedInventorySlot.Data.UseDescription;
+                    if (GameManager.Instance.isBattle())
+                    {
+                        currentText = slots[selectedSlot].AssignedInventorySlot.Data.BattleUseDescription;
+                    }
+                    else
+                    {
+                        currentText = slots[selectedSlot].AssignedInventorySlot.Data.UseDescription;
+                    }
+                    
                     if (slots[selectedSlot].AssignedInventorySlot.Data.Consumable) // If the item is consumable, we want to (a) carry out its effects and (b) remove it from the inventory
                     {
                         // (a) carry out effects

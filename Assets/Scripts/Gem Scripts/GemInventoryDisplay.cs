@@ -142,6 +142,14 @@ public class GemInventoryDisplay : MonoBehaviour
                     UpdateStatDisplay();    // Alert the stat display that a change has been made
                     currentIttyBitty.sprite = ittyBitty[equippedSlot];      // Alert the itty bitty gem that a change has been made
 
+                    if (GameManager.Instance.isBattle())
+                    {
+                        // If we're in battle, we need to:
+                        // Let the BattleManager know that we made a selection
+                        // Tell InventoryView that it's time to go
+                        // Get BattleUI back online
+                    }
+
                     // Revert the changes made to the indicator
                     selectorArrow.selectorSwap();
                     gemChosen = false;

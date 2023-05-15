@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
         _isInventory = flag;
         if (flag != former)
         {
-            onInventoryStateChange?.Invoke();
+            onInventoryStateChange?.Invoke();   // And then THIS messes with the camera
         }
 
     }

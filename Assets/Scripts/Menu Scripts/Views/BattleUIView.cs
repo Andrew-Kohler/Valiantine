@@ -17,6 +17,10 @@ public class BattleUIView : View
     [SerializeField] GameObject manaBar;
     //[SerializeField] GameObject player;
 
+    // Things the inventory uses
+    GemSystem gemSystem;
+
+    // Other things
     IndicatorAction indicatorInfo;
     PlayerStats playerStats;
     HealthBar healthBarUI;
@@ -30,6 +34,8 @@ public class BattleUIView : View
         playerStats = PlayerManager.Instance.PlayerStats();
         healthBarUI = healthBar.GetComponent<HealthBar>();
         manaBarUI = manaBar.GetComponent<ManaBar>();
+
+        gemSystem = PlayerManager.Instance.GemSystem();
     }
 
     private void Update()
@@ -40,6 +46,18 @@ public class BattleUIView : View
         {
             updateText();
             updateHPandMP();
+
+            // Alright gamers, tomorrow we enter the battlefield once again.
+            // Ok, new plan, literally just switch the view over to inventory, why not
+            // The complexity of retrofitting this class far outweigh the relative benefits of just...switching to what we have
+            BattleManager.MenuStatus status = BattleManager.Instance.GetPlayerStatus();
+            if(status == BattleManager.MenuStatus.Inventory)
+            {
+                GameManager.Instance.Inventory(true);
+                ViewManager.ShowFade<InventoryMenuView>(true); // Show the inventory menu
+            }
+
+
             if (GameManager.Instance.isSettings())  // Considerations made for changing to settings
             {
                 ViewManager.Show<SettingsMenuView>(true);
@@ -60,11 +78,11 @@ public class BattleUIView : View
             }
             else if (currentBoxName == "SPL")
             {
-                battleText.text = "Cast your gem spell. Equipped Spell: None (I haven't coded that yet, silly)";
+                battleText.text = "Cast your gem spell. Current Spell: " + gemSystem.CurrentGemText.UseDescription.Substring(6); 
             }
             else if (currentBoxName == "ITM")
             {
-                battleText.text = "Use a health or mana potion to restore your strength.";
+                battleText.text = "Take a turn to use an item or switch out your equiped gem.";
             }
             else if (currentBoxName == "RUN")
             {
@@ -77,11 +95,11 @@ public class BattleUIView : View
         }
         else if (status == BattleManager.MenuStatus.Spell)
         {
-            battleText.text = "Can't you read? It says this isn't coded yet.";
+            battleText.text = "This will be...complicated, and will need to function on a per-gem basis.";
         }
         else if (status == BattleManager.MenuStatus.Inventory)
         {
-            battleText.text = "Item and gem descriptions will go here when the inventory actually opens.";
+            battleText.text = "Use a health or mana potion to restore your strength.";
         }
         else if (status == BattleManager.MenuStatus.Run)
         {

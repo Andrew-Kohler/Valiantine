@@ -27,6 +27,8 @@ public class InventoryMenuView : View
 
     [SerializeField] TextMeshProUGUI flavorText;
 
+    private bool fadeOut;
+
     public delegate void OnTabSwitch();
     public static event OnTabSwitch onTabSwitch;
     public override void Initialize()
@@ -34,11 +36,15 @@ public class InventoryMenuView : View
         itemsTab.SetActive(true);
         gemsTab.SetActive(false);
 
-        //playerStats = player.GetComponent<PlayerStats>();
         playerStats = PlayerManager.Instance.PlayerStats();
         healthBarUI = healthBar.GetComponent<HealthBar>();
         manaBarUI = manaBar.GetComponent<ManaBar>();
         xpUI = XPIndicator.GetComponent<XPDisplay>();
+    }
+
+    private void OnEnable()
+    {
+        fadeOut = false;
     }
 
     private void Start()
@@ -63,13 +69,33 @@ public class InventoryMenuView : View
         {
             ViewManager.Show<SettingsMenuView>(true);
         }
-        if (!GameManager.Instance.isInventory())
+        if (!GameManager.Instance.isInventory())    // If we close the inventory
         {
-            GetComponent<FadeUI>().UIFadeOut();
+            if (!fadeOut) // Only calls this once so we don't go ZOOOOMM
+            {
+                Debug.Log("Left foot out");
+                GetComponent<FadeUI>().UIFadeOut(); 
+                fadeOut = true; 
+            }
+    
         }
-        if (GameManager.Instance.isBattle())
+        if (GameManager.Instance.isBattle())    // If we are in battle
         {
-            GameManager.Instance.Inventory(false);
+            BattleManager.MenuStatus status = BattleManager.Instance.GetPlayerStatus();
+            if (status == BattleManager.MenuStatus.Inventory)
+            {
+                GameManager.Instance.Inventory(true);
+                if (Input.GetButtonDown("Inventory"))
+                {
+                    ViewManager.ShowLast();
+                }
+            }
+            else
+            {
+                GameManager.Instance.Inventory(false);// The game manager no longer indicates that we are in the inventory 
+            }
+              
+            // Problem: Since we are in battle, the inventory is perpetually going to fade itself out
         }
     }
 

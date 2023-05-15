@@ -28,8 +28,10 @@ public class GemSystem : MonoBehaviour
     public List<GemStatBlock> GemStats => gemStats;
 
     GemStatBlock currentGem;    // The gem that's currently equipped
+    ItemData currentGemText;
     public GemStatBlock CurrentGem => currentGem;   // Getter for current gem
-    
+    public ItemData CurrentGemText => currentGemText;   // Getter for current gem item data
+
     [SerializeField] ItemData[] heldGemList;
     public ItemData[] HeldGemList => heldGemList;
 
@@ -61,6 +63,7 @@ public class GemSystem : MonoBehaviour
     public void equipGem(int index)  // Method for changing which gem is equipped
     {
         currentGem = gemStats[index];
+        currentGemText = heldGemList[index];
         // TODO: Update Player Stats with all its new mods
         playerStats.SetATKMod(currentGem.ATKMod);
         playerStats.SetDEFMod(currentGem.DEFMod);
