@@ -55,6 +55,20 @@ public class IndicatorFlash : Indicator
 
         yield return null;
     }
+
+    public IEnumerator DoFlashOutSelected() // Called by calling DoFlashOut in IndicatorAction
+    {
+        alpha = 1;
+        while (alpha > 0)
+        {
+           indicators[0].GetComponent<SpriteRenderer>().color = new Color(indicators[0].GetComponent<SpriteRenderer>().color.r, indicators[0].GetComponent<SpriteRenderer>().color.g, indicators[0].GetComponent<SpriteRenderer>().color.b, alpha);
+                //sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
+            alpha -= alphaStep * Time.deltaTime;
+            yield return null;
+        }
+
+        yield return null;
+    }
 }
 
     /*public IEnumerator DoFlashOutFast() // Called by calling DoFlashOut in IndicatorAction

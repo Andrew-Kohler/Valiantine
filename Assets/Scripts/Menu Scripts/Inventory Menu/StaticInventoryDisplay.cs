@@ -25,6 +25,9 @@ public class StaticInventoryDisplay : InventoryDisplay //
     public InventorySlot_UI SelectedInventorySlot => slots[selectedSlot];
     public string CurrentText => currentText;
 
+    public delegate void OnItemUse();
+    public static event OnItemUse onItemUse;
+
     protected override void Start() // Fix my other inheritnece to work like this
     {
         base.Start();
@@ -146,7 +149,13 @@ public class StaticInventoryDisplay : InventoryDisplay //
                     slots[selectedSlot].UpdateUISlot();
                     slotChosen = false;
 
-                }
+                    if (GameManager.Instance.isBattle())
+                    {
+                        onItemUse?.Invoke();
+                        StartCoroutine(DoWait());
+                    }
+
+                    }
                 else if (Input.GetButtonDown("Return"))
                 {
                     selectorArrow.selectorSwap();                // Back out of the selection sub-menu
@@ -246,6 +255,12 @@ public class StaticInventoryDisplay : InventoryDisplay //
         UpdatePointer(); // Call a movement on the arrow
         activeCoroutine = false;
         yield return null;
+    }
+    IEnumerator DoWait()    // Exists to freeze this class until the inventory closes
+    {
+        activeCoroutine = true;
+        yield return new WaitForSeconds(3f);
+        activeCoroutine = false;
     }
 
     

@@ -258,4 +258,25 @@ public class IndicatorAction : Indicator
 
         yield return null;
     }
+
+    public IEnumerator DoFlashOutSelected()
+    {
+        IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
+
+        activeCoroutine = true;
+        flash.enabled = true;
+        StartCoroutine(flash.DoFlashOutSelected()); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
+
+        alpha = 1;              // In order to always have this coroutine flash the indicators out, reset alpha to 1
+        while (alpha >= 0)
+        {
+            indicators[0].GetComponent<SpriteRenderer>().color = new Color(indicators[0].GetComponent<SpriteRenderer>().color.r, indicators[0].GetComponent<SpriteRenderer>().color.g, indicators[0].GetComponent<SpriteRenderer>().color.b, alpha);
+            alpha -= 1;
+            yield return null;
+        }
+        enabled = false; // Disable this script so that random inputs aren't moving the boxes
+        activeCoroutine = false;
+
+        yield return null;
+    }
 }

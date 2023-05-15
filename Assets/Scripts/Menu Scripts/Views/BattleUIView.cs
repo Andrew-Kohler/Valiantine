@@ -105,6 +105,10 @@ public class BattleUIView : View
         {
             battleText.text = "You got away, but just wait until I add speed checks in, you yellow-bellied ninny.";
         }
+        else if (status == BattleManager.MenuStatus.Inactive)
+        {
+            battleText.text = "Well, uh...it's the white square's turn. You got anything, bud? ...No? Well, take your time.";
+        }
         else
         {
             battleText.text = "";

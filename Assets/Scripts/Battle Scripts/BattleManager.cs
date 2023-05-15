@@ -77,6 +77,16 @@ public class BattleManager : MonoBehaviour
         //DontDestroyOnLoad(this.gameObject);
     }
 
+    private void OnEnable()
+    {
+        InventoryMenuView.onBattleInvenExit += EndTurnInventory;
+    }
+
+    private void OnDisable()
+    {
+        InventoryMenuView.onBattleInvenExit -= EndTurnInventory;
+    }
+
     private void Start()
     {
         battleIntro = true;
@@ -195,7 +205,7 @@ public class BattleManager : MonoBehaviour
                     }
                     else // If not the player (an enemy)
                     {
-
+                        Debug.Log("It's a me, white square!"); 
                     }
                 }
 
@@ -336,9 +346,10 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void EndTurn()
+    private void EndTurnInventory()
     {
-        currentTurn++;
+        Debug.Log("Successful turn end");
+        StartCoroutine(DoTurnAdvanceInven());
     }
 
     // Coroutines --------------------------------------------
@@ -365,6 +376,24 @@ public class BattleManager : MonoBehaviour
 
         battleIntro = false;                        // Set battleIntro to false and battleActive to true 
         battleActive = true;
+        activeCoroutine = false;
+        yield return null;
+    }
+
+    IEnumerator DoTurnAdvanceInven()
+    {
+        activeCoroutine = true;
+        if (currentTurn != turnArray.Length - 1) // Advance the turn
+        {
+            currentTurn++;                  
+        }
+        else
+        {
+            currentTurn = 0;
+        }
+        StartCoroutine(indAction.DoFlashOutSelected());
+        status = MenuStatus.Inactive;   // The player acts no more!
+
         activeCoroutine = false;
         yield return null;
     }

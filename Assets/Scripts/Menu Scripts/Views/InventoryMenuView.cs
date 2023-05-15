@@ -28,9 +28,12 @@ public class InventoryMenuView : View
     [SerializeField] TextMeshProUGUI flavorText;
 
     private bool fadeOut;
+    private bool activeCoroutine;
 
     public delegate void OnTabSwitch();
     public static event OnTabSwitch onTabSwitch;
+    public delegate void OnBattleInvenExit();
+    public static event OnBattleInvenExit onBattleInvenExit;
     public override void Initialize()
     {
         itemsTab.SetActive(true);
@@ -40,11 +43,18 @@ public class InventoryMenuView : View
         healthBarUI = healthBar.GetComponent<HealthBar>();
         manaBarUI = manaBar.GetComponent<ManaBar>();
         xpUI = XPIndicator.GetComponent<XPDisplay>();
+        activeCoroutine = false; 
     }
 
     private void OnEnable()
     {
         fadeOut = false;
+        StaticInventoryDisplay.onItemUse += CloseInventoryBattle;
+    }
+
+    private void OnDisable()
+    {
+        StaticInventoryDisplay.onItemUse -= CloseInventoryBattle;
     }
 
     private void Start()
@@ -54,49 +64,63 @@ public class InventoryMenuView : View
 
     private void Update()
     {
-        UpdateText();
-        updateHPMPXP();
-        if (Input.GetButtonDown("Inv.Tab 1"))
+        if (!activeCoroutine)
         {
-            Switch(itemsTab);
-        }
-        if (Input.GetButtonDown("Inv.Tab 2"))
-        {
-            Switch(gemsTab);
-        }
-
-        if (GameManager.Instance.isSettings())  // Considerations made for changing to other views
-        {
-            ViewManager.Show<SettingsMenuView>(true);
-        }
-        if (!GameManager.Instance.isInventory())    // If we close the inventory
-        {
-            if (!fadeOut) // Only calls this once so we don't go ZOOOOMM
+            UpdateText();
+            updateHPMPXP();
+            if (Input.GetButtonDown("Inv.Tab 1"))
             {
-                Debug.Log("Left foot out");
-                GetComponent<FadeUI>().UIFadeOut(); 
-                fadeOut = true; 
+                Switch(itemsTab);
             }
-    
-        }
-        if (GameManager.Instance.isBattle())    // If we are in battle
-        {
-            BattleManager.MenuStatus status = BattleManager.Instance.GetPlayerStatus();
-            if (status == BattleManager.MenuStatus.Inventory)
+            if (Input.GetButtonDown("Inv.Tab 2"))
             {
-                GameManager.Instance.Inventory(true);
-                if (Input.GetButtonDown("Inventory"))
+                Switch(gemsTab);
+            }
+
+            if (GameManager.Instance.isSettings())  // Considerations made for changing to other views
+            {
+                ViewManager.Show<SettingsMenuView>(true);
+            }
+
+            if (GameManager.Instance.isBattle())    // If we are in battle
+            {
+                BattleManager.MenuStatus status = BattleManager.Instance.GetPlayerStatus();
+                if (status == BattleManager.MenuStatus.Inventory)
                 {
-                    ViewManager.ShowLast();
+                    if (!fadeOut)
+                    {
+                        GameManager.Instance.Inventory(true);
+                    }      
+                }
+                else
+                {
+                    if (!fadeOut)
+                    {
+                        GameManager.Instance.Inventory(false);
+                        Debug.Log("Why");
+                        GetComponent<FadeUI>().UIFadeOut();
+                        fadeOut = true;
+                    }
+                    // GameManager.Instance.Inventory(false);// The game manager no longer indicates that we are in the inventory 
                 }
             }
-            else
+
+            else // If we are not in battle
             {
-                GameManager.Instance.Inventory(false);// The game manager no longer indicates that we are in the inventory 
+                if (!GameManager.Instance.isInventory())    // If we close the inventory
+                {
+                    if (!fadeOut) // Only calls this once so we don't go ZOOOOMM
+                    {
+                        Debug.Log("Left foot out");
+                        GetComponent<FadeUI>().UIFadeOut();
+                        fadeOut = true;
+                    }
+
+                }
             }
-              
-            // Problem: Since we are in battle, the inventory is perpetually going to fade itself out
+
         }
+        
     }
 
     private void Switch(GameObject desiredSubmenu)  // A method that will switch the active sub-menu of the player menu
@@ -134,7 +158,7 @@ public class InventoryMenuView : View
         }
     }
 
-    void updateHPMPXP()
+    private void updateHPMPXP()
     {
         healthBarUI.SetHealth(playerStats.GetHP());
         healthBarUI.SetMaxHealth(playerStats.GetMaxHP());
@@ -144,6 +168,25 @@ public class InventoryMenuView : View
 
         xpUI.SetXP(playerStats.GetXP(), playerStats.GetXPThreshold());
         xpUI.SetLVL(playerStats.GetLVL());
+    }
+
+    private void CloseInventoryBattle()
+    {
+        UpdateText();
+        StartCoroutine(DoCloseInvenBattle());
+    }
+
+    IEnumerator DoCloseInvenBattle()
+    {
+        activeCoroutine = true;
+        yield return new WaitForSeconds(3f); // Freeze everything and wait for a lil
+        GameManager.Instance.Inventory(false);
+        onBattleInvenExit?.Invoke();
+        GetComponent<FadeUI>().UIFadeOut();
+        
+
+        activeCoroutine = false;
+        yield return null;
     }
 
 }
