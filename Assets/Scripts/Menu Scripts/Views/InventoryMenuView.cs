@@ -50,11 +50,13 @@ public class InventoryMenuView : View
     {
         fadeOut = false;
         StaticInventoryDisplay.onItemUse += CloseInventoryBattle;
+        GemInventoryDisplay.onGemSwap += CloseInventoryBattle;
     }
 
     private void OnDisable()
     {
         StaticInventoryDisplay.onItemUse -= CloseInventoryBattle;
+        GemInventoryDisplay.onGemSwap -= CloseInventoryBattle;
     }
 
     private void Start()
@@ -84,6 +86,7 @@ public class InventoryMenuView : View
 
             if (GameManager.Instance.isBattle())    // If we are in battle
             {
+                updateHPMPXP();
                 BattleManager.MenuStatus status = BattleManager.Instance.GetPlayerStatus();
                 if (status == BattleManager.MenuStatus.Inventory)
                 {
@@ -179,6 +182,7 @@ public class InventoryMenuView : View
     IEnumerator DoCloseInvenBattle()
     {
         activeCoroutine = true;
+        updateHPMPXP();
         yield return new WaitForSeconds(3f); // Freeze everything and wait for a lil
         GameManager.Instance.Inventory(false);
         onBattleInvenExit?.Invoke();

@@ -82,7 +82,7 @@ public class BattleUIView : View
             }
             else if (currentBoxName == "ITM")
             {
-                battleText.text = "Take a turn to use an item or switch out your equiped gem.";
+                battleText.text = "Take a turn to use an item or switch out your equipped gem.";
             }
             else if (currentBoxName == "RUN")
             {
@@ -107,7 +107,7 @@ public class BattleUIView : View
         }
         else if (status == BattleManager.MenuStatus.Inactive)
         {
-            battleText.text = "Well, uh...it's the white square's turn. You got anything, bud? ...No? Well, take your time.";
+            battleText.text = "Alright, white square, give her what for! ...No? Fine, then. Take another turn, Em.";
         }
         else
         {

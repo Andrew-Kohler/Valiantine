@@ -155,7 +155,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
                         StartCoroutine(DoWait());
                     }
 
-                    }
+                }
                 else if (Input.GetButtonDown("Return"))
                 {
                     selectorArrow.selectorSwap();                // Back out of the selection sub-menu
@@ -168,7 +168,8 @@ public class StaticInventoryDisplay : InventoryDisplay //
         }
         else
         {
-            selectArrow.SetActive(false);
+            //if(!GameManager.Instance.isBattle())
+                selectArrow.SetActive(false);
         }
         
     }
@@ -259,7 +260,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
     IEnumerator DoWait()    // Exists to freeze this class until the inventory closes
     {
         activeCoroutine = true;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         activeCoroutine = false;
     }
 

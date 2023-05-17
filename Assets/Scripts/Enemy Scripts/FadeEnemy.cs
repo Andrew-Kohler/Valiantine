@@ -6,6 +6,18 @@ public class FadeEnemy : MonoBehaviour
 {
     float fadeSpeed = 3f;
 
+    private void OnEnable()
+    {
+        BattleManager.battleHideEnemies += FadeOutIfPassive;
+        BattleManager.battleShowEnemies += FadeInIfPassive;
+    }
+
+    private void OnDisable()
+    {
+        BattleManager.battleHideEnemies -= FadeOutIfPassive;
+        BattleManager.battleHideEnemies -= FadeInIfPassive;
+    }
+
     public void FadeOut()
     {
         StartCoroutine(FadeOutEnemy());
@@ -14,6 +26,23 @@ public class FadeEnemy : MonoBehaviour
     public void FadeIn()
     {
         StartCoroutine(FadeInEnemy());  
+    }
+
+    public void FadeOutIfPassive(string name)   // These work with the more decentralized battle manager
+    {
+        if (name != this.gameObject.name)
+        {
+            StartCoroutine(FadeOutEnemy());
+        }
+            
+    }
+
+    public void FadeInIfPassive(string name)
+    {
+        if (name != this.gameObject.name)
+        {
+            StartCoroutine(FadeInEnemy());
+        }
     }
 
     IEnumerator FadeOutEnemy()

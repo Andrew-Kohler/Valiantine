@@ -44,6 +44,8 @@ public class GemInventoryDisplay : MonoBehaviour
 
     public delegate void OnSelectedGemChange();
     public static event OnSelectedGemChange onSelectedGemChange;
+    public delegate void OnGemSwap();
+    public static event OnGemSwap onGemSwap;
 
     private void Start()
     {
@@ -67,16 +69,18 @@ public class GemInventoryDisplay : MonoBehaviour
         }
         showSpell = false;
         pointerUpdated = false;
+        activeCoroutine = false;
         UpdateText();
         UpdateStatDisplay();
         Init();
         onSelectedGemChange?.Invoke();
+        selectArrow.SetActive(true);
     }
 
     private void Update()
     {
         if (!activeCoroutine)
-        {
+        {   
             if (!gemChosen)
             {
                 if (!pointerUpdated)
@@ -87,6 +91,7 @@ public class GemInventoryDisplay : MonoBehaviour
 
                 if (Input.GetButtonDown("Inventory Left"))  // Move the selection arrow left
                 {
+                    Debug.Log("Can you hear me"); 
                     StartCoroutine(DoMoveLeft());
                     onSelectedGemChange?.Invoke();
                 }
@@ -138,21 +143,19 @@ public class GemInventoryDisplay : MonoBehaviour
                     }
                     gemSystem.equipGem(selectedSlot);                                       // Alert the backend gem system that a change has been made
                     gemDisplays[selectedSlot].GetComponent<GemDisplay>().equipGem(true);    // Turn on the outline on the new selected one
-                    equippedSlot = selectedSlot;   
+                    equippedSlot = selectedSlot;
                     UpdateStatDisplay();    // Alert the stat display that a change has been made
                     currentIttyBitty.sprite = ittyBitty[equippedSlot];      // Alert the itty bitty gem that a change has been made
-
-                    if (GameManager.Instance.isBattle())
-                    {
-                        // If we're in battle, we need to:
-                        // Let the BattleManager know that we made a selection
-                        // Tell InventoryView that it's time to go
-                        // Get BattleUI back online
-                    }
 
                     // Revert the changes made to the indicator
                     selectorArrow.selectorSwap();
                     gemChosen = false;
+
+                    if (GameManager.Instance.isBattle())
+                    {
+                        onGemSwap?.Invoke();
+                        StartCoroutine(DoWait());
+                    }
 
                 }
                 else if (Input.GetButtonDown("Return"))
@@ -165,12 +168,11 @@ public class GemInventoryDisplay : MonoBehaviour
 
             // For activating the shine
             waitTime -= Time.deltaTime;
-            if(waitTime <= 0)
+            if (waitTime <= 0)
             {
                 StartCoroutine(DoShine());
             }
         }
-        
     }
 
     // Methods ----------------------------------
@@ -298,6 +300,16 @@ public class GemInventoryDisplay : MonoBehaviour
         sword.GetComponent<SwordDisplay>().shineSword();
         waitTime = waitReset; // Reset the timer
         yield return null;
+    }
+
+    IEnumerator DoWait()    // Exists to freeze this class until the inventory closes
+    {
+        activeCoroutine = true;
+        selectorArrow.selectorSwap();
+        gemChosen = false;
+        selectArrow.SetActive(false);
+        yield return new WaitForSeconds(5f);
+        activeCoroutine = false;
     }
 
 }

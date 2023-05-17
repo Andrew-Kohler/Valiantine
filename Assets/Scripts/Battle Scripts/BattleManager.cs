@@ -48,6 +48,11 @@ public class BattleManager : MonoBehaviour
 
     GameObject battleUI;
 
+    public delegate void BattleHideEnemies(string name);
+    public static event BattleHideEnemies battleHideEnemies;
+    public delegate void BattleShowEnemies(string name);
+    public static event BattleShowEnemies battleShowEnemies;
+
     private BattleManager()
     {
         battleIntro = true;
@@ -107,6 +112,7 @@ public class BattleManager : MonoBehaviour
         {
             if (battleIntro && !activeCoroutine)    // The fun intro sequence that happens when the battle begins
             {
+                StopAllCoroutines();
                 // Get the instances of:
                 playerStats = PlayerManager.Instance.PlayerStats();   // Player stats
                 enemyStats = currentEnemy.GetComponent<EnemyStats>(); // Enemy stats
@@ -116,7 +122,9 @@ public class BattleManager : MonoBehaviour
                 camX = (enemyRb.position.x + playerRb.position.x) / 2;
                 camZ = playerRb.position.z;
 
-                HideEnemies(currentEnemy);    // Hide all other enemies
+                //HideEnemies(currentEnemy);    // Hide all other enemies
+                enemies = GameObject.FindGameObjectsWithTag("Enemy");   // Get all the components in Enemies
+                battleHideEnemies?.Invoke(currentEnemy.name); 
 
                 // Determine turn order
                 turnArray = new Stats[2];  // This will make potential expansion of this system easier in the future
@@ -205,7 +213,7 @@ public class BattleManager : MonoBehaviour
                     }
                     else // If not the player (an enemy)
                     {
-                        Debug.Log("It's a me, white square!"); 
+                        StartCoroutine(DoTurnAdvanceEnemyTemp());
                     }
                 }
 
@@ -248,33 +256,6 @@ public class BattleManager : MonoBehaviour
     public MenuStatus GetPlayerStatus()
     {
         return status;
-    }
-
-    private void HideEnemies(GameObject show)
-    {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");   // Get all the components in Enemies
-
-        foreach (GameObject enemy in enemies)
-        {
-            if (enemy.name != show.name)
-            {
-                enemy.GetComponent<FadeEnemy>().FadeOut();
-                
-            }
-        }
-    }
-
-    private void ShowEnemies(GameObject visible)
-    {
-        foreach (GameObject enemy in enemies)
-        {
-            if (enemy.name != visible.name)
-            {
-               // enemy.SetActive(true);
-                enemy.GetComponent<FadeEnemy>().FadeIn();
-
-            }
-        }
     }
 
     private void CombatantDisable()
@@ -397,6 +378,24 @@ public class BattleManager : MonoBehaviour
         activeCoroutine = false;
         yield return null;
     }
+    IEnumerator DoTurnAdvanceEnemyTemp()
+    {
+        activeCoroutine = true;
+        yield return new WaitForSeconds(5f);
+        if (currentTurn != turnArray.Length - 1) // Advance the turn
+        {
+            currentTurn++;
+        }
+        else
+        {
+            currentTurn = 0;
+        }
+        status = MenuStatus.Inactive;   // The player acts no more!
+
+        activeCoroutine = false;
+        yield return null;
+    }
+
 
     IEnumerator DoBattleRun()
     {
@@ -409,10 +408,8 @@ public class BattleManager : MonoBehaviour
 
         playerReenable();                                   // Reenable combatant movement
         allEnemyReenable(currentEnemy);
-        ShowEnemies(currentEnemy);                          // For all enemies that are not the current opposition, fade them back in
-        yield return new WaitForSeconds(2f);                // Wait for a few moments before letting all the enemies loose again
-        // Here's the problem! I'm picking a fight when the enemies can't actually move.
-        // I'm pretty sure an event refactor will either fix this or make it a more parsable problem. So. Uh. Done for today, nerds.
+        battleShowEnemies?.Invoke(currentEnemy.name);
+        yield return new WaitForSeconds(2f);                // Wait for a few moments before letting the current enemy loose again
         currentEnemyReenable();
 
         battleIntro = true;
@@ -424,4 +421,7 @@ public class BattleManager : MonoBehaviour
 
         yield return null;
     }
+
+    // So, most of the other stuff I have that handles enemies works the way it does so that they can be re-activated remotely
+    // Seeing as you can't reactivate something that isn't active from inside that thing, because it isn't active
 }
