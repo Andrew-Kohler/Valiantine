@@ -91,7 +91,6 @@ public class GemInventoryDisplay : MonoBehaviour
 
                 if (Input.GetButtonDown("Inventory Left"))  // Move the selection arrow left
                 {
-                    Debug.Log("Can you hear me"); 
                     StartCoroutine(DoMoveLeft());
                     onSelectedGemChange?.Invoke();
                 }
@@ -153,7 +152,8 @@ public class GemInventoryDisplay : MonoBehaviour
 
                     if (GameManager.Instance.isBattle())
                     {
-                        onGemSwap?.Invoke();
+                        currentText = "Gem equipped!";
+                        onGemSwap?.Invoke(); 
                         StartCoroutine(DoWait());
                     }
 
