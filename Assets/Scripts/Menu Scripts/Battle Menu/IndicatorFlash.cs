@@ -34,6 +34,11 @@ public class IndicatorFlash : Indicator
         indicators[3].transform.position = threePos;
     }
 
+    public void Indicator0PosChange(Vector3 pos)
+    {
+        indicators[0].transform.position = pos;
+    }
+
     public IEnumerator DoFlashOut(bool all) // Called by calling DoFlashIn in IndicatorAction
     {
         int j = 1;
@@ -56,7 +61,7 @@ public class IndicatorFlash : Indicator
         yield return null;
     }
 
-    public IEnumerator DoFlashOutSelected() // Called by calling DoFlashOut in IndicatorAction
+    public IEnumerator DoFlashOutSelected() // Flashes out ONLY the front one
     {
         alpha = 1;
         while (alpha > 0)

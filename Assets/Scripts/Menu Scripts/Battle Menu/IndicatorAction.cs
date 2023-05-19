@@ -189,27 +189,27 @@ public class IndicatorAction : Indicator
 
         activeCoroutine = true;
         flash.enabled = true;
-        StartCoroutine(flash.DoFlashOut(k)); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
+        flash.Indicator0PosChange(indicators[0].transform.position);
 
+        StartCoroutine(flash.DoFlashOut(k)); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
+        if (!all)
+        {
+            StartCoroutine(DoIndicator0Reset());    // Move indicator 0 to position 0
+        }
+        
         alpha = 0;              // In order to always have this coroutine flash the indicators in, reset alpha to 0
         while (alpha <= 1)
         {
             for (int i = j; i < 4; i++)  // Move the indicators towards full opacity
             {
                 indicators[i].GetComponent<SpriteRenderer>().color = new Color(indicators[i].GetComponent<SpriteRenderer>().color.r, indicators[i].GetComponent<SpriteRenderer>().color.g, indicators[i].GetComponent<SpriteRenderer>().color.b, alpha);
-                //sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
-            
-            
-
             alpha += alphaStep * Time.deltaTime;
             yield return null;
         }
 
-        
         enabled = true; // Enable this script (for when you first enter the battle)
         activeCoroutine = false;
-
 
         yield return null;
     }
@@ -236,30 +236,38 @@ public class IndicatorAction : Indicator
             for (int i = j; i < 4; i++)  // Move the indicators towards full opacity
             {
                 indicators[i].GetComponent<SpriteRenderer>().color = new Color(indicators[i].GetComponent<SpriteRenderer>().color.r, indicators[i].GetComponent<SpriteRenderer>().color.g, indicators[i].GetComponent<SpriteRenderer>().color.b, alpha);
-                //sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
             alpha -= 1;
 
             yield return null;
         }
 
-        /*if (!all)
+        if (!all)   // Move Indicator 0 to center position
         {
-            while (indicators[0].transform.position.z > centerPos.z)
+            Debug.Log("We should be shmovin?");
+            
+            while (Vector3.Distance(indicators[0].transform.position, centerPos) > .01)
             {
-              indicators[0].transform.position = Vector3.MoveTowards(indicators[0].transform.position, centerPos, alphaStep * Time.deltaTime);
-              yield return null;
+                indicators[0].transform.position = Vector3.MoveTowards(indicators[0].transform.position, centerPos, alphaStep * Time.deltaTime);
+
+                indicators[0].transform.rotation = Quaternion.Euler(0f, indicators[0].transform.rotation.y + rotationStep, 0f);
+                rotationStep -= rotationSpeed * Time.deltaTime;
+                yield return null;
             }
-        }*/
-        
-        //indicators[0].transform.position = centerPos;
+
+            flash.Indicator0PosChange(indicators[0].transform.position);
+            indicators[0].transform.position = centerPos;
+            indicators[0].transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            rotationStep = 0f;
+        }
+
         enabled = false; // Disable this script so that random inputs aren't moving the boxes
         activeCoroutine = false;
 
         yield return null;
     }
 
-    public IEnumerator DoFlashOutSelected()
+    public IEnumerator DoFlashOutSelected() // Just flashes out indicator 0
     {
         IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
 
@@ -274,8 +282,37 @@ public class IndicatorAction : Indicator
             alpha -= 1;
             yield return null;
         }
+
+        indicators[0].transform.position = zeroPos;
+        indicators[0].transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        rotationStep = 0f;
+        //flash.Indicator0PosChange(indicators[0].transform.position);
+
         enabled = false; // Disable this script so that random inputs aren't moving the boxes
         activeCoroutine = false;
+
+        yield return null;
+    }
+
+    private IEnumerator DoIndicator0Reset() {   // For moving the indicator back to zero pos in a visible manner
+        Debug.Log("We should be shmovin 2vin?");
+
+        IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
+
+        //flash.Indicator0PosReset();
+        while (Vector3.Distance(indicators[0].transform.position, zeroPos) > .01)
+        {
+            indicators[0].transform.position = Vector3.MoveTowards(indicators[0].transform.position, zeroPos, alphaStep * Time.deltaTime);
+
+            indicators[0].transform.rotation = Quaternion.Euler(0f, indicators[0].transform.rotation.y + rotationStep, 0f);
+            rotationStep -= rotationSpeed * Time.deltaTime;
+            yield return null;
+        }
+
+        indicators[0].transform.position = zeroPos;
+        indicators[0].transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        rotationStep = 0f;
+        flash.Indicator0PosChange(indicators[0].transform.position);
 
         yield return null;
     }

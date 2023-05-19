@@ -75,7 +75,7 @@ public class ViewManager : MonoBehaviour
                 _instance.currentView.GetComponent<FadeUI>().UIFadeIn();
             }
         }
-    }   // End of Show<T>
+    }   // End of ShowFade<T>
 
     public static void Show(View view, bool remember)   // Same purpose as above, different implementation
     {
@@ -98,6 +98,16 @@ public class ViewManager : MonoBehaviour
         if(_instance.history.Count != 0) // If it is possible to go back
         {
             Show(_instance.history.Pop(), false);
+        }
+    }
+
+    public static void ShowLastFade()   // DO NOT USE THIS ANYWHERE BUT CROSSFADING INVENTORY AND BATTLE UI IN BATTLE
+    {
+        if (_instance.history.Count != 0) // If it is possible to go back
+        {
+            _instance.history.Pop();
+            ShowFade<BattleUIView>(false);
+
         }
     }
 

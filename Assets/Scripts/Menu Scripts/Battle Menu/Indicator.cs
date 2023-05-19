@@ -51,7 +51,7 @@ public class Indicator : MonoBehaviour
         onePos = new Vector3(this.gameObject.transform.parent.position.x - xOffset2, this.gameObject.transform.parent.position.y + yOffset2, this.gameObject.transform.parent.position.z);
         twoPos = new Vector3(this.gameObject.transform.parent.position.x - xOffset1, this.gameObject.transform.parent.position.y + yOffset3, this.gameObject.transform.parent.position.z + zOffset);
         threePos = new Vector3(this.gameObject.transform.parent.position.x + xOffset2, this.gameObject.transform.parent.position.y + yOffset2, this.gameObject.transform.parent.position.z);
-        centerPos = new Vector3(this.gameObject.transform.parent.position.x, this.gameObject.transform.parent.position.y + yOffset2, this.gameObject.transform.parent.position.z);
+        centerPos = new Vector3(this.gameObject.transform.parent.position.x + 1f, this.gameObject.transform.parent.position.y + yOffset2, this.gameObject.transform.parent.position.z - 2f);
 
         indicators[0].transform.position = zeroPos;
         indicators[1].transform.position = onePos;

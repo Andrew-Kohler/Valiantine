@@ -54,7 +54,8 @@ public class BattleUIView : View
             if(status == BattleManager.MenuStatus.Inventory)
             {
                 GameManager.Instance.Inventory(true);
-                ViewManager.ShowFade<InventoryMenuView>(true); // Show the inventory menu
+                GetComponent<FadeUI>().UIFadeOut();
+                 // Show the inventory menu
             }
 
 
@@ -99,7 +100,7 @@ public class BattleUIView : View
         }
         else if (status == BattleManager.MenuStatus.Inventory)
         {
-            battleText.text = "Use a health or mana potion to restore your strength.";
+            battleText.text = "Take a turn to use an item or switch out your equipped gem.";
         }
         else if (status == BattleManager.MenuStatus.Run)
         {

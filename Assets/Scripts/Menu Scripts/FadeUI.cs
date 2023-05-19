@@ -42,11 +42,31 @@ public class FadeUI : MonoBehaviour
 
         while (canvasGroup.alpha > 0f)
         {
-           // Debug.Log("Right foot out");
             canvasGroup.alpha -= Time.deltaTime * 3f;
             yield return null;
         }
-        ViewManager.ShowLast();
+
+        if (!GameManager.Instance.isBattle())
+        {
+            ViewManager.ShowLast();
+        }
+        else
+        {
+            // Listen, the ONLY time this clause is ever invoked is backing out of the inventory in battle. I caved and made it
+            // a specific method. Let me have this.
+
+            // Ok, left off here pondering the fact that if I fade out the BattleUI when I fade the inventory in, this will
+            // also get invoked, and I don't want that
+            if (!GameManager.Instance.isInventory())
+            {
+                ViewManager.ShowLastFade(); // Check ViewManager for explanation
+            }
+            else
+            {
+                ViewManager.ShowFade<InventoryMenuView>(true);
+            }
+            
+        }
         yield return null;    
     }
 }
