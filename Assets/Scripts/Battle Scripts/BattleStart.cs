@@ -14,7 +14,7 @@ public class BattleStart : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            GameManager.Instance.Battle(true);  // We are now in battle, and pass along the enemy name to BattleManager
+            GameManager.Instance.Battle(true);  // We are now in battle, and pass along the enemy to BattleManager
             BattleManager.Instance.SetTarget(collision.gameObject);
         }  
     }

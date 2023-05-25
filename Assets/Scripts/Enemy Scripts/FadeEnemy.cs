@@ -28,18 +28,18 @@ public class FadeEnemy : MonoBehaviour
         StartCoroutine(FadeInEnemy());  
     }
 
-    public void FadeOutIfPassive(string name)   // These work with the more decentralized battle manager
+    public void FadeOutIfPassive()   // These work with the more decentralized battle manager
     {
-        if (name != this.gameObject.name)
+        if (!this.gameObject.GetComponent<EnemyStats>().isBattling)
         {
             StartCoroutine(FadeOutEnemy());
         }
             
     }
 
-    public void FadeInIfPassive(string name)
+    public void FadeInIfPassive()
     {
-        if (name != this.gameObject.name)
+        if (!this.gameObject.GetComponent<EnemyStats>().isBattling)
         {
             StartCoroutine(FadeInEnemy());
         }

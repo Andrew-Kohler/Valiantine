@@ -48,9 +48,9 @@ public class BattleManager : MonoBehaviour
 
     GameObject battleUI;
 
-    public delegate void BattleHideEnemies(string name);
+    public delegate void BattleHideEnemies();
     public static event BattleHideEnemies battleHideEnemies;
-    public delegate void BattleShowEnemies(string name);
+    public delegate void BattleShowEnemies();
     public static event BattleShowEnemies battleShowEnemies;
 
     private BattleManager()
@@ -122,9 +122,10 @@ public class BattleManager : MonoBehaviour
                 camX = (enemyRb.position.x + playerRb.position.x) / 2;
                 camZ = playerRb.position.z;
 
-                //HideEnemies(currentEnemy);    // Hide all other enemies
+
+                enemyStats.isBattling = true;
                 enemies = GameObject.FindGameObjectsWithTag("Enemy");   // Get all the components in Enemies
-                battleHideEnemies?.Invoke(currentEnemy.name); 
+                battleHideEnemies?.Invoke(); 
 
                 // Determine turn order
                 turnArray = new Stats[2];  // This will make potential expansion of this system easier in the future
@@ -408,7 +409,7 @@ public class BattleManager : MonoBehaviour
 
         playerReenable();                                   // Reenable combatant movement
         allEnemyReenable(currentEnemy);
-        battleShowEnemies?.Invoke(currentEnemy.name);
+        battleShowEnemies?.Invoke();
         yield return new WaitForSeconds(2f);                // Wait for a few moments before letting the current enemy loose again
         currentEnemyReenable();
 
