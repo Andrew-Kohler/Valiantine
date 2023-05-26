@@ -586,6 +586,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LVL: 1
+  isBattling: 0
+  remainOnPlayerFlight: 1
 --- !u!114 &39347369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5985,6 +5987,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LVL: 1
+  isBattling: 0
+  remainOnPlayerFlight: 1
 --- !u!114 &668637585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15414,6 +15418,7 @@ GameObject:
   - component: {fileID: 1691525564}
   - component: {fileID: 1691525565}
   - component: {fileID: 1691525567}
+  - component: {fileID: 1691525568}
   m_Layer: 6
   m_Name: Enemy (Path/Chase)
   m_TagString: Enemy
@@ -15555,6 +15560,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LVL: 1
+  isBattling: 0
+  remainOnPlayerFlight: 1
 --- !u!54 &1691525566
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15583,6 +15590,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73701fce7f5cbb44a957a9e9e532106c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1691525568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691525557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21b7068d2ec0ebe459c96728660599a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawn: 1
+  numberToSpawn: 1
+  additionalEnemies:
+  - {fileID: 8256270032172331742, guid: d55012d11eb17e746a4dcc3dd0911368, type: 3}
+  spawnpoint: {fileID: 1691525558}
 --- !u!1 &1692315309
 GameObject:
   m_ObjectHideFlags: 0

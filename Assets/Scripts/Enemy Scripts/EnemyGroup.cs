@@ -5,8 +5,9 @@ using UnityEngine;
 public class EnemyGroup : MonoBehaviour
 {
     [SerializeField] private bool spawn = false;    // Whether or not we're spawning new friends
-    [SerializeField] private int numberToSpawn = 0; // How many new friends we're spawning
+    [SerializeField] public int numberToSpawn = 0; // How many new friends we're spawning (max of 2)
     [SerializeField] private GameObject[] additionalEnemies;    // Our new friends
+    [SerializeField] private Transform spawnpoint;
     void Start()
     {
         
@@ -22,7 +23,10 @@ public class EnemyGroup : MonoBehaviour
     {
         if (spawn)  // If we are indeed spawning enemies at all
         {
-
+            for (int i = 0; i < numberToSpawn; i++)
+            {
+                Instantiate(additionalEnemies[i], spawnpoint.position, additionalEnemies[i].transform.rotation);
+            }
         }
     }
 }

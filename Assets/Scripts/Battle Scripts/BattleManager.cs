@@ -34,11 +34,12 @@ public class BattleManager : MonoBehaviour
     // Instances of all other necessary classes
     GameObject currentEnemy;
     GameObject[] enemies;
-    GameObject player;
+    GameObject[] battlingEnemies;
     GameObject actInds;
 
     PlayerStats playerStats;
     EnemyStats enemyStats;
+    EnemyGroup enemyGroup;
     IndicatorAction indAction;
 
     Stats[] turnArray;
@@ -116,16 +117,29 @@ public class BattleManager : MonoBehaviour
                 // Get the instances of:
                 playerStats = PlayerManager.Instance.PlayerStats();   // Player stats
                 enemyStats = currentEnemy.GetComponent<EnemyStats>(); // Enemy stats
-                playerRb = PlayerManager.Instance.PlayerRigidbody();
+                enemyGroup = currentEnemy.GetComponent<EnemyGroup>(); // The enemy group that spawns the Gang
+
+                playerRb = PlayerManager.Instance.PlayerRigidbody();    // Get player and enemy RBs
                 enemyRb = currentEnemy.GetComponent<Rigidbody>();
 
-                camX = (enemyRb.position.x + playerRb.position.x) / 2;
+                camX = (enemyRb.position.x + playerRb.position.x) / 2;  // Tell the camera where to go
                 camZ = playerRb.position.z;
 
-
-                enemyStats.isBattling = true;
+                battlingEnemies = new GameObject[1 + enemyGroup.numberToSpawn];  // Create list of how many foes Em is facing
+                enemyStats.isBattling = true;   // We are battling the enemy we collided with
+                enemyGroup.SpawnEncounter();    // Beam our new friends in if we have any
                 enemies = GameObject.FindGameObjectsWithTag("Enemy");   // Get all the components in Enemies
-                battleHideEnemies?.Invoke(); 
+
+                int i = 0;
+                foreach (GameObject enemy in enemies)   // Add the active ones to their own list for ease of access
+                {
+                    if (enemy.GetComponent<EnemyStats>().isBattling)
+                    {
+                        battlingEnemies[i] = enemy;
+                        i++;
+                    }
+                }
+                battleHideEnemies?.Invoke(); // Hide everyone who isn't battling
 
                 // Determine turn order
                 turnArray = new Stats[2];  // This will make potential expansion of this system easier in the future
@@ -138,9 +152,10 @@ public class BattleManager : MonoBehaviour
                 {
                     turnArray[1] = playerStats;
                     turnArray[0] = enemyStats;
+                    // Oh god I'm gonna need a recursive method to sort these
                 }
                 currentTurn = 0;    // Set the current turn to 0 so the first actor goes
-                //StopAllCoroutines();
+
                 StartCoroutine(DoBattleIntro());    // Use a coroutine to time visual elements (player motion, UI swap)           
             } // End of battle intro
 
@@ -217,6 +232,10 @@ public class BattleManager : MonoBehaviour
                         StartCoroutine(DoTurnAdvanceEnemyTemp());
                     }
                 }
+                else // If the one who's turn it is is dead
+                {
+                   // Advance the turn count I guess 
+                }
 
             } // End of primary turn loop
 
@@ -277,8 +296,7 @@ public class BattleManager : MonoBehaviour
     }
 
     private void currentEnemyReenable()
-    {
-        
+    {   
         if (currentEnemy.TryGetComponent(out EnemyPathMovement enemyPM))
         {
             enemyPM.enabled = true;
@@ -291,6 +309,7 @@ public class BattleManager : MonoBehaviour
 
     private void allEnemyReenable(GameObject visible)
     {
+
         foreach (GameObject enemy in enemies)
         {
             if (enemy.name != visible.name)
@@ -309,6 +328,17 @@ public class BattleManager : MonoBehaviour
         playerM.enabled = true;
     }
 
+    private void destroySpawnedEnemies()
+    {
+        foreach (GameObject enemy in battlingEnemies)
+        {
+            if (!enemy.GetComponent<EnemyStats>().remainOnPlayerFlight) // Get rid of the lackeys
+            {
+                Destroy(enemy);
+            }
+        }
+    }
+
     private void BattleRecoil() // Launches the player and enemy up like they recoil from each other on battle start
     {
         CombatantDisable();
@@ -317,7 +347,12 @@ public class BattleManager : MonoBehaviour
         {
             Debug.Log("Player is left of the enemy");
             playerRb.velocity = new Vector3(-10f, 3f, 0f);
-            enemyRb.velocity = new Vector3(10f, 3f, 0f);
+            //enemyRb.velocity = new Vector3(10f, 3f, 0f);
+
+            foreach (GameObject enemy in battlingEnemies)
+            {
+                enemy.GetComponent<Rigidbody>().velocity = new Vector3(10f, 3f, 0f);
+            }
         }
         else // If the player is right of the enemy
         {
@@ -412,6 +447,7 @@ public class BattleManager : MonoBehaviour
         battleShowEnemies?.Invoke();
         yield return new WaitForSeconds(2f);                // Wait for a few moments before letting the current enemy loose again
         currentEnemyReenable();
+        destroySpawnedEnemies();
 
         battleIntro = true;
         battleActive = false;
