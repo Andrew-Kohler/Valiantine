@@ -42,6 +42,9 @@ public class BattleManager : MonoBehaviour
     EnemyGroup enemyGroup;
     IndicatorAction indAction;
 
+    EnemyRandomMovement mainEnemyRandom;
+    EnemyPathMovement mainEnemyPath;
+
     Stats[] turnArray;
 
     Rigidbody playerRb;
@@ -122,6 +125,15 @@ public class BattleManager : MonoBehaviour
                 playerRb = PlayerManager.Instance.PlayerRigidbody();    // Get player and enemy RBs
                 enemyRb = currentEnemy.GetComponent<Rigidbody>();
 
+                if (currentEnemy.GetComponent<EnemyPathMovement>() != null)
+                {
+                    mainEnemyPath = currentEnemy.GetComponent<EnemyPathMovement>();
+                }
+                if (currentEnemy.GetComponent<EnemyRandomMovement>() != null)
+                {
+                    mainEnemyRandom = currentEnemy.GetComponent<EnemyRandomMovement>();
+                }
+
                 camX = (enemyRb.position.x + playerRb.position.x) / 2;  // Tell the camera where to go
                 camZ = playerRb.position.z;
 
@@ -142,7 +154,7 @@ public class BattleManager : MonoBehaviour
                 battleHideEnemies?.Invoke(); // Hide everyone who isn't battling
 
                 // Determine turn order
-                turnArray = new Stats[2];  // This will make potential expansion of this system easier in the future
+                turnArray = new Stats[1 + battlingEnemies.Length];  // This will make potential expansion of this system easier in the future
                 if (playerStats.GetSPD() >= enemyStats.GetSPD()) // A very basic speed check
                 {
                     turnArray[0] = playerStats;
@@ -154,6 +166,12 @@ public class BattleManager : MonoBehaviour
                     turnArray[0] = enemyStats;
                     // Oh god I'm gonna need a recursive method to sort these
                 }
+
+                // New implementation
+                // I feel like it's better to have the whole gameObject in the array, so we'll do that
+                // 
+
+
                 currentTurn = 0;    // Set the current turn to 0 so the first actor goes
 
                 StartCoroutine(DoBattleIntro());    // Use a coroutine to time visual elements (player motion, UI swap)           
@@ -163,7 +181,7 @@ public class BattleManager : MonoBehaviour
             {
                 if (!turnArray[currentTurn].getDowned()) // If the current turn taker is not downed/dead
                 {
-                    if (turnArray[currentTurn].name == PlayerManager.Instance.PlayerName())  // Currently we're only dealing with 1v1s, so that's how we'll code
+                    if (turnArray[currentTurn].name == PlayerManager.Instance.PlayerName())  // If it's the player's turn
                     {
                         if (status == MenuStatus.Inactive) // Show the action indicators
                         {
@@ -285,26 +303,28 @@ public class BattleManager : MonoBehaviour
 
         playerM.enabled = false;
         enemyCM.enabled = false;
-        if (currentEnemy.TryGetComponent(out EnemyPathMovement enemyPM))
+        if (mainEnemyPath != null)
         {
-            enemyPM.enabled = false;
+            mainEnemyPath.enabled = false;
         }
-        else if (currentEnemy.TryGetComponent(out EnemyRandomMovement enemyRM))
+        if (mainEnemyRandom != null)
         {
-            enemyRM.enabled = false;
+            mainEnemyRandom.enabled = false;
         }
     }
 
     private void currentEnemyReenable()
-    {   
-        if (currentEnemy.TryGetComponent(out EnemyPathMovement enemyPM))
+    {
+
+        if(mainEnemyPath != null)
         {
-            enemyPM.enabled = true;
+            mainEnemyPath.enabled = true;
         }
-        else if (currentEnemy.TryGetComponent(out EnemyRandomMovement enemyRM))
+        if (mainEnemyRandom != null)
         {
-            enemyRM.enabled = true;
+            mainEnemyRandom.enabled = true;
         }
+
     }
 
     private void allEnemyReenable(GameObject visible)
@@ -328,6 +348,17 @@ public class BattleManager : MonoBehaviour
         playerM.enabled = true;
     }
 
+    private void fadeSpawnedEnemies()
+    {
+        foreach (GameObject enemy in battlingEnemies)
+        {
+            if (!enemy.GetComponent<EnemyStats>().remainOnPlayerFlight) // Get rid of the lackeys
+            {
+                enemy.GetComponent<FadeEnemy>().FadeOut();
+            }
+        }
+    }
+
     private void destroySpawnedEnemies()
     {
         foreach (GameObject enemy in battlingEnemies)
@@ -349,9 +380,24 @@ public class BattleManager : MonoBehaviour
             playerRb.velocity = new Vector3(-10f, 3f, 0f);
             //enemyRb.velocity = new Vector3(10f, 3f, 0f);
 
-            foreach (GameObject enemy in battlingEnemies)
+            /*foreach (GameObject enemy in battlingEnemies)
             {
                 enemy.GetComponent<Rigidbody>().velocity = new Vector3(10f, 3f, 0f);
+            }*/
+            if(battlingEnemies.Length == 1)
+            {
+                battlingEnemies[0].GetComponent<Rigidbody>().velocity = new Vector3(10f, 3f, 0f);
+            }
+            else if(battlingEnemies.Length == 2)
+            {
+                battlingEnemies[0].GetComponent<Rigidbody>().velocity = new Vector3(10f, 3f, 3f);
+                battlingEnemies[1].GetComponent<Rigidbody>().velocity = new Vector3(15f, 3f, -3f);
+            }
+            else if(battlingEnemies.Length == 3)
+            {
+                battlingEnemies[0].GetComponent<Rigidbody>().velocity = new Vector3(5f, 3f, 4f);
+                battlingEnemies[1].GetComponent<Rigidbody>().velocity = new Vector3(10f, 3f, 1f);
+                battlingEnemies[2].GetComponent<Rigidbody>().velocity = new Vector3(15f, 3f, -2f);
             }
         }
         else // If the player is right of the enemy
@@ -377,7 +423,10 @@ public class BattleManager : MonoBehaviour
         BattleRecoil();                             // Correctly position the player and the enemy
         yield return new WaitForSeconds(.7f);       // Wait for Battle Recoil to finish
         playerRb.velocity = new Vector3(0f, 0f, 0f);
-        enemyRb.velocity = new Vector3(0f, 0f, 0f);
+        foreach (GameObject enemy in battlingEnemies)
+        {
+            enemy.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
+        }
 
         if (GameManager.Instance.isInventory())
         {
@@ -442,16 +491,20 @@ public class BattleManager : MonoBehaviour
 
         GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle
 
-        playerReenable();                                   // Reenable combatant movement
-        allEnemyReenable(currentEnemy);
+        playerReenable();                                   // Reenable player movement
+        allEnemyReenable(currentEnemy);                     // Reenable enemies that weren't in the fight
+        fadeSpawnedEnemies();                               // Get rid of enemies spawned for the battle
         battleShowEnemies?.Invoke();
         yield return new WaitForSeconds(2f);                // Wait for a few moments before letting the current enemy loose again
-        currentEnemyReenable();
-        destroySpawnedEnemies();
 
+        currentEnemyReenable();                             // Reenable the current enemy's movement, and destroy enemies spawn for the battle
+        destroySpawnedEnemies();
+        
         battleIntro = true;
         battleActive = false;
         activeCoroutine = false;
+        mainEnemyPath = null;
+        mainEnemyRandom = null;
 
         endResult = EndStatus.None;
         status = MenuStatus.Inactive;  

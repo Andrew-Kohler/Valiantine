@@ -45,6 +45,11 @@ public class FadeEnemy : MonoBehaviour
         }
     }
 
+    /*public void FadeOutDestroy()
+    {
+        StartCoroutine(DoFadeOutDestroy());
+    }*/
+
     IEnumerator FadeOutEnemy()
     {
         while(this.GetComponent<Renderer>().material.color.a > 0.01f)
@@ -59,6 +64,21 @@ public class FadeEnemy : MonoBehaviour
         this.gameObject.SetActive(false);
         yield return null;
     }
+
+   /* IEnumerator DoFadeOutDestroy()
+    {
+        while (this.GetComponent<Renderer>().material.color.a > 0.01f)
+        {
+            Color objColor = this.GetComponent<Renderer>().material.color;
+            float fadeAmt = objColor.a - (fadeSpeed * Time.deltaTime);
+
+            objColor = new Color(objColor.r, objColor.g, objColor.b, fadeAmt);
+            this.GetComponent<Renderer>().material.color = objColor;
+            yield return null;
+        }
+        Destroy(this.gameObject);
+        yield return null;
+    }*/
 
     IEnumerator FadeInEnemy()
     {

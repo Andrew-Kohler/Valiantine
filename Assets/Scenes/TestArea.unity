@@ -15603,8 +15603,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawn: 1
-  numberToSpawn: 1
+  numberToSpawn: 2
   additionalEnemies:
+  - {fileID: 8256270032172331742, guid: d55012d11eb17e746a4dcc3dd0911368, type: 3}
   - {fileID: 8256270032172331742, guid: d55012d11eb17e746a4dcc3dd0911368, type: 3}
   spawnpoint: {fileID: 1691525558}
 --- !u!1 &1692315309
