@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04d29dcff5d4b40418f0d190387b91e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LVL: 1
+  LVL: 10
   isBattling: 1
   remainOnPlayerFlight: 0
 --- !u!114 &1913355519285880654

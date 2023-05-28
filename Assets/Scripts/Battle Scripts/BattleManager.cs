@@ -4,6 +4,8 @@ Used on:    ---
 For:    Overarching manager for turns, states, and actions in battle
 */
 
+//https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/ref
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,8 +35,8 @@ public class BattleManager : MonoBehaviour
 
     // Instances of all other necessary classes
     GameObject currentEnemy;
-    GameObject[] enemies;
-    GameObject[] battlingEnemies;
+    GameObject[] enemies;           // ALL enemies (we need this as a tether - they all get deactivated, and this class holds onto them)
+    GameObject[] battlingEnemies;   // Battling enemies (the relevant ones)
     GameObject actInds;
 
     PlayerStats playerStats;
@@ -45,7 +47,8 @@ public class BattleManager : MonoBehaviour
     EnemyRandomMovement mainEnemyRandom;
     EnemyPathMovement mainEnemyPath;
 
-    Stats[] turnArray;
+    Stats[] turnArray;          // The stats of every combatant, which get sorted by speed from greatest to least to determine turn order
+    GameObject[] combatants;    // ALL combatants' GameObjects, for moving them around the field
 
     Rigidbody playerRb;
     Rigidbody enemyRb;
@@ -154,8 +157,24 @@ public class BattleManager : MonoBehaviour
                 battleHideEnemies?.Invoke(); // Hide everyone who isn't battling
 
                 // Determine turn order
-                turnArray = new Stats[1 + battlingEnemies.Length];  // This will make potential expansion of this system easier in the future
-                if (playerStats.GetSPD() >= enemyStats.GetSPD()) // A very basic speed check
+                turnArray = new Stats[1 + battlingEnemies.Length];
+                combatants = new GameObject[1 + battlingEnemies.Length];
+                i = 0;
+                foreach (GameObject enemy in enemies)   // Add the active ones to their own list for ease of access
+                {
+                    if (enemy.GetComponent<EnemyStats>().isBattling)
+                    {
+                        turnArray[i] = enemy.GetComponent<EnemyStats>();
+                        combatants[i] = enemy;
+                        i++;
+                    }
+                }
+                turnArray[i] = playerStats;
+                combatants[i] = PlayerManager.Instance.GameObject();
+                CalculateTurnOrder(ref turnArray, ref combatants);
+
+
+                /*if (playerStats.GetSPD() >= enemyStats.GetSPD()) // A very basic speed check
                 {
                     turnArray[0] = playerStats;
                     turnArray[1] = enemyStats;
@@ -165,11 +184,23 @@ public class BattleManager : MonoBehaviour
                     turnArray[1] = playerStats;
                     turnArray[0] = enemyStats;
                     // Oh god I'm gonna need a recursive method to sort these
-                }
+                }*/
 
-                // New implementation
-                // I feel like it's better to have the whole gameObject in the array, so we'll do that
-                // 
+                // Alright, no more running, I need to figure this out
+                // So, say I have 4 objects, 1 player stats and 3 enemy stats
+                // They're all stats, so I can add all of them to this array
+                // And I think I would be able to get away with just having an array of stats, EXCEPT:
+                // Em is gonna be moving around a lot, which isn't necessarily a problem on its own
+                // But the enemies will also move into position for melee attacks, so I need access to the enemy game objects on their turn
+                // All of that to say, I should put everyone's GameObjects into an array and sort that in parallel with the stats array
+                // Dual-array sorting
+                // Insane
+
+                // So, to do:
+                // Make that GameObject array
+                // Pass both arrays by reference to a method that sorts them
+                // ...make the method that sorts them
+                // From there, turnArray is already set up to govern turn order, so...yeah, that's it!
 
 
                 currentTurn = 0;    // Set the current turn to 0 so the first actor goes
@@ -274,8 +305,9 @@ public class BattleManager : MonoBehaviour
             } // End of end conditions
 
         } // End of battle check
-    }
+    } // End of update
 
+    // Public methods ------------------------------------------------------
     public void SetTarget(GameObject enemy)
     {
         currentEnemy = enemy;
@@ -294,6 +326,40 @@ public class BattleManager : MonoBehaviour
     public MenuStatus GetPlayerStatus()
     {
         return status;
+    }
+
+    public string GetCurrentTurnName()
+    {
+        return combatants[currentTurn].name;
+    }
+
+    // Private methods -----------------------------------------------------
+
+    private void CalculateTurnOrder(ref Stats[] stats, ref GameObject[] participants)
+    {
+        // sorting - ASCENDING ORDER
+        // https://www.includehelp.com/cpp-programs/sort-an-array-in-ascending-order.aspx
+
+        Stats temp;
+        GameObject temp2;
+        for (int i = 0; i < stats.Length; i++)
+        {
+            for (int j = i + 1; j < stats.Length; j++)
+            {
+                if (stats[i].GetSPD() < stats[j].GetSPD())
+                {
+                    temp = stats[i];
+                    stats[i] = stats[j];
+                    stats[j] = temp;
+
+                    temp2 = participants[i];
+                    participants[i] = participants[j];
+                    participants[j] = temp2;
+                }
+            }
+        }
+        Debug.Log(combatants[0].name + " , SPD:" + stats[0].GetSPD());
+        Debug.Log(combatants[1].name + " , SPD:" + stats[1].GetSPD());
     }
 
     private void CombatantDisable()
@@ -378,12 +444,7 @@ public class BattleManager : MonoBehaviour
         {
             Debug.Log("Player is left of the enemy");
             playerRb.velocity = new Vector3(-10f, 3f, 0f);
-            //enemyRb.velocity = new Vector3(10f, 3f, 0f);
 
-            /*foreach (GameObject enemy in battlingEnemies)
-            {
-                enemy.GetComponent<Rigidbody>().velocity = new Vector3(10f, 3f, 0f);
-            }*/
             if(battlingEnemies.Length == 1)
             {
                 battlingEnemies[0].GetComponent<Rigidbody>().velocity = new Vector3(10f, 3f, 0f);

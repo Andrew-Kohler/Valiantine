@@ -108,7 +108,7 @@ public class BattleUIView : View
         }
         else if (status == BattleManager.MenuStatus.Inactive)
         {
-            battleText.text = "Alright, white square, give her what for! ...No? Fine, then. Take another turn, Em.";
+            battleText.text = "It's " + BattleManager.Instance.GetCurrentTurnName() + "'s turn, but they aren't really up to much right now.";
         }
         else
         {

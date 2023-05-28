@@ -25,12 +25,12 @@ public abstract class Stats : MonoBehaviour
 
     protected bool down;
 
-    private void Start()    // As always, note this with the caveat that problems may occur on scene transitions
+    private void Awake()
     {
-        for(int i = 1; i < LVL; i++)
+        for (int i = 1; i < LVL; i++)
         {
             LVLUp();
-            //Debug.Log("LVL Up"); 
+            //Debug.Log("LVL Up");
         }
     }
 

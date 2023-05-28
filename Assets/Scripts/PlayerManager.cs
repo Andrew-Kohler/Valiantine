@@ -66,6 +66,11 @@ public class PlayerManager : MonoBehaviour
         return GetComponent<GemSystem>();
     }
 
+    public GameObject GameObject()
+    {
+        return gameObject;
+    }
+
 
     /*// Start is called before the first frame update
     void Start()
