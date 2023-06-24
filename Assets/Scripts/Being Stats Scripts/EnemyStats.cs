@@ -56,4 +56,5 @@ public class EnemyStats : Stats
             MaxMP += 2;
         }
     }
+
 }

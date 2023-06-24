@@ -7,16 +7,17 @@ public class EnemyGroup : MonoBehaviour
     [SerializeField] private bool spawn = false;    // Whether or not we're spawning new friends
     [SerializeField] public int numberToSpawn = 0; // How many new friends we're spawning (max of 2)
     [SerializeField] private GameObject[] additionalEnemies;    // Our new friends
+    [SerializeField] public int lowerLVLBound;
+    [SerializeField] public int upperLVLBound;
+    public int[] additionalEnemyLevels;    // Levels generated for everyone in the encounter, including the original enemy
     [SerializeField] private Transform spawnpoint;
-    void Start()
+    private void Awake()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        additionalEnemyLevels = new int[numberToSpawn + 1];
+        for(int i = 0; i < additionalEnemyLevels.Length; i++)
+        {
+            additionalEnemyLevels[i] = Random.Range(lowerLVLBound, upperLVLBound + 1);
+        }
     }
 
     public void SpawnEncounter()    // Called at the start of a battle

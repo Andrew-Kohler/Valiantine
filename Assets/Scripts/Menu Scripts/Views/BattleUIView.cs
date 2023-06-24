@@ -69,6 +69,7 @@ public class BattleUIView : View
 
     void updateText() 
     {
+        // This was cute for a while, but I really think I need to shift it all over to a system where it gets passed from BatManager
         string currentBoxName = indicatorInfo.GetLeadBox();
         BattleManager.MenuStatus status = BattleManager.Instance.GetPlayerStatus();
         if (status == BattleManager.MenuStatus.Selecting)

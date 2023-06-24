@@ -37,7 +37,11 @@ public class BattleManager : MonoBehaviour
     GameObject currentEnemy;
     GameObject[] enemies;           // ALL enemies (we need this as a tether - they all get deactivated, and this class holds onto them)
     GameObject[] battlingEnemies;   // Battling enemies (the relevant ones)
+    GameObject[] combatants;        // ALL combatants' GameObjects, for moving them around the field
+    Stats[] turnArray;          // The stats of every combatant, which get sorted by speed from greatest to least to determine turn order
+
     GameObject actInds;
+    GameObject enemySelectArrow;
 
     PlayerStats playerStats;
     EnemyStats enemyStats;
@@ -47,8 +51,8 @@ public class BattleManager : MonoBehaviour
     EnemyRandomMovement mainEnemyRandom;
     EnemyPathMovement mainEnemyPath;
 
-    Stats[] turnArray;          // The stats of every combatant, which get sorted by speed from greatest to least to determine turn order
-    GameObject[] combatants;    // ALL combatants' GameObjects, for moving them around the field
+   
+    
 
     Rigidbody playerRb;
     Rigidbody enemyRb;
@@ -160,11 +164,16 @@ public class BattleManager : MonoBehaviour
                 turnArray = new Stats[1 + battlingEnemies.Length];
                 combatants = new GameObject[1 + battlingEnemies.Length];
                 i = 0;
-                foreach (GameObject enemy in enemies)   // Add the active ones to their own list for ease of access
+                foreach (GameObject enemy in enemies)   // Add all the battling enemies' stats to turn array
                 {
                     if (enemy.GetComponent<EnemyStats>().isBattling)
                     {
                         turnArray[i] = enemy.GetComponent<EnemyStats>();
+                       
+                            turnArray[i].SetLVL(enemyGroup.additionalEnemyLevels[i]);
+                          
+                        
+
                         combatants[i] = enemy;
                         i++;
                     }
@@ -227,6 +236,8 @@ public class BattleManager : MonoBehaviour
                                 if (indAction.GetLeadBox() == "ATK")
                                 {
                                     status = MenuStatus.Attack;
+                                    CreateSelectionArrow(); // Create the arrow for picking your fight
+                                    enemySelectArrow.GetComponent<TargetArrow>().SetValues(battlingEnemies);
                                     StartCoroutine(indAction.DoFlashOut(false));
                                 }
                                 else if (indAction.GetLeadBox() == "SPL")
@@ -248,15 +259,19 @@ public class BattleManager : MonoBehaviour
                         else if (status == MenuStatus.Attack) // If the player has chosen to attack
                         {
                             indAction.enabled = false;
-                            if (Input.GetButtonDown("Inventory"))
+                            if (Input.GetButtonDown("Inventory"))   // For backing out - TODO, change backout input
                             {
+                                DestroySelectionArrow();
                                 StartCoroutine(indAction.DoFlashIn(false));
                                 status = MenuStatus.Selecting;
                             }
+                            // Making a choice is actually handled by the arrow itself, so I don't need an if else here
+                         
                         }
                         else if (status == MenuStatus.Spell) // If the player has chosen to cast a spell
                         {
                             indAction.enabled = false;
+                            // All spells should have a target enum so I know what to do here
                             
                         }
                         else if (status == MenuStatus.Inventory) // If the player has chosen to open the inventory
@@ -313,7 +328,7 @@ public class BattleManager : MonoBehaviour
         currentEnemy = enemy;
     }
 
-    public float GetCamX()
+    public float GetCamX()  // For setting initial camera position in battle
     {
         return camX;
     }
@@ -331,6 +346,16 @@ public class BattleManager : MonoBehaviour
     public string GetCurrentTurnName()
     {
         return combatants[currentTurn].name;
+    }
+
+    public void SetAttackTarget(GameObject targetedEnemy)   // Sets the target for the player's attack
+    {
+        DestroySelectionArrow();
+        // For testing purposes, let's find a way to change the text in the battle UI
+        Debug.Log(targetedEnemy.name);
+        // Pass this along to a coroutine for the player attacking
+        StartCoroutine(DoTurnAdvancePlayerAttack(targetedEnemy));
+
     }
 
     // Private methods -----------------------------------------------------
@@ -358,8 +383,8 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
-        Debug.Log(combatants[0].name + " , SPD:" + stats[0].GetSPD());
-        Debug.Log(combatants[1].name + " , SPD:" + stats[1].GetSPD());
+        //Debug.Log(combatants[0].name + " , SPD:" + stats[0].GetSPD());
+        //Debug.Log(combatants[1].name + " , SPD:" + stats[1].GetSPD());
     }
 
     private void CombatantDisable()
@@ -476,6 +501,16 @@ public class BattleManager : MonoBehaviour
         StartCoroutine(DoTurnAdvanceInven());
     }
 
+    private void CreateSelectionArrow()
+    {
+        enemySelectArrow = Instantiate((GameObject)Resources.Load("Target Arrow"), new Vector3(battlingEnemies[0].transform.position.x, battlingEnemies[0].transform.position.y * 2 + .7f, battlingEnemies[0].transform.position.z), Quaternion.identity);
+    }
+
+    private void DestroySelectionArrow()
+    {
+        Destroy(enemySelectArrow);
+    }
+
     // Coroutines --------------------------------------------
     IEnumerator DoBattleIntro()
     {
@@ -507,7 +542,47 @@ public class BattleManager : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator DoTurnAdvanceInven()
+    IEnumerator DoTurnAdvancePlayerAttack(GameObject targetedEnemy) // The sequence wherein the player attacks an enemy
+    {
+        activeCoroutine = true;
+        StartCoroutine(indAction.DoFlashOutSelected()); // Flash out the attack indicator
+
+        // TODO
+        // The text box fades out and the HP/MP bar lowers, letting us get a better look at the action
+
+        // (Within a script for the player with a callable method)
+        // The player performs the motions associated with attacking
+        // The player performs the animations associated with attacking
+
+        // (Within a script for the enemy with a callable method)
+        // The enemy takes damage (in code)
+        // The enemy's hurt animation plays in tandem with the player's attack animation
+        // Damage numbers fly off of the enemy when they are hit
+        // The enemy is capable of dying (destroyed when HP = 0)
+        // The enemy dies STYLISHLY (out in a flash of white)
+        // Right before they die, they pass a piece of data letting us know they died
+
+        // The text box returns as the HP/MP bar comes back up
+        // Is anyone still alive? 
+        // If yes, advance the turn
+        // If no, we win! Do that.
+        yield return new WaitForSeconds(3f);    // Temp for just letting us keep going
+
+        if (currentTurn != turnArray.Length - 1) // Advance the turn
+        {
+            currentTurn++;                  
+        }
+        else
+        {
+            currentTurn = 0;
+        }
+
+        status = MenuStatus.Inactive;  // Get rid of the menu
+        activeCoroutine = false;
+        yield return null;
+    }
+
+    IEnumerator DoTurnAdvanceInven()    // Advancing a turn when the player uses their turn on an inventory action
     {
         activeCoroutine = true;
         if (currentTurn != turnArray.Length - 1) // Advance the turn

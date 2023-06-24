@@ -244,7 +244,7 @@ public class IndicatorAction : Indicator
 
         if (!all)   // Move Indicator 0 to center position
         {
-            Debug.Log("We should be shmovin?");
+            //Debug.Log("We should be shmovin?");
             
             while (Vector3.Distance(indicators[0].transform.position, centerPos) > .01)
             {
@@ -295,7 +295,7 @@ public class IndicatorAction : Indicator
     }
 
     private IEnumerator DoIndicator0Reset() {   // For moving the indicator back to zero pos in a visible manner
-        Debug.Log("We should be shmovin 2vin?");
+        //Debug.Log("We should be shmovin 2vin?");
 
         IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
 

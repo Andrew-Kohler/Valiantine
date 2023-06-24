@@ -156,6 +156,16 @@ public abstract class Stats : MonoBehaviour
         // Get this before and after we set XP in BM if we win so we know if we need to tell the player they levelled up
     }
 
+    public void SetLVL(int LVL)
+    {
+        for (int i = this.LVL; i < LVL; i++)
+        {
+            LVLUp();
+            //Debug.Log("LVL Up");
+        }
+        this.LVL = LVL;
+    }
+
     protected abstract void LVLUp();    // Contains the logic for levelling up
     /*{
         // This is a separate Trello card and a wholly separate topic from just writing this class
