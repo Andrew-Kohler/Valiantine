@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Save Statue
   - Chest
+  - Save Point
   layers:
   - Default
   - TransparentFX

@@ -18,12 +18,16 @@ public class CameraControl : MonoBehaviour
     [SerializeField] Vector3 saveStatuePos = new Vector3(5f, -9f, 12f);
     [SerializeField] Vector3 chestPos = new Vector3(0f, -3f, 2f);
 
+    [SerializeField] Vector3 savePos0 = new Vector3(10f, 10f, 10f);   // Position modifier of the camera for the save point in the test area
+
     // X, Y, and Z camera angles for different interactions in the game
     [SerializeField] Vector3 standardAngle = new Vector3(20.51f, 0f, 0f);
     [SerializeField] Vector3 battleAngle = new Vector3(20.51f, 0f, 0f);
     [SerializeField] Vector3 inventoryAngle = new Vector3(0f, 0f, 0f);
     [SerializeField] Vector3 saveStatueAngle = new Vector3(-20f, -20f, 0f);
     [SerializeField] Vector3 chestAngle = new Vector3(10f, 0f, 0f);
+
+    [SerializeField] Vector3 saveAngle0 = new Vector3(20.51f, 0f, 0f); // Angle of the camera for the save point in the test area
 
     Transform playerTransform;
 
@@ -55,7 +59,8 @@ public class CameraControl : MonoBehaviour
         GameManager.onBattleStateChange += SetCamBattle;
         GameManager.onInventoryStateChange += SetCamInventory;
         GameManager.onSaveStatueStateChange += SetCamSaveStatue; 
-        GameManager.onChestStateChange += SetCamChest;  
+        GameManager.onChestStateChange += SetCamChest;
+        GameManager.onSavePointStateChange += SetCamSavePoint;
     }
 
     private void OnDisable()
@@ -63,7 +68,8 @@ public class CameraControl : MonoBehaviour
         GameManager.onBattleStateChange -= SetCamBattle;
         GameManager.onInventoryStateChange -= SetCamInventory;
         GameManager.onSaveStatueStateChange -= SetCamSaveStatue;
-        GameManager.onChestStateChange += SetCamChest;
+        GameManager.onChestStateChange -= SetCamChest;
+        GameManager.onSavePointStateChange -= SetCamSavePoint;
     }
 
     void Start()
@@ -179,6 +185,28 @@ public class CameraControl : MonoBehaviour
         {
             Vector3 targetPos = new Vector3(playerTransform.position.x + chestPos.x, playerTransform.position.y + yConstant + chestPos.y, playerTransform.position.z - zConstant + chestPos.z);
             StartCoroutine(DoCamPosition(targetPos, inventoryStep, chestAngle));
+        }
+        else
+        {
+            CamReset(battleStep);
+        }
+    }
+
+    private void SetCamSavePoint(int currentPoint)
+    {
+        StopAllCoroutines();
+        if (GameManager.Instance.isInteraction())
+        {
+            if(currentPoint == 0)
+            {
+                Vector3 targetPos = new Vector3(playerTransform.position.x + savePos0.x, playerTransform.position.y + yConstant + savePos0.y, playerTransform.position.z - zConstant + savePos0.z);
+                StartCoroutine(DoCamPosition(targetPos, inventoryStep, saveAngle0));
+            }
+            else
+            {
+                Vector3 targetPos = new Vector3(playerTransform.position.x + savePos0.x, playerTransform.position.y + yConstant + savePos0.y, playerTransform.position.z - zConstant + savePos0.z);
+                StartCoroutine(DoCamPosition(targetPos, inventoryStep, saveAngle0));
+            }             
         }
         else
         {

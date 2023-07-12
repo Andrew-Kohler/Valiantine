@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     private bool _isTransition; // Are we in a scene transition?
     private bool _isInteraction;// Are we in some kind of dialogue interaction (opening a chest, healing at a statue)?
     private bool _isBattle;     // Are we in a battle?
+    [SerializeField] private bool _isWindy;      // ...Is it windy
     // Other potential states of interest
     // isMainMenu
     private bool _canInteract;
@@ -31,6 +32,8 @@ public class GameManager : MonoBehaviour
     public static event OnBattleStateChange onBattleStateChange;
     public delegate void OnSaveStatueStateChange();
     public static event OnSaveStatueStateChange onSaveStatueStateChange;
+    public delegate void OnSavePointStateChange(int currentPoint);
+    public static event OnSavePointStateChange onSavePointStateChange;
     public delegate void OnChestStateChange();
     public static event OnChestStateChange onChestStateChange;
 
@@ -114,6 +117,10 @@ public class GameManager : MonoBehaviour
         {
             onChestStateChange?.Invoke();
         }
+        if (currentInteractable.CompareTag("Save Point") && flag != former)
+        {
+            onSavePointStateChange?.Invoke(0);
+        }
         // Ok, write it down now -> diff event for each type of interactable, they all do the same stuff for initial pos in animator but all do diff stuff to cam
 
     }
@@ -150,7 +157,17 @@ public class GameManager : MonoBehaviour
         return _isBattle;
     }
 
-    public void CanInteract(bool flag)   // Setter and getter for if we are in battle!
+    public void Windy(bool wind)       // Setter and getter for if...it is windy.
+    {
+        _isWindy = wind;
+    }
+
+    public bool IsWindy()
+    {
+        return _isWindy;
+    }
+
+    public void CanInteract(bool flag)   // Setter and getter for if we can interact with something!
     {
         _canInteract = flag;
         if(_canInteract == false)
