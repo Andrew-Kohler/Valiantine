@@ -48,11 +48,10 @@ public class BattleManager : MonoBehaviour
     EnemyGroup enemyGroup;
     IndicatorAction indAction;
 
-    EnemyRandomMovement mainEnemyRandom;
-    EnemyPathMovement mainEnemyPath;
+    /*EnemyRandomMovement mainEnemyRandom;
+    EnemyPathMovement mainEnemyPath;*/
 
-   
-    
+    EnemyMovement mainEnemyMovement;    // The movement script of the enemy that was in the overworld
 
     Rigidbody playerRb;
     Rigidbody enemyRb;
@@ -132,14 +131,16 @@ public class BattleManager : MonoBehaviour
                 playerRb = PlayerManager.Instance.PlayerRigidbody();    // Get player and enemy RBs
                 enemyRb = currentEnemy.GetComponent<Rigidbody>();
 
-                if (currentEnemy.GetComponent<EnemyPathMovement>() != null)
+                /*if (currentEnemy.GetComponent<EnemyPathMovement>() != null)
                 {
                     mainEnemyPath = currentEnemy.GetComponent<EnemyPathMovement>();
                 }
                 if (currentEnemy.GetComponent<EnemyRandomMovement>() != null)
                 {
                     mainEnemyRandom = currentEnemy.GetComponent<EnemyRandomMovement>();
-                }
+                }*/
+
+                mainEnemyMovement = currentEnemy.GetComponent<EnemyMovement>();
 
                 camX = (enemyRb.position.x + playerRb.position.x) / 2;  // Tell the camera where to go
                 camZ = playerRb.position.z;
@@ -387,13 +388,14 @@ public class BattleManager : MonoBehaviour
         //Debug.Log(combatants[1].name + " , SPD:" + stats[1].GetSPD());
     }
 
-    private void CombatantDisable()
+    private void CombatantDisable() // Disables the movement scripts on both primary combatants
     {
         PlayerMovement playerM = PlayerManager.Instance.PlayerMovement();
-        EnemyChaseMovement enemyCM = currentEnemy.GetComponent<EnemyChaseMovement>();
+        //EnemyChaseMovement enemyCM = currentEnemy.GetComponent<EnemyChaseMovement>();
 
         playerM.enabled = false;
-        enemyCM.enabled = false;
+        mainEnemyMovement.enabled = false;
+        /*enemyCM.enabled = false;
         if (mainEnemyPath != null)
         {
             mainEnemyPath.enabled = false;
@@ -401,20 +403,20 @@ public class BattleManager : MonoBehaviour
         if (mainEnemyRandom != null)
         {
             mainEnemyRandom.enabled = false;
-        }
+        }*/
     }
 
     private void currentEnemyReenable()
     {
-
-        if(mainEnemyPath != null)
+        mainEnemyMovement.enabled = true;
+        /*if(mainEnemyPath != null)
         {
             mainEnemyPath.enabled = true;
         }
         if (mainEnemyRandom != null)
         {
             mainEnemyRandom.enabled = true;
-        }
+        }*/
 
     }
 
@@ -472,7 +474,8 @@ public class BattleManager : MonoBehaviour
 
             if(battlingEnemies.Length == 1)
             {
-                battlingEnemies[0].GetComponent<Rigidbody>().velocity = new Vector3(10f, 3f, 0f);
+                //battlingEnemies[0].GetComponent<Rigidbody>().velocity = new Vector3(10f, 3f, 0f);
+                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(3);
             }
             else if(battlingEnemies.Length == 2)
             {
@@ -491,7 +494,7 @@ public class BattleManager : MonoBehaviour
             Debug.Log("Player is right of the enemy");
             playerRb.velocity = new Vector3(10f, 3f, 0f);
             enemyRb.velocity = new Vector3(-10f, 3f, 0f);
-            // Nothing is currently configured to make this work
+            // Nothing is currently configured to make this work, and it never will be, which means I need to figure out an alternative
         }
     }
 
@@ -501,12 +504,12 @@ public class BattleManager : MonoBehaviour
         StartCoroutine(DoTurnAdvanceInven());
     }
 
-    private void CreateSelectionArrow()
+    private void CreateSelectionArrow() // Creates an arrow to let the player select which enemy to attack
     {
         enemySelectArrow = Instantiate((GameObject)Resources.Load("Target Arrow"), new Vector3(battlingEnemies[0].transform.position.x, battlingEnemies[0].transform.position.y * 2 + .7f, battlingEnemies[0].transform.position.z), Quaternion.identity);
     }
 
-    private void DestroySelectionArrow()
+    private void DestroySelectionArrow() // Destroys said arrow
     {
         Destroy(enemySelectArrow);
     }
@@ -521,7 +524,8 @@ public class BattleManager : MonoBehaviour
         playerRb.velocity = new Vector3(0f, 0f, 0f);
         foreach (GameObject enemy in battlingEnemies)
         {
-            enemy.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
+            //enemy.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f); // Ok, so...this should probably be part of the animation rather than all this
+            // nonsense happening in here
         }
 
         if (GameManager.Instance.isInventory())
@@ -639,8 +643,9 @@ public class BattleManager : MonoBehaviour
         battleIntro = true;
         battleActive = false;
         activeCoroutine = false;
-        mainEnemyPath = null;
-        mainEnemyRandom = null;
+        mainEnemyMovement = null;
+        /*mainEnemyPath = null;
+        mainEnemyRandom = null;*/
 
         endResult = EndStatus.None;
         status = MenuStatus.Inactive;  

@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Health Potion
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 52fac3b34007fa34f9758cac4f30b64d, type: 2}
-  m_sharedMaterial: {fileID: 2129406146671339026, guid: 52fac3b34007fa34f9758cac4f30b64d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 950c4b8e2e9b414429aa9d2e67355dc5, type: 2}
+  m_sharedMaterial: {fileID: -1978667628909625620, guid: 950c4b8e2e9b414429aa9d2e67355dc5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -93,8 +93,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 72
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -193,6 +193,7 @@ MonoBehaviour:
   assignedInventorySlot:
     itemData: {fileID: 0}
     stackSize: -1
+  Selected: 0
 --- !u!1 &7098294576343322473
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,8 +338,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: x99
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 52fac3b34007fa34f9758cac4f30b64d, type: 2}
-  m_sharedMaterial: {fileID: 2129406146671339026, guid: 52fac3b34007fa34f9758cac4f30b64d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 950c4b8e2e9b414429aa9d2e67355dc5, type: 2}
+  m_sharedMaterial: {fileID: -1978667628909625620, guid: 950c4b8e2e9b414429aa9d2e67355dc5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -362,8 +363,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 72
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

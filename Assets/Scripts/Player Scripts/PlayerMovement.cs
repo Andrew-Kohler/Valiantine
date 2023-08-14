@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
             horizontalInput = Input.GetAxis("Horizontal");
             verticalInput = Input.GetAxis("Vertical");
 
-            rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
+            //rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
 
         }
         else // Freezes the player if something else is going on, like entering a menu
@@ -49,6 +49,16 @@ public class PlayerMovement : MonoBehaviour
 
 
     }   // End of Update()
+
+    private void FixedUpdate()
+    {
+        MovePlayer3D();
+    }
+
+    private void MovePlayer3D()
+    {
+        rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
+    }
 
 
 

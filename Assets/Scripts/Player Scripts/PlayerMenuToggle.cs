@@ -39,10 +39,12 @@ public class PlayerMenuToggle : MonoBehaviour
         {
             if (!GameManager.Instance.isSettings())
             {
+                Time.timeScale = 0;
                 GameManager.Instance.Settings(true);
             }
             else
             {
+                Time.timeScale = 1;
                 GameManager.Instance.Settings(false);
             }
         }

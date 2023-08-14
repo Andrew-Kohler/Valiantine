@@ -11,7 +11,7 @@ using UnityEngine;
 public class EnemyPathMovement : MonoBehaviour
 {
     // This script goes on the actual enemy themselves
-    [SerializeField] GameObject[] waypoints;
+    [SerializeField] GameObject[] waypoints;    // The waypoints an enemy travels between
     EnemyFollow followCheck;
     EnemyChaseMovement chaseMovement;
     Rigidbody rb;

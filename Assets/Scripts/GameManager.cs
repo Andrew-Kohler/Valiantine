@@ -11,6 +11,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance; // = new GameManager();   // Look at this again, b/c I'm pretty sure awake should be doing this?
+    private bool activeCoroutine;
 
     private bool _isGameOver;   // Has the player been defeated?
     private bool _isInventory;  // Are we in the inventory?
@@ -37,14 +38,20 @@ public class GameManager : MonoBehaviour
     public delegate void OnChestStateChange();
     public static event OnChestStateChange onChestStateChange;
 
+    public delegate void OnWindStateChange();
+    public static event OnWindStateChange onWindStateChange;
+
     private GameManager()
     {
+        activeCoroutine = false;
+
         _isGameOver = false;
         _isInventory = false;
         _isSettings = false;
         _isTransition = false;
         _isInteraction = false;
         _isBattle = false;
+        _isWindy = false;
         _canInteract = false;
         currentInteractable = null;
     }
@@ -65,6 +72,14 @@ public class GameManager : MonoBehaviour
     {
         _instance = this;
         //DontDestroyOnLoad(this.gameObject);
+    }
+
+    private void Update()
+    {
+        if (!activeCoroutine)
+        {
+            StartCoroutine(DoWindCycle());
+        }
     }
 
     public void GameOver(bool flag) // Setter and getter for state of player defeat
@@ -143,7 +158,7 @@ public class GameManager : MonoBehaviour
     public void Battle(bool flag)   // Setter and getter for if we are in battle!
     {
         
-        bool former = _isBattle;    
+        bool former = _isBattle;        // This little song and dance lets me check if a change occurs
         _isBattle = flag;
         if (flag != former)
         {
@@ -159,7 +174,12 @@ public class GameManager : MonoBehaviour
 
     public void Windy(bool wind)       // Setter and getter for if...it is windy.
     {
+        bool former = _isWindy;
         _isWindy = wind;
+        if (wind != former)
+        {
+            onWindStateChange?.Invoke(); 
+        }
     }
 
     public bool IsWindy()
@@ -204,6 +224,28 @@ public class GameManager : MonoBehaviour
     public bool freeCam()
     {
         return !_isGameOver && !_isInventory && !_isSettings && !_isBattle && !_isInteraction;
+    }
+
+    //Coroutines
+
+    IEnumerator DoWindCycle()
+    {
+        activeCoroutine = true;
+        // Generate a random number for the wind to NOT play
+        float downtime = 10f;//Random.Range(30f, 75f);
+        // Generate a random number for the wind to play for
+        float uptime = 10f;//Random.Range(5f, 17f);
+
+        // Let the wind not play for a while
+        yield return new WaitForSeconds(downtime);
+        // Switch wind to true
+        Windy(true);
+        // Wait for the play time
+        yield return new WaitForSeconds(uptime);
+        // Set it to false
+        Windy(false);
+
+        activeCoroutine = false;
     }
 
     

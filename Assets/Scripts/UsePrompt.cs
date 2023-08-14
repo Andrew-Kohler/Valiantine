@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UsePrompt : MonoBehaviour
 {
@@ -14,11 +15,13 @@ public class UsePrompt : MonoBehaviour
 
     private void Start()
     {
-        Color textColor = text.GetComponent<SpriteRenderer>().material.color;
+        //Color textColor = text.GetComponent<SpriteRenderer>().material.color;
+        Color textColor = text.GetComponent<TextMeshPro>().color;
         Color backingColor = backing.GetComponent<SpriteRenderer>().material.color;
 
         textColor = new Color(textColor.r, textColor.g, textColor.b, 0);
-        text.GetComponent<SpriteRenderer>().material.color = textColor;
+        //text.GetComponent<SpriteRenderer>().material.color = textColor;
+        text.GetComponent<TextMeshPro>().color = textColor;
         backingColor = new Color(backingColor.r, backingColor.g, backingColor.b, 0);
         backing.GetComponent<SpriteRenderer>().material.color = backingColor;
     }
@@ -45,7 +48,7 @@ public class UsePrompt : MonoBehaviour
 
     IEnumerator FadeOutPrompt()
     {
-        while (text.GetComponent<SpriteRenderer>().material.color.a > 0.01f)
+        /*while (text.GetComponent<SpriteRenderer>().material.color.a > 0.01f)
         {
             stopFadeIn = true;
 
@@ -59,6 +62,21 @@ public class UsePrompt : MonoBehaviour
             backing.GetComponent<SpriteRenderer>().material.color = backingColor;
 
             yield return null;
+        }*/
+        while (text.GetComponent<TextMeshPro>().color.a > 0.01f)
+        {
+            stopFadeIn = true;
+
+            Color textColor = text.GetComponent<TextMeshPro>().color;
+            Color backingColor = backing.GetComponent<SpriteRenderer>().material.color;
+            float fadeAmt = textColor.a - (fadeSpeed * Time.deltaTime);
+
+            textColor = new Color(textColor.r, textColor.g, textColor.b, fadeAmt);
+            text.GetComponent<TextMeshPro>().color = textColor;
+            backingColor = new Color(backingColor.r, backingColor.g, backingColor.b, fadeAmt);
+            backing.GetComponent<SpriteRenderer>().material.color = backingColor;
+
+            yield return null;
         }
         //this.gameObject.SetActive(false);
         yield return null;
@@ -66,7 +84,7 @@ public class UsePrompt : MonoBehaviour
 
     IEnumerator FadeInPrompt()
     {
-        while (text.GetComponent<SpriteRenderer>().material.color.a <= 1f)
+        /*while (text.GetComponent<SpriteRenderer>().material.color.a <= 1f)
         {
             //Debug.Log("Fading in");
             if (stopFadeIn)
@@ -79,6 +97,24 @@ public class UsePrompt : MonoBehaviour
 
             textColor = new Color(textColor.r, textColor.g, textColor.b, fadeAmt);
             text.GetComponent<SpriteRenderer>().material.color = textColor;
+            backingColor = new Color(backingColor.r, backingColor.g, backingColor.b, fadeAmt);
+            backing.GetComponent<SpriteRenderer>().material.color = backingColor;
+
+            yield return null;
+        }*/
+        while (text.GetComponent<TextMeshPro>().color.a <= 1f)
+        {
+            //Debug.Log("Fading in");
+            if (stopFadeIn)
+            {
+                break;
+            }
+            Color textColor = text.GetComponent<TextMeshPro>().color;
+            Color backingColor = backing.GetComponent<SpriteRenderer>().material.color;
+            float fadeAmt = textColor.a + (fadeSpeed * Time.deltaTime);
+
+            textColor = new Color(textColor.r, textColor.g, textColor.b, fadeAmt);
+            text.GetComponent<TextMeshPro>().color = textColor;
             backingColor = new Color(backingColor.r, backingColor.g, backingColor.b, fadeAmt);
             backing.GetComponent<SpriteRenderer>().material.color = backingColor;
 

@@ -1,5 +1,5 @@
 /*
-Enemy Random Movement
+Enemy Follow
 Used on:    Enemies
 For:    Detects if an enemy is trying to move out of bounds, and whether it is a valid time for an enemy to chase 
         a player
@@ -18,10 +18,8 @@ public class EnemyFollow : MonoBehaviour
     Transform upperZ;
     Transform lowerZ;
 
-    Transform player;
-
     private bool follow;
-    private int trackingDist = 10;
+    [SerializeField] private int sightRadius;   // The radius a player needs to enter to be seen
 
     void Start()
     {
@@ -30,14 +28,12 @@ public class EnemyFollow : MonoBehaviour
         upperZ = GameObject.Find("Upper ZE").transform;
         lowerZ = GameObject.Find("Lower ZE").transform;
 
-        //player = GameObject.Find("Player").transform;
-
         follow = false;
     }
 
     private void Update()
     {
-        if(Vector3.Distance(transform.position, PlayerManager.Instance.PlayerTransform().position) <= trackingDist && inBounds())
+        if(Vector3.Distance(transform.position, PlayerManager.Instance.PlayerTransform().position) <= sightRadius && inBounds())
         {
             follow = true;
         }
@@ -46,47 +42,6 @@ public class EnemyFollow : MonoBehaviour
             follow = false;
         }
     }
-
-    /*private void OnTriggerEnter(Collider other)
-    {
-        // When the player enters the trigger:
-        // Are they within the valid zone?
-        // If they are, follow is true
-        // If they are not, follow is false
-        if (other.gameObject.CompareTag("Player") && inBounds())
-        {
-            Debug.Log("Entered");
-            follow = true; 
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        // While the player is in the trigger:
-        // Are they in the valid zone?
-        // If they are, follow is true
-        // If they are not, follow is false
-        if (other.gameObject.CompareTag("Player") && inBounds())
-        {
-            follow = true; 
-        }
-        else
-        {
-            follow = false;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        // If the player leaves the trigger:
-        // Stop following lol
-        if (other.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Left");
-            follow = false;
-        }
-        
-    }*/
 
     public bool inBounds()    // Checks if we are inside acceptable boundaries
     {
