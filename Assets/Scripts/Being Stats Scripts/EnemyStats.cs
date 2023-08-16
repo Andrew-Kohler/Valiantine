@@ -6,6 +6,7 @@ public class EnemyStats : Stats
 {
     [SerializeField] public bool isBattling = false;           // If involved in the battle
     [SerializeField] public bool remainOnPlayerFlight = true; // If this enemy should continue to exist if the player runs from the battle
+    [SerializeField] public string enemyName;
     public EnemyStats()
     {
         HP = 1;

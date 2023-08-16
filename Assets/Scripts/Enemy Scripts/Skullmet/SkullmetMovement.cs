@@ -12,16 +12,11 @@ using UnityEngine;
 public class SkullmetMovement : EnemyMovement
 {
     [SerializeField] GameObject[] waypoints;    // The waypoints the Skullmet travels between
-    //[SerializeField] float normalMovementSpeed = 170f;  // The speed of the enemy
-    //[SerializeField] float chaseMovementSpeed = 374f;   // The chase speed of the enemy
-
-    //private EnemyFollow enemyFollow;                    // Our script that checks if we should be chasing the player
-    //private Rigidbody rb;
-
     int currentWaypointIndex = 0;
     bool active = false;
     public bool ChasingPlayer => active;
-    bool movementEnabled = true;
+    bool movementEnabled = true; // For making the appearance of the skull hopping
+    public bool spawnedToFight; // For disabling the attempts of the spawned enemies to move about
     Vector3 pursuitVector;
 
     //Vector3 direction;
@@ -34,34 +29,33 @@ public class SkullmetMovement : EnemyMovement
 
     void Update()
     {
-        active = enemyFollow.isFollow();    // Are we following the player or not?
-
-        if (!active && GameManager.Instance.enemyCanMove()) // If we are not chasing the player
+        if (!spawnedToFight)
         {
-            
-            // First, check if we're at a waypoint (that means we need to change target)
-            if (Vector3.Distance(transform.position, waypoints[currentWaypointIndex].transform.position) < .1f)
+            active = enemyFollow.isFollow();    // Are we following the player or not?
+
+            if (!active && GameManager.Instance.enemyCanMove()) // If we are not chasing the player
             {
-                currentWaypointIndex++;
-                if (currentWaypointIndex >= waypoints.Length)
+
+                // First, check if we're at a waypoint (that means we need to change target)
+                if (Vector3.Distance(transform.position, waypoints[currentWaypointIndex].transform.position) < .1f)
                 {
-                    currentWaypointIndex = 0;
+                    currentWaypointIndex++;
+                    if (currentWaypointIndex >= waypoints.Length)
+                    {
+                        currentWaypointIndex = 0;
+                    }
                 }
+
+                direction = (waypoints[currentWaypointIndex].transform.position - this.transform.position).normalized * normalMovementSpeed;
             }
+            else if (active && GameManager.Instance.enemyCanMove()) // If chase has been enabled
+            {
+                Transform playerTransform = PlayerManager.Instance.PlayerTransform();
+                pursuitVector = new Vector3(playerTransform.position.x, transform.position.y, playerTransform.position.z);
 
-            direction = (waypoints[currentWaypointIndex].transform.position - this.transform.position).normalized * normalMovementSpeed;
+                direction = (pursuitVector - this.transform.position).normalized * chaseMovementSpeed;
+            }
         }
-        else if (active && GameManager.Instance.enemyCanMove()) // If chase has been enabled
-        {
-           Transform playerTransform = PlayerManager.Instance.PlayerTransform();
-            pursuitVector = new Vector3(playerTransform.position.x, transform.position.y, playerTransform.position.z);
-
-            direction = (pursuitVector - this.transform.position).normalized * chaseMovementSpeed;
-        }
-/*        else    // If enemies can't move, freeze them
-        {
-            direction = new Vector3(0f, 0f, 0f);
-        }*/
     }
 
     private void FixedUpdate()

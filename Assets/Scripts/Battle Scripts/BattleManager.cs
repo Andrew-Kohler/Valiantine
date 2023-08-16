@@ -48,9 +48,6 @@ public class BattleManager : MonoBehaviour
     EnemyGroup enemyGroup;
     IndicatorAction indAction;
 
-    /*EnemyRandomMovement mainEnemyRandom;
-    EnemyPathMovement mainEnemyPath;*/
-
     EnemyMovement mainEnemyMovement;    // The movement script of the enemy that was in the overworld
 
     Rigidbody playerRb;
@@ -130,15 +127,6 @@ public class BattleManager : MonoBehaviour
 
                 playerRb = PlayerManager.Instance.PlayerRigidbody();    // Get player and enemy RBs
                 enemyRb = currentEnemy.GetComponent<Rigidbody>();
-
-                /*if (currentEnemy.GetComponent<EnemyPathMovement>() != null)
-                {
-                    mainEnemyPath = currentEnemy.GetComponent<EnemyPathMovement>();
-                }
-                if (currentEnemy.GetComponent<EnemyRandomMovement>() != null)
-                {
-                    mainEnemyRandom = currentEnemy.GetComponent<EnemyRandomMovement>();
-                }*/
 
                 mainEnemyMovement = currentEnemy.GetComponent<EnemyMovement>();
 
@@ -346,7 +334,7 @@ public class BattleManager : MonoBehaviour
 
     public string GetCurrentTurnName()
     {
-        return combatants[currentTurn].name;
+        return combatants[currentTurn].GetComponent<EnemyStats>().enemyName;
     }
 
     public void SetAttackTarget(GameObject targetedEnemy)   // Sets the target for the player's attack
@@ -391,33 +379,14 @@ public class BattleManager : MonoBehaviour
     private void CombatantDisable() // Disables the movement scripts on both primary combatants
     {
         PlayerMovement playerM = PlayerManager.Instance.PlayerMovement();
-        //EnemyChaseMovement enemyCM = currentEnemy.GetComponent<EnemyChaseMovement>();
 
         playerM.enabled = false;
         mainEnemyMovement.enabled = false;
-        /*enemyCM.enabled = false;
-        if (mainEnemyPath != null)
-        {
-            mainEnemyPath.enabled = false;
-        }
-        if (mainEnemyRandom != null)
-        {
-            mainEnemyRandom.enabled = false;
-        }*/
     }
 
     private void currentEnemyReenable()
     {
         mainEnemyMovement.enabled = true;
-        /*if(mainEnemyPath != null)
-        {
-            mainEnemyPath.enabled = true;
-        }
-        if (mainEnemyRandom != null)
-        {
-            mainEnemyRandom.enabled = true;
-        }*/
-
     }
 
     private void allEnemyReenable(GameObject visible)
@@ -474,19 +443,18 @@ public class BattleManager : MonoBehaviour
 
             if(battlingEnemies.Length == 1)
             {
-                //battlingEnemies[0].GetComponent<Rigidbody>().velocity = new Vector3(10f, 3f, 0f);
                 battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(3);
             }
             else if(battlingEnemies.Length == 2)
             {
-                battlingEnemies[0].GetComponent<Rigidbody>().velocity = new Vector3(10f, 3f, 3f);
-                battlingEnemies[1].GetComponent<Rigidbody>().velocity = new Vector3(15f, 3f, -3f);
+                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(4);
+                battlingEnemies[1].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(2);
             }
             else if(battlingEnemies.Length == 3)
             {
-                battlingEnemies[0].GetComponent<Rigidbody>().velocity = new Vector3(5f, 3f, 4f);
-                battlingEnemies[1].GetComponent<Rigidbody>().velocity = new Vector3(10f, 3f, 1f);
-                battlingEnemies[2].GetComponent<Rigidbody>().velocity = new Vector3(15f, 3f, -2f);
+                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(5);
+                battlingEnemies[1].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(3);
+                battlingEnemies[2].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(1);
             }
         }
         else // If the player is right of the enemy
@@ -521,12 +489,7 @@ public class BattleManager : MonoBehaviour
 
         BattleRecoil();                             // Correctly position the player and the enemy
         yield return new WaitForSeconds(.7f);       // Wait for Battle Recoil to finish
-        playerRb.velocity = new Vector3(0f, 0f, 0f);
-        foreach (GameObject enemy in battlingEnemies)
-        {
-            //enemy.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f); // Ok, so...this should probably be part of the animation rather than all this
-            // nonsense happening in here
-        }
+        playerRb.velocity = new Vector3(0f, 0f, 0f);// TODO: This will eventually go in the player animator
 
         if (GameManager.Instance.isInventory())
         {

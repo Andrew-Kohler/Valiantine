@@ -33,25 +33,51 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             if (GameManager.Instance.enemyCanMove())    // Non-battle animation
             {
                 frameLoop = 7;
-                if (rb.velocity.z < -.05) // Moving forwards
+                if(Mathf.Abs(rb.velocity.z) > Mathf.Abs(rb.velocity.x)) // Allows the higher velocity to always take priority
                 {
-                    animationIndex = _WalkForwardsIndex;
+                    if (rb.velocity.z < -.05) // Moving forwards
+                    {
+                        animationIndex = _WalkForwardsIndex;
+                    }
+                    else if (rb.velocity.z > 0.05) // Moving backwards
+                    {
+                        animationIndex = _WalkBackwardsIndex;
+                    }
+                    else // Moving left or right
+                    {
+                        if (rb.velocity.x < -0.05) // Moving left
+                        {
+                            animationIndex = _WalkLIndex;
+                        }
+                        else if (rb.velocity.x > 0.05) // Moving right
+                        {
+                            animationIndex = _WalkRIndex;
+                        }
+                    }
                 }
-                else if(rb.velocity.z > 0.05) // Moving backwards
+                else
                 {
-                    animationIndex = _WalkBackwardsIndex;
-                }
-                else // Moving left or right
-                {
-                    if(rb.velocity.x < -0.05) // Moving left
+                    if (rb.velocity.x < -0.05) // Moving left
                     {
                         animationIndex = _WalkLIndex;
                     }
-                    else if(rb.velocity.x > 0.05) // Moving right
+                    else if (rb.velocity.x > 0.05) // Moving right
                     {
                         animationIndex = _WalkRIndex;
                     }
+                    else 
+                    {
+                        if (rb.velocity.z < -.05) // Moving forwards
+                        {
+                            animationIndex = _WalkForwardsIndex;
+                        }
+                        else if (rb.velocity.z > 0.05) // Moving backwards
+                        {
+                            animationIndex = _WalkBackwardsIndex;
+                        }
+                    }
                 }
+                
             }
 
             else if (GameManager.Instance.isBattle())
@@ -93,7 +119,7 @@ public class SkullmetAnimatorS : EnemyAnimatorS
                 {
                     skullmetMovement.MovementToggle(false);
                 }
-                else if(frame == 1)
+                else if(frame == 2)
                 {
                     skullmetMovement.MovementToggle(true);
                 }
@@ -164,26 +190,98 @@ public class SkullmetAnimatorS : EnemyAnimatorS
     }
 
     // Attacking
-    IEnumerator DoAttackAnim()
+    protected override IEnumerator DoAttackAnim()
     {
+        // Startup stuff
+        activeCoroutine = true;
+        animationIndex = _AttackIndex; // The main thing in all of this startup is changing the animation index and frame data
+        frameLoop = 11;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+
+        activeCoroutine = false;
         yield return null;
     }
 
     // Casting a spell
-    IEnumerator DoSpellcastAnim()
+    protected override IEnumerator DoSpellcastAnim()
     {
+        // Startup stuff
+        activeCoroutine = true;
+        animationIndex = _SpellcastIndex; // The main thing in all of this startup is changing the animation index and frame data
+        frameLoop = 13;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+
+        activeCoroutine = false;
         yield return null;
     }
 
     // Getting hurt
-    IEnumerator DoHurtAnim()
+    protected override IEnumerator DoHurtAnim()
     {
+        // Startup stuff
+        activeCoroutine = true;
+        animationIndex = _HurtIndex; // The main thing in all of this startup is changing the animation index and frame data
+        frameLoop = 10;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+
+        activeCoroutine = false;
         yield return null;
     }
 
     // Dying
-    IEnumerator DoDieAnim()
+    protected override IEnumerator DoDieAnim()
     {
+        // Startup stuff
+        activeCoroutine = true;
+        animationIndex = _DieIndex; // The main thing in all of this startup is changing the animation index and frame data
+        frameLoop = 12;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+
+        activeCoroutine = false;
         yield return null;
     }
 }

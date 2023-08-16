@@ -771,6 +771,7 @@ MonoBehaviour:
   LVL: 1
   isBattling: 0
   remainOnPlayerFlight: 1
+  enemyName: 
 --- !u!114 &39347369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5595,11 +5596,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21b7068d2ec0ebe459c96728660599a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawn: 0
-  numberToSpawn: 0
-  additionalEnemies: []
-  lowerLVLBound: 0
-  upperLVLBound: 0
+  spawn: 1
+  numberToSpawn: 2
+  additionalEnemies:
+  - {fileID: 2986665773169648867, guid: 20f307f85459142409c37ac8e71d3a9b, type: 3}
+  - {fileID: 2986665773169648867, guid: 20f307f85459142409c37ac8e71d3a9b, type: 3}
+  lowerLVLBound: 2
+  upperLVLBound: 5
   additionalEnemyLevels: 
   spawnpoint: {fileID: 443298022}
 --- !u!114 &443298026
@@ -5629,6 +5632,7 @@ MonoBehaviour:
   LVL: 1
   isBattling: 0
   remainOnPlayerFlight: 1
+  enemyName: Skullmet
 --- !u!114 &443298028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5661,6 +5665,7 @@ MonoBehaviour:
   - {fileID: 89242380}
   - {fileID: 1928686740}
   - {fileID: 1159376088}
+  spawnedToFight: 0
 --- !u!1001 &461235433
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7372,6 +7377,7 @@ MonoBehaviour:
   LVL: 1
   isBattling: 0
   remainOnPlayerFlight: 1
+  enemyName: 
 --- !u!114 &668637585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32249,6 +32255,7 @@ MonoBehaviour:
   LVL: 1
   isBattling: 0
   remainOnPlayerFlight: 1
+  enemyName: 
 --- !u!54 &1691525566
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -37814,6 +37821,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44b8ca5a0fe438e4eb613d94a2cb558f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 0}
+  rb: {fileID: 0}
   rowProperty: _CurrRow
   colProperty: _CurrCol
   axis: 0

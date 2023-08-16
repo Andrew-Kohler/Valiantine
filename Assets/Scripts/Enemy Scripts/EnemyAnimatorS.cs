@@ -6,8 +6,8 @@ public class EnemyAnimatorS : MonoBehaviour
 {
     public enum AnimationAxis { Rows, Columns } // Enum creation for whether we're animating along rows or down columns
 
-    protected MeshRenderer meshRenderer;
-    protected Rigidbody rb;
+    [SerializeField] protected MeshRenderer meshRenderer;
+    [SerializeField] protected Rigidbody rb;
 
     [SerializeField] protected string rowProperty = "_CurrRow", colProperty = "_CurrCol"; // Properties of the material
 
