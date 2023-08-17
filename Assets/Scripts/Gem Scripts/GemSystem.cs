@@ -65,11 +65,11 @@ public class GemSystem : MonoBehaviour
         currentGem = gemStats[index];
         currentGemText = heldGemList[index];
         // TODO: Update Player Stats with all its new mods
-        playerStats.SetATKMod(currentGem.ATKMod);
-        playerStats.SetDEFMod(currentGem.DEFMod);
-        playerStats.SetSPDMod(currentGem.SPDMod);
-        playerStats.SetMaxHPMod(currentGem.HPMod);
-        playerStats.SetMaxMPMod(currentGem.MPMod);
+        playerStats.SetGemATKMod(currentGem.ATKMod);
+        playerStats.SetGemDEFMod(currentGem.DEFMod);
+        playerStats.SetGemSPDMod(currentGem.SPDMod);
+        playerStats.SetGemMaxHPMod(currentGem.HPMod);
+        playerStats.SetGemMaxMPMod(currentGem.MPMod);
 
         if (playerStats.GetHP() > playerStats.GetMaxHP())   // Lowers HP and MP if maxes are lowered beyond previous full
         {

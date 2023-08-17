@@ -157,12 +157,8 @@ public class BattleManager : MonoBehaviour
                 {
                     if (enemy.GetComponent<EnemyStats>().isBattling)
                     {
-                        turnArray[i] = enemy.GetComponent<EnemyStats>();
-                       
-                            turnArray[i].SetLVL(enemyGroup.additionalEnemyLevels[i]);
-                          
-                        
-
+                        turnArray[i] = enemy.GetComponent<EnemyStats>(); 
+                        turnArray[i].SetLVL(enemyGroup.additionalEnemyLevels[i]);
                         combatants[i] = enemy;
                         i++;
                     }
@@ -170,37 +166,6 @@ public class BattleManager : MonoBehaviour
                 turnArray[i] = playerStats;
                 combatants[i] = PlayerManager.Instance.GameObject();
                 CalculateTurnOrder(ref turnArray, ref combatants);
-
-
-                /*if (playerStats.GetSPD() >= enemyStats.GetSPD()) // A very basic speed check
-                {
-                    turnArray[0] = playerStats;
-                    turnArray[1] = enemyStats;
-                }
-                else
-                {
-                    turnArray[1] = playerStats;
-                    turnArray[0] = enemyStats;
-                    // Oh god I'm gonna need a recursive method to sort these
-                }*/
-
-                // Alright, no more running, I need to figure this out
-                // So, say I have 4 objects, 1 player stats and 3 enemy stats
-                // They're all stats, so I can add all of them to this array
-                // And I think I would be able to get away with just having an array of stats, EXCEPT:
-                // Em is gonna be moving around a lot, which isn't necessarily a problem on its own
-                // But the enemies will also move into position for melee attacks, so I need access to the enemy game objects on their turn
-                // All of that to say, I should put everyone's GameObjects into an array and sort that in parallel with the stats array
-                // Dual-array sorting
-                // Insane
-
-                // So, to do:
-                // Make that GameObject array
-                // Pass both arrays by reference to a method that sorts them
-                // ...make the method that sorts them
-                // From there, turnArray is already set up to govern turn order, so...yeah, that's it!
-
-
                 currentTurn = 0;    // Set the current turn to 0 so the first actor goes
 
                 StartCoroutine(DoBattleIntro());    // Use a coroutine to time visual elements (player motion, UI swap)           
@@ -341,9 +306,8 @@ public class BattleManager : MonoBehaviour
     {
         DestroySelectionArrow();
         // For testing purposes, let's find a way to change the text in the battle UI
-        Debug.Log(targetedEnemy.name);
-        // Pass this along to a coroutine for the player attacking
-        StartCoroutine(DoTurnAdvancePlayerAttack(targetedEnemy));
+        Debug.Log(targetedEnemy.name); 
+        StartCoroutine(DoTurnAdvancePlayerAttack(targetedEnemy));   // Pass this along to a coroutine for the player attacking
 
     }
 
@@ -569,7 +533,9 @@ public class BattleManager : MonoBehaviour
     IEnumerator DoTurnAdvanceEnemyTemp()
     {
         activeCoroutine = true;
-        yield return new WaitForSeconds(5f);
+        combatants[currentTurn].GetComponent<EnemyMoves>().Move1(playerStats);
+        yield return new WaitUntil(() => combatants[currentTurn].GetComponent<EnemyMoves>().moveInProgress == false);
+
         if (currentTurn != turnArray.Length - 1) // Advance the turn
         {
             currentTurn++;
@@ -578,12 +544,11 @@ public class BattleManager : MonoBehaviour
         {
             currentTurn = 0;
         }
-        status = MenuStatus.Inactive;   // The player acts no more!
+        status = MenuStatus.Inactive;   // The enemy acts no more!
 
         activeCoroutine = false;
         yield return null;
     }
-
 
     IEnumerator DoBattleRun()
     {
@@ -603,19 +568,14 @@ public class BattleManager : MonoBehaviour
         currentEnemyReenable();                             // Reenable the current enemy's movement, and destroy enemies spawn for the battle
         destroySpawnedEnemies();
         
-        battleIntro = true;
+        battleIntro = true;         // Resetting everything for if the player gets into a tangle in the same scene
         battleActive = false;
         activeCoroutine = false;
         mainEnemyMovement = null;
-        /*mainEnemyPath = null;
-        mainEnemyRandom = null;*/
 
         endResult = EndStatus.None;
         status = MenuStatus.Inactive;  
 
         yield return null;
     }
-
-    // So, most of the other stuff I have that handles enemies works the way it does so that they can be re-activated remotely
-    // Seeing as you can't reactivate something that isn't active from inside that thing, because it isn't active
 }

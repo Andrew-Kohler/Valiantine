@@ -16,16 +16,15 @@ public class SkullmetMovement : EnemyMovement
     bool active = false;
     public bool ChasingPlayer => active;
     bool movementEnabled = true; // For making the appearance of the skull hopping
+    
     public bool spawnedToFight; // For disabling the attempts of the spawned enemies to move about
     Vector3 pursuitVector;
 
-    //Vector3 direction;
-
-    /*void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        enemyFollow = GetComponent<EnemyFollow>();   
-    }*/
+    bool battleMovementEnabled = false;
+    public bool arrived = false;
+    private Vector3 idleBattlePosition; // Where the Skullmet landed when battle began
+    private Vector3 orderedBattlePosition;  // Where the Skullmet is headed when ordered to move
+    private float distanceFromPoint;
 
     void Update()
     {
@@ -56,6 +55,17 @@ public class SkullmetMovement : EnemyMovement
                 direction = (pursuitVector - this.transform.position).normalized * chaseMovementSpeed;
             }
         }
+
+        if (GameManager.Instance.isBattle())
+        {
+            if (battleMovementEnabled)  // If we are moving
+            {
+                if(Vector3.Distance(orderedBattlePosition, this.transform.position) < distanceFromPoint)  // If we are pretty close
+                {
+                    arrived = true;
+                }
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -72,15 +82,46 @@ public class SkullmetMovement : EnemyMovement
             }
 
         }
-        /*else
-        {
-            rb.velocity = direction * Time.fixedDeltaTime;
-        }*/
+        if (GameManager.Instance.isBattle())
+        {  
+            if (battleMovementEnabled)
+            { 
+                rb.velocity = new Vector3(direction.x, 0f, direction.z) * Time.fixedDeltaTime;
+            }
+            else
+            {
+                
+                rb.velocity = new Vector3(0f, 0f, 0f);
+            }
+        }
     }
 
-    // Public methods
+    // Public methods---------------------------------------------------------------
     public void MovementToggle(bool enabled)    // Toggles the overworld movement on and off
     {
         movementEnabled = enabled;
     }
+
+    public void BattleMovementToggle(bool enabled)    // Toggles the battle movement on and off
+    {
+        battleMovementEnabled = enabled;
+    }
+
+    public void SetBattleIdlePosition()
+    {
+        idleBattlePosition = this.transform.position;
+    }
+
+    public Vector3 GetBattleIdlePosition()
+    {
+        return idleBattlePosition;
+    }
+
+    public void MoveToPoint(Vector3 point, float distanceFromPoint) // Assigns a point to move to in the battle
+    {
+        orderedBattlePosition = point;
+        this.distanceFromPoint = distanceFromPoint;
+        direction = (point - this.transform.position).normalized * chaseMovementSpeed;
+    }
+    // Coroutines --------------------------------------------------------------
 }

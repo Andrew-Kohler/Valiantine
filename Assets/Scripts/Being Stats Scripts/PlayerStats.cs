@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerStats : Stats
 {
+    private float GemATKMod;    // The gem modifiers are separate because they cannot be affected by enemy spells
+    private float GemDEFMod;
+    private float GemSPDMod;
+    private float GemMaxMPMod;
+    private float GemMaxHPMod;
+
     public PlayerStats()
     {
         HP = 15;
@@ -27,8 +33,68 @@ public class PlayerStats : Stats
         MaxHPMod = 1f;
         XPMod = 1f;
 
+        GemATKMod = 1f;
+        GemDEFMod = 1f;
+        GemSPDMod = 1f;
+        GemMaxMPMod = 1f;
+        GemMaxHPMod = 1f;
+
         down = false;
 
+    }
+
+    private void OnEnable()
+    {
+        SkullmetMoves.damagePlayer += SetHP;
+    }
+
+    private void OnDisable()
+    {
+        SkullmetMoves.damagePlayer -= SetHP;
+    }
+
+    // Overrides for all of the stat getters to account for the passive modifications of the gems
+    public new int GetMaxHP()
+    {
+        return (int)(MaxHP * MaxHPMod * GemMaxHPMod);
+    }
+    public new int GetMaxMP()
+    {
+        return (int)(MaxMP * MaxMPMod * GemMaxMPMod);
+    }
+    public new int GetATK()
+    {
+        return (int)(ATK * ATKMod * GemATKMod);
+    }
+    public new int GetDEF()
+    {
+        return (int)(DEF * DEFMod * GemDEFMod);
+    }
+    public new int GetSPD()
+    {
+        return (int)(SPD * SPDMod * GemSPDMod);
+    }
+
+    // Setters for all of the gem modifiers
+    public void SetGemMaxHPMod(float changeVal)
+    {
+        GemMaxHPMod = changeVal;
+    }
+    public void SetGemMaxMPMod(float changeVal)
+    {
+        GemMaxMPMod = changeVal;
+    }
+    public void SetGemATKMod(float changeVal)
+    {
+        GemATKMod = changeVal;
+    }
+    public void SetGemDEFMod(float changeVal)
+    {
+        GemDEFMod = changeVal;
+    }
+    public void SetGemSPDMod(float changeVal)
+    {
+        GemSPDMod = changeVal;
     }
 
     protected override void LVLUp() // Adds all the basic stats for levelling up

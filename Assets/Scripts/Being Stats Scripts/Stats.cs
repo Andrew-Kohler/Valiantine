@@ -167,11 +167,6 @@ public abstract class Stats : MonoBehaviour
     }
 
     protected abstract void LVLUp();    // Contains the logic for levelling up
-    /*{
-        // This is a separate Trello card and a wholly separate topic from just writing this class
-        // Potentially abstract?
-        // Def abstract
-    }*/
 
     public int GetXP()
     {
@@ -180,7 +175,6 @@ public abstract class Stats : MonoBehaviour
 
     public int GetXPThreshold()
     {
-        ///return baseXPThreshold;
         return (int)Mathf.Floor(baseXPThreshold * Mathf.Pow(LVL, LVLExponent)); 
     }
 
@@ -197,10 +191,14 @@ public abstract class Stats : MonoBehaviour
         }
     }
 
-    public int CalculateDMG(float oppoDef)
+    public int CalculateDMG(int oppoDef) // Calculate the damage you are going to do to your opponent
     {
-        return 1;
-        //TODO: Come up with me secret formula, ARGARGARGARGH
+        int dmgDone = this.GetATK() - oppoDef;
+        if(dmgDone <= 0)
+        {
+            dmgDone = 1;
+        }
+        return dmgDone;
     }
 
     public bool getDowned()

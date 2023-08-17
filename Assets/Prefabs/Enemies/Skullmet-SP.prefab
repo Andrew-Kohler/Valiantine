@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6624848456654977198}
   - component: {fileID: 8612590016972673803}
   - component: {fileID: -6017410335096564527}
+  - component: {fileID: 4046065257147548683}
   m_Layer: 6
   m_Name: Skullmet-SP
   m_TagString: Enemy
@@ -101,7 +102,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2986665773169648867}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 663c68ac530869a46a9c47e928a0a1bd, type: 3}
   m_Name: 
@@ -110,6 +111,24 @@ MonoBehaviour:
   chaseMovementSpeed: 374
   waypoints: []
   spawnedToFight: 1
+  arrived: 0
+--- !u!114 &4046065257147548683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2986665773169648867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179d5cf88fbf10d4790e069561e658fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Move1LVLCap: 1
+  Move2LVLCap: 3
+  Move3LVLCap: 5
+  Move4LVLCap: 7
+  moveInProgress: 0
 --- !u!1 &8616937010672990042
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,3 +232,4 @@ MonoBehaviour:
   axis: 0
   animationSpeed: 5.4
   animationIndex: 0
+  activeCoroutine: 0

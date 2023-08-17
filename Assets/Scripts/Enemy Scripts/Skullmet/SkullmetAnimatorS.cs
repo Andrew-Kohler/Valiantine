@@ -173,8 +173,7 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         // Animated component (sprite-based motion corresponding to physical motion)
         int frame = 0;// (int)(deltaT * animationSpeed);
         while(frame < frameLoop)
-        {
-            
+        { 
             deltaT += Time.deltaTime;
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
@@ -189,13 +188,133 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         yield return null;
     }
 
-    // Attacking
-    protected override IEnumerator DoAttackAnim()
+    // MOVE 1: Bite (Standard attack anim)
+    protected override IEnumerator DoMove1Anim()
     {
         // Startup stuff
         activeCoroutine = true;
-        animationIndex = _AttackIndex; // The main thing in all of this startup is changing the animation index and frame data
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+
+        skullmetMovement.SetBattleIdlePosition();
+        
+
+        // PART 1: Walk to player position ----------------------------------------------------
+        animationIndex = _WalkLIndex;
+        animationSpeed = _SpedUpAnimationSpeed;
+        frameLoop = 7;
+
+        Vector3 playerPos = new Vector3(PlayerManager.Instance.PlayerTransform().position.x, GetComponentInParent<Transform>().position.y, PlayerManager.Instance.PlayerTransform().position.z);
+        skullmetMovement.MoveToPoint(playerPos, 3.5f);
+
+        skullmetMovement.enabled = true;
+
+        int frame = 0;
+        while (!skullmetMovement.arrived)                       // Wait until the skullmet gets where it is going
+        {
+            if (frame == 0 || frame == 5)
+            {
+                skullmetMovement.BattleMovementToggle(false);
+            }
+            else if (frame == 2)
+            {
+                skullmetMovement.BattleMovementToggle(true);
+            }
+
+            deltaT += Time.deltaTime;
+            frame = (int)(deltaT * animationSpeed);
+            if (frame >= frameLoop)
+            {
+                deltaT = 0;
+                frame = frameReset;
+            }
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            
+            yield return null;
+        }
+
+        skullmetMovement.BattleMovementToggle(false);                       // Once we arrive, stop forward motion
+        skullmetMovement.arrived = false;
+        rb.velocity = new Vector3(0f, 0f, 0f);
+
+        // PART 2: Play the attack animation ------------------------------------------
+        animationIndex = _AttackIndex;
+        animationSpeed = _NormalAnimationSpeed;
         frameLoop = 11;
+
+        frame = 0;                  // Play the attack animation once
+        deltaT = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            if(frame == 4)
+            {
+                dealDamage = true;
+            }
+            yield return null;
+        }      
+
+        // PART 3: Walk back to original position -------------------------------------
+        animationIndex = _WalkRIndex;
+        animationSpeed = _SpedUpAnimationSpeed;
+        frameLoop = 7;
+
+        skullmetMovement.MoveToPoint(skullmetMovement.GetBattleIdlePosition(), .1f);
+
+        frame = 0;
+        while (!skullmetMovement.arrived)                       // Wait until the skullmet gets where it is going
+        {
+            if (frame == 0 || frame == 5)
+            {
+                skullmetMovement.BattleMovementToggle(false);
+            }
+            else if (frame == 2)
+            {
+                skullmetMovement.BattleMovementToggle(true);
+            }
+
+            deltaT += Time.deltaTime;
+            frame = (int)(deltaT * animationSpeed);
+            if (frame >= frameLoop)
+            {
+                deltaT = 0;
+                frame = frameReset;
+            }
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            yield return null;
+        }
+
+        skullmetMovement.BattleMovementToggle(false);                       // Once we arrive, stop forward motion
+        skullmetMovement.arrived = false;
+        rb.velocity = new Vector3(0f, 0f, 0f);
+
+        // Resume idle
+        skullmetMovement.enabled = false;
+        animationSpeed = _NormalAnimationSpeed;
+        activeCoroutine = false;
+        yield return null;
+    }
+
+    // MOVE 2: 
+    protected override IEnumerator DoMove2Anim()
+    {
+        // Startup stuff
+        activeCoroutine = true;
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
@@ -213,13 +332,33 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         yield return null;
     }
 
-    // Casting a spell
-    protected override IEnumerator DoSpellcastAnim()
+    // MOVE 3: 
+    protected override IEnumerator DoMove3Anim()
     {
         // Startup stuff
         activeCoroutine = true;
-        animationIndex = _SpellcastIndex; // The main thing in all of this startup is changing the animation index and frame data
-        frameLoop = 13;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+
+        activeCoroutine = false;
+        yield return null;
+    }
+
+    // MOVE 4: 
+    protected override IEnumerator DoMove4Anim()
+    {
+        // Startup stuff
+        activeCoroutine = true;
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)

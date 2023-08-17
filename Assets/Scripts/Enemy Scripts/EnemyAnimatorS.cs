@@ -20,7 +20,8 @@ public class EnemyAnimatorS : MonoBehaviour
     protected int frameLoop = 0;  // A value to hold the number of the frame that the current animation loops on (e.g. after frame 13, loop it)
     protected int frameReset = 0; // A value to hold the number of the frame that the current animation loops back to (e.g. the loop starts on frame 0)
     protected float deltaT = 0;   // A cumulative delta time value
-    protected bool activeCoroutine = false;    // The classic boolean to use when Update() needs to be quiet during a coroutine
+    public bool activeCoroutine = false;    // The classic boolean to use when Update() needs to be quiet during a coroutine
+    public bool dealDamage = false;         // A boolean flipped on and off to indicate when in the animation damage should be dealt to the player to keep things lined up
 
     // Public methods ---------------------------------------------------------
     public void PlayBattleEntrance(int position)        // Position docs:   5 = Furthest back (3 enemy battle)
@@ -28,14 +29,24 @@ public class EnemyAnimatorS : MonoBehaviour
         StartCoroutine(DoBattleEnterAnim(position));                    //  3 = Straight (1, 3 enemy battle)
     }                                                                   //  2 = A bit forward (2 enemy battle)       
                                                                         //  1 = Very forward (3 enemy battle)   
-    public void PlayAttack()
+    public void PlayMove1()
     {
-        StartCoroutine(DoAttackAnim());
+        StartCoroutine(DoMove1Anim());
     }
 
     public void PlaySpellcast()
     {
-        StartCoroutine(DoSpellcastAnim());
+        StartCoroutine(DoMove2Anim());
+    }
+
+    public void PlayMove3()
+    {
+        StartCoroutine(DoMove3Anim());
+    }
+
+    public void PlayMove4()
+    {
+        StartCoroutine(DoMove4Anim());
     }
 
     public void PlayHurt()
@@ -55,14 +66,26 @@ public class EnemyAnimatorS : MonoBehaviour
         yield return null;
     }
 
-    // Attacking
-    protected virtual IEnumerator DoAttackAnim()
+    // 1st combat move
+    protected virtual IEnumerator DoMove1Anim()
     {
         yield return null;
     }
 
-    // Casting a spell
-    protected virtual IEnumerator DoSpellcastAnim()
+    // 2nd combat move
+    protected virtual IEnumerator DoMove2Anim()
+    {
+        yield return null;
+    }
+
+    // 3rd combat move
+    protected virtual IEnumerator DoMove3Anim()
+    {
+        yield return null;
+    }
+
+    // 4th combat move
+    protected virtual IEnumerator DoMove4Anim()
     {
         yield return null;
     }
