@@ -43,9 +43,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: World Text
     uniqueID: 3241414763
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0

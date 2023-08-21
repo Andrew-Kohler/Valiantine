@@ -28,6 +28,11 @@ public class StaticInventoryDisplay : InventoryDisplay //
     public delegate void OnItemUse();
     public static event OnItemUse onItemUse;
 
+    public delegate void OnHealthPotDrink();
+    public static event OnHealthPotDrink onHealthPotDrink;
+    public delegate void OnManaPotDrink();
+    public static event OnManaPotDrink onManaPotDrink;
+
     protected override void Start() // Fix my other inheritnece to work like this
     {
         base.Start();
@@ -126,7 +131,15 @@ public class StaticInventoryDisplay : InventoryDisplay //
                     {
                         // (a) carry out effects
                         PlayerManager.Instance.PlayerStats().SetHP(slots[selectedSlot].AssignedInventorySlot.Data.HPRestore);
+                        if (slots[selectedSlot].AssignedInventorySlot.Data.HPRestore > 0)
+                        {
+                            onHealthPotDrink?.Invoke();
+                        }
                         PlayerManager.Instance.PlayerStats().SetMP(slots[selectedSlot].AssignedInventorySlot.Data.MPRestore);
+                        if(slots[selectedSlot].AssignedInventorySlot.Data.MPRestore > 0)
+                        {
+                            onManaPotDrink?.Invoke();
+                        }
 
                         // (b) remove from inventory
                         inventorySystem.RemoveFromInventory(slots[selectedSlot].AssignedInventorySlot.Data, 1, selectedSlot);
