@@ -336,8 +336,6 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
-        //Debug.Log(combatants[0].name + " , SPD:" + stats[0].GetSPD());
-        //Debug.Log(combatants[1].name + " , SPD:" + stats[1].GetSPD());
     }
 
     private void CombatantDisable() // Disables the movement scripts on both primary combatants
@@ -378,7 +376,7 @@ public class BattleManager : MonoBehaviour
     {
         foreach (GameObject enemy in battlingEnemies)
         {
-            if (!enemy.GetComponent<EnemyStats>().remainOnPlayerFlight) // Get rid of the lackeys
+            if (!enemy.GetComponent<EnemyStats>().remainOnPlayerFlight && enemy.GetComponent<FadeEnemy>() != null) // Get rid of the lackeys
             {
                 enemy.GetComponent<FadeEnemy>().FadeOut();
             }
@@ -403,9 +401,12 @@ public class BattleManager : MonoBehaviour
         if (PlayerManager.Instance.PlayerTransform().position.x <= currentEnemy.transform.position.x)    // If the player is left of the enemy
         {
             Debug.Log("Player is left of the enemy");
-            playerRb.velocity = new Vector3(-10f, 3f, 0f);
+            playerRb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+            //playerRb.velocity = new Vector3(-10f, 3f, 0f);
+            playerRb.velocity = Vector3.zero;
+            playerRb.AddForce(new Vector3(-10f, 3f, 0f), ForceMode.VelocityChange);
 
-            if(battlingEnemies.Length == 1)
+            if (battlingEnemies.Length == 1)
             {
                 battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(3);
             }
@@ -416,8 +417,8 @@ public class BattleManager : MonoBehaviour
             }
             else if(battlingEnemies.Length == 3)
             {
-                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(5);
-                battlingEnemies[1].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(3);
+                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(3);
+                battlingEnemies[1].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(5);
                 battlingEnemies[2].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(1);
             }
         }
@@ -453,6 +454,7 @@ public class BattleManager : MonoBehaviour
 
         BattleRecoil();                             // Correctly position the player and the enemy
         yield return new WaitForSeconds(.7f);       // Wait for Battle Recoil to finish
+        playerRb.constraints = RigidbodyConstraints.FreezeRotation;
         playerRb.velocity = new Vector3(0f, 0f, 0f);// TODO: This will eventually go in the player animator
 
         if (GameManager.Instance.isInventory())
@@ -562,8 +564,9 @@ public class BattleManager : MonoBehaviour
         playerReenable();                                   // Reenable player movement
         allEnemyReenable(currentEnemy);                     // Reenable enemies that weren't in the fight
         fadeSpawnedEnemies();                               // Get rid of enemies spawned for the battle
-        battleShowEnemies?.Invoke();
+       
         yield return new WaitForSeconds(2f);                // Wait for a few moments before letting the current enemy loose again
+        battleShowEnemies?.Invoke();
 
         currentEnemyReenable();                             // Reenable the current enemy's movement, and destroy enemies spawn for the battle
         destroySpawnedEnemies();

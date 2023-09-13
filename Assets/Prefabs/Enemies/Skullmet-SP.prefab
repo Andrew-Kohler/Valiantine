@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8612590016972673803}
   - component: {fileID: -6017410335096564527}
   - component: {fileID: 4046065257147548683}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Skullmet-SP
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 7988501163736878941}
   - component: {fileID: 2208740587355829161}
   - component: {fileID: 1611132100492918698}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Skullmet Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,3 +233,4 @@ MonoBehaviour:
   animationSpeed: 5.4
   animationIndex: 0
   activeCoroutine: 0
+  dealDamage: 0

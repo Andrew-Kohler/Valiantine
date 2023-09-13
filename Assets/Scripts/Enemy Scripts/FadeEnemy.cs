@@ -15,7 +15,13 @@ public class FadeEnemy : MonoBehaviour
     private void OnDisable()
     {
         BattleManager.battleHideEnemies -= FadeOutIfPassive;
-        BattleManager.battleHideEnemies -= FadeInIfPassive;
+        BattleManager.battleShowEnemies -= FadeInIfPassive;
+    }
+
+    private void OnDestroy()
+    {
+        BattleManager.battleHideEnemies -= FadeOutIfPassive;
+        BattleManager.battleShowEnemies -= FadeInIfPassive;
     }
 
     public void FadeOut()

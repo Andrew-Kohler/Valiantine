@@ -11,7 +11,7 @@ public class EnemyMovement : MonoBehaviour
     protected Rigidbody rb;
 
     protected Vector3 direction;
-    void Start()
+    protected void Start()
     {
         rb = GetComponent<Rigidbody>();
         enemyFollow = GetComponent<EnemyFollow>();

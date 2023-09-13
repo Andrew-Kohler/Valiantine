@@ -70,7 +70,7 @@ public class SkullmetMovement : EnemyMovement
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.enemyCanMove()) // If we are not chasing the player
+        if (GameManager.Instance.enemyCanMove()) // If we are not in battle
         {
             if (movementEnabled)
             {
