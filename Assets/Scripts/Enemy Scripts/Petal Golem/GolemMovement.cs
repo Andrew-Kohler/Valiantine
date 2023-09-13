@@ -2,19 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LoverMovement : EnemyMovement
+public class GolemMovement : EnemyMovement
 {
-    bool active = false; // Whether or not the Lover is chasing the player
-    public bool ChasingPlayer => active;
-    bool movementEnabled = true; // For making the appearance of the corpse lurching
+    public bool sleeping = false;   // The primary toggle of overworld Golem movement - if true, they do not move,and just sleep
 
     [SerializeField] private bool moveRandomly;    // Whether or not we are moving, WITHIN THE CONFINES OF THE NORMAL MOVEMENT ROUTINE
-                                  // That is to say, is it time to move in a given random direction, or time to stop?
+                                                   // That is to say, is it time to move in a given random direction, or time to stop?
     public bool LurchingAround => moveRandomly;
     private float moveRandomlyTimer = 2f;                         // A timer that is used to change cycles
     [SerializeField] private float moveRandomCycleTime = 2f; // How long we stay in either phase of the movement pattern
     private bool goX = false;
-    private bool reversed = false;  // Used to ping-pong the Lover off of the enemy bounds if they try to stray outside of them when not chasing
+    private bool reversed = false;  // Used to ping-pong the Golem off of the enemy bounds if they try to stray outside of them when not chasing
 
     private float currentXDir;  // Either 1 or -1
     private float currentZDir;
@@ -25,8 +23,7 @@ public class LoverMovement : EnemyMovement
     Vector3 pursuitVector;
 
     bool battleMovementEnabled = false;
-
-    private void Start()
+    void Start()
     {
         base.Start();
         moveRandomly = false;
@@ -38,12 +35,11 @@ public class LoverMovement : EnemyMovement
     {
         if (!spawnedToFight) // If I'm an overworld enemy
         {
-            active = enemyFollow.isFollow();    // Are we following the player or not?
 
-            if (!active && GameManager.Instance.enemyCanMove()) // If we are not chasing the player
+            if (!sleeping && GameManager.Instance.enemyCanMove()) // If we are not sleeping
             {
 
-                if(moveRandomlyTimer <= 0) // If our timer has run out, reset it and swap our movement style
+                if (moveRandomlyTimer <= 0) // If our timer has run out, reset it and swap our movement style
                 {
                     moveRandomlyTimer = moveRandomCycleTime;
                     moveRandomly = !moveRandomly;
@@ -61,10 +57,10 @@ public class LoverMovement : EnemyMovement
                             currentZDir = generateDir();
                             currentXDir = 0;
                         }
-                    }  
+                    }
                 }
 
-                if (!enemyFollow.inBounds() && !reversed)   // Keeps the Lover from wandering out of enemy bounds
+                if (!enemyFollow.inBounds() && !reversed)   // Keeps the Golem from wandering out of enemy bounds
                 {
                     reversed = true;    // "Reversed" prevents us from getting stuck in a loop on the edge where we're just perpetually stuck within the edge turning
                     if (goX)
@@ -89,13 +85,9 @@ public class LoverMovement : EnemyMovement
 
                 moveRandomlyTimer -= Time.deltaTime; // Decrement the timer
             }
-            else if (active && GameManager.Instance.enemyCanMove()) // If chase has been enabled
+            else if (sleeping)
             {
-                Transform playerTransform = PlayerManager.Instance.PlayerTransform();
-                pursuitVector = new Vector3(playerTransform.position.x, transform.position.y, playerTransform.position.z);
-
-                direction = (pursuitVector - this.transform.position).normalized;
-                currentSpeed = chaseMovementSpeed;
+                direction = new Vector3(0f, 0f, 0f);
             }
         }
     }
@@ -108,45 +100,11 @@ public class LoverMovement : EnemyMovement
         }
     }
 
-    // Public methods---------------------------------------------------------------
-    public void MovementToggle(bool enabled)    // Toggles the overworld movement on and off
-    {
-        //movementEnabled = enabled;
-        if (enabled)
-        {
-            if (active)
-            {
-                currentSpeed = chaseMovementSpeed;
-            }
-            else
-            {
-                currentSpeed = normalMovementSpeed;
-            }
-            
-        }
-        else
-        {
-            if (active)
-            {
-                currentSpeed = .4f * chaseMovementSpeed;
-            }
-            else
-            {
-                currentSpeed = .4f * normalMovementSpeed;
-            }
-        }
-    }
-
-    public void BattleMovementToggle(bool enabled)    // Toggles the battle movement on and off
-    {
-        battleMovementEnabled = enabled;
-    }
-
     // Private methods---------------------------------------------------------------
     private bool generateAxis() // Generates which axis we'll be moving along
     {
         bool x = true;
-        if(Random.Range(-1, 1) == 0)
+        if (Random.Range(-1, 1) == 0)
         {
             x = false;
         }
@@ -155,7 +113,7 @@ public class LoverMovement : EnemyMovement
     private int generateDir() // Generates a random dir for the Forgotten Lover to walk in
     {
         int num = Random.Range(-1, 1);
-        if(num== 0)
+        if (num == 0)
         {
             num = 1;
         }
