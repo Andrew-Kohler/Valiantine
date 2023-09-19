@@ -181,7 +181,7 @@ public class CameraControl : MonoBehaviour
     private void SetCamChest() 
     {
         StopAllCoroutines();
-        if (GameManager.Instance.isInteraction())
+        if (GameManager.Instance.isInteraction() && !GameManager.Instance.getCurrentInteractable().GetComponent<ChestInteractable>().Opened)
         {
             Vector3 targetPos = new Vector3(playerTransform.position.x + chestPos.x, playerTransform.position.y + yConstant + chestPos.y, playerTransform.position.z - zConstant + chestPos.z);
             StartCoroutine(DoCamPosition(targetPos, inventoryStep, chestAngle));

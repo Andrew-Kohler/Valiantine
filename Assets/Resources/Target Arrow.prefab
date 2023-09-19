@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4839632861593264637}
   - component: {fileID: 4839632861593264626}
   - component: {fileID: 4839632861593264636}
+  - component: {fileID: -5664280484233387154}
   m_Layer: 0
   m_Name: Target Arrow
   m_TagString: Untagged
@@ -98,5 +99,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arrowSpeed: 40
-  delay: 0.6
   heightAdd: 0.7
+--- !u!95 &-5664280484233387154
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4839632861593264627}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 825209319de6af34bae8f4614a374d97, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -19,9 +19,10 @@ MonoBehaviour:
   Consumable: 0
   HPRestore: 0
   MPRestore: 0
-  InventoryDescription: A line from an ancient poem. It reads, "..."
-  UseDescription: Why it has been broken is a mystery. Perhaps one of the monsters
-    disliked it.
-  BattleUseDescription: A fine sentiment, but it doesn't mean much out of context.
+  InventoryDescription: A line from an ancient poem. One of the words is underlined.
+  UseDescription: ' It reads, "This lyric I have left you, That it might show the
+    way"'
+  BattleUseDescription: If you don't understand it out of context, the monsters certainly
+    won't.
   SingleObtainDescription: You found the second line of a poem! It looks like the
     rest is missing.

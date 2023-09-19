@@ -16,11 +16,13 @@ public class FadeUI : MonoBehaviour
 
     public void UIFadeIn()  // Methods used for the battle UI
     {
+        StopAllCoroutines();
         StartCoroutine(DoFadeInUI());
     }
 
     public void UIFadeOut()
     {
+        StopAllCoroutines();
         StartCoroutine(DoFadeOutUI());
     }
 

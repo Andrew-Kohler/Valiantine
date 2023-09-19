@@ -7,6 +7,8 @@ public class PlayerAnimatorS : MonoBehaviour
     public enum AnimationAxis {Rows, Columns}
 
     private MeshRenderer meshRenderer;
+    private Rigidbody rb;
+    private PlayerMovement playerMovement;
     [SerializeField] private string rowProperty = "_CurrRow", colProperty = "_CurrCol";
 
     [SerializeField] private AnimationAxis axis;
@@ -25,6 +27,8 @@ public class PlayerAnimatorS : MonoBehaviour
 
     private float timeToIdle = 7f;
     private float idleTimer;
+
+    public bool dealDamage = false;         // A boolean flipped on and off to indicate when in the animation damage should be dealt to the player to keep things lined up
 
     private int _AttackIndex = 23;
     private int _DefeatIndex = 22;
@@ -58,8 +62,10 @@ public class PlayerAnimatorS : MonoBehaviour
     private void OnEnable()
     {
         GameManager.onSaveStatueStateChange += faceAway;
-        GameManager.onChestStateChange += faceAway;
-        ChestAnimatorS.onChestOpen += faceTowards;
+        ChestInteractable.onChestInteract += faceAway;
+        ChestAnimatorS.onChestOpen += PlayItemGet1;
+
+        InGameUIView.onInteractionEnd += PlayItemGet2;
 
         StaticInventoryDisplay.onHealthPotDrink += PlayRedPotionDrink;
         StaticInventoryDisplay.onManaPotDrink += PlayBluePotionDrink;
@@ -68,8 +74,10 @@ public class PlayerAnimatorS : MonoBehaviour
     private void OnDisable()
     {
         GameManager.onSaveStatueStateChange -= faceAway;
-        GameManager.onChestStateChange -= faceAway;
-        ChestAnimatorS.onChestOpen -= faceTowards;
+        ChestInteractable.onChestInteract -= faceAway;
+        ChestAnimatorS.onChestOpen -= PlayItemGet1;
+
+        InGameUIView.onInteractionEnd -= PlayItemGet2;
 
         StaticInventoryDisplay.onHealthPotDrink -= PlayRedPotionDrink;
         StaticInventoryDisplay.onManaPotDrink -= PlayBluePotionDrink;
@@ -80,6 +88,8 @@ public class PlayerAnimatorS : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
         deltaT = 0;
         idleTimer = 7f;
+        rb = GetComponentInParent<Rigidbody>();
+        playerMovement = GetComponentInParent<PlayerMovement>();
     }
 
     private void Update()
@@ -233,6 +243,40 @@ public class PlayerAnimatorS : MonoBehaviour
         StartCoroutine(DoPotionAnim(false));
     }
 
+    public void PlayItemGet1()
+    {
+        StopAllCoroutines();
+        StartCoroutine(DoItemGet1());
+    }
+
+    public void PlayItemGet2()
+    {
+        if(animationIndex == _ItemGetIndex)
+        {
+            StopAllCoroutines();
+            StartCoroutine(DoItemGet2());
+        }
+    }
+
+    public void PlayBattleEnter()
+    {
+        StopAllCoroutines();
+        StartCoroutine(DoBattleEnterAnim());
+    }
+
+    public void PlayAttack(Transform enemyTransform)
+    {
+        StopAllCoroutines();
+        Vector3 attackPosition = new Vector3(enemyTransform.position.x - 2f, this.GetComponentInParent<Transform>().position.y, enemyTransform.position.z);
+        StartCoroutine(DoAttackAnim(attackPosition));
+    }
+
+    public void PlayHurt()
+    {
+        StopAllCoroutines();
+        StartCoroutine(DoHurtAnim());
+    }
+
 
     // Private methods ----------------------------------------------------------
 
@@ -266,6 +310,14 @@ public class PlayerAnimatorS : MonoBehaviour
         {
             direction = 3;
         }
+    }
+
+
+    private void faceAway() // Faces the player in their idle stance away from the camera
+    {
+        direction = 2;
+        animationIndex = _ActiveIdleBackwardsIndex;
+        GameManager.onChestStateChange -= faceAway; // Prevents from turning back around on next state change; will probably change 
     }
 
     // Coroutines ------------------------------------------------------------
@@ -379,20 +431,317 @@ public class PlayerAnimatorS : MonoBehaviour
         yield return null;
     }
 
-    // Animation control methods (soon to be deprecated)
-
-    private void faceAway() // Faces the player in their idle stance away from the camera
+    private IEnumerator DoItemGet1()
     {
-        direction = 2;
-        animationIndex = _ActiveIdleBackwardsIndex;
-        GameManager.onChestStateChange -= faceAway; // Prevents from turning back around on next state change; will probably change 
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _ItemGetIndex;
+        animationSpeed = 6.4f;
+
+        // Content ----------------------------------------------
+
+        // Jump around and raise your arms
+        int frame = 0;
+        frameLoop = 8;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * animationSpeed);
+            yield return null;
+        }
+
+        yield return null;
     }
 
-    private void faceTowards() // Faces the player in their idle stance towards the camera
+    private IEnumerator DoItemGet2()
     {
+        // Lower your arms and set the direction, index, and frame appropriately
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        frameLoop = 10;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 7 + (int)(deltaT * animationSpeed);
+            yield return null;
+        }
+
+
         direction = 3;
-        animationIndex = _ActiveIdleForwardsIndex;
+        animationIndex = _IdleForwardsIndex;
+        
+        //deltaT = 0;
+        activeCoroutine = false;
+        yield return null;
     }
+
+    private IEnumerator DoBattleEnterAnim()
+    {
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _BattleEnterIndex;
+        animationSpeed = 5.4f;
+
+        // Content ----------------------------------------------
+
+        rb.velocity = Vector3.zero;
+        float yStop = gameObject.GetComponentInParent<Transform>().position.y;
+        frame = 0;// (int)(deltaT * animationSpeed);
+        frameLoop = 14;
+
+        // Play the startup animation
+        while (frame < 3)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (2f * animationSpeed));
+            yield return null;
+        }
+
+        rb.AddForce(new Vector3(-10f, 3f, 0f), ForceMode.VelocityChange);
+
+        // Play the in-air animation
+        yield return new WaitForSeconds(.1f);
+        deltaT = 0;
+        while (gameObject.GetComponentInParent<Transform>().position.y > yStop)
+        {
+            if (frame > 4)
+            {
+                deltaT = 0;
+            }
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 3 + (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        deltaT = 0;
+        rb.velocity = new Vector3(0f, 0f, 0f);
+
+        // Play the landing animation
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 5 + (int)(deltaT * (1.4f * animationSpeed));
+            yield return null;
+        }
+
+        activeCoroutine = false;
+        yield return null;
+    }
+
+    private IEnumerator DoAttackAnim(Vector3 attackPosition)
+    {
+        // Startup stuff
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _AttackIndex;
+
+        playerMovement.SetBattleIdlePosition();
+        playerMovement.MovePlayerToPoint(attackPosition);
+        yield return new WaitForSeconds(5f);
+        // Ok, little steps
+        // Step 1: Move the player to a position relative to the targeted enemy
+
+
+        /*
+        // PART 1: Walk to player position ----------------------------------------------------
+        
+        animationSpeed = _SpedUpAnimationSpeed;
+        frameLoop = 7;
+
+        Vector3 playerPos = new Vector3(PlayerManager.Instance.PlayerTransform().position.x, GetComponentInParent<Transform>().position.y, PlayerManager.Instance.PlayerTransform().position.z);
+        skullmetMovement.MoveToPoint(playerPos, 3.5f);
+
+        skullmetMovement.enabled = true;
+
+        int frame = 0;
+        while (!skullmetMovement.arrived)                       // Wait until the skullmet gets where it is going
+        {
+            if (frame == 0 || frame == 5)
+            {
+                skullmetMovement.BattleMovementToggle(false);
+            }
+            else if (frame == 2)
+            {
+                skullmetMovement.BattleMovementToggle(true);
+            }
+
+            deltaT += Time.deltaTime;
+            frame = (int)(deltaT * animationSpeed);
+            if (frame >= frameLoop)
+            {
+                deltaT = 0;
+                frame = frameReset;
+            }
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+
+            yield return null;
+        }
+
+        skullmetMovement.BattleMovementToggle(false);                       // Once we arrive, stop forward motion
+        skullmetMovement.arrived = false;
+        rb.velocity = new Vector3(0f, 0f, 0f);
+
+        // PART 2: Play the attack animation ------------------------------------------
+        animationIndex = _AttackIndex;
+        animationSpeed = _NormalAnimationSpeed;
+        frameLoop = 11;
+
+        frame = 0;                  // Play the attack animation once
+        deltaT = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            if (frame == 4)
+            {
+                dealDamage = true;
+            }
+            yield return null;
+        }
+
+        // PART 3: Walk back to original position -------------------------------------
+        animationIndex = _WalkRIndex;
+        animationSpeed = _SpedUpAnimationSpeed;
+        frameLoop = 7;
+
+        skullmetMovement.MoveToPoint(skullmetMovement.GetBattleIdlePosition(), .1f);
+
+        frame = 0;
+        while (!skullmetMovement.arrived)                       // Wait until the skullmet gets where it is going
+        {
+            if (frame == 0 || frame == 5)
+            {
+                skullmetMovement.BattleMovementToggle(false);
+            }
+            else if (frame == 2)
+            {
+                skullmetMovement.BattleMovementToggle(true);
+            }
+
+            deltaT += Time.deltaTime;
+            frame = (int)(deltaT * animationSpeed);
+            if (frame >= frameLoop)
+            {
+                deltaT = 0;
+                frame = frameReset;
+            }
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            yield return null;
+        }
+
+        skullmetMovement.BattleMovementToggle(false);                       // Once we arrive, stop forward motion
+        skullmetMovement.arrived = false;
+        rb.velocity = new Vector3(0f, 0f, 0f);
+
+        // Resume idle
+        skullmetMovement.enabled = false;
+        animationSpeed = _NormalAnimationSpeed;
+        */
+        activeCoroutine = false;
+        yield return null;
+    }
+
+    private IEnumerator DoHurtAnim()
+    {
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _HurtIndex;
+        animationSpeed = 5.4f;
+        frameLoop = 3;
+
+        // Content ----------------------------------------------
+        // Play the animation
+        int frame = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        activeCoroutine = false;
+        yield return null;
+    }
+
+    private IEnumerator DoDefeatAnim()
+    {
+        yield return null;
+    }
+
 }
 
 

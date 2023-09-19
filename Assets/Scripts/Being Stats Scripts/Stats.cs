@@ -39,14 +39,14 @@ public abstract class Stats : MonoBehaviour
         return HP;
     }
 
-    public void SetHP(int changeVal)
+    public virtual void SetHP(int changeVal)
     {
         HP += changeVal;
         if(HP > MaxHP)  // Accounts for attempts at healing beyond max, damage beyond min, and revives
         {
             HP = MaxHP;
         }
-        else if(HP < 0)
+        else if(HP <= 0)
         {
             HP = 0;
             down = true;

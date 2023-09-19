@@ -168,7 +168,78 @@ public class LoverAnimatorS : EnemyAnimatorS
 
     protected override IEnumerator DoBattleEnterAnim(int position)
     {
+        // Startup stuff
         activeCoroutine = true;
+        animationIndex = _BattleEnterIndex; // The main thing in all of this startup is changing the animation index and frame data
+        frameLoop = 10;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+
+        float yStop = gameObject.GetComponentInParent<Transform>().position.y;
+        int frame = 0;// (int)(deltaT * animationSpeed);
+
+        // Play the startup animation
+        while (frame < 4)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (2f * animationSpeed));
+            yield return null;
+        }
+
+        // Physical component (which angle the Lover jumps back at)
+        if (position == 1)
+            rb.velocity = new Vector3(15f, 3f, -2f); // A little closer to cam (3 enemy fight)
+        else if (position == 2)
+            rb.velocity = new Vector3(15f, 3f, -3f); // A little closer to cam (2 enemy fight)
+        else if (position == 3)
+            rb.velocity = new Vector3(10f, 3f, 0f); // Directly parallel to player (1, 3 enemy fight) 
+        else if (position == 4)
+            rb.velocity = new Vector3(10f, 3f, 3f); // A little further from cam (2 enemy fight)
+        else if (position == 5)
+            rb.velocity = new Vector3(5f, 3f, 4f); // A little further from cam (3 enemy fight)
+
+        // Animated component (sprite-based motion corresponding to physical motion)
+
+        // Play the in-air animation
+        yield return new WaitForSeconds(.1f);
+        deltaT = 0;
+        while (gameObject.GetComponentInParent<Transform>().position.y > yStop)
+        {
+            if (frame > 5)
+            {
+                deltaT = 0;
+            }
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 4 + (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        deltaT = 0;
+        rb.velocity = new Vector3(0f, 0f, 0f);
+
+        // Play the landing animation
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 6 + (int)(deltaT * (1.4f * animationSpeed));
+            yield return null;
+        }
 
 
         activeCoroutine = false;

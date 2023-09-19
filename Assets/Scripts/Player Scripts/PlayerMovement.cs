@@ -16,6 +16,11 @@ public class PlayerMovement : MonoBehaviour
     float horizontalInput;
     float verticalInput;
 
+    bool activeCoroutine = false;
+    private Vector3 direction;
+    private Vector3 idleBattlePosition; // Where the player landed when battle began
+    private Vector3 orderedBattlePosition;  // Where the player is headed when ordered to move
+
     public delegate void OnInteractButton();
     public static event OnInteractButton onInteractButton;
 
@@ -39,7 +44,11 @@ public class PlayerMovement : MonoBehaviour
         }
         else // Freezes the player if something else is going on, like entering a menu
         {
-            rb.velocity = new Vector3(0f, 0f, 0f);
+            if (!activeCoroutine)
+            {
+                rb.velocity = new Vector3(0f, 0f, 0f);
+            }
+            
         }
 
         if (Input.GetButtonDown("Interact"))
@@ -57,9 +66,42 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer3D()
     {
-        rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
+        if (GameManager.Instance.canMove())
+        {
+            rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
+        }
+        
+    }
+
+    public void SetBattleIdlePosition()
+    {
+        idleBattlePosition = this.transform.position;
+    }
+
+    public Vector3 GetBattleIdlePosition()
+    {
+        return idleBattlePosition;
+    }
+
+    public void MovePlayerToPoint(Vector3 point)
+    {
+        StartCoroutine(MoveToPoint(point));
     }
 
 
+    private IEnumerator MoveToPoint(Vector3 point)
+    {
+        activeCoroutine = true;
+        direction = (point - this.transform.position).normalized * 800f;
+        while (Vector3.Distance(this.transform.position, point) > 3f)
+        {
+            
+            rb.velocity = new Vector3(direction.x, 0f, direction.z) * Time.deltaTime;
+            yield return null;
+        }
+
+        activeCoroutine = false;
+        
+    }
 
 }

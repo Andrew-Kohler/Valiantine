@@ -35,7 +35,7 @@ public class GolemMovement : EnemyMovement
     {
         if (!spawnedToFight) // If I'm an overworld enemy
         {
-
+            currentSpeed = normalMovementSpeed;
             if (!sleeping && GameManager.Instance.enemyCanMove()) // If we are not sleeping
             {
 

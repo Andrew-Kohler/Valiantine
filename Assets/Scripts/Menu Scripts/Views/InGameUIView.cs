@@ -106,6 +106,7 @@ public class InGameUIView : View
         //menuOpen = false;
         //activeCoroutine = false;
         onInteractionEnd?.Invoke();
+        GameManager.Instance.CanInteract(false);
     }
 
 }

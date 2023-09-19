@@ -10,6 +10,10 @@ public class PlayerStats : Stats
     private float GemMaxMPMod;
     private float GemMaxHPMod;
 
+    PlayerAnimatorS animator;
+
+    private bool HeartProtectionActive; // Whether or not the Gem of Heart's protection spell is active
+
     public PlayerStats()
     {
         HP = 15;
@@ -51,6 +55,47 @@ public class PlayerStats : Stats
     private void OnDisable()
     {
         SkullmetMoves.damagePlayer -= SetHP;
+    }
+
+    private void Start()
+    {
+        animator = GetComponentInChildren<PlayerAnimatorS>();
+    }
+
+    public override void SetHP(int changeVal)
+    {
+        if(changeVal < 0 && HeartProtectionActive) // If we cast the Gem of Heart's spell, we reap its benefit on the next damaging hit
+        {
+            HeartProtectionActive = false;
+            changeVal = changeVal * -1;
+        }
+
+        HP += changeVal;
+        if (HP > MaxHP)  // Accounts for attempts at healing beyond max, damage beyond min, and revives
+        {
+            HP = MaxHP;
+        }
+        else if (HP <= 0)
+        {
+            HP = 0;
+            down = true;
+        }
+        else if (HP > 0 && down)
+        {
+            down = false;
+        }
+
+        if(changeVal < 0 && GameManager.Instance.isBattle())  // Animation logic
+        {
+            if (down)
+            {
+                // The game over sequence is Something I Have To Do
+            }
+            else
+            {
+                animator.PlayHurt();   
+            }
+        }
     }
 
     // Overrides for all of the stat getters to account for the passive modifications of the gems
@@ -95,6 +140,12 @@ public class PlayerStats : Stats
     public void SetGemSPDMod(float changeVal)
     {
         GemSPDMod = changeVal;
+    }
+
+    // Unique setters to facilitate unique gem qualities
+    public void SetHeartSpell()
+    {
+        HeartProtectionActive = true;
     }
 
     protected override void LVLUp() // Adds all the basic stats for levelling up

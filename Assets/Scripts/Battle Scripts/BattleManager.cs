@@ -44,6 +44,7 @@ public class BattleManager : MonoBehaviour
     GameObject enemySelectArrow;
 
     PlayerStats playerStats;
+    PlayerMoves playerMoves;
     EnemyStats enemyStats;
     EnemyGroup enemyGroup;
     IndicatorAction indAction;
@@ -121,7 +122,8 @@ public class BattleManager : MonoBehaviour
             {
                 StopAllCoroutines();
                 // Get the instances of:
-                playerStats = PlayerManager.Instance.PlayerStats();   // Player stats
+                playerStats = PlayerManager.Instance.PlayerStats();                 // Player stats
+                playerMoves = playerStats.gameObject.GetComponent<PlayerMoves>();   // Player moves
                 enemyStats = currentEnemy.GetComponent<EnemyStats>(); // Enemy stats
                 enemyGroup = currentEnemy.GetComponent<EnemyGroup>(); // The enemy group that spawns the Gang
 
@@ -403,8 +405,9 @@ public class BattleManager : MonoBehaviour
             Debug.Log("Player is left of the enemy");
             playerRb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
             //playerRb.velocity = new Vector3(-10f, 3f, 0f);
-            playerRb.velocity = Vector3.zero;
-            playerRb.AddForce(new Vector3(-10f, 3f, 0f), ForceMode.VelocityChange);
+            //playerRb.velocity = Vector3.zero;
+            //playerRb.AddForce(new Vector3(-10f, 3f, 0f), ForceMode.VelocityChange);
+            PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleEnter();
 
             if (battlingEnemies.Length == 1)
             {
@@ -455,7 +458,7 @@ public class BattleManager : MonoBehaviour
         BattleRecoil();                             // Correctly position the player and the enemy
         yield return new WaitForSeconds(.7f);       // Wait for Battle Recoil to finish
         playerRb.constraints = RigidbodyConstraints.FreezeRotation;
-        playerRb.velocity = new Vector3(0f, 0f, 0f);// TODO: This will eventually go in the player animator
+        //playerRb.velocity = new Vector3(0f, 0f, 0f);// TODO: This will eventually go in the player animator
 
         if (GameManager.Instance.isInventory())
         {
@@ -486,6 +489,7 @@ public class BattleManager : MonoBehaviour
         // (Within a script for the player with a callable method)
         // The player performs the motions associated with attacking
         // The player performs the animations associated with attacking
+        playerMoves.Attack(targetedEnemy);
 
         // (Within a script for the enemy with a callable method)
         // The enemy takes damage (in code)
@@ -499,7 +503,7 @@ public class BattleManager : MonoBehaviour
         // Is anyone still alive? 
         // If yes, advance the turn
         // If no, we win! Do that.
-        yield return new WaitForSeconds(3f);    // Temp for just letting us keep going
+        yield return new WaitForSeconds(6f);    // Temp for just letting us keep going
 
         if (currentTurn != turnArray.Length - 1) // Advance the turn
         {
