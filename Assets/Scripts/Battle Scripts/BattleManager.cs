@@ -490,6 +490,7 @@ public class BattleManager : MonoBehaviour
         // The player performs the motions associated with attacking
         // The player performs the animations associated with attacking
         playerMoves.Attack(targetedEnemy);
+        yield return new WaitUntil(() => combatants[currentTurn].GetComponent<PlayerMoves>().moveInProgress == false);
 
         // (Within a script for the enemy with a callable method)
         // The enemy takes damage (in code)
@@ -503,7 +504,6 @@ public class BattleManager : MonoBehaviour
         // Is anyone still alive? 
         // If yes, advance the turn
         // If no, we win! Do that.
-        yield return new WaitForSeconds(6f);    // Temp for just letting us keep going
 
         if (currentTurn != turnArray.Length - 1) // Advance the turn
         {

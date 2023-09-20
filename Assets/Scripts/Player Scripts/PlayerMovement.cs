@@ -16,7 +16,8 @@ public class PlayerMovement : MonoBehaviour
     float horizontalInput;
     float verticalInput;
 
-    bool activeCoroutine = false;
+    public bool activeCoroutine = false;
+    public bool GettingClose = false; // For animation purposes when moving to attack
     private Vector3 direction;
     private Vector3 idleBattlePosition; // Where the player landed when battle began
     private Vector3 orderedBattlePosition;  // Where the player is headed when ordered to move
@@ -83,24 +84,28 @@ public class PlayerMovement : MonoBehaviour
         return idleBattlePosition;
     }
 
-    public void MovePlayerToPoint(Vector3 point)
+    public void MovePlayerToPoint(Vector3 point, float distanceFromPoint)
     {
-        StartCoroutine(MoveToPoint(point));
+        StartCoroutine(MoveToPoint(point, distanceFromPoint));
     }
 
 
-    private IEnumerator MoveToPoint(Vector3 point)
+    private IEnumerator MoveToPoint(Vector3 point, float distanceFromPoint)
     {
         activeCoroutine = true;
-        direction = (point - this.transform.position).normalized * 800f;
-        while (Vector3.Distance(this.transform.position, point) > 3f)
-        {
-            
-            rb.velocity = new Vector3(direction.x, 0f, direction.z) * Time.deltaTime;
-            yield return null;
-        }
+        GettingClose = false;
+        Vector3 direction = (point - this.transform.position);
+        float yStop = this.gameObject.transform.position.y;
+
+        // Method 2
+        rb.AddForce(new Vector3(direction.x, 4f, direction.z), ForceMode.VelocityChange); //Mathf.Abs(direction.x * .27f)
+
+
+        yield return new WaitUntil(()=> Mathf.Abs(this.transform.position.x - point.x) <= distanceFromPoint + .03f);
+        GettingClose = true;
 
         activeCoroutine = false;
+        yield return null;
         
     }
 

@@ -30,9 +30,9 @@ public class PlayerMoves : MonoBehaviour
     {
         moveInProgress = true;
         animator.PlayAttack(enemy.transform);
-        yield return new WaitUntil(() => animator.dealDamage);  // Wait until it is time to deal damage
+        //yield return new WaitUntil(() => animator.dealDamage);  // Wait until it is time to deal damage
 
-
+        yield return new WaitUntil(() => animator.activeCoroutine == false);   // Wait out the rest of the animation
 
         moveInProgress = false;
         animator.dealDamage = false;

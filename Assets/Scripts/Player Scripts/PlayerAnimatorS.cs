@@ -267,7 +267,7 @@ public class PlayerAnimatorS : MonoBehaviour
     public void PlayAttack(Transform enemyTransform)
     {
         StopAllCoroutines();
-        Vector3 attackPosition = new Vector3(enemyTransform.position.x - 2f, this.GetComponentInParent<Transform>().position.y, enemyTransform.position.z);
+        Vector3 attackPosition = new Vector3(enemyTransform.position.x - 4f, this.GetComponentInParent<Transform>().position.y, enemyTransform.position.z);
         StartCoroutine(DoAttackAnim(attackPosition));
     }
 
@@ -577,6 +577,7 @@ public class PlayerAnimatorS : MonoBehaviour
     {
         // Startup stuff
         activeCoroutine = true;
+        int frame = 0;
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
@@ -590,43 +591,33 @@ public class PlayerAnimatorS : MonoBehaviour
             frameKey = rowProperty;
         }
         animationIndex = _AttackIndex;
-
         playerMovement.SetBattleIdlePosition();
-        playerMovement.MovePlayerToPoint(attackPosition);
-        yield return new WaitForSeconds(5f);
-        // Ok, little steps
-        // Step 1: Move the player to a position relative to the targeted enemy
+        Debug.Log(playerMovement.GetBattleIdlePosition());
 
-
-        /*
-        // PART 1: Walk to player position ----------------------------------------------------
-        
-        animationSpeed = _SpedUpAnimationSpeed;
-        frameLoop = 7;
-
-        Vector3 playerPos = new Vector3(PlayerManager.Instance.PlayerTransform().position.x, GetComponentInParent<Transform>().position.y, PlayerManager.Instance.PlayerTransform().position.z);
-        skullmetMovement.MoveToPoint(playerPos, 3.5f);
-
-        skullmetMovement.enabled = true;
-
-        int frame = 0;
-        while (!skullmetMovement.arrived)                       // Wait until the skullmet gets where it is going
+        // Animation content ---------------------------------------------------
+        while (frame < 5) // Play the windup animation
         {
-            if (frame == 0 || frame == 5)
-            {
-                skullmetMovement.BattleMovementToggle(false);
-            }
-            else if (frame == 2)
-            {
-                skullmetMovement.BattleMovementToggle(true);
-            }
-
             deltaT += Time.deltaTime;
-            frame = (int)(deltaT * animationSpeed);
-            if (frame >= frameLoop)
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        float yStop = gameObject.GetComponentInParent<Transform>().position.y;
+        
+
+        playerMovement.MovePlayerToPoint(attackPosition, .1f); // Start the player moving towards the enemy
+        yield return new WaitForSeconds(.1f);
+        deltaT = 0;
+        while (gameObject.GetComponentInParent<Transform>().position.y > yStop || !playerMovement.GettingClose) //  
+        {
+            deltaT += Time.deltaTime;
+            frame = 5 + (int)(deltaT * (animationSpeed));
+            if (frame > 6)
             {
                 deltaT = 0;
-                frame = frameReset;
+                frame = 5;
             }
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
@@ -634,16 +625,63 @@ public class PlayerAnimatorS : MonoBehaviour
             yield return null;
         }
 
-        skullmetMovement.BattleMovementToggle(false);                       // Once we arrive, stop forward motion
-        skullmetMovement.arrived = false;
+        deltaT = 0;
         rb.velocity = new Vector3(0f, 0f, 0f);
 
-        // PART 2: Play the attack animation ------------------------------------------
-        animationIndex = _AttackIndex;
-        animationSpeed = _NormalAnimationSpeed;
-        frameLoop = 11;
+        // Play the attack animation
+        deltaT = 0;
+        while (frame < 14)
+        {
+            deltaT += Time.deltaTime;
+            frame = 7 + (int)(deltaT * (animationSpeed));
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
 
-        frame = 0;                  // Play the attack animation once
+            yield return null;
+        }
+
+        Debug.Log(playerMovement.GetBattleIdlePosition());
+        playerMovement.MovePlayerToPoint(playerMovement.GetBattleIdlePosition(), .1f); // Start the player moving to their original spot
+        yield return new WaitForSeconds(.3f);
+        deltaT = 0;
+        while (gameObject.GetComponentInParent<Transform>().position.y > yStop) // Play the return flying animation
+        {
+            deltaT += Time.deltaTime;
+            frame = 14 + (int)(deltaT * (animationSpeed));
+            if (frame > 15)
+            {
+                deltaT = 0;
+                frame = 14;
+            }
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+
+            yield return null;
+        }
+
+        // Play the landing animation
+        deltaT = 0;
+        frame = 16;
+        while (frame < 18 && !playerMovement.GettingClose)
+        {
+            deltaT += Time.deltaTime;
+
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 16 + (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        //yield return new WaitUntil(() => );
+
+        deltaT = 0;
+        rb.velocity = new Vector3(0f, 0f, 0f);
+
+        
+
+        
+
+        /*frame = 0;                  // Play the attack animation once
         deltaT = 0;
         while (frame < frameLoop)
         {
@@ -656,47 +694,9 @@ public class PlayerAnimatorS : MonoBehaviour
                 dealDamage = true;
             }
             yield return null;
-        }
+        }*/
 
-        // PART 3: Walk back to original position -------------------------------------
-        animationIndex = _WalkRIndex;
-        animationSpeed = _SpedUpAnimationSpeed;
-        frameLoop = 7;
-
-        skullmetMovement.MoveToPoint(skullmetMovement.GetBattleIdlePosition(), .1f);
-
-        frame = 0;
-        while (!skullmetMovement.arrived)                       // Wait until the skullmet gets where it is going
-        {
-            if (frame == 0 || frame == 5)
-            {
-                skullmetMovement.BattleMovementToggle(false);
-            }
-            else if (frame == 2)
-            {
-                skullmetMovement.BattleMovementToggle(true);
-            }
-
-            deltaT += Time.deltaTime;
-            frame = (int)(deltaT * animationSpeed);
-            if (frame >= frameLoop)
-            {
-                deltaT = 0;
-                frame = frameReset;
-            }
-            meshRenderer.material.SetFloat(clipKey, animationIndex);
-            meshRenderer.material.SetFloat(frameKey, frame);
-            yield return null;
-        }
-
-        skullmetMovement.BattleMovementToggle(false);                       // Once we arrive, stop forward motion
-        skullmetMovement.arrived = false;
-        rb.velocity = new Vector3(0f, 0f, 0f);
-
-        // Resume idle
-        skullmetMovement.enabled = false;
-        animationSpeed = _NormalAnimationSpeed;
-        */
+        deltaT = 0;
         activeCoroutine = false;
         yield return null;
     }
