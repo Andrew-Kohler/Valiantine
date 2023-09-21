@@ -381,7 +381,7 @@ public class SkullmetAnimatorS : EnemyAnimatorS
     {
         // Startup stuff
         activeCoroutine = true;
-        animationIndex = _HurtIndex; // The main thing in all of this startup is changing the animation index and frame data
+        animationIndex = _HurtIndex; 
         frameLoop = 10;
         deltaT = 0;
         string clipKey, frameKey;
@@ -394,6 +394,17 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         {
             clipKey = colProperty;
             frameKey = rowProperty;
+        }
+
+        int frame = 0;                  
+        deltaT = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
         }
 
         activeCoroutine = false;
@@ -420,7 +431,17 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             frameKey = rowProperty;
         }
 
-        activeCoroutine = false;
+        int frame = 0;
+        deltaT = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
         yield return null;
     }
 }

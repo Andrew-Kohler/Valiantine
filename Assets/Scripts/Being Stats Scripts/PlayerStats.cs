@@ -14,6 +14,8 @@ public class PlayerStats : Stats
 
     private bool HeartProtectionActive; // Whether or not the Gem of Heart's protection spell is active
 
+    [SerializeField] GameObject dmgNums;
+
     public PlayerStats()
     {
         HP = 15;
@@ -87,6 +89,8 @@ public class PlayerStats : Stats
 
         if(changeVal < 0 && GameManager.Instance.isBattle())  // Animation logic
         {
+            GameObject ouch = Instantiate(dmgNums, this.transform.position, Quaternion.identity);
+            ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, -1);
             if (down)
             {
                 // The game over sequence is Something I Have To Do

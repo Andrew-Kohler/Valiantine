@@ -54,7 +54,7 @@ Material:
     - _Alpha_Value: 0
     - _CurrCol: 0
     - _CurrRow: 0
-    - _QueueControl: 0
+    - _QueueControl: 1
     - _QueueOffset: 0
     m_Colors:
     - _Grid_Size: {r: 13, g: 10, b: 0, a: 0}

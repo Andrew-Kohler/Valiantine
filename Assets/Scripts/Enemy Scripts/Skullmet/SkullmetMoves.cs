@@ -10,7 +10,7 @@ public class SkullmetMoves : EnemyMoves
         moveInProgress = true;                  // Lets other classes know a move is going on (maybe an event is better?)
         enemyAnimatorS.PlayMove1();             // Play the attack animation
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);  // Wait until it is time to deal damage
-        int dmgDealt = enemyStats.CalculateDMG(playerStats.GetATK()); // Calculate damage being dealt (in this case, ATK power is a clean 100%)
+        int dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF()); // Calculate damage being dealt (in this case, ATK power is a clean 100%)
         damagePlayer?.Invoke(-dmgDealt);                              // Send that via an event
 
         // PlayerStats receives the initial event, and then sends an animation event to PlayerAnimatorS once it determines whether Emily lives or dies

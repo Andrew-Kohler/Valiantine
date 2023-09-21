@@ -267,7 +267,7 @@ public class PlayerAnimatorS : MonoBehaviour
     public void PlayAttack(Transform enemyTransform)
     {
         StopAllCoroutines();
-        Vector3 attackPosition = new Vector3(enemyTransform.position.x - 4f, this.GetComponentInParent<Transform>().position.y, enemyTransform.position.z);
+        Vector3 attackPosition = new Vector3(enemyTransform.position.x - 1f, this.GetComponentInParent<Transform>().position.y, enemyTransform.position.z);
         StartCoroutine(DoAttackAnim(attackPosition));
     }
 
@@ -573,7 +573,7 @@ public class PlayerAnimatorS : MonoBehaviour
         yield return null;
     }
 
-    private IEnumerator DoAttackAnim(Vector3 attackPosition)
+    private IEnumerator DoAttackAnim(Vector3 attackPosition) // Coroutine for the attack animation
     {
         // Startup stuff
         activeCoroutine = true;
@@ -592,7 +592,6 @@ public class PlayerAnimatorS : MonoBehaviour
         }
         animationIndex = _AttackIndex;
         playerMovement.SetBattleIdlePosition();
-        Debug.Log(playerMovement.GetBattleIdlePosition());
 
         // Animation content ---------------------------------------------------
         while (frame < 5) // Play the windup animation
@@ -610,10 +609,10 @@ public class PlayerAnimatorS : MonoBehaviour
         playerMovement.MovePlayerToPoint(attackPosition, .1f); // Start the player moving towards the enemy
         yield return new WaitForSeconds(.1f);
         deltaT = 0;
-        while (gameObject.GetComponentInParent<Transform>().position.y > yStop || !playerMovement.GettingClose) //  
+        while (gameObject.GetComponentInParent<Transform>().position.y > yStop) //  
         {
             deltaT += Time.deltaTime;
-            frame = 5 + (int)(deltaT * (animationSpeed));
+            frame = 5 + (int)(deltaT * (2f * animationSpeed));
             if (frame > 6)
             {
                 deltaT = 0;
@@ -633,21 +632,24 @@ public class PlayerAnimatorS : MonoBehaviour
         while (frame < 14)
         {
             deltaT += Time.deltaTime;
-            frame = 7 + (int)(deltaT * (animationSpeed));
+            frame = 7 + (int)(deltaT * (1.5f * animationSpeed));
+            if (frame >= 9)
+            {
+                dealDamage = true;
+            }
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
 
             yield return null;
         }
 
-        Debug.Log(playerMovement.GetBattleIdlePosition());
         playerMovement.MovePlayerToPoint(playerMovement.GetBattleIdlePosition(), .1f); // Start the player moving to their original spot
         yield return new WaitForSeconds(.3f);
         deltaT = 0;
         while (gameObject.GetComponentInParent<Transform>().position.y > yStop) // Play the return flying animation
         {
             deltaT += Time.deltaTime;
-            frame = 14 + (int)(deltaT * (animationSpeed));
+            frame = 14 + (int)(deltaT * (2f * animationSpeed));
             if (frame > 15)
             {
                 deltaT = 0;

@@ -7,6 +7,9 @@ public class EnemyStats : Stats
     [SerializeField] public bool isBattling = false;           // If involved in the battle
     [SerializeField] public bool remainOnPlayerFlight = true; // If this enemy should continue to exist if the player runs from the battle
     [SerializeField] public string enemyName;
+    [SerializeField] GameObject dmgNums;
+
+    EnemyAnimatorS enemyAnimator;
     public EnemyStats()
     {
         HP = 1;
@@ -28,6 +31,11 @@ public class EnemyStats : Stats
         XPMod = 1f;
         down = false;
 
+    }
+
+    private void Start()
+    {
+        enemyAnimator = GetComponentInChildren<EnemyAnimatorS>();
     }
 
     protected override void LVLUp()
@@ -55,6 +63,39 @@ public class EnemyStats : Stats
         {
             MP += 2;
             MaxMP += 2;
+        }
+    }
+
+    public override void SetHP(int changeVal)
+    {
+        HP += changeVal;
+        if (HP > MaxHP)  // Accounts for attempts at healing beyond max, damage beyond min, and revives
+        {
+            HP = MaxHP;
+        }
+        else if (HP <= 0)
+        {
+            HP = 0;
+            down = true;
+        }
+        else if (HP > 0 && down)
+        {
+            down = false;
+        }
+
+        if (changeVal < 0 && GameManager.Instance.isBattle())  // Animation logic
+        {
+            GameObject ouch = Instantiate(dmgNums, this.transform.position, Quaternion.identity);
+            ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, 1);
+            if (down)
+            {
+                enemyAnimator.PlayDie();
+                // The game over sequence is Something I Have To Do
+            }
+            else
+            {
+                enemyAnimator.PlayHurt();
+            }
         }
     }
 

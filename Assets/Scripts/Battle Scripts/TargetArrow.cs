@@ -30,7 +30,6 @@ public class TargetArrow : MonoBehaviour
     void Start()
     {
         activeCoroutine = false;
-        currentPosition = 0;
     }
 
     private void Update()
@@ -60,9 +59,10 @@ public class TargetArrow : MonoBehaviour
 
     // Public methods ----------------------------------------------------------
 
-    public void SetValues(GameObject[] options)
+    public void SetValues(GameObject[] options, int currentPosition)
     {
         this.options = options;
+        this.currentPosition = currentPosition;
     }
 
     // Private methods ----------------------------------------------------------
@@ -77,34 +77,29 @@ public class TargetArrow : MonoBehaviour
         if(currentPosition != 0)    // If we aren't going to negative overflow ourselves
         {
             currentPosition = currentPosition - 1;
+            if (options[currentPosition].GetComponent<Stats>().getDowned())
+            {
+                StartCoroutine(UpCoroutine());
+            }
 
         }
         else    // If we ARE going to negative overflow ourselves
         {
             currentPosition = options.Length - 1;
+            if (options[currentPosition].GetComponent<Stats>().getDowned())
+            {
+                StartCoroutine(UpCoroutine());
+            }
         }
         newPos = new Vector3(options[currentPosition].transform.position.x, options[currentPosition].transform.position.y * 2 + heightAdd, options[currentPosition].transform.position.z);
 
         while (Vector3.Distance(this.transform.position, newPos) > .01)    // Move the indicators towards their positions to make it feel natural
         {
             this.transform.position = Vector3.MoveTowards(this.transform.position, newPos, arrowSpeed * Time.deltaTime);
-            /*indicators[3].transform.rotation = Quaternion.Euler(0f, indicators[3].transform.rotation.y + rotationStep, 0f);
-            rotationStep += rotationSpeed * Time.deltaTime;*/
 
             yield return null;
         }
-
-        /*indicators[0].transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        rotationStep = 0f;*/
-
-        /*if (keepGoingCheck)
-        {
-            StartCoroutine(KeepGoingCheckCoroutine());
-        }
-        else
-        {*/
-            activeCoroutine = false;
-        //}
+        activeCoroutine = false;
 
         yield return null;
     }
@@ -117,11 +112,19 @@ public class TargetArrow : MonoBehaviour
         if (currentPosition != options.Length - 1)    // If we aren't going to overflow ourselves
         {
             currentPosition = currentPosition + 1;
+            if (options[currentPosition].GetComponent<Stats>().getDowned())
+            {
+                StartCoroutine(DownCoroutine());
+            }
 
         }
         else    // If we ARE going to overflow ourselves
         {
             currentPosition = 0;
+            if (options[currentPosition].GetComponent<Stats>().getDowned())
+            {
+                StartCoroutine(DownCoroutine());
+            }
         }
         newPos = new Vector3(options[currentPosition].transform.position.x, options[currentPosition].transform.position.y * 2 + heightAdd, options[currentPosition].transform.position.z);
 
@@ -144,7 +147,6 @@ public class TargetArrow : MonoBehaviour
         else
         {*/
             activeCoroutine = false;
-        //}
 
         yield return null;
     }

@@ -83,6 +83,7 @@ MonoBehaviour:
   isBattling: 1
   remainOnPlayerFlight: 0
   enemyName: Skullmet
+  dmgNums: {fileID: 6470322771213101756, guid: a2d36344f55aacf40be8b212749f9503, type: 3}
 --- !u!114 &8612590016972673803
 MonoBehaviour:
   m_ObjectHideFlags: 0

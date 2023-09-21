@@ -193,7 +193,7 @@ public class BattleManager : MonoBehaviour
                                 {
                                     status = MenuStatus.Attack;
                                     CreateSelectionArrow(); // Create the arrow for picking your fight
-                                    enemySelectArrow.GetComponent<TargetArrow>().SetValues(battlingEnemies);
+
                                     StartCoroutine(indAction.DoFlashOut(false));
                                 }
                                 else if (indAction.GetLeadBox() == "SPL")
@@ -254,7 +254,14 @@ public class BattleManager : MonoBehaviour
                 }
                 else // If the one who's turn it is is dead
                 {
-                   // Advance the turn count I guess 
+                    if (currentTurn != turnArray.Length - 1) // Advance the turn
+                    {
+                        currentTurn++;
+                    }
+                    else
+                    {
+                        currentTurn = 0;
+                    }
                 }
 
             } // End of primary turn loop
@@ -404,9 +411,6 @@ public class BattleManager : MonoBehaviour
         {
             Debug.Log("Player is left of the enemy");
             playerRb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
-            //playerRb.velocity = new Vector3(-10f, 3f, 0f);
-            //playerRb.velocity = Vector3.zero;
-            //playerRb.AddForce(new Vector3(-10f, 3f, 0f), ForceMode.VelocityChange);
             PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleEnter();
 
             if (battlingEnemies.Length == 1)
@@ -442,7 +446,20 @@ public class BattleManager : MonoBehaviour
 
     private void CreateSelectionArrow() // Creates an arrow to let the player select which enemy to attack
     {
-        enemySelectArrow = Instantiate((GameObject)Resources.Load("Target Arrow"), new Vector3(battlingEnemies[0].transform.position.x, battlingEnemies[0].transform.position.y * 2 + .7f, battlingEnemies[0].transform.position.z), Quaternion.identity);
+        int enemyNum = 0;
+        if (battlingEnemies[0].GetComponent<Stats>().getDowned()) // This works because the player will never be able to attempt a bad selection after they kill the last enemy
+        {
+            if (battlingEnemies[1].GetComponent<Stats>().getDowned())
+            {
+                enemyNum = 2;
+            }
+            else
+            {
+                enemyNum = 1;
+            }
+        }
+        enemySelectArrow = Instantiate((GameObject)Resources.Load("Target Arrow"), new Vector3(battlingEnemies[enemyNum].transform.position.x, battlingEnemies[enemyNum].transform.position.y * 2 + .7f, battlingEnemies[enemyNum].transform.position.z), Quaternion.identity);
+        enemySelectArrow.GetComponent<TargetArrow>().SetValues(battlingEnemies, enemyNum);
     }
 
     private void DestroySelectionArrow() // Destroys said arrow
@@ -486,24 +503,18 @@ public class BattleManager : MonoBehaviour
         // TODO
         // The text box fades out and the HP/MP bar lowers, letting us get a better look at the action
 
-        // (Within a script for the player with a callable method)
-        // The player performs the motions associated with attacking
-        // The player performs the animations associated with attacking
         playerMoves.Attack(targetedEnemy);
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<PlayerMoves>().moveInProgress == false);
 
-        // (Within a script for the enemy with a callable method)
-        // The enemy takes damage (in code)
-        // The enemy's hurt animation plays in tandem with the player's attack animation
-        // Damage numbers fly off of the enemy when they are hit
         // The enemy is capable of dying (destroyed when HP = 0)
-        // The enemy dies STYLISHLY (out in a flash of white)
         // Right before they die, they pass a piece of data letting us know they died
 
         // The text box returns as the HP/MP bar comes back up
         // Is anyone still alive? 
         // If yes, advance the turn
-        // If no, we win! Do that.
+        // If no, we win! Enemies are faded out and destroyed, we get XP, all that jazz.
+
+        yield return new WaitForSeconds(.5f);
 
         if (currentTurn != turnArray.Length - 1) // Advance the turn
         {
