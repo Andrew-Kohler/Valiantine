@@ -14,7 +14,7 @@ public class EnemyMoves : MonoBehaviour
 
     public bool moveInProgress; // Allows us to halt the battle manager until a move is done
 
-    public delegate void DamagePlayer(int dmgTaken);
+    public delegate void DamagePlayer(int dmgTaken, bool crit);
     public static event DamagePlayer damagePlayer;
 
     protected void Start()

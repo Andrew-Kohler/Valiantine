@@ -73,7 +73,7 @@ public class GemSystem : MonoBehaviour
 
         if (playerStats.GetHP() > playerStats.GetMaxHP())   // Lowers HP and MP if maxes are lowered beyond previous full
         {
-            playerStats.SetHP(-(playerStats.GetHP() - playerStats.GetMaxHP()));
+            playerStats.SetHP(-(playerStats.GetHP() - playerStats.GetMaxHP()), false);
         }
         if (playerStats.GetMP() > playerStats.GetMaxMP())
         {

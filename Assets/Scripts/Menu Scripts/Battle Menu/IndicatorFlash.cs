@@ -58,7 +58,6 @@ public class IndicatorFlash : Indicator
             
             yield return null;
         }
-        Debug.Log("We're done, boss");
         yield return null;
     }
 
@@ -73,7 +72,6 @@ public class IndicatorFlash : Indicator
             
             yield return null;
         }
-        Debug.Log("Really, we are");
         yield return null;
     }
 }

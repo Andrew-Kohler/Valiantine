@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PlayerStats : Stats
@@ -64,7 +65,7 @@ public class PlayerStats : Stats
         animator = GetComponentInChildren<PlayerAnimatorS>();
     }
 
-    public override void SetHP(int changeVal)
+    public override void SetHP(int changeVal, bool crit)
     {
         if(changeVal < 0 && HeartProtectionActive) // If we cast the Gem of Heart's spell, we reap its benefit on the next damaging hit
         {
@@ -90,7 +91,7 @@ public class PlayerStats : Stats
         if(changeVal < 0 && GameManager.Instance.isBattle())  // Animation logic
         {
             GameObject ouch = Instantiate(dmgNums, this.transform.position, Quaternion.identity);
-            ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, -1);
+            ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, -1, crit);
             if (down)
             {
                 // The game over sequence is Something I Have To Do
@@ -154,7 +155,7 @@ public class PlayerStats : Stats
 
     protected override void LVLUp() // Adds all the basic stats for levelling up
     {
-        int dont = Random.Range(1, 6);  // Randomly choose which stat to not level
+        int dont = UnityEngine.Random.Range(1, 6);  // Randomly choose which stat to not level
         if (dont != 1){
             ATK += 1;
         }
@@ -219,5 +220,22 @@ public class PlayerStats : Stats
 
         // Give an EXTRA extra bonus based on player choice and averages
         // Which, uh, involves some selection and UI stuff that qualifies for a different method. Future Andrew <3
+    }
+
+    public override bool GetCrit()
+    {
+        bool crit = false;
+        int max = 101;
+        if (DateTime.Now.Month == 2 && DateTime.Now.Day == 14) // If it is Valentine's Day, the player crit chances are x2
+        {
+            max = 51;
+        }
+
+        if (UnityEngine.Random.Range(1, max) == 1)
+        {
+            crit = true;
+        }
+
+        return crit;
     }
 }

@@ -11,9 +11,15 @@ public class SkullmetMoves : EnemyMoves
         enemyAnimatorS.PlayMove1();             // Play the attack animation
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);  // Wait until it is time to deal damage
         int dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF()); // Calculate damage being dealt (in this case, ATK power is a clean 100%)
-        damagePlayer?.Invoke(-dmgDealt);                              // Send that via an event
-
-        // PlayerStats receives the initial event, and then sends an animation event to PlayerAnimatorS once it determines whether Emily lives or dies
+        if (enemyStats.GetCrit())
+        {
+            damagePlayer?.Invoke(-dmgDealt * 2, true);                              // Send that via an event
+        }
+        else
+        {
+            damagePlayer?.Invoke(-dmgDealt, false);      // PlayerStats receives the initial event, and then sends an animation event to PlayerAnimatorS
+                                                  // once it determines whether Emily lives or dies                        
+        }
 
         yield return new WaitUntil(()=> enemyAnimatorS.activeCoroutine == false);   // Wait out the rest of the animation
         moveInProgress = false;                 // Lets other classes know the move is done (maybe an event is better?)

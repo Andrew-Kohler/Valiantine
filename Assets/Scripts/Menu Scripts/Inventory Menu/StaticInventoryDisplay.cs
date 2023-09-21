@@ -130,7 +130,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
                     if (slots[selectedSlot].AssignedInventorySlot.Data.Consumable) // If the item is consumable, we want to (a) carry out its effects and (b) remove it from the inventory
                     {
                         // (a) carry out effects
-                        PlayerManager.Instance.PlayerStats().SetHP(slots[selectedSlot].AssignedInventorySlot.Data.HPRestore);
+                        PlayerManager.Instance.PlayerStats().SetHP(slots[selectedSlot].AssignedInventorySlot.Data.HPRestore, false);
                         if (slots[selectedSlot].AssignedInventorySlot.Data.HPRestore > 0)
                         {
                             onHealthPotDrink?.Invoke();

@@ -21,7 +21,7 @@ public class SaveStatueInteractable : Interactable
     {
         usePrompt.GetComponent<UsePrompt>().FadeOut(); // Fades out the little indicator
 
-        PlayerManager.Instance.PlayerStats().SetHP(999); // Heal the player
+        PlayerManager.Instance.PlayerStats().SetHP(999, false); // Heal the player
         PlayerManager.Instance.PlayerStats().SetMP(999);
 
         // Start the text readout

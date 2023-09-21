@@ -444,4 +444,41 @@ public class SkullmetAnimatorS : EnemyAnimatorS
 
         yield return null;
     }
+
+    protected override IEnumerator DoDieReverseAnim()
+    {
+        // Startup stuff
+        activeCoroutine = true;
+        animationIndex = _DieIndex; // The main thing in all of this startup is changing the animation index and frame data
+        frameLoop = 12;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+
+        int frame = 11;
+        deltaT = 0;
+        while (frame >= 0)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 11 - (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        frameLoop = 13;
+        animationSpeed = _NormalAnimationSpeed;
+        animationIndex = _IdleIndex;
+        activeCoroutine = false;
+        yield return null;
+    }
 }

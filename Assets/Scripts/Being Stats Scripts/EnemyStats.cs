@@ -66,7 +66,7 @@ public class EnemyStats : Stats
         }
     }
 
-    public override void SetHP(int changeVal)
+    public override void SetHP(int changeVal, bool crit)
     {
         HP += changeVal;
         if (HP > MaxHP)  // Accounts for attempts at healing beyond max, damage beyond min, and revives
@@ -86,7 +86,7 @@ public class EnemyStats : Stats
         if (changeVal < 0 && GameManager.Instance.isBattle())  // Animation logic
         {
             GameObject ouch = Instantiate(dmgNums, this.transform.position, Quaternion.identity);
-            ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, 1);
+            ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, 1, crit);
             if (down)
             {
                 enemyAnimator.PlayDie();
@@ -96,6 +96,16 @@ public class EnemyStats : Stats
             {
                 enemyAnimator.PlayHurt();
             }
+        }
+    }
+
+    public void Resurrect() // Used on a parent enemy at the end of a battle if the player runs away
+    {
+        HP = MaxHP;
+        if (down)
+        {
+            down = false;
+            enemyAnimator.PlayDieReverse();
         }
     }
 

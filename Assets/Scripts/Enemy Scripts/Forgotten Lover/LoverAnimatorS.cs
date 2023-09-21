@@ -188,13 +188,15 @@ public class LoverAnimatorS : EnemyAnimatorS
         float yStop = gameObject.GetComponentInParent<Transform>().position.y;
         int frame = 0;// (int)(deltaT * animationSpeed);
 
+       
+
         // Play the startup animation
         while (frame < 4)
         {
             deltaT += Time.deltaTime;
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
-            frame = (int)(deltaT * (2f * animationSpeed));
+            frame = (int)(deltaT * (4f * animationSpeed));
             yield return null;
         }
 

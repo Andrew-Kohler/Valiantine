@@ -59,6 +59,11 @@ public class EnemyAnimatorS : MonoBehaviour
         StartCoroutine(DoDieAnim());
     }
 
+    public void PlayDieReverse()
+    {
+        StartCoroutine(DoDieReverseAnim());
+    }
+
     // Coroutines --------------------------------------------------------------
     // Entering the battle
     protected virtual IEnumerator DoBattleEnterAnim(int position)
@@ -96,6 +101,11 @@ public class EnemyAnimatorS : MonoBehaviour
         yield return null;
     }
     protected virtual IEnumerator DoDieAnim()
+    {
+        yield return null;
+    }
+
+    protected virtual IEnumerator DoDieReverseAnim()
     {
         yield return null;
     }

@@ -10,12 +10,22 @@ using UnityEngine;
 
 public class BattleStart : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    //[SerializeField] GameObject enemyProper;
+    /*private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
             GameManager.Instance.Battle(true);  // We are now in battle, and pass along the enemy to BattleManager
             BattleManager.Instance.SetTarget(collision.gameObject);
         }  
+    }*/
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            GameManager.Instance.Battle(true);  // We are now in battle, and pass along the enemy to BattleManager
+            BattleManager.Instance.SetTarget(this.gameObject);
+        }
     }
 }

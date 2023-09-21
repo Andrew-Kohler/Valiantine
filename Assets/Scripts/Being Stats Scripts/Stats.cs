@@ -39,7 +39,7 @@ public abstract class Stats : MonoBehaviour
         return HP;
     }
 
-    public virtual void SetHP(int changeVal)
+    public virtual void SetHP(int changeVal, bool crit)
     {
         HP += changeVal;
         if(HP > MaxHP)  // Accounts for attempts at healing beyond max, damage beyond min, and revives
@@ -199,6 +199,18 @@ public abstract class Stats : MonoBehaviour
             dmgDone = 1;
         }
         return dmgDone;
+    }
+
+    public virtual bool GetCrit()
+    {
+        bool crit = false;
+        int max = 101;
+        if (Random.Range(1, max) == 1)
+        {
+            crit = true;
+        }
+
+        return crit;
     }
 
     public bool getDowned()

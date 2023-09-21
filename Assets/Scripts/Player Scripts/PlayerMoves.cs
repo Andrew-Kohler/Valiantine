@@ -33,7 +33,15 @@ public class PlayerMoves : MonoBehaviour
         yield return new WaitUntil(() => animator.dealDamage);  // Wait until it is time to deal damage
 
         int dmgDealt = stats.CalculateDMG(enemy.GetComponent<EnemyStats>().GetDEF()); // Calculate damage being dealt 
-        enemy.GetComponent<EnemyStats>().SetHP(-dmgDealt);
+        if (stats.GetCrit())
+        {
+            enemy.GetComponent<EnemyStats>().SetHP(-dmgDealt * 2, true);
+        }
+        else
+        {
+            enemy.GetComponent<EnemyStats>().SetHP(-dmgDealt, false);
+        }
+        
 
         yield return new WaitUntil(() => animator.activeCoroutine == false);   // Wait out the rest of the animation
 

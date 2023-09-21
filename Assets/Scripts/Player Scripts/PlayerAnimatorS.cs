@@ -534,7 +534,7 @@ public class PlayerAnimatorS : MonoBehaviour
             deltaT += Time.deltaTime;
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
-            frame = (int)(deltaT * (2f * animationSpeed));
+            frame = (int)(deltaT * (4f * animationSpeed));
             yield return null;
         }
 

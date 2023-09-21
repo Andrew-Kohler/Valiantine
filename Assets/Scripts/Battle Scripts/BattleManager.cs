@@ -358,6 +358,8 @@ public class BattleManager : MonoBehaviour
     private void currentEnemyReenable()
     {
         mainEnemyMovement.enabled = true;
+        
+        
     }
 
     private void allEnemyReenable(GameObject visible)
@@ -506,9 +508,6 @@ public class BattleManager : MonoBehaviour
         playerMoves.Attack(targetedEnemy);
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<PlayerMoves>().moveInProgress == false);
 
-        // The enemy is capable of dying (destroyed when HP = 0)
-        // Right before they die, they pass a piece of data letting us know they died
-
         // The text box returns as the HP/MP bar comes back up
         // Is anyone still alive? 
         // If yes, advance the turn
@@ -570,6 +569,7 @@ public class BattleManager : MonoBehaviour
     IEnumerator DoBattleRun()
     {
         activeCoroutine = true;
+        enemyStats.Resurrect();
 
         yield return new WaitForSeconds(2f);                // Wait so the player can read the text box
         battleUI.GetComponent<FadeUI>().UIFadeOut();

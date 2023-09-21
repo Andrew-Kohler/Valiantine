@@ -19,20 +19,36 @@ public class DamageNumbers : MonoBehaviour
 		StartCoroutine(Duration());
 	}
 
-	public DamageNumbers(float duration, int numberValue, int xSign)
+	public DamageNumbers(float duration, int numberValue, int xSign, bool crit)
 	{
 		this.duration = duration;
 		nums.text = numberValue.ToString();
 		backer.text = numberValue.ToString();
 		this.xSign = xSign;
+        if (crit)
+        {
+			nums.color = Color.red;
+        }
+		else
+		{
+			nums.color = Color.white;
+		}
 	}
 
-	public void SetValues(float duration, int numberValue, int xSign)
+	public void SetValues(float duration, int numberValue, int xSign, bool crit)
 	{
 		this.duration = duration;
 		nums.text = numberValue.ToString();
 		backer.text = numberValue.ToString();
 		this.xSign = xSign;
+		if (crit)
+		{
+			nums.color = Color.red;
+		}
+        else
+        {
+			nums.color = Color.white;
+        }
 	}
 
 	IEnumerator Duration()

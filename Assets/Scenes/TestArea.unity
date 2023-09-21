@@ -5418,6 +5418,7 @@ GameObject:
   - component: {fileID: 443298026}
   - component: {fileID: 443298025}
   - component: {fileID: 443298030}
+  - component: {fileID: 443298031}
   m_Layer: 6
   m_Name: Skullmet Enemy
   m_TagString: Enemy
@@ -5433,7 +5434,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 443298021}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 2.19, y: -0.27, z: 2.96}
+  m_LocalPosition: {x: 1.2200012, y: -0.26999998, z: 3.7200003}
   m_LocalScale: {x: 1.200001, y: 1, z: 1.2000005}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5487,8 +5488,8 @@ MonoBehaviour:
   additionalEnemies:
   - {fileID: 2986665773169648867, guid: 20f307f85459142409c37ac8e71d3a9b, type: 3}
   - {fileID: 2986665773169648867, guid: 20f307f85459142409c37ac8e71d3a9b, type: 3}
-  lowerLVLBound: 2
-  upperLVLBound: 5
+  lowerLVLBound: 1
+  upperLVLBound: 2
   additionalEnemyLevels: 
   spawnpoint: {fileID: 443298022}
 --- !u!114 &443298026
@@ -5571,6 +5572,18 @@ MonoBehaviour:
   Move3LVLCap: 5
   Move4LVLCap: 7
   moveInProgress: 0
+--- !u!114 &443298031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 443298021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cede9a1520bb1104a9a3349dc7b399b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &461235433
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10478,12 +10491,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 480842162}
   m_LocalRotation: {x: 0.01262282, y: -0.05107514, z: -0.00052866543, w: 0.9986149}
-  m_LocalPosition: {x: 16.47, y: 6.9, z: -1.2}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 26
+  m_Father: {fileID: 1974885569}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 1.442, y: -5.857, z: -0.134}
 --- !u!1 &488355264
 GameObject:
@@ -20270,13 +20283,12 @@ GameObject:
   - component: {fileID: 908275612}
   - component: {fileID: 908275609}
   - component: {fileID: 908275608}
-  - component: {fileID: 908275605}
   - component: {fileID: 908275610}
   - component: {fileID: 908275611}
   - component: {fileID: 908275613}
   - component: {fileID: 908275614}
   - component: {fileID: 908275615}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -20298,6 +20310,7 @@ Transform:
   - {fileID: 1310906394}
   - {fileID: 679152182}
   - {fileID: 1950711780}
+  - {fileID: 2091568954}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 90, y: 179.416, z: -0.584}
@@ -20367,18 +20380,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 908275599}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &908275605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 908275599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cede9a1520bb1104a9a3349dc7b399b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &908275608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23844,6 +23845,7 @@ GameObject:
   - component: {fileID: 1239845590}
   - component: {fileID: 1239845595}
   - component: {fileID: 1239845598}
+  - component: {fileID: 1239845599}
   m_Layer: 6
   m_Name: Petal Golem
   m_TagString: Enemy
@@ -23954,8 +23956,8 @@ MonoBehaviour:
   spawn: 0
   numberToSpawn: 0
   additionalEnemies: []
-  lowerLVLBound: 0
-  upperLVLBound: 0
+  lowerLVLBound: 1
+  upperLVLBound: 2
   additionalEnemyLevels: 
   spawnpoint: {fileID: 1239845589}
 --- !u!114 &1239845597
@@ -23992,6 +23994,18 @@ MonoBehaviour:
   Move3LVLCap: 3
   Move4LVLCap: 4
   moveInProgress: 0
+--- !u!114 &1239845599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1239845588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cede9a1520bb1104a9a3349dc7b399b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1240425166
 GameObject:
   m_ObjectHideFlags: 0
@@ -42269,13 +42283,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1651798287}
-  m_LocalRotation: {x: -0.19516507, y: 0.6603223, z: 0.18370202, w: 0.70152605}
-  m_LocalPosition: {x: 14.93, y: 9.6, z: -1.15}
+  m_LocalRotation: {x: -0.19516504, y: 0.66032225, z: 0.183702, w: 0.701526}
+  m_LocalPosition: {x: -1.539999, y: 2.7000003, z: 0.05000007}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 25
+  m_Father: {fileID: 1974885569}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -31.093, y: 86.534, z: 0}
 --- !u!1 &1656825465
 GameObject:
@@ -43035,6 +43049,7 @@ GameObject:
   - component: {fileID: 1720770011}
   - component: {fileID: 1720770008}
   - component: {fileID: 1720770004}
+  - component: {fileID: 1720770012}
   m_Layer: 6
   m_Name: Forgotten Lover
   m_TagString: Enemy
@@ -43165,6 +43180,18 @@ MonoBehaviour:
   upperLVLBound: 0
   additionalEnemyLevels: 
   spawnpoint: {fileID: 0}
+--- !u!114 &1720770012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720770003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cede9a1520bb1104a9a3349dc7b399b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1721028939
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -64962,6 +64989,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1970713014}
   m_CullTransparentMesh: 1
+--- !u!1 &1974885568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1974885569}
+  m_Layer: 0
+  m_Name: God Ray Effect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1974885569
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974885568}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.47, y: 6.9, z: -1.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1651798290}
+  - {fileID: 480842165}
+  m_Father: {fileID: 0}
+  m_RootOrder: 25
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1975894557 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -7610117457777720033, guid: f862891d83920134da5b0150d1475bfe, type: 3}
@@ -65732,6 +65792,51 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!1 &2091568953
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2091568954}
+  - component: {fileID: 2091568955}
+  m_Layer: 0
+  m_Name: Enemy Trigger
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2091568954
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091568953}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 908275600}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2091568955
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091568953}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 7.9514985, y: 1, z: 9.993273}
+  m_Center: {x: 0.20714611, y: 3.662004e-15, z: 0.33050805}
 --- !u!1 &2097296337
 GameObject:
   m_ObjectHideFlags: 0
