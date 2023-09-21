@@ -49,15 +49,16 @@ public class IndicatorFlash : Indicator
         alpha = 1;
         while (alpha > 0)
         {
+            alpha -= alphaStep * Time.deltaTime;
             for (int i = j; i < 4; i++)  // Set these to 1f
             {
                 indicators[i].GetComponent<SpriteRenderer>().color = new Color(indicators[i].GetComponent<SpriteRenderer>().color.r, indicators[i].GetComponent<SpriteRenderer>().color.g, indicators[i].GetComponent<SpriteRenderer>().color.b, alpha);
                 //sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             }
-            alpha -= alphaStep * Time.deltaTime;
+            
             yield return null;
         }
-
+        Debug.Log("We're done, boss");
         yield return null;
     }
 
@@ -66,12 +67,13 @@ public class IndicatorFlash : Indicator
         alpha = 1;
         while (alpha > 0)
         {
-           indicators[0].GetComponent<SpriteRenderer>().color = new Color(indicators[0].GetComponent<SpriteRenderer>().color.r, indicators[0].GetComponent<SpriteRenderer>().color.g, indicators[0].GetComponent<SpriteRenderer>().color.b, alpha);
-                //sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
             alpha -= alphaStep * Time.deltaTime;
+            indicators[0].GetComponent<SpriteRenderer>().color = new Color(indicators[0].GetComponent<SpriteRenderer>().color.r, indicators[0].GetComponent<SpriteRenderer>().color.g, indicators[0].GetComponent<SpriteRenderer>().color.b, alpha);
+                //sr[i].color = new Color(sr[i].color.r, sr[i].color.g, sr[i].color.b, alpha);
+            
             yield return null;
         }
-
+        Debug.Log("Really, we are");
         yield return null;
     }
 }
