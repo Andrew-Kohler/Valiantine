@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class TargetArrow : MonoBehaviour
 {
-    // Ok, oy vey, whadda I gotta feed this thing
-    // The enemy array, so that it can get their positions, yes yes
-
-    // Have it spawn over the 0 position in the array? No, b/c I gotta spawn it and then feed it stuff
-    // Oh, lol, just feed the instantiate command the correct spawn point, lol
-
     // This combines everything I've learned up to this point, aside from a vastly complex inventory and stats system
     // And view managing and scene loading
     // It's very cool in that way
@@ -17,6 +11,7 @@ public class TargetArrow : MonoBehaviour
     [SerializeField] private float arrowSpeed = 2f; // How fast the arrow moves
     //[SerializeField] private float delay = 2f;      // How long we hold before the arrow gets to go willy nilly if the player is holding an input
     [SerializeField] private float heightAdd = .7f;   // How high above the enemy the arrow is
+    [SerializeField] private float rotationSpeed = .5f;
 
     private GameObject[] options;   // The things we are choosing between
 
@@ -24,6 +19,7 @@ public class TargetArrow : MonoBehaviour
     private int currentPosition;
     private bool activeCoroutine;
     private bool keepGoingCheck;
+    float rotationStep = 0f;
 
 
     // Start is called before the first frame update
@@ -38,6 +34,12 @@ public class TargetArrow : MonoBehaviour
 
         if (GameManager.Instance.isBattle() && !activeCoroutine)
         {
+            this.transform.rotation = Quaternion.Euler(0f, this.transform.rotation.y + rotationStep, 0f);
+            rotationStep += rotationSpeed * Time.deltaTime;
+            if(rotationStep > 360)
+            {
+                rotationStep = 0f;
+            }
             if (Input.GetButtonDown("Inventory Up")) // Indicates an upward movement
             {
                 StartCoroutine(UpCoroutine());
@@ -104,7 +106,7 @@ public class TargetArrow : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator DownCoroutine() // The timed sequence which rotates the indicators a quarter-circle right
+    IEnumerator DownCoroutine() 
     {
         activeCoroutine = true;
 
@@ -131,22 +133,14 @@ public class TargetArrow : MonoBehaviour
         while (Vector3.Distance(this.transform.position, newPos) > .01)    // Move the indicators towards their positions to make it feel natural
         {
             this.transform.position = Vector3.MoveTowards(this.transform.position, newPos, arrowSpeed * Time.deltaTime);
-            /*indicators[3].transform.rotation = Quaternion.Euler(0f, indicators[3].transform.rotation.y + rotationStep, 0f);
-            rotationStep += rotationSpeed * Time.deltaTime;*/
 
             yield return null;
         }
 
-        /*indicators[0].transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        rotationStep = 0f;*/
+        this.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        rotationStep = 0f;
 
-        /*if (keepGoingCheck)
-        {
-            StartCoroutine(KeepGoingCheckCoroutine());
-        }
-        else
-        {*/
-            activeCoroutine = false;
+        activeCoroutine = false;
 
         yield return null;
     }
