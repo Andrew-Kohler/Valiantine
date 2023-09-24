@@ -62,6 +62,7 @@ public class PlayerAnimatorS : MonoBehaviour
     private void OnEnable()
     {
         GameManager.onSaveStatueStateChange += faceAway;
+        GameManager.onGateStateChange += faceAway;
         ChestInteractable.onChestInteract += faceAway;
         ChestAnimatorS.onChestOpen += PlayItemGet1;
 
@@ -74,6 +75,7 @@ public class PlayerAnimatorS : MonoBehaviour
     private void OnDisable()
     {
         GameManager.onSaveStatueStateChange -= faceAway;
+        GameManager.onGateStateChange -= faceAway;
         ChestInteractable.onChestInteract -= faceAway;
         ChestAnimatorS.onChestOpen -= PlayItemGet1;
 
@@ -258,16 +260,16 @@ public class PlayerAnimatorS : MonoBehaviour
         }
     }
 
-    public void PlayBattleEnter()
+    public void PlayBattleEnter(bool leftOfEnemy)
     {
         StopAllCoroutines();
-        StartCoroutine(DoBattleEnterAnim());
+        StartCoroutine(DoBattleEnterAnim(leftOfEnemy));
     }
 
     public void PlayAttack(Transform enemyTransform)
     {
         StopAllCoroutines();
-        Vector3 attackPosition = new Vector3(enemyTransform.position.x - 1f, this.GetComponentInParent<Transform>().position.y, enemyTransform.position.z);
+        Vector3 attackPosition = new Vector3(enemyTransform.position.x - 1f, GetComponentInParent<Transform>().position.y, enemyTransform.position.z);
         StartCoroutine(DoAttackAnim(attackPosition));
     }
 
@@ -315,9 +317,15 @@ public class PlayerAnimatorS : MonoBehaviour
 
     private void faceAway() // Faces the player in their idle stance away from the camera
     {
-        direction = 2;
-        animationIndex = _ActiveIdleBackwardsIndex;
-        GameManager.onChestStateChange -= faceAway; // Prevents from turning back around on next state change; will probably change 
+        if (!activeCoroutine)
+        {
+            direction = 2;
+            animationIndex = _ActiveIdleBackwardsIndex;
+            animationSpeed = 5.4f;
+            frameLoop = 5;
+        }
+        
+        //GameManager.onChestStateChange -= faceAway; // Prevents from turning back around on next state change; will probably change 
     }
 
     // Coroutines ------------------------------------------------------------
@@ -457,10 +465,11 @@ public class PlayerAnimatorS : MonoBehaviour
         frameLoop = 8;
         while (frame < frameLoop)
         {
-            deltaT += Time.deltaTime;
+            
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * animationSpeed);
+            deltaT += Time.deltaTime;
             yield return null;
         }
 
@@ -471,6 +480,7 @@ public class PlayerAnimatorS : MonoBehaviour
     {
         // Lower your arms and set the direction, index, and frame appropriately
         activeCoroutine = true;
+        
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
@@ -486,10 +496,11 @@ public class PlayerAnimatorS : MonoBehaviour
         frameLoop = 10;
         while (frame < frameLoop)
         {
-            deltaT += Time.deltaTime;
+            
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = 7 + (int)(deltaT * animationSpeed);
+            deltaT += Time.deltaTime;
             yield return null;
         }
 
@@ -499,10 +510,11 @@ public class PlayerAnimatorS : MonoBehaviour
         
         //deltaT = 0;
         activeCoroutine = false;
+        GameManager.Instance.Animating(false) ;
         yield return null;
     }
 
-    private IEnumerator DoBattleEnterAnim()
+    private IEnumerator DoBattleEnterAnim(bool leftOfEnemy)
     {
         // Setup ----------------------------------------------
         activeCoroutine = true;
@@ -538,7 +550,10 @@ public class PlayerAnimatorS : MonoBehaviour
             yield return null;
         }
 
-        rb.AddForce(new Vector3(-10f, 3f, 0f), ForceMode.VelocityChange);
+        if(leftOfEnemy)
+            rb.AddForce(new Vector3(-10f, 3f, 0f), ForceMode.VelocityChange);
+        else
+            rb.AddForce(new Vector3(-13f, 3f, 0f), ForceMode.VelocityChange);
 
         // Play the in-air animation
         yield return new WaitForSeconds(.1f);

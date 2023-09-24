@@ -62,6 +62,7 @@ public class PlayerStats : Stats
 
     private void Start()
     {
+        base.Start();
         animator = GetComponentInChildren<PlayerAnimatorS>();
     }
 
@@ -90,7 +91,7 @@ public class PlayerStats : Stats
 
         if(changeVal < 0 && GameManager.Instance.isBattle())  // Animation logic
         {
-            GameObject ouch = Instantiate(dmgNums, this.transform.position, Quaternion.identity);
+            GameObject ouch = Instantiate(dmgNums, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - .02f), Quaternion.identity);
             ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, -1, crit);
             if (down)
             {

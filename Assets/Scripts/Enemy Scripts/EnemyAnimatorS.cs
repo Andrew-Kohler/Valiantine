@@ -24,9 +24,9 @@ public class EnemyAnimatorS : MonoBehaviour
     public bool dealDamage = false;         // A boolean flipped on and off to indicate when in the animation damage should be dealt to the player to keep things lined up
 
     // Public methods ---------------------------------------------------------
-    public void PlayBattleEntrance(int position)        // Position docs:   5 = Furthest back (3 enemy battle)
+    public void PlayBattleEntrance(int position, bool playerFromLeft)        // Position docs:   5 = Furthest back (3 enemy battle)
     {                                                                   //  4 = Less far back (2 enemy battle)
-        StartCoroutine(DoBattleEnterAnim(position));                    //  3 = Straight (1, 3 enemy battle)
+        StartCoroutine(DoBattleEnterAnim(position, playerFromLeft));                    //  3 = Straight (1, 3 enemy battle)
     }                                                                   //  2 = A bit forward (2 enemy battle)       
                                                                         //  1 = Very forward (3 enemy battle)   
     public void PlayMove1()
@@ -66,7 +66,7 @@ public class EnemyAnimatorS : MonoBehaviour
 
     // Coroutines --------------------------------------------------------------
     // Entering the battle
-    protected virtual IEnumerator DoBattleEnterAnim(int position)
+    protected virtual IEnumerator DoBattleEnterAnim(int position, bool playerFromLeft)
     {
         yield return null;
     }

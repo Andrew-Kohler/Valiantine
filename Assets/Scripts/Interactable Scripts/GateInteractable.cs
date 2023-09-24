@@ -35,7 +35,7 @@ public class GateInteractable : Interactable
     private void GateCheck()
     {
         if(validInteraction && validKey)
-        StartCoroutine(DoGateOpen()); // Add redundancy so that this only happens when the gate is actually checked
+            StartCoroutine(DoGateOpen()); // Add redundancy so that this only happens when the gate is actually checked
     }
 
     protected override IEnumerator DoInteraction()

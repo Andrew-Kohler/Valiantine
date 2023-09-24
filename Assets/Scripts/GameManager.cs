@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     private bool _isTransition; // Are we in a scene transition?
     private bool _isInteraction;// Are we in some kind of dialogue interaction (opening a chest, healing at a statue)?
     private bool _isBattle;     // Are we in a battle?
+    private bool _isAnimating;  // Specifically for if we want to freeze player motion for a cutscene moment
     [SerializeField] private bool _isWindy;      // ...Is it windy
     // Other potential states of interest
     // isMainMenu
@@ -37,6 +38,8 @@ public class GameManager : MonoBehaviour
     public static event OnSavePointStateChange onSavePointStateChange;
     public delegate void OnChestStateChange();
     public static event OnChestStateChange onChestStateChange;
+    public delegate void OnGateStateChange();
+    public static event OnGateStateChange onGateStateChange;
 
     public delegate void OnWindStateChange();
     public static event OnWindStateChange onWindStateChange;
@@ -116,6 +119,15 @@ public class GameManager : MonoBehaviour
         return _isSettings;
     }
 
+    public void Animating(bool flag) // Setter and getter for state of player being in the settings menu
+    {
+        _isAnimating = flag;
+    }
+    public bool isAnimating()
+    {
+        return _isAnimating;
+    }
+
     public void Interaction(bool flag)
     { 
         bool former = _isInteraction;
@@ -131,6 +143,10 @@ public class GameManager : MonoBehaviour
         if (currentInteractable.CompareTag("Chest") && flag != former)
         {
             onChestStateChange?.Invoke();
+        }
+        if (currentInteractable.CompareTag("Gate") && flag != former)
+        {
+            onGateStateChange?.Invoke();
         }
         if (currentInteractable.CompareTag("Save Point") && flag != former)
         {
@@ -213,7 +229,7 @@ public class GameManager : MonoBehaviour
 
     public bool canMove()   // If we can move, nothing else should be going on
     {
-        return !_isGameOver && !_isInventory && !_isSettings && !_isBattle && !_isTransition && !_isInteraction;
+        return !_isGameOver && !_isInventory && !_isSettings && !_isBattle && !_isTransition && !_isInteraction && !_isAnimating;
     }
 
     public bool enemyCanMove()
@@ -232,9 +248,9 @@ public class GameManager : MonoBehaviour
     {
         activeCoroutine = true;
         // Generate a random number for the wind to NOT play
-        float downtime = 10f;//Random.Range(30f, 75f);
+        float downtime = Random.Range(30f, 75f);
         // Generate a random number for the wind to play for
-        float uptime = 10f;//Random.Range(5f, 17f);
+        float uptime = Random.Range(15f, 23f);
 
         // Let the wind not play for a while
         yield return new WaitForSeconds(downtime);

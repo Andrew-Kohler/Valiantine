@@ -9,6 +9,7 @@ TagManager:
   - Save Statue
   - Chest
   - Save Point
+  - Gate
   layers:
   - Default
   - TransparentFX

@@ -13,7 +13,7 @@ public class ChestAnimatorS : MonoBehaviour
     [SerializeField] private float animationSpeed = 5f;
     [SerializeField] private int animationIndex = 0; // The row of the spritesheet we're on (here, always 0)
     private int frameLoop = 4;  // The frame value the animation resets on
-    private int frameReset = 0; // The frame value the animation resets to
+     //private int frameReset = 0; // The frame value the animation resets to
 
     private float deltaT;
 

@@ -17,6 +17,7 @@ public class DamageNumbers : MonoBehaviour
 	{
 		rb = GetComponent<Rigidbody>();
 		StartCoroutine(Duration());
+		StartCoroutine(Fade());
 	}
 
 	public DamageNumbers(float duration, int numberValue, int xSign, bool crit)
@@ -51,11 +52,21 @@ public class DamageNumbers : MonoBehaviour
         }
 	}
 
-	IEnumerator Duration()
+	private IEnumerator Duration()
 	{
-		rb.AddForce(xSign * 3f, 5f, 0f, ForceMode.Impulse);
+		rb.AddForce(xSign * 5f, 8f, 0f, ForceMode.Impulse);
 		yield return new WaitForSeconds(duration);
 		Destroy(gameObject);
 	}
+
+	private IEnumerator Fade()
+    {
+		while(nums.color.a > 0)
+        {
+			nums.color = new Color(nums.color.r, nums.color.g, nums.color.b, nums.color.a - .5f * Time.deltaTime);
+			backer.color = new Color(backer.color.r, backer.color.g, backer.color.b, backer.color.a - .5f * Time.deltaTime);
+			yield return null;
+		}
+    }
 
 }

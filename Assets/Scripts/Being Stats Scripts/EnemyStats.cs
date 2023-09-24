@@ -33,8 +33,9 @@ public class EnemyStats : Stats
 
     }
 
-    private void Start()
+    private new void Start()
     {
+        base.Start();
         enemyAnimator = GetComponentInChildren<EnemyAnimatorS>();
     }
 
@@ -85,7 +86,7 @@ public class EnemyStats : Stats
 
         if (changeVal < 0 && GameManager.Instance.isBattle())  // Animation logic
         {
-            GameObject ouch = Instantiate(dmgNums, this.transform.position, Quaternion.identity);
+            GameObject ouch = Instantiate(dmgNums, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - .02f), Quaternion.identity);
             ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, 1, crit);
             if (down)
             {

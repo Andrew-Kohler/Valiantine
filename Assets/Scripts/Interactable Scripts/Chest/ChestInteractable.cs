@@ -61,11 +61,12 @@ public class ChestInteractable : Interactable
         ViewManager.GetView<InGameUIView>().startInteractionText(lines);
 
         // Show the item sprite
+        chestItemDisplay.enabled = true;
         chestItemDisplay.showItem();
 
         trigger.SetActive(false); // Deactivate the pickup trigger
         //Destroy(trigger);
-        
+        GameManager.Instance.Animating(true);
 
         opened = true;
         yield return null;

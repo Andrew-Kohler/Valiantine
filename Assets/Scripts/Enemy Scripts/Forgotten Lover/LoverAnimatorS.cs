@@ -166,7 +166,7 @@ public class LoverAnimatorS : EnemyAnimatorS
         }
     }
 
-    protected override IEnumerator DoBattleEnterAnim(int position)
+    protected override IEnumerator DoBattleEnterAnim(int position, bool playerFromLeft)
     {
         // Startup stuff
         activeCoroutine = true;
@@ -200,17 +200,33 @@ public class LoverAnimatorS : EnemyAnimatorS
             yield return null;
         }
 
-        // Physical component (which angle the Lover jumps back at)
-        if (position == 1)
-            rb.velocity = new Vector3(15f, 3f, -2f); // A little closer to cam (3 enemy fight)
-        else if (position == 2)
-            rb.velocity = new Vector3(15f, 3f, -3f); // A little closer to cam (2 enemy fight)
-        else if (position == 3)
-            rb.velocity = new Vector3(10f, 3f, 0f); // Directly parallel to player (1, 3 enemy fight) 
-        else if (position == 4)
-            rb.velocity = new Vector3(10f, 3f, 3f); // A little further from cam (2 enemy fight)
-        else if (position == 5)
-            rb.velocity = new Vector3(5f, 3f, 4f); // A little further from cam (3 enemy fight)
+        // Physical component (which angle the Skullmet jumps back at)
+        if (playerFromLeft) // If the player came from the left
+        {
+            if (position == 1)
+                rb.velocity = new Vector3(15f, 3f, -2f); // A little closer to cam (3 enemy fight)
+            else if (position == 2)
+                rb.velocity = new Vector3(15f, 3f, -3f); // A little closer to cam (2 enemy fight)
+            else if (position == 3)
+                rb.velocity = new Vector3(10f, 3f, 0f); // Directly parallel to player (1, 3 enemy fight) 
+            else if (position == 4)
+                rb.velocity = new Vector3(10f, 3f, 3f); // A little further from cam (2 enemy fight)
+            else if (position == 5)
+                rb.velocity = new Vector3(5f, 3f, 4f); // A little further from cam (3 enemy fight)
+        }
+        else // If the player came from the right
+        {
+            if (position == 1)
+                rb.velocity = new Vector3(20f, 3f, -2f); // A little closer to cam (3 enemy fight)
+            else if (position == 2)
+                rb.velocity = new Vector3(20f, 3f, -3f); // A little closer to cam (2 enemy fight)
+            else if (position == 3)
+                rb.velocity = new Vector3(15f, 3f, 0f); // Directly parallel to player (1, 3 enemy fight) 
+            else if (position == 4)
+                rb.velocity = new Vector3(15f, 3f, 3f); // A little further from cam (2 enemy fight)
+            else if (position == 5)
+                rb.velocity = new Vector3(10f, 3f, 4f); // A little further from cam (3 enemy fight)
+        }
 
         // Animated component (sprite-based motion corresponding to physical motion)
 

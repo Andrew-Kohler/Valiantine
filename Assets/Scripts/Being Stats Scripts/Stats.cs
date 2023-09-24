@@ -25,13 +25,33 @@ public abstract class Stats : MonoBehaviour
 
     protected bool down;
 
+    protected Stack<StatMod> stack1;
+    protected Stack<StatMod> stack2;
+    // Because we'd need 2, right?
+    // We're popping them off one and pushing them onto another every time we check
+
+    private void OnEnable()
+    {
+        BattleManager.battleNewTurn += DecrementStatMods;
+    }
+
+    private void OnDisable()
+    {
+        BattleManager.battleNewTurn -= DecrementStatMods;
+    }
+
     private void Awake()
     {
         for (int i = 1; i < LVL; i++)
         {
             LVLUp();
-            //Debug.Log("LVL Up");
         }
+    }
+
+    protected void Start()
+    {
+        stack1 = new Stack<StatMod>();
+        stack2 = new Stack<StatMod>();
     }
 
     public int GetHP()  // Getter and setter for HP
@@ -211,6 +231,82 @@ public abstract class Stats : MonoBehaviour
         }
 
         return crit;
+    }
+
+    private void AddStatMod(StatMod newMod)
+    {
+        int type = newMod.getType();
+        if (type == 0)
+            ATKMod += newMod.getStatMod();
+        else if (type == 1)
+            DEFMod += newMod.getStatMod();
+        else if (type == 2)
+            SPDMod += newMod.getStatMod();
+        else if (type == 3)
+            MaxHPMod += newMod.getStatMod();
+        else if (type == 4)
+            MaxMPMod += newMod.getStatMod();
+    }
+
+    public void UpdateStatMods(StatMod newMod) // Takes in a new StatMod and refreshes our count on all stats
+    {
+        // Wait, if we're just adding a new one, we don't need to go through all of them
+        // Add it, and based on its type, add it to the current modifier
+
+        AddStatMod(newMod);
+
+        if (stack1.Count == 0) // Just whichever foot we're on - determines the correct one to add it to
+        {
+            stack2.Push(newMod);
+        }
+        else
+        {
+            stack1.Push(newMod);
+        }
+    }
+
+    public void DecrementStatMods() // At the start of every new turn, take note of which buffs have run their course, and retally
+    {
+        ATKMod = 1f;
+        DEFMod = 1f;
+        SPDMod = 1f;
+        MaxHPMod = 1f;
+        MaxMPMod = 1f;
+
+        if (stack1.Count == 0) // Just whichever foot we're on
+        {
+            while (stack2.Count > 0)
+            {
+                // Perform on the top of the stack:
+                if(stack2.TryPeek(out StatMod result))
+                {
+                    result.decrementDuration();  // Decrement the turn counter
+                    if (result.getDuration() > 0)// If it's not done, add it to the other stack before popping it
+                    {
+                        AddStatMod(result);
+                        stack1.Push(result);
+                    }
+                    stack2.Pop();
+                }
+            }
+        }
+        else
+        {
+            while (stack1.Count > 0)
+            {
+                // Perform on the top of the stack:
+                if (stack1.TryPeek(out StatMod result))
+                {
+                    result.decrementDuration();  // Decrement the turn counter
+                    if (result.getDuration() > 0)// If it's not done, add it to the other stack before popping it
+                    {
+                        AddStatMod(result);
+                        stack2.Push(result);
+                    }
+                    stack1.Pop();
+                }
+            }
+        }
     }
 
     public bool getDowned()

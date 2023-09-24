@@ -20,6 +20,7 @@ public class BattleManager : MonoBehaviour
     private bool activeCoroutine;
 
     private int currentTurn;
+    private bool newLoop;
 
     public enum MenuStatus { Selecting, Attack, Spell, Inventory, Run, Inactive };
     MenuStatus status;
@@ -60,6 +61,8 @@ public class BattleManager : MonoBehaviour
     public static event BattleHideEnemies battleHideEnemies;
     public delegate void BattleShowEnemies();
     public static event BattleShowEnemies battleShowEnemies;
+    public delegate void BattleNewTurn();
+    public static event BattleNewTurn battleNewTurn;
 
     private BattleManager()
     {
@@ -67,7 +70,7 @@ public class BattleManager : MonoBehaviour
         battleActive = false;
         activeCoroutine = false;
         currentTurn = 0;
-
+        newLoop = true;
     }
 
     public static BattleManager Instance
@@ -104,6 +107,7 @@ public class BattleManager : MonoBehaviour
     {
         battleIntro = true;
         battleActive = false;
+        newLoop = true;
 
         actInds = GameObject.Find("Action Indicators");
         indAction = actInds.GetComponent<IndicatorAction>();
@@ -173,8 +177,24 @@ public class BattleManager : MonoBehaviour
                 StartCoroutine(DoBattleIntro());    // Use a coroutine to time visual elements (player motion, UI swap)           
             } // End of battle intro
 
+            // ------------------ The turn loop -----------------------------
+
             else if (battleActive && !activeCoroutine)  // Primary turn loop
             {
+                if(currentTurn == 0 && newLoop) // If the current turn is 0, we're at the start of a full loop, and need to decrement some timers
+                {
+                    // Send out an event so that buffs and debuffs know that it's time to check their timers
+                    battleNewTurn?.Invoke();
+
+                    // If the Patience timers are greater than 0, decrement them
+                        // if the Patience timers hit 0 after being decremented, apply their buffs
+                    newLoop = false;
+                }
+                if(currentTurn == 1)
+                {
+                    newLoop = true;
+                }
+
                 if (!turnArray[currentTurn].getDowned()) // If the current turn taker is not downed/dead
                 {
                     if (turnArray[currentTurn].name == PlayerManager.Instance.PlayerName())  // If it's the player's turn
@@ -283,6 +303,7 @@ public class BattleManager : MonoBehaviour
             } // End of end conditions
 
         } // End of battle check
+
     } // End of update
 
     // Public methods ------------------------------------------------------
@@ -408,35 +429,48 @@ public class BattleManager : MonoBehaviour
     private void BattleRecoil() // Launches the player and enemy up like they recoil from each other on battle start
     {
         CombatantDisable();
+        playerRb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
 
         if (PlayerManager.Instance.PlayerTransform().position.x <= currentEnemy.transform.position.x)    // If the player is left of the enemy
         {
             Debug.Log("Player is left of the enemy");
-            playerRb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
-            PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleEnter();
+            PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleEnter(true);
 
             if (battlingEnemies.Length == 1)
             {
-                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(3);
+                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(3, true);
             }
             else if(battlingEnemies.Length == 2)
             {
-                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(4);
-                battlingEnemies[1].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(2);
+                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(4, true);
+                battlingEnemies[1].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(2, true);
             }
             else if(battlingEnemies.Length == 3)
             {
-                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(3);
-                battlingEnemies[1].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(5);
-                battlingEnemies[2].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(1);
+                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(3, true);
+                battlingEnemies[1].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(5, true);
+                battlingEnemies[2].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(1, true);
             }
         }
         else // If the player is right of the enemy
         {
             Debug.Log("Player is right of the enemy");
-            playerRb.velocity = new Vector3(10f, 3f, 0f);
-            enemyRb.velocity = new Vector3(-10f, 3f, 0f);
-            // Nothing is currently configured to make this work, and it never will be, which means I need to figure out an alternative
+            PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleEnter(false);
+            if (battlingEnemies.Length == 1)
+            {
+                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(3, false);
+            }
+            else if (battlingEnemies.Length == 2)
+            {
+                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(4, false);
+                battlingEnemies[1].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(2, false);
+            }
+            else if (battlingEnemies.Length == 3)
+            {
+                battlingEnemies[0].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(3, false);
+                battlingEnemies[1].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(5, false);
+                battlingEnemies[2].GetComponentInChildren<EnemyAnimatorS>().PlayBattleEntrance(1, false);
+            }
         }
     }
 
