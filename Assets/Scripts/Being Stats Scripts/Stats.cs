@@ -233,7 +233,7 @@ public abstract class Stats : MonoBehaviour
         return crit;
     }
 
-    private void AddStatMod(StatMod newMod)
+    protected void AddStatMod(StatMod newMod)
     {
         int type = newMod.getType();
         if (type == 0)
@@ -250,8 +250,6 @@ public abstract class Stats : MonoBehaviour
 
     public void UpdateStatMods(StatMod newMod) // Takes in a new StatMod and refreshes our count on all stats
     {
-        // Wait, if we're just adding a new one, we don't need to go through all of them
-        // Add it, and based on its type, add it to the current modifier
 
         AddStatMod(newMod);
 
@@ -305,6 +303,30 @@ public abstract class Stats : MonoBehaviour
                     }
                     stack1.Pop();
                 }
+            }
+        }
+    }
+
+    public void ClearStatMods()
+    {
+        ATKMod = 1f;
+        DEFMod = 1f;
+        SPDMod = 1f;
+        MaxHPMod = 1f;
+        MaxMPMod = 1f;
+
+        if (stack1.Count == 0) // Just whichever foot we're on
+        {
+            while (stack2.Count > 0)
+            {
+                stack2.Pop();
+            }
+        }
+        else
+        {
+            while (stack1.Count > 0)
+            {
+                stack1.Pop();
             }
         }
     }

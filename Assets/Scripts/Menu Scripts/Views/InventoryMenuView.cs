@@ -100,7 +100,6 @@ public class InventoryMenuView : View
                     if (!fadeOut)
                     {
                         GameManager.Instance.Inventory(false);
-                        Debug.Log("Why");
                         GetComponent<FadeUI>().UIFadeOut();
                         fadeOut = true;
                     }

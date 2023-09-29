@@ -20,7 +20,8 @@ public class BattleManager : MonoBehaviour
     private bool activeCoroutine;
 
     private int currentTurn;
-    private bool newLoop;
+    private bool newLoop;           // A boolean for doing things once at the start of a new turn cycle
+    private bool playerTurn;        // A boolean for doing things once at the start of a player's turn
 
     public enum MenuStatus { Selecting, Attack, Spell, Inventory, Run, Inactive };
     MenuStatus status;
@@ -61,8 +62,11 @@ public class BattleManager : MonoBehaviour
     public static event BattleHideEnemies battleHideEnemies;
     public delegate void BattleShowEnemies();
     public static event BattleShowEnemies battleShowEnemies;
+
     public delegate void BattleNewTurn();
     public static event BattleNewTurn battleNewTurn;
+    public delegate void BattlePlayerTurn();
+    public static event BattleNewTurn battlePlayerTurn;
 
     private BattleManager()
     {
@@ -108,6 +112,7 @@ public class BattleManager : MonoBehaviour
         battleIntro = true;
         battleActive = false;
         newLoop = true;
+        playerTurn = false;
 
         actInds = GameObject.Find("Action Indicators");
         indAction = actInds.GetComponent<IndicatorAction>();
@@ -201,11 +206,20 @@ public class BattleManager : MonoBehaviour
                     {
                         if (status == MenuStatus.Inactive) // Show the action indicators
                         {
+                            playerStats.UpdateStatMods(new StatMod(4, 0, -.5f));
+                            playerStats.UpdateStatMods(new StatMod(4, 1, .5f));
+                            playerStats.UpdateStatMods(new StatMod(4, 2, .5f));
+                            
                             status = MenuStatus.Selecting;
                             StartCoroutine(indAction.DoFlashIn(true));    // Flash our action indicators in
                         }
                         else if (status == MenuStatus.Selecting) // Handles all the conditionals for choosing an action
                         {
+                            if (!playerTurn)
+                            {
+                                playerTurn = true;
+                                toggleStatDisplays(true);
+                            }
                             indAction.enabled = true;
                             if (Input.GetButtonDown("Interact"))
                             {
@@ -269,11 +283,15 @@ public class BattleManager : MonoBehaviour
                     }
                     else // If not the player (an enemy)
                     {
+                        toggleStatDisplays(false);
+                        playerTurn = false;
                         StartCoroutine(DoTurnAdvanceEnemyTemp());
                     }
                 }
                 else // If the one who's turn it is is dead
                 {
+                    toggleStatDisplays(false);
+                    playerTurn = false;
                     if (currentTurn != turnArray.Length - 1) // Advance the turn
                     {
                         currentTurn++;
@@ -426,6 +444,24 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    private void toggleStatDisplays(bool on) // Turns buff and debuff displays on and off
+    {
+        foreach(GameObject combatant in combatants)
+        {
+            if(combatant.GetComponent<StadModVisualController>() != null)
+                combatant.GetComponent<StadModVisualController>().enabled = on;
+        }
+    }
+
+    private void clearStatMods()
+    {
+        foreach (Stats stats in turnArray)
+        {
+            if (stats != null)
+                stats.ClearStatMods();
+        }
+    }
+
     private void BattleRecoil() // Launches the player and enemy up like they recoil from each other on battle start
     {
         CombatantDisable();
@@ -534,6 +570,7 @@ public class BattleManager : MonoBehaviour
     IEnumerator DoTurnAdvancePlayerAttack(GameObject targetedEnemy) // The sequence wherein the player attacks an enemy
     {
         activeCoroutine = true;
+        toggleStatDisplays(false);
         StartCoroutine(indAction.DoFlashOutSelected()); // Flash out the attack indicator
 
         // TODO
@@ -566,6 +603,7 @@ public class BattleManager : MonoBehaviour
     IEnumerator DoTurnAdvanceInven()    // Advancing a turn when the player uses their turn on an inventory action
     {
         activeCoroutine = true;
+        toggleStatDisplays(false);
         if (currentTurn != turnArray.Length - 1) // Advance the turn
         {
             currentTurn++;                  
@@ -603,6 +641,8 @@ public class BattleManager : MonoBehaviour
     IEnumerator DoBattleRun()
     {
         activeCoroutine = true;
+        toggleStatDisplays(false);
+        clearStatMods();
         enemyStats.Resurrect();
 
         yield return new WaitForSeconds(2f);                // Wait so the player can read the text box

@@ -116,7 +116,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: StatusIndicators 1_0
+      name: ATKText
       rect:
         serializedVersion: 2
         x: 1
@@ -124,7 +124,7 @@ TextureImporter:
         width: 14
         height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -137,7 +137,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_1
+      name: ATK Up 0
       rect:
         serializedVersion: 2
         x: 17
@@ -145,7 +145,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -158,7 +158,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_2
+      name: ATK Up 1
       rect:
         serializedVersion: 2
         x: 24
@@ -166,7 +166,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -179,7 +179,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_3
+      name: ATK Up 2
       rect:
         serializedVersion: 2
         x: 31
@@ -187,7 +187,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -200,7 +200,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_4
+      name: DEFText
       rect:
         serializedVersion: 2
         x: 1
@@ -208,7 +208,7 @@ TextureImporter:
         width: 13
         height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -221,7 +221,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_5
+      name: SPDText
       rect:
         serializedVersion: 2
         x: 1
@@ -229,7 +229,7 @@ TextureImporter:
         width: 14
         height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -242,7 +242,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_6
+      name: SPD Up 0
       rect:
         serializedVersion: 2
         x: 17
@@ -250,7 +250,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -263,7 +263,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_7
+      name: SPD Up 1
       rect:
         serializedVersion: 2
         x: 24
@@ -271,7 +271,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -284,7 +284,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_8
+      name: DEF Up 1
       rect:
         serializedVersion: 2
         x: 24
@@ -292,7 +292,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -305,7 +305,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_9
+      name: DEF Up 0
       rect:
         serializedVersion: 2
         x: 17
@@ -313,7 +313,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -326,7 +326,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_10
+      name: DEF Up 2
       rect:
         serializedVersion: 2
         x: 31
@@ -334,7 +334,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -347,7 +347,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_11
+      name: SPD Up 2
       rect:
         serializedVersion: 2
         x: 31
@@ -355,7 +355,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -368,7 +368,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_12
+      name: SPD Down 0
       rect:
         serializedVersion: 2
         x: 38
@@ -376,7 +376,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -389,7 +389,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_13
+      name: DEF Down 0
       rect:
         serializedVersion: 2
         x: 38
@@ -397,7 +397,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -410,7 +410,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_14
+      name: DEF Down 1
       rect:
         serializedVersion: 2
         x: 45
@@ -418,7 +418,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -431,7 +431,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_15
+      name: DEF Down 2
       rect:
         serializedVersion: 2
         x: 52
@@ -439,7 +439,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -452,7 +452,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_16
+      name: ATK Down 2
       rect:
         serializedVersion: 2
         x: 52
@@ -460,7 +460,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -473,7 +473,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_17
+      name: ATK Down 1
       rect:
         serializedVersion: 2
         x: 45
@@ -481,7 +481,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -494,7 +494,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_18
+      name: ATK Down 0
       rect:
         serializedVersion: 2
         x: 38
@@ -502,7 +502,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -515,7 +515,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_19
+      name: SPD Down 1
       rect:
         serializedVersion: 2
         x: 45
@@ -523,7 +523,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -536,7 +536,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StatusIndicators 1_20
+      name: SPD Down 2
       rect:
         serializedVersion: 2
         x: 52
@@ -544,7 +544,7 @@ TextureImporter:
         width: 6
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -567,27 +567,27 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      StatusIndicators 1_16: -1597706843
-      StatusIndicators 1_1: 908420229
-      StatusIndicators 1_5: -434238660
-      StatusIndicators 1_20: 188979545
-      StatusIndicators 1_2: 873451152
-      StatusIndicators 1_7: -1900170786
-      StatusIndicators 1_10: -1129014353
-      StatusIndicators 1_12: -209814757
-      StatusIndicators 1_9: 1722581006
-      StatusIndicators 1_14: -1673581808
-      StatusIndicators 1_18: 661575844
-      StatusIndicators 1_13: -1098611859
-      StatusIndicators 1_15: -1541858060
-      StatusIndicators 1_8: 824816507
-      StatusIndicators 1_6: 711245199
-      StatusIndicators 1_17: 2097050118
-      StatusIndicators 1_0: -293079422
-      StatusIndicators 1_3: 1847600465
-      StatusIndicators 1_19: -1438758275
-      StatusIndicators 1_4: 1741500944
-      StatusIndicators 1_11: -2126598791
+      ATK Down 2: -1597706843
+      DEF Up 0: 1722581006
+      ATK Down 0: 661575844
+      DEF Up 1: 824816507
+      DEF Up 2: -1129014353
+      DEF Down 0: -1098611859
+      SPD Up 0: 711245199
+      SPD Down 1: -1438758275
+      ATK Down 1: 2097050118
+      ATKText: -293079422
+      DEFText: 1741500944
+      SPDText: -434238660
+      SPD Down 2: 188979545
+      DEF Down 2: -1541858060
+      SPD Up 2: -2126598791
+      ATK Up 2: 1847600465
+      SPD Down 0: -209814757
+      SPD Up 1: -1900170786
+      ATK Up 0: 908420229
+      DEF Down 1: -1673581808
+      ATK Up 1: 873451152
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
