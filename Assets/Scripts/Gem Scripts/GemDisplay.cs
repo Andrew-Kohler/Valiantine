@@ -31,6 +31,11 @@ public class GemDisplay : MonoBehaviour
         
     }
 
+    private void OnDisable()
+    {
+        shine.color = Color.clear;
+    }
+
     public void showGem()
     {
         gemHeld = true;

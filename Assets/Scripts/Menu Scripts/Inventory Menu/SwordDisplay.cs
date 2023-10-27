@@ -12,11 +12,17 @@ public class SwordDisplay : MonoBehaviour
         shine.color = Color.clear;
         shineAnimator = shine.GetComponent<Animator>(); 
     }
+    private void OnDisable()
+    {
+        shine.color = Color.clear;
+    }
 
     public void shineSword()
     {
         StartCoroutine(DoSwordShine());
     }
+
+    
 
     IEnumerator DoSwordShine()
     {

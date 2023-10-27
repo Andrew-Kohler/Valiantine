@@ -34,7 +34,7 @@ public class EnemyAnimatorS : MonoBehaviour
         StartCoroutine(DoMove1Anim());
     }
 
-    public void PlaySpellcast()
+    public void PlayMove2()
     {
         StartCoroutine(DoMove2Anim());
     }

@@ -206,9 +206,6 @@ public class BattleManager : MonoBehaviour
                     {
                         if (status == MenuStatus.Inactive) // Show the action indicators
                         {
-                            playerStats.UpdateStatMods(new StatMod(4, 0, -.5f));
-                            playerStats.UpdateStatMods(new StatMod(4, 1, .5f));
-                            playerStats.UpdateStatMods(new StatMod(4, 2, .5f));
                             
                             status = MenuStatus.Selecting;
                             StartCoroutine(indAction.DoFlashIn(true));    // Flash our action indicators in
@@ -218,6 +215,7 @@ public class BattleManager : MonoBehaviour
                             if (!playerTurn)
                             {
                                 playerTurn = true;
+                                //toggleStatDisplaysE(false);
                                 toggleStatDisplays(true);
                             }
                             indAction.enabled = true;
@@ -354,9 +352,14 @@ public class BattleManager : MonoBehaviour
     {
         DestroySelectionArrow();
         // For testing purposes, let's find a way to change the text in the battle UI
-        Debug.Log(targetedEnemy.name); 
+        //Debug.Log(targetedEnemy.name); 
         StartCoroutine(DoTurnAdvancePlayerAttack(targetedEnemy));   // Pass this along to a coroutine for the player attacking
 
+    }
+
+    public GameObject[] GetBattlingEnemies()    // For when enemies need to buff their pals <3
+    {
+        return battlingEnemies;
     }
 
     // Private methods -----------------------------------------------------
@@ -397,8 +400,6 @@ public class BattleManager : MonoBehaviour
     private void currentEnemyReenable()
     {
         mainEnemyMovement.enabled = true;
-        
-        
     }
 
     private void allEnemyReenable(GameObject visible)
@@ -448,10 +449,19 @@ public class BattleManager : MonoBehaviour
     {
         foreach(GameObject combatant in combatants)
         {
-            if(combatant.GetComponent<StadModVisualController>() != null)
-                combatant.GetComponent<StadModVisualController>().enabled = on;
+            if (combatant.GetComponent<StatModVisualController>() != null)
+                combatant.GetComponent<StatModVisualController>().SetPlayerTurn(on);
         }
     }
+
+/*    private void toggleStatDisplaysE(bool on) // Turns buff and debuff displays on and off
+    {
+        foreach (GameObject combatant in combatants)
+        {
+            if (combatant.GetComponent<StatModVisualController>() != null)
+                combatant.GetComponent<StatModVisualController>().SetEnemyTurn(on);
+        }
+    }*/
 
     private void clearStatMods()
     {
@@ -621,7 +631,8 @@ public class BattleManager : MonoBehaviour
     IEnumerator DoTurnAdvanceEnemyTemp()
     {
         activeCoroutine = true;
-        combatants[currentTurn].GetComponent<EnemyMoves>().Move1(playerStats);
+        //toggleStatDisplaysE(true);
+        combatants[currentTurn].GetComponent<EnemyMoves>().Move4(playerStats);
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<EnemyMoves>().moveInProgress == false);
 
         if (currentTurn != turnArray.Length - 1) // Advance the turn
@@ -633,7 +644,7 @@ public class BattleManager : MonoBehaviour
             currentTurn = 0;
         }
         status = MenuStatus.Inactive;   // The enemy acts no more!
-
+        
         activeCoroutine = false;
         yield return null;
     }

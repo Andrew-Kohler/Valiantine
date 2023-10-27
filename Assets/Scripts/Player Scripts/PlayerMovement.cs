@@ -47,7 +47,9 @@ public class PlayerMovement : MonoBehaviour
         {
             if (!activeCoroutine)
             {
-                rb.velocity = new Vector3(0f, 0f, 0f);
+                horizontalInput = 0;
+                verticalInput = 0;
+                //rb.velocity = new Vector3(0f, 0f, 0f);
             }
             
         }
@@ -70,6 +72,10 @@ public class PlayerMovement : MonoBehaviour
         if (GameManager.Instance.canMove())
         {
             rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
+        }
+        else
+        {
+            rb.velocity = Vector3.zero;
         }
         
     }

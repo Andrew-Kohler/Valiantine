@@ -27,6 +27,8 @@ public abstract class Stats : MonoBehaviour
 
     protected Stack<StatMod> stack1;
     protected Stack<StatMod> stack2;
+
+    protected StatModVisualController statVisuals;
     // Because we'd need 2, right?
     // We're popping them off one and pushing them onto another every time we check
 
@@ -52,6 +54,7 @@ public abstract class Stats : MonoBehaviour
     {
         stack1 = new Stack<StatMod>();
         stack2 = new Stack<StatMod>();
+        statVisuals = GetComponent<StatModVisualController>();
     }
 
     public int GetHP()  // Getter and setter for HP
@@ -246,6 +249,15 @@ public abstract class Stats : MonoBehaviour
             MaxHPMod += newMod.getStatMod();
         else if (type == 4)
             MaxMPMod += newMod.getStatMod();
+
+/*        if(newMod.getStatMod() > 0)
+        {
+            statVisuals.PlayStatChange(type, true);
+        }
+        else
+        {
+            statVisuals.PlayStatChange(type, false);
+        }*/
     }
 
     public void UpdateStatMods(StatMod newMod) // Takes in a new StatMod and refreshes our count on all stats
