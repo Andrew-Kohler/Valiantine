@@ -45,7 +45,6 @@ public class WaterAnimator : MonoBehaviour
         }
         meshRenderer.material.SetFloat(clipKey, animationIndex);
         meshRenderer.material.SetFloat(frameKey, (int)frame);
-        Debug.Log(frame);
 
     }
 }

@@ -43,6 +43,11 @@ public class SceneLoader : MonoBehaviour
         fade.SceneFadeIn(levelToLoad);
     }
 
+    public void OnForcedTransition(string levelToLoad)
+    {
+
+    }
+
     private void Awake()
     {
         // _instance = this;

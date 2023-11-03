@@ -13,8 +13,8 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody rb;
 
     float movementSpeed = 7f;
-    float horizontalInput;
-    float verticalInput;
+    public float horizontalInput;
+    public float verticalInput;
 
     public bool activeCoroutine = false;
     public bool GettingClose = false; // For animation purposes when moving to attack
@@ -24,6 +24,16 @@ public class PlayerMovement : MonoBehaviour
 
     public delegate void OnInteractButton();
     public static event OnInteractButton onInteractButton;
+    private void OnEnable()
+    {
+        GateInteractable.onCastleEnter += WalkIntoCastle;
+
+    }
+    private void OnDisable()
+    {
+        GateInteractable.onCastleEnter -= WalkIntoCastle;
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.canMove()) // If we are allowed to move
+        if (GameManager.Instance.canMove() && !GameManager.Instance.isCutscene()) // If we are allowed to move
         {
             // Uses old input system; I'd like to try the new one on my next project
             horizontalInput = Input.GetAxis("Horizontal");
@@ -69,14 +79,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer3D()
     {
-        if (GameManager.Instance.canMove())
+        if (!activeCoroutine)
         {
-            rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
+            if (GameManager.Instance.canMove())
+            {
+                rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
+            }
+            else
+            {
+                rb.velocity = Vector3.zero;
+            }
         }
-        else
-        {
-            rb.velocity = Vector3.zero;
-        }
+        
         
     }
 
@@ -95,6 +109,10 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(MoveToPoint(point, distanceFromPoint));
     }
 
+    public void WalkIntoCastle()
+    {
+        StartCoroutine(DoWalkIntoCastle());
+    }
 
     private IEnumerator MoveToPoint(Vector3 point, float distanceFromPoint)
     {
@@ -113,6 +131,21 @@ public class PlayerMovement : MonoBehaviour
         activeCoroutine = false;
         yield return null;
         
+    }
+
+    private IEnumerator DoWalkIntoCastle()
+    {
+        activeCoroutine = true;
+        float timer = 100f;
+        while (timer > 0)
+        {
+            verticalInput = 1;
+            rb.velocity = new Vector3(0, rb.velocity.y, 1 * movementSpeed);
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+        activeCoroutine = false;
+        //GameManager.Instance.Cutscene(false);
     }
 
 }

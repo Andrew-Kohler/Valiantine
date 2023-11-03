@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 public class FadeUI : MonoBehaviour
 {
     CanvasGroup canvasGroup;
+    [SerializeField] float modifier = 3f;
 
     public void UIFadeIn()  // Methods used for the battle UI
     {
@@ -33,7 +34,7 @@ public class FadeUI : MonoBehaviour
         while (canvasGroup.alpha < 1f)
         {
           //  Debug.Log("Right foot in");
-            canvasGroup.alpha += Time.deltaTime * 3f;
+            canvasGroup.alpha += Time.deltaTime * modifier;
             yield return null;
         }
         
@@ -44,7 +45,7 @@ public class FadeUI : MonoBehaviour
 
         while (canvasGroup.alpha > 0f)
         {
-            canvasGroup.alpha -= Time.deltaTime * 3f;
+            canvasGroup.alpha -= Time.deltaTime * modifier;
             yield return null;
         }
 

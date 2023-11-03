@@ -11,6 +11,7 @@ using UnityEngine;
 public class InGameUIView : View
 {
     [SerializeField] GameObject interactionMenu;
+    [SerializeField] FadeUI openingLogo;
 
     //bool menuOpen;              // Whether or not the interaction sub-menu is open
     //bool activeCoroutine;       // Whether or not a coroutine is active
@@ -34,11 +35,13 @@ public class InGameUIView : View
     private void OnEnable()
     {
         PlayerMovement.onInteractButton += AdvanceText;
+        GateInteractable.onCastleEnter += showLogo;
     }
 
     private void OnDisable()
     {
         PlayerMovement.onInteractButton -= AdvanceText;
+        GateInteractable.onCastleEnter -= showLogo;
     }
 
     void Update()
@@ -76,6 +79,11 @@ public class InGameUIView : View
         
     }
 
+    private void showLogo()
+    {
+        StartCoroutine(DoTitleCard());
+    }
+
     IEnumerator interactionText(List<string> lines) // Fades in the text box and reads out each line of text given
     {
         //activeCoroutine = true;
@@ -107,6 +115,12 @@ public class InGameUIView : View
         //activeCoroutine = false;
         onInteractionEnd?.Invoke();
         GameManager.Instance.CanInteract(false);
+    }
+
+    private IEnumerator DoTitleCard()
+    {
+        yield return new WaitForSeconds(1f);
+        openingLogo.UIFadeIn();
     }
 
 }

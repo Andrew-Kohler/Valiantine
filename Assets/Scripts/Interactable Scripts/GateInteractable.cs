@@ -12,10 +12,16 @@ public class GateInteractable : Interactable
 
     [SerializeField] ItemData key;  // The item required to open the gates
 
+    [SerializeField] public bool mainDoors;
     [SerializeField] float gateOpenSpeed;   // Speed at which the gates open
 
     bool validKey;
     bool validInteraction;
+
+    public delegate void OnCastleInteract();
+    public static event OnCastleInteract onCastleInteract;
+    public delegate void OnCastleEnter();
+    public static event OnCastleEnter onCastleEnter;
 
     private void OnEnable()
     {
@@ -34,8 +40,21 @@ public class GateInteractable : Interactable
 
     private void GateCheck()
     {
-        if(validInteraction && validKey)
-            StartCoroutine(DoGateOpen()); // Add redundancy so that this only happens when the gate is actually checked
+        if (!mainDoors)
+        {
+            if (validInteraction && validKey)
+                StartCoroutine(DoGateOpen()); // Add redundancy so that this only happens when the gate is actually checked
+        }
+        else
+        {
+            if (validInteraction)
+            {
+                onCastleInteract?.Invoke();
+                StartCoroutine(DoGateOpen()); // Add redundancy so that this only happens when the gate is actually checked
+            }
+                
+        }
+        
     }
 
     protected override IEnumerator DoInteraction()
@@ -45,16 +64,25 @@ public class GateInteractable : Interactable
 
         // Check for if the player has the item necessary to open the gate
         lines.Clear();
-        if (PlayerManager.Instance.PlayerInventory().InventorySystem.ContainsItem(key))
+        if (!mainDoors)
         {
-            lines.Add("The " + key.DisplayName + " fits right in the lock. You hear a click as you turn it.");
-            validKey = true;
+            if (PlayerManager.Instance.PlayerInventory().InventorySystem.ContainsItem(key))
+            {
+                lines.Add("The " + key.DisplayName + " fits right in the lock. You hear a click as you turn it.");
+                validKey = true;
+            }
+            else
+            {
+                lines.Add("The gate is locked tight, even after all this time.");
+                lines.Add("The lock looks like a " + key.DisplayName + " would fit right in.");
+            }
         }
         else
         {
-            lines.Add("The gate is locked tight, even after all this time.");
-            lines.Add("The lock looks like a " + key.DisplayName + " would fit right in.");
+            lines.Add("The doors hang loose on their hinges, as though they believe there is nothing left to guard.");
+            lines.Add("But you know better.");
         }
+        
 
         // Start the text readout
         ViewManager.GetView<InGameUIView>().startInteractionText(lines);
@@ -64,6 +92,10 @@ public class GateInteractable : Interactable
 
     private IEnumerator DoGateOpen() // Opens the gates by rotating them
     {
+        if (mainDoors)
+        {
+            GameManager.Instance.Cutscene(true);
+        }
         trigger.SetActive(false);   // Disable the ability to interact with the gate; it's open, we're done
         float count = 0;
         while (count <= 90)
@@ -75,6 +107,11 @@ public class GateInteractable : Interactable
         }
         count = 0;
         validInteraction = false;
+
+        if (mainDoors)
+        {
+            onCastleEnter?.Invoke();
+        }
         
         yield return null;
         

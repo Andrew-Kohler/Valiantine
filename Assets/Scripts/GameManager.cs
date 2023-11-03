@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     private bool _isInteraction;// Are we in some kind of dialogue interaction (opening a chest, healing at a statue)?
     private bool _isBattle;     // Are we in a battle?
     private bool _isAnimating;  // Specifically for if we want to freeze player motion for a cutscene moment
+    private bool _isCutscene;   // Specifically for if we want to move the player around during a cutscene
     [SerializeField] private bool _isWindy;      // ...Is it windy
     // Other potential states of interest
     // isMainMenu
@@ -188,6 +189,16 @@ public class GameManager : MonoBehaviour
         return _isBattle;
     }
 
+    public void Cutscene(bool flag)
+    {
+        _isCutscene = flag;
+    }
+
+    public bool isCutscene()
+    {
+        return _isCutscene;
+    }
+
     public void Windy(bool wind)       // Setter and getter for if...it is windy.
     {
         bool former = _isWindy;
@@ -239,7 +250,7 @@ public class GameManager : MonoBehaviour
 
     public bool freeCam()
     {
-        return !_isGameOver && !_isInventory && !_isSettings && !_isBattle && !_isInteraction;
+        return !_isGameOver && !_isInventory && !_isSettings && !_isBattle && !_isInteraction && !_isCutscene;
     }
 
     //Coroutines

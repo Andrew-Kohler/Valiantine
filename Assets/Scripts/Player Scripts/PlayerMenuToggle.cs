@@ -26,7 +26,7 @@ public class PlayerMenuToggle : MonoBehaviour
     {
         if (Input.GetButtonDown("Inventory") )    // If the player presses Q, it should toggle the inventory
         {
-            if (!GameManager.Instance.isInventory() && GameManager.Instance.canMove())
+            if (!GameManager.Instance.isInventory() && GameManager.Instance.canMove() && !GameManager.Instance.isCutscene())
             {
                 GameManager.Instance.Inventory(true);
             }
@@ -35,7 +35,7 @@ public class PlayerMenuToggle : MonoBehaviour
                 GameManager.Instance.Inventory(false);
             }
         }
-        else if (Input.GetButtonDown("Settings / Back") && !GameManager.Instance.isTransition()) // If the player presses Esc, it should toggle the settings
+        else if (Input.GetButtonDown("Settings / Back") && !GameManager.Instance.isTransition() && !GameManager.Instance.isCutscene() && !GameManager.Instance.isInteraction()) // If the player presses Esc, it should toggle the settings
         {
             if (!GameManager.Instance.isSettings())
             {

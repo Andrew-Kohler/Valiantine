@@ -65,6 +65,7 @@ public class PlayerAnimatorS : MonoBehaviour
         GameManager.onGateStateChange += faceAway;
         ChestInteractable.onChestInteract += faceAway;
         ChestAnimatorS.onChestOpen += PlayItemGet1;
+        GateInteractable.onCastleInteract += faceAway;
 
         InGameUIView.onInteractionEnd += PlayItemGet2;
 
@@ -78,6 +79,7 @@ public class PlayerAnimatorS : MonoBehaviour
         GameManager.onGateStateChange -= faceAway;
         ChestInteractable.onChestInteract -= faceAway;
         ChestAnimatorS.onChestOpen -= PlayItemGet1;
+        GateInteractable.onCastleInteract -= faceAway;
 
         InGameUIView.onInteractionEnd -= PlayItemGet2;
 
@@ -96,8 +98,8 @@ public class PlayerAnimatorS : MonoBehaviour
 
     private void Update()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = playerMovement.horizontalInput;
+        verticalInput = playerMovement.verticalInput;
 
         // The logic that determines what animation should be played 
         if (!GameManager.Instance.isSettings() && !activeCoroutine)
