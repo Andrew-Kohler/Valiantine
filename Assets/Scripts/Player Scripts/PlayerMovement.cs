@@ -50,8 +50,6 @@ public class PlayerMovement : MonoBehaviour
             horizontalInput = Input.GetAxis("Horizontal");
             verticalInput = Input.GetAxis("Vertical");
 
-            //rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
-
         }
         else // Freezes the player if something else is going on, like entering a menu
         {
@@ -94,6 +92,11 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
+    public void ForceDeactiveCoroutine()
+    {
+        activeCoroutine = false;
+    }
+
     public void SetBattleIdlePosition()
     {
         idleBattlePosition = this.transform.position;
@@ -127,7 +130,7 @@ public class PlayerMovement : MonoBehaviour
 
         yield return new WaitUntil(()=> Mathf.Abs(this.transform.position.x - point.x) <= distanceFromPoint + .03f);
         GettingClose = true;
-
+        Debug.Log("made it!");
         activeCoroutine = false;
         yield return null;
         

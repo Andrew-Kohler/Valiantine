@@ -9,6 +9,8 @@ public class EnemyStats : Stats
     [SerializeField] public string enemyName;
     [SerializeField] GameObject dmgNums;
 
+    private int XPValue; // How much XP an enemy is worth
+
     EnemyAnimatorS enemyAnimator;
     public EnemyStats()
     {
@@ -30,6 +32,7 @@ public class EnemyStats : Stats
         MaxHPMod = 1f;
         XPMod = 1f;
         down = false;
+        XPValue = 5;
 
     }
 
@@ -65,6 +68,7 @@ public class EnemyStats : Stats
             MP += 2;
             MaxMP += 2;
         }
+        XPValue = XPValue * 2;
     }
 
     public override void SetHP(int changeVal, bool crit)
@@ -108,6 +112,16 @@ public class EnemyStats : Stats
             down = false;
             enemyAnimator.PlayDieReverse();
         }
+    }
+
+    public int GetXPValue()
+    {
+        return XPValue;
+    }
+
+    public void SetXPValue(int val)
+    {
+        XPValue = val;
     }
 
 }

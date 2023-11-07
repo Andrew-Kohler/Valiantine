@@ -201,7 +201,7 @@ public abstract class Stats : MonoBehaviour
         return (int)Mathf.Floor(baseXPThreshold * Mathf.Pow(LVL, LVLExponent)); 
     }
 
-    public void SetXP(int changeVal)
+    public bool SetXP(int changeVal)
     {
         XP += changeVal;
         if(XP > GetXPThreshold())    // If it's time to level up
@@ -211,6 +211,11 @@ public abstract class Stats : MonoBehaviour
             LVL += 1;
             LVLUp();
             SetXP(leftover);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 

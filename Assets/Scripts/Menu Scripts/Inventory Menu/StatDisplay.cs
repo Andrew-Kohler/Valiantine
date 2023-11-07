@@ -56,6 +56,11 @@ public class StatDisplay : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        UpdateStats();
+    }
+
     // Methods
     public void SetRelevantGemStats(GemStatBlock equipped, GemStatBlock selected)
     {

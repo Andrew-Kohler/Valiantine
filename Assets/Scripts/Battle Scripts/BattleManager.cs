@@ -186,119 +186,132 @@ public class BattleManager : MonoBehaviour
 
             else if (battleActive && !activeCoroutine)  // Primary turn loop
             {
-                if(currentTurn == 0 && newLoop) // If the current turn is 0, we're at the start of a full loop, and need to decrement some timers
+                if (CheckForWin()) // Check if player wins
                 {
-                    // Send out an event so that buffs and debuffs know that it's time to check their timers
-                    battleNewTurn?.Invoke();
-
-                    // If the Patience timers are greater than 0, decrement them
-                        // if the Patience timers hit 0 after being decremented, apply their buffs
-                    newLoop = false;
+                    battleActive = false;
+                    endResult = EndStatus.Win;
                 }
-                if(currentTurn == 1)
+                //TODO: Check if player loses
+                else // Actual turns going on
                 {
-                    newLoop = true;
-                }
-
-                if (!turnArray[currentTurn].getDowned()) // If the current turn taker is not downed/dead
-                {
-                    if (turnArray[currentTurn].name == PlayerManager.Instance.PlayerName())  // If it's the player's turn
+                    if (currentTurn == 0 && newLoop) // If the current turn is 0, we're at the start of a full loop, and need to decrement some timers
                     {
-                        if (status == MenuStatus.Inactive) // Show the action indicators
-                        {
-                            
-                            status = MenuStatus.Selecting;
-                            StartCoroutine(indAction.DoFlashIn(true));    // Flash our action indicators in
-                        }
-                        else if (status == MenuStatus.Selecting) // Handles all the conditionals for choosing an action
-                        {
-                            if (!playerTurn)
-                            {
-                                playerTurn = true;
-                                //toggleStatDisplaysE(false);
-                                toggleStatDisplays(true);
-                            }
-                            indAction.enabled = true;
-                            if (Input.GetButtonDown("Interact"))
-                            {
-                                if (indAction.GetLeadBox() == "ATK")
-                                {
-                                    status = MenuStatus.Attack;
-                                    CreateSelectionArrow(); // Create the arrow for picking your fight
+                        // Send out an event so that buffs and debuffs know that it's time to check their timers
+                        battleNewTurn?.Invoke();
 
-                                    StartCoroutine(indAction.DoFlashOut(false));
-                                }
-                                else if (indAction.GetLeadBox() == "SPL")
-                                {
-                                    status = MenuStatus.Spell;
-                                    StartCoroutine(indAction.DoFlashOut(true));
-                                }
-                                else if (indAction.GetLeadBox() == "ITM")
-                                {
-                                    status = MenuStatus.Inventory;
-                                    StartCoroutine(indAction.DoFlashOut(false));
-                                }
-                                else if (indAction.GetLeadBox() == "RUN")
-                                {
-                                    status = MenuStatus.Run;
-                                }
-                            }
-                        }
-                        else if (status == MenuStatus.Attack) // If the player has chosen to attack
+                        // If the Patience timers are greater than 0, decrement them
+                        // if the Patience timers hit 0 after being decremented, apply their buffs
+                        newLoop = false;
+                    }
+                    if (currentTurn == 1)
+                    {
+                        newLoop = true;
+                    }
+
+                    if (!turnArray[currentTurn].getDowned()) // If the current turn taker is not downed/dead
+                    {
+                        if (turnArray[currentTurn].name == PlayerManager.Instance.PlayerName())  // If it's the player's turn
                         {
-                            indAction.enabled = false;
-                            if (Input.GetButtonDown("Inventory"))   // For backing out - TODO, change backout input
+                            if (status == MenuStatus.Inactive) // Show the action indicators
                             {
-                                DestroySelectionArrow();
-                                StartCoroutine(indAction.DoFlashIn(false));
                                 status = MenuStatus.Selecting;
+                                StartCoroutine(indAction.DoFlashIn(true));    // Flash our action indicators in
                             }
-                            // Making a choice is actually handled by the arrow itself, so I don't need an if else here
-                         
-                        }
-                        else if (status == MenuStatus.Spell) // If the player has chosen to cast a spell
-                        {
-                            indAction.enabled = false;
-                            // All spells should have a target enum so I know what to do here
-                            
-                        }
-                        else if (status == MenuStatus.Inventory) // If the player has chosen to open the inventory
-                        {
-                            indAction.enabled = false;
-                            if (Input.GetButtonDown("Inventory"))
+                            else if (status == MenuStatus.Selecting) // Handles all the conditionals for choosing an action
                             {
-                                StartCoroutine(indAction.DoFlashIn(false));
-                                status = MenuStatus.Selecting;
+                                if (!playerTurn)
+                                {
+                                    playerTurn = true;
+                                    //toggleStatDisplaysE(false);
+                                    toggleStatDisplays(true);
+                                }
+                                indAction.enabled = true;
+                                if (Input.GetButtonDown("Interact"))
+                                {
+                                    if (indAction.GetLeadBox() == "ATK")
+                                    {
+                                        ViewManager.GetView<BattleUIView>().setText("Which enemy will you attack?");
+                                        status = MenuStatus.Attack;
+                                        CreateSelectionArrow(); // Create the arrow for picking your fight
+
+                                        StartCoroutine(indAction.DoFlashOut(false));
+                                    }
+                                    else if (indAction.GetLeadBox() == "SPL")
+                                    {
+                                        status = MenuStatus.Spell;
+                                        StartCoroutine(indAction.DoFlashOut(true));
+                                        ViewManager.GetView<BattleUIView>().setText("This will be...complicated, and will need to function on a per-gem basis.");
+                                    }
+                                    else if (indAction.GetLeadBox() == "ITM")
+                                    {
+                                        status = MenuStatus.Inventory;
+                                        StartCoroutine(indAction.DoFlashOut(false));
+                                        ViewManager.GetView<BattleUIView>().setText("Take a turn to use an item or switch out your equipped gem.");
+                                    }
+                                    else if (indAction.GetLeadBox() == "RUN")
+                                    {
+                                        ViewManager.GetView<BattleUIView>().setText("You got away, but just wait until I add speed checks in, you yellow-bellied ninny.");
+                                        status = MenuStatus.Run;
+                                    }
+                                }
+                            }
+                            else if (status == MenuStatus.Attack) // If the player has chosen to attack
+                            {
+                                indAction.enabled = false;
+                                if (Input.GetButtonDown("Inventory"))   // For backing out - TODO, change backout input
+                                {
+                                    DestroySelectionArrow();
+                                    StartCoroutine(indAction.DoFlashIn(false));
+                                    status = MenuStatus.Selecting;
+                                }
+                                // Making a choice is actually handled by the arrow itself, so I don't need an if else here
+
+                            }
+                            else if (status == MenuStatus.Spell) // If the player has chosen to cast a spell
+                            {
+                                indAction.enabled = false;
+                                // All spells should have a target enum so I know what to do here
+
+                            }
+                            else if (status == MenuStatus.Inventory) // If the player has chosen to open the inventory
+                            {
+                                indAction.enabled = false;
+                                if (Input.GetButtonDown("Inventory"))
+                                {
+                                    StartCoroutine(indAction.DoFlashIn(false));
+                                    status = MenuStatus.Selecting;
+                                }
+                            }
+                            else if (status == MenuStatus.Run) // If the player has chosen to run
+                            {
+                                indAction.enabled = false;
+                                StartCoroutine(indAction.DoFlashOut(true));
+                                endResult = EndStatus.Run;
+                                battleActive = false;
                             }
                         }
-                        else if (status == MenuStatus.Run) // If the player has chosen to run
+                        else // If not the player (an enemy)
                         {
-                            indAction.enabled = false;
-                            StartCoroutine(indAction.DoFlashOut(true));
-                            endResult = EndStatus.Run;
-                            battleActive = false;
+                            toggleStatDisplays(false);
+                            playerTurn = false;
+                            StartCoroutine(DoTurnAdvanceEnemyTemp());
                         }
                     }
-                    else // If not the player (an enemy)
+                    else // If the one who's turn it is is dead
                     {
                         toggleStatDisplays(false);
                         playerTurn = false;
-                        StartCoroutine(DoTurnAdvanceEnemyTemp());
+                        if (currentTurn != turnArray.Length - 1) // Advance the turn
+                        {
+                            currentTurn++;
+                        }
+                        else
+                        {
+                            currentTurn = 0;
+                        }
                     }
                 }
-                else // If the one who's turn it is is dead
-                {
-                    toggleStatDisplays(false);
-                    playerTurn = false;
-                    if (currentTurn != turnArray.Length - 1) // Advance the turn
-                    {
-                        currentTurn++;
-                    }
-                    else
-                    {
-                        currentTurn = 0;
-                    }
-                }
+                
 
             } // End of primary turn loop
 
@@ -306,7 +319,8 @@ public class BattleManager : MonoBehaviour
             {
                 if (endResult == EndStatus.Win)
                 {
-
+                    Debug.Log("Win");
+                    StartCoroutine(DoBattleWin());
                 }
                 else if (endResult == EndStatus.Loss)
                 {
@@ -421,6 +435,7 @@ public class BattleManager : MonoBehaviour
         PlayerMovement playerM = PlayerManager.Instance.PlayerMovement();
 
         playerM.enabled = true;
+        playerM.ForceDeactiveCoroutine();
     }
 
     private void fadeSpawnedEnemies()
@@ -432,6 +447,16 @@ public class BattleManager : MonoBehaviour
                 enemy.GetComponent<FadeEnemy>().FadeOut();
             }
         }
+    }
+
+    private int totalXpGain()
+    {
+        int xpGain = 0;
+        foreach (GameObject enemy in battlingEnemies)
+        {
+            xpGain += enemy.GetComponent<EnemyStats>().GetXPValue();
+        }
+        return xpGain;
     }
 
     private void destroySpawnedEnemies()
@@ -549,6 +574,23 @@ public class BattleManager : MonoBehaviour
         Destroy(enemySelectArrow);
     }
 
+    private bool CheckForWin()
+    {
+        foreach (GameObject enemy in battlingEnemies)
+        {
+            if (!enemy.GetComponent<EnemyStats>().getDowned()) // If even one enemy is still standing, we haven't won yet
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /*private bool CheckForLoss()
+    {
+
+    }*/
+
     // Coroutines --------------------------------------------
     IEnumerator DoBattleIntro()
     {
@@ -632,6 +674,7 @@ public class BattleManager : MonoBehaviour
     {
         activeCoroutine = true;
         //toggleStatDisplaysE(true);
+        ViewManager.GetView<BattleUIView>().setText(GetCurrentTurnName() + " moves to attack!");
         combatants[currentTurn].GetComponent<EnemyMoves>().Move4(playerStats);
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<EnemyMoves>().moveInProgress == false);
 
@@ -646,6 +689,46 @@ public class BattleManager : MonoBehaviour
         status = MenuStatus.Inactive;   // The enemy acts no more!
         
         activeCoroutine = false;
+        yield return null;
+    }
+
+    IEnumerator DoBattleWin()
+    {
+        activeCoroutine = true;
+        toggleStatDisplays(false);
+        clearStatMods();
+
+        int xpGain = totalXpGain();
+        ViewManager.GetView<BattleUIView>().setText("You win, and gain " + xpGain + " experience points!");
+        yield return new WaitUntil(() => Input.GetButtonDown("Interact")); // Wait so the player can read the text box
+        if (playerStats.SetXP(xpGain))
+        {
+            ViewManager.GetView<BattleUIView>().setText(playerStats.GetLVLUpText());
+            yield return new WaitForSeconds(.1f);
+            yield return new WaitUntil(() => Input.GetButtonDown("Interact"));
+            
+        }
+
+        battleUI.GetComponent<FadeUI>().UIFadeOut();
+
+        playerReenable();                                   // Reenable player movement
+        allEnemyReenable(currentEnemy);                     // Reenable enemies that weren't in the fight
+        battleShowEnemies?.Invoke();
+
+        // Fade out and destroy the enemies you fought with
+        // Readout for XP gain
+        // If LVL Up: Readout for LVL Up
+
+        GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle (this also pulls the camera back)
+
+        battleIntro = true;         // Resetting everything for if the player gets into a tangle in the same scene
+        battleActive = false;
+        activeCoroutine = false;
+        mainEnemyMovement = null;
+
+        endResult = EndStatus.None;
+        status = MenuStatus.Inactive;
+
         yield return null;
     }
 

@@ -67,6 +67,11 @@ public class BattleUIView : View
         
     }
 
+    public void setText(string text)
+    {
+        battleText.text = text;
+    }
+
     void updateText() 
     {
         // This was cute for a while, but I really think I need to shift it all over to a system where it gets passed from BatManager
@@ -91,7 +96,7 @@ public class BattleUIView : View
                 battleText.text = "Attempt to flee the battle.";
             }
         }
-        else if (status == BattleManager.MenuStatus.Attack)
+        /*else if (status == BattleManager.MenuStatus.Attack)
         {
             battleText.text = "Which enemy will you attack?";
         }
@@ -106,15 +111,15 @@ public class BattleUIView : View
         else if (status == BattleManager.MenuStatus.Run)
         {
             battleText.text = "You got away, but just wait until I add speed checks in, you yellow-bellied ninny.";
-        }
-        else if (status == BattleManager.MenuStatus.Inactive)
+        }*/
+        /*else if (status == BattleManager.MenuStatus.Inactive)
         {
             battleText.text = BattleManager.Instance.GetCurrentTurnName() + " moves to attack!";
-        }
-        else
+        }*/
+        /*else
         {
             battleText.text = "";
-        }
+        }*/
     }
 
     void updateHPandMP()

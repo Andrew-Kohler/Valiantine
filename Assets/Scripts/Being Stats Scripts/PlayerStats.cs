@@ -28,8 +28,8 @@ public class PlayerStats : Stats
         DEF = 7;
         SPD = 5;
 
-        LVL = 3;
-        XP = 2;
+        LVL = 1;
+        XP = 6;
         baseXPThreshold = 15;
         LVLExponent = 1.4f;
 
@@ -238,5 +238,43 @@ public class PlayerStats : Stats
         }
 
         return crit;
+    }
+
+    public string GetLVLUpText()
+    {
+        GemStatBlock currentGem = GetComponent<GemSystem>().CurrentGem;
+        string text = "";
+        if (currentGem != null)
+        {
+            if (currentGem.name == "Will")
+            {
+                text = "Your experience levels you up, increasing your stats! You feel your will to continue on restored.";
+            }
+            else if (currentGem.name == "Courage")
+            {
+                text = "Your experience levels you up, increasing your stats! Courage swells within your heart as you take stock of your accomplishments.";
+            }
+            else if (currentGem.name == "Patience")
+            {
+                text = "Your experience levels you up, increasing your stats! You feel more aware of your surroundings, in tune with nature's soul.";
+            }
+            else if (currentGem.name == "Constitution")
+            {
+                text = "Your experience levels you up, increasing your stats! Your sores and wounds seem lesser now; you know they will become callouses and scars.";
+            }
+            else if (currentGem.name == "Cunning")
+            {
+                text = "Your experience levels you up, increasing your stats! Your armor weights a little less heavily on your shoulders, and you find a new bounce in your step.";
+            }
+            else if (currentGem.name == "Great Patience")
+            {
+                text = "Your experience levels you up, increasing your stats! Battle has forged you into a warrior, making you tougher and more dangerous.";
+            }
+            else if (currentGem.name == "Heart")
+            {
+                text = "Your experience levels you up, increasing your stats! You long for the hour when you can put down your sword; it is this longing that empowers you.";
+            }
+        }
+        return text;
     }
 }

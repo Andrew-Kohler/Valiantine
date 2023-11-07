@@ -50,7 +50,11 @@ public class GemSystem : MonoBehaviour
     private void Start()
     {
         heldGemList = new ItemData[7];
-        currentGem = gemStats[0];
+        if(currentGem == null)
+        {
+            currentGem = gemStats[0];
+        }
+        
         playerStats = PlayerManager.Instance.PlayerStats();
     }
 
@@ -80,5 +84,7 @@ public class GemSystem : MonoBehaviour
             playerStats.SetMP(-(playerStats.GetMP() - playerStats.GetMaxMP()));
         }
     }
+
+
 
 }
