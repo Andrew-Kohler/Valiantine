@@ -109,14 +109,14 @@ public class BearcrowAnimatorS : EnemyAnimatorS
         deltaT = 0;
         while (gameObject.GetComponentInParent<Transform>().position.y > yStop)
         {
-            if (frame > 1)
+/*            if (frame > 1)
             {
                 deltaT = 0;
             }
             deltaT += Time.deltaTime;
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
-            frame = (int)(deltaT * (2f * animationSpeed));
+            frame = (int)(deltaT * (2f * animationSpeed));*/
             yield return null;
         }
         //yield return new WaitForSeconds(.7f - deltaT);
@@ -234,9 +234,42 @@ public class BearcrowAnimatorS : EnemyAnimatorS
     // Getting hurt
     protected override IEnumerator DoHurtAnim()
     {
-        /*// Startup stuff
+        // Startup stuff
         activeCoroutine = true;
-        animationIndex = _HurtIndex;
+        frameLoop = 4;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+
+        int frame = 0;
+        deltaT = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        activeCoroutine = false;
+        yield return null;
+    }
+
+    // Dying
+    protected override IEnumerator DoDieAnim()
+    {
+        // Startup stuff
+        activeCoroutine = true;
         frameLoop = 10;
         deltaT = 0;
         string clipKey, frameKey;
@@ -258,21 +291,18 @@ public class BearcrowAnimatorS : EnemyAnimatorS
             deltaT += Time.deltaTime;
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
-            frame = (int)(deltaT * (animationSpeed));
+            frame = 4 + (int)(deltaT * (animationSpeed));
             yield return null;
         }
 
-        activeCoroutine = false;*/
         yield return null;
     }
 
-    // Dying
-    protected override IEnumerator DoDieAnim()
+    protected override IEnumerator DoDieReverseAnim()
     {
-        /*// Startup stuff
+        // Startup stuff
         activeCoroutine = true;
-        animationIndex = _DieIndex; // The main thing in all of this startup is changing the animation index and frame data
-        frameLoop = 12;
+        frameLoop = 10;
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
@@ -288,52 +318,16 @@ public class BearcrowAnimatorS : EnemyAnimatorS
 
         int frame = 0;
         deltaT = 0;
-        while (frame < frameLoop)
+        while (frame >= 4)
         {
             deltaT += Time.deltaTime;
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
-            frame = (int)(deltaT * (animationSpeed));
-            yield return null;
-        }*/
-
-        yield return null;
-    }
-
-    protected override IEnumerator DoDieReverseAnim()
-    {
-        /*// Startup stuff
-        activeCoroutine = true;
-        animationIndex = _DieIndex; // The main thing in all of this startup is changing the animation index and frame data
-        frameLoop = 12;
-        deltaT = 0;
-        string clipKey, frameKey;
-        if (axis == AnimationAxis.Rows)
-        {
-            clipKey = rowProperty;
-            frameKey = colProperty;
-        }
-        else
-        {
-            clipKey = colProperty;
-            frameKey = rowProperty;
-        }
-
-        int frame = 11;
-        deltaT = 0;
-        while (frame >= 0)
-        {
-            deltaT += Time.deltaTime;
-            meshRenderer.material.SetFloat(clipKey, animationIndex);
-            meshRenderer.material.SetFloat(frameKey, frame);
-            frame = 11 - (int)(deltaT * (animationSpeed));
+            frame = 9 - (int)(deltaT * (animationSpeed));
             yield return null;
         }
 
-        frameLoop = 13;
-        animationSpeed = _NormalAnimationSpeed;
-        animationIndex = _IdleIndex;
-        activeCoroutine = false;*/
+        activeCoroutine = false;
         yield return null;
     }
 }

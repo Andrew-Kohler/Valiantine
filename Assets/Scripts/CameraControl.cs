@@ -18,6 +18,7 @@ public class CameraControl : MonoBehaviour
     [SerializeField] Vector3 saveStatuePos = new Vector3(5f, -9f, 12f);
     [SerializeField] Vector3 chestPos = new Vector3(0f, -3f, 2f);
     [SerializeField] Vector3 castleEntryPos = new Vector3(0f, -3f, 0f);
+    [SerializeField] Vector3 hereStandsPos = new Vector3(0f, 12f, -8f);
 
     [SerializeField] Vector3 savePos0 = new Vector3(10f, 10f, 10f);   // Position modifier of the camera for the save point in the test area
 
@@ -28,7 +29,8 @@ public class CameraControl : MonoBehaviour
     [SerializeField] Vector3 saveStatueAngle = new Vector3(-20f, -20f, 0f);
     [SerializeField] Vector3 chestAngle = new Vector3(10f, 0f, 0f);
     [SerializeField] Vector3 castleEntryAngle = new Vector3(-60f, 0f, 0f);
-    
+    [SerializeField] Vector3 hereStandsAngle = new Vector3(20f, 0f, 0f);
+
 
     [SerializeField] Vector3 saveAngle0 = new Vector3(20.51f, 0f, 0f); // Angle of the camera for the save point in the test area
 
@@ -64,6 +66,7 @@ public class CameraControl : MonoBehaviour
         GameManager.onSaveStatueStateChange += SetCamSaveStatue; 
         GameManager.onChestStateChange += SetCamChest;
         GameManager.onSavePointStateChange += SetCamSavePoint;
+        GameManager.onPlaqueStateChange += SetCamHereStands;
         GateInteractable.onCastleEnter += SetCamCastleEntry;
     }
 
@@ -74,6 +77,7 @@ public class CameraControl : MonoBehaviour
         GameManager.onSaveStatueStateChange -= SetCamSaveStatue;
         GameManager.onChestStateChange -= SetCamChest;
         GameManager.onSavePointStateChange -= SetCamSavePoint;
+        GameManager.onPlaqueStateChange -= SetCamHereStands;
         GateInteractable.onCastleEnter -= SetCamCastleEntry;
     }
 
@@ -231,6 +235,21 @@ public class CameraControl : MonoBehaviour
         {
             CamReset(battleStep);
         }*/
+    }
+
+    private void SetCamHereStands()
+    {
+        Debug.Log("Aw yeah");
+        StopAllCoroutines();
+        if (GameManager.Instance.isInteraction())
+        {
+            Vector3 targetPos = new Vector3(playerTransform.position.x + hereStandsPos.x, playerTransform.position.y + yConstant + hereStandsPos.y, playerTransform.position.z - zConstant + hereStandsPos.z);
+            StartCoroutine(DoCamPosition(targetPos, inventoryStep * 8, hereStandsAngle));
+        }
+        else
+        {
+            CamReset(battleStep);
+        }
     }
 
     private void SetCamBossBattle() // How I hope for the day I get to dust you off, love.

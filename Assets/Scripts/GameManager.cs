@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
     public static event OnChestStateChange onChestStateChange;
     public delegate void OnGateStateChange();
     public static event OnGateStateChange onGateStateChange;
+    public delegate void OnPlaqueStateChange();
+    public static event OnPlaqueStateChange onPlaqueStateChange;
 
     public delegate void OnWindStateChange();
     public static event OnWindStateChange onWindStateChange;
@@ -148,6 +150,10 @@ public class GameManager : MonoBehaviour
         if (currentInteractable.CompareTag("Gate") && flag != former)
         {
             onGateStateChange?.Invoke();
+        }
+        if (currentInteractable.CompareTag("Plaque") && flag != former)
+        {
+            onPlaqueStateChange?.Invoke();
         }
         if (currentInteractable.CompareTag("Save Point") && flag != former)
         {

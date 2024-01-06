@@ -256,7 +256,7 @@ public class PlayerStats : Stats
             }
             else if (currentGem.name == "Patience")
             {
-                text = "Your experience levels you up, increasing your stats! You feel more aware of your surroundings, in tune with nature's soul.";
+                text = "Your experience levels you up, increasing your stats! You feel as though a wave of calm has washed over you.";
             }
             else if (currentGem.name == "Constitution")
             {

@@ -470,6 +470,24 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    private void fadeAllBattlingEnemies()
+    {
+        foreach (GameObject enemy in battlingEnemies)
+        {
+            enemy.GetComponent<FadeEnemy>().FadeOut();
+
+        }
+    }
+
+    private void destroyAllBattlingEnemies()
+    {
+        foreach (GameObject enemy in battlingEnemies)
+        {
+                Destroy(enemy);
+            
+        }
+    }
+
     private void toggleStatDisplays(bool on) // Turns buff and debuff displays on and off
     {
         foreach(GameObject combatant in combatants)
@@ -714,13 +732,18 @@ public class BattleManager : MonoBehaviour
         playerReenable();                                   // Reenable player movement
         allEnemyReenable(currentEnemy);                     // Reenable enemies that weren't in the fight
         battleShowEnemies?.Invoke();
+        fadeAllBattlingEnemies();
+        GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle (this also pulls the camera back)
 
+        yield return new WaitForSeconds(1f);
+
+
+        destroyAllBattlingEnemies();
         // Fade out and destroy the enemies you fought with
         // Readout for XP gain
         // If LVL Up: Readout for LVL Up
 
-        GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle (this also pulls the camera back)
-
+        
         battleIntro = true;         // Resetting everything for if the player gets into a tangle in the same scene
         battleActive = false;
         activeCoroutine = false;
