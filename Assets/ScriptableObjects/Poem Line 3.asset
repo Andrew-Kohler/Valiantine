@@ -19,8 +19,8 @@ MonoBehaviour:
   Consumable: 0
   HPRestore: 0
   MPRestore: 0
-  InventoryDescription: A line from an ancient poem. Three of the words have been
-    emphasized.
+  InventoryDescription: A line from an ancient poem. The words "right," "towards,"
+    and "away" are underlined.
   UseDescription: ' It reads, "To a heart most right and true: Go towards love; from
     fear, away."
 

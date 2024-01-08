@@ -19,7 +19,7 @@ MonoBehaviour:
   Consumable: 0
   HPRestore: 0
   MPRestore: 0
-  InventoryDescription: A line from an ancient poem. One of the words has been circled.
+  InventoryDescription: A line from an ancient poem. The word "away" is underlined.
   UseDescription: It reads, "As the dead surround us, I, a poet, run away"
   BattleUseDescription: The true sign of a monster is a lack of appreciation for
     good poetry.

@@ -19,7 +19,7 @@ MonoBehaviour:
   Consumable: 0
   HPRestore: 0
   MPRestore: 0
-  InventoryDescription: A line from an ancient poem. One of the words is underlined.
+  InventoryDescription: A line from an ancient poem. The word "left" is underlined.
   UseDescription: ' It reads, "This lyric I have left you, That it might show the
     way"'
   BattleUseDescription: If you don't understand it out of context, the monsters certainly
