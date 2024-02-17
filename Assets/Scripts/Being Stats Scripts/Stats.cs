@@ -80,6 +80,11 @@ public abstract class Stats : MonoBehaviour
         }
     }
 
+    public void SetHPDir(int changeVal) //  DO NOT USE UNLESS YOU KNOW WHAT YOU ARE DOING
+    {
+        HP = changeVal;
+    }
+
     public int GetMaxHP()
     {
         return (int)(MaxHP * MaxHPMod);
@@ -95,7 +100,7 @@ public abstract class Stats : MonoBehaviour
         return MP;
     }
 
-    public void SetMP(int changeVal)
+    public virtual void SetMP(int changeVal)
     {
         MP += changeVal;
         if (MP > MaxMP)  // Accounts for attempts at re-upping beyond max and trying to spend beyond 0
@@ -106,6 +111,11 @@ public abstract class Stats : MonoBehaviour
         {
             MP = 0;
         }
+    }
+
+    public void SetMPDir(int changeVal) //  DO NOT USE UNLESS YOU KNOW WHAT YOU ARE DOING
+    {
+        MP = changeVal;
     }
 
     public int GetMaxMP()

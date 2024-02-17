@@ -83,6 +83,14 @@ public class GemSystem : MonoBehaviour
         {
             playerStats.SetMP(-(playerStats.GetMP() - playerStats.GetMaxMP()));
         }
+
+        if(currentGem.name == "Heart")
+        {
+            int avg = (playerStats.GetMP() + playerStats.GetHP()) / 2;
+            Debug.Log(avg);
+            playerStats.SetMPDir(avg);
+            playerStats.SetHPDir(avg);
+        }
     }
 
 

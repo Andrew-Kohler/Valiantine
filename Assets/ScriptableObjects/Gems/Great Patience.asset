@@ -24,5 +24,5 @@ MonoBehaviour:
   UseDescription: 'SPELL: Great Things Come - Next turn, all stats are x4 their normal
     values and items are applied triply.'
   BattleUseDescription: 
-  SingleObtainDescription: You found the Gem of Great Patience! It looks like it
-    fits in the hilt of your sword...
+  SingleObtainDescription: You found the Gem of Great Patience! You feel like a true
+    treasure hunter.

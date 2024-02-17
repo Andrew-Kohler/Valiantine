@@ -68,49 +68,158 @@ public class PlayerStats : Stats
 
     public override void SetHP(int changeVal, bool crit)
     {
-        if(changeVal < 0 && HeartProtectionActive) // If we cast the Gem of Heart's spell, we reap its benefit on the next damaging hit
+        if (GetComponent<GemSystem>().CurrentGem.name == "Heart") // If the Gem of Heart is equipped, we have to do stuff differently
         {
-            HeartProtectionActive = false;
-            changeVal = changeVal * -1;
-        }
-
-        HP += changeVal;
-        if (HP > MaxHP)  // Accounts for attempts at healing beyond max, damage beyond min, and revives
-        {
-            HP = MaxHP;
-        }
-        else if (HP <= 0)
-        {
-            HP = 0;
-            down = true;
-        }
-        else if (HP > 0 && down)
-        {
-            down = false;
-        }
-
-        if(changeVal < 0 && GameManager.Instance.isBattle())  // Animation logic
-        {
-            GameObject ouch = Instantiate(dmgNums, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - .02f), Quaternion.identity);
-            ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, -1, crit);
-            if (down)
+            if (changeVal < 0 && HeartProtectionActive) // If we cast the Gem of Heart's spell, we reap its benefit on the next damaging hit
             {
-                // The game over sequence is Something I Have To Do
+                HeartProtectionActive = false;
+                changeVal = changeVal * -1;
             }
-            else
+
+            HP += changeVal;
+            MP += changeVal;
+            if (HP > GetMaxHP())  // Accounts for attempts at healing beyond max, damage beyond min, and revives
             {
-                animator.PlayHurt();   
+                HP = GetMaxHP();
+                MP = GetMaxMP();
+            }
+            else if (HP <= 0)
+            {
+                HP = 0;
+                MP = 0;
+                down = true;
+            }
+            else if (HP > 0 && down)
+            {
+                down = false;
+            }
+
+            if (changeVal < 0 && GameManager.Instance.isBattle())  // Animation logic
+            {
+                GameObject ouch = Instantiate(dmgNums, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - .02f), Quaternion.identity);
+                ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, -1, crit);
+                if (down)
+                {
+                    // The game over sequence is Something I Have To Do
+                }
+                else
+                {
+                    animator.PlayHurt();
+                }
             }
         }
+        else // Normal stuff
+        {
+            if (changeVal < 0 && HeartProtectionActive) // If we cast the Gem of Heart's spell, we reap its benefit on the next damaging hit
+            {
+                HeartProtectionActive = false;
+                changeVal = changeVal * -1;
+            }
+
+            HP += changeVal;
+            if (HP > GetMaxHP())  // Accounts for attempts at healing beyond max, damage beyond min, and revives
+            {
+                HP = GetMaxHP();
+            }
+            else if (HP <= 0)
+            {
+                HP = 0;
+                down = true;
+            }
+            else if (HP > 0 && down)
+            {
+                down = false;
+            }
+
+            if (changeVal < 0 && GameManager.Instance.isBattle())  // Animation logic
+            {
+                GameObject ouch = Instantiate(dmgNums, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - .02f), Quaternion.identity);
+                ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, -1, crit);
+                if (down)
+                {
+                    // The game over sequence is Something I Have To Do
+                }
+                else
+                {
+                    animator.PlayHurt();
+                }
+            }
+        }
+    }
+
+    public override void SetMP(int changeVal)
+    {
+        if (GetComponent<GemSystem>().CurrentGem.name == "Heart") // If the Gem of Heart is equipped, we have to do stuff differently
+        {
+            if (changeVal < 0 && HeartProtectionActive) // If we cast the Gem of Heart's spell, we reap its benefit on the next damaging hit
+            {
+                HeartProtectionActive = false;
+                changeVal = changeVal * -1;
+            }
+
+            HP += changeVal;
+            MP += changeVal;
+            if (HP > GetMaxHP())  // Accounts for attempts at healing beyond max, damage beyond min, and revives
+            {
+                HP = GetMaxHP();
+                MP = GetMaxMP();
+            }
+            else if (HP <= 0)
+            {
+                HP = 0;
+                MP = 0;
+                down = true;
+            }
+            else if (HP > 0 && down)
+            {
+                down = false;
+            }
+
+            if (changeVal < 0 && GameManager.Instance.isBattle())  // Animation logic
+            {
+                GameObject ouch = Instantiate(dmgNums, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - .02f), Quaternion.identity);
+                ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, -1, false);
+                if (down)
+                {
+                    // The game over sequence is Something I Have To Do
+                }
+                /*else  We don't play the hurt anim on an MP related loss because it might interfere with spellcast stuff
+                {
+                    animator.PlayHurt();
+                }*/
+            }
+        }
+        else
+        {
+            MP += changeVal;
+            if (MP > MaxMP)  // Accounts for attempts at re-upping beyond max and trying to spend beyond 0
+            {                // The latter should NEVER occur if I'm doing things right elsewhere
+                MP = MaxMP;
+            }
+            else if (MP < 0)
+            {
+                MP = 0;
+            }
+        }
+        
     }
 
     // Overrides for all of the stat getters to account for the passive modifications of the gems
     public new int GetMaxHP()
     {
+        if (GetComponent<GemSystem>().CurrentGem.name == "Heart")
+        {
+            return (int)(MaxHP * MaxHPMod * GemMaxHPMod) + (int)(MaxMP * MaxMPMod * GemMaxMPMod);
+        }
         return (int)(MaxHP * MaxHPMod * GemMaxHPMod);
     }
     public new int GetMaxMP()
     {
+        if (GetComponent<GemSystem>().CurrentGem.name == "Heart")
+        {
+            return (int)(MaxHP * MaxHPMod * GemMaxHPMod) + (int)(MaxMP * MaxMPMod * GemMaxMPMod);
+
+        }
         return (int)(MaxMP * MaxMPMod * GemMaxMPMod);
     }
     public new int GetATK()
@@ -148,10 +257,10 @@ public class PlayerStats : Stats
         GemSPDMod = changeVal;
     }
 
-    // Unique setters to facilitate unique gem qualities
+    // Unique setters to facilitate unique gem qualities - these are for ACTIVE SPELLS
     public void SetHeartSpell()
     {
-        HeartProtectionActive = true;
+        HeartProtectionActive = !HeartProtectionActive;
     }
 
     protected override void LVLUp() // Adds all the basic stats for levelling up

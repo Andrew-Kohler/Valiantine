@@ -22,8 +22,7 @@ public class GameManager : MonoBehaviour
     private bool _isAnimating;  // Specifically for if we want to freeze player motion for a cutscene moment
     private bool _isCutscene;   // Specifically for if we want to move the player around during a cutscene
     [SerializeField] private bool _isWindy;      // ...Is it windy
-    // Other potential states of interest
-    // isMainMenu
+
     private bool _canInteract;
 
     private GameObject currentInteractable;
@@ -47,6 +46,12 @@ public class GameManager : MonoBehaviour
     public delegate void OnWindStateChange();
     public static event OnWindStateChange onWindStateChange;
 
+    // Worldstate booleans
+    public bool IsTowerFallen;
+
+    //Storing player stats between scenes
+    //public bool IsHeartEquipped;
+
     private GameManager()
     {
         activeCoroutine = false;
@@ -60,6 +65,8 @@ public class GameManager : MonoBehaviour
         _isWindy = false;
         _canInteract = false;
         currentInteractable = null;
+
+        IsTowerFallen = false;
     }
 
     public static GameManager Instance
