@@ -91,6 +91,15 @@ public class GemSystem : MonoBehaviour
             playerStats.SetMPDir(avg);
             playerStats.SetHPDir(avg);
         }
+
+        if(currentGem.name == "Cunning")
+        {
+
+        }
+        else
+        {
+
+        }
     }
 
 

@@ -14,6 +14,7 @@ public class PlayerStats : Stats
     PlayerAnimatorS animator;
 
     private bool HeartProtectionActive; // Whether or not the Gem of Heart's protection spell is active
+    //privca
 
     [SerializeField] GameObject dmgNums;
 

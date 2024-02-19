@@ -23,6 +23,8 @@ public class BattleManager : MonoBehaviour
     private bool newLoop;           // A boolean for doing things once at the start of a new turn cycle
     private bool playerTurn;        // A boolean for doing things once at the start of a player's turn
 
+    private bool cunningSecondTurn; // A boolean for applying the special effect of the Gem of Cunning
+
     public enum MenuStatus { Selecting, Attack, Spell, Inventory, Run, Inactive };
     MenuStatus status;
 
@@ -47,6 +49,7 @@ public class BattleManager : MonoBehaviour
 
     PlayerStats playerStats;
     PlayerMoves playerMoves;
+    GemSystem playerGemSys;
     EnemyStats enemyStats;
     EnemyGroup enemyGroup;
     IndicatorAction indAction;
@@ -133,6 +136,8 @@ public class BattleManager : MonoBehaviour
                 // Get the instances of:
                 playerStats = PlayerManager.Instance.PlayerStats();                 // Player stats
                 playerMoves = playerStats.gameObject.GetComponent<PlayerMoves>();   // Player moves
+                playerGemSys = playerStats.gameObject.GetComponent<GemSystem>();
+                
                 enemyStats = currentEnemy.GetComponent<EnemyStats>(); // Enemy stats
                 enemyGroup = currentEnemy.GetComponent<EnemyGroup>(); // The enemy group that spawns the Gang
 
@@ -198,6 +203,11 @@ public class BattleManager : MonoBehaviour
                     {
                         // Send out an event so that buffs and debuffs know that it's time to check their timers
                         battleNewTurn?.Invoke();
+                        // Gem of Cunning 2nd turn reset
+                        if (playerGemSys.CurrentGem.name == "Cunning")
+                        {
+                            cunningSecondTurn = true;
+                        }
 
                         // If the Patience timers are greater than 0, decrement them
                         // if the Patience timers hit 0 after being decremented, apply their buffs
@@ -656,14 +666,22 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(.5f);
 
-        if (currentTurn != turnArray.Length - 1) // Advance the turn
+        if (cunningSecondTurn)
         {
-            currentTurn++;                  
+            cunningSecondTurn = false;
         }
         else
         {
-            currentTurn = 0;
+            if (currentTurn != turnArray.Length - 1) // Advance the turn
+            {
+                currentTurn++;
+            }
+            else
+            {
+                currentTurn = 0;
+            }
         }
+        
 
         status = MenuStatus.Inactive;  // Get rid of the menu
         activeCoroutine = false;
@@ -674,13 +692,20 @@ public class BattleManager : MonoBehaviour
     {
         activeCoroutine = true;
         toggleStatDisplays(false);
-        if (currentTurn != turnArray.Length - 1) // Advance the turn
+        if (cunningSecondTurn)
         {
-            currentTurn++;                  
+            cunningSecondTurn = false;
         }
         else
         {
-            currentTurn = 0;
+            if (currentTurn != turnArray.Length - 1) // Advance the turn
+            {
+                currentTurn++;
+            }
+            else
+            {
+                currentTurn = 0;
+            }
         }
         StartCoroutine(indAction.DoFlashOutSelected());
         status = MenuStatus.Inactive;   // The player acts no more!

@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     public bool IsTowerFallen;
 
     //Storing player stats between scenes
-    //public bool IsHeartEquipped;
+    
 
     private GameManager()
     {
