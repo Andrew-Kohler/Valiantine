@@ -18,4 +18,5 @@ public class ItemData : ScriptableObject
     [TextArea(1, 4)] public string UseDescription;
     [TextArea(1, 4)] public string BattleUseDescription;
     [TextArea(1, 4)] public string SingleObtainDescription;
+    [TextArea(1, 4)] public string MultipleObtainDescription;
 }

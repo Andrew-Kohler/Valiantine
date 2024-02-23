@@ -30,6 +30,10 @@ public class ChestInteractable : Interactable
         {
             lines.Add(chestItem.SingleObtainDescription);
         }
+        else
+        {
+            lines.Add(chestItem.MultipleObtainDescription);
+        }
         
     }
     public override void Interact()
