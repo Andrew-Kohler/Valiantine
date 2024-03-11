@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5972166922303279186}
-  m_LocalRotation: {x: 0.17802937, y: -0, z: -0, w: 0.98402524}
+  m_LocalRotation: {x: 0.17802937, y: 0, z: 0, w: 0.98402524}
   m_LocalPosition: {x: 10.03, y: 9.8, z: -110.3}
   m_LocalScale: {x: 0.74999994, y: 1.3826909, z: 0.8469237}
   m_ConstrainProportionsScale: 0
@@ -144,6 +144,7 @@ MonoBehaviour:
   castleEntryPos: {x: 0, y: -3, z: 0}
   hereStandsPos: {x: 0, y: 12, z: -8}
   savePos0: {x: 25, y: 10, z: -25}
+  savePos1: {x: -10, y: 10, z: -15}
   standardAngle: {x: 20.51, y: 0, z: 0}
   battleAngle: {x: 20.51, y: 0, z: 0}
   inventoryAngle: {x: 8, y: 0, z: 0}
@@ -152,6 +153,7 @@ MonoBehaviour:
   castleEntryAngle: {x: -40, y: 0, z: 0}
   hereStandsAngle: {x: 20, y: 0, z: 0}
   saveAngle0: {x: 20.51, y: 0, z: 0}
+  saveAngle1: {x: 30, y: 0, z: 0}
   battleStep: 0.25
   inventoryStep: 0.5
   battleYOffset: 0

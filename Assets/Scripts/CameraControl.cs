@@ -21,6 +21,7 @@ public class CameraControl : MonoBehaviour
     [SerializeField] Vector3 hereStandsPos = new Vector3(0f, 12f, -8f);
 
     [SerializeField] Vector3 savePos0 = new Vector3(10f, 10f, 10f);   // Position modifier of the camera for the save point in the test area
+    [SerializeField] Vector3 savePos1 = new Vector3(5f, 10f, 5f);
 
     // X, Y, and Z camera angles for different interactions in the game
     [SerializeField] Vector3 standardAngle = new Vector3(20.51f, 0f, 0f);
@@ -33,6 +34,7 @@ public class CameraControl : MonoBehaviour
 
 
     [SerializeField] Vector3 saveAngle0 = new Vector3(20.51f, 0f, 0f); // Angle of the camera for the save point in the test area
+    [SerializeField] Vector3 saveAngle1 = new Vector3(20.51f, 0f, 0f);
 
     Transform playerTransform;
 
@@ -210,6 +212,11 @@ public class CameraControl : MonoBehaviour
             {
                 Vector3 targetPos = new Vector3(playerTransform.position.x + savePos0.x, playerTransform.position.y + yConstant + savePos0.y, playerTransform.position.z - zConstant + savePos0.z);
                 StartCoroutine(DoCamPosition(targetPos, inventoryStep, saveAngle0));
+            }
+            else if (currentPoint == 1)
+            {
+                Vector3 targetPos = new Vector3(playerTransform.position.x + savePos1.x, playerTransform.position.y + yConstant + savePos1.y, playerTransform.position.z - zConstant + savePos1.z);
+                StartCoroutine(DoCamPosition(targetPos, inventoryStep * 3.0f, saveAngle1));
             }
             else
             {

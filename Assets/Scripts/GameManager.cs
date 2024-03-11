@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviour
         }
         if (currentInteractable.CompareTag("Save Point") && flag != former)
         {
-            onSavePointStateChange?.Invoke(0);
+            onSavePointStateChange?.Invoke(currentInteractable.GetComponent<SavePointInteractable>().pointNumber);
         }
         // Ok, write it down now -> diff event for each type of interactable, they all do the same stuff for initial pos in animator but all do diff stuff to cam
 
