@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager _instance; // = new GameManager();   // Look at this again, b/c I'm pretty sure awake should be doing this?
     private bool activeCoroutine;
+    public bool towerfall = false;
 
     private bool _isGameOver;   // Has the player been defeated?
     private bool _isInventory;  // Are we in the inventory?
@@ -42,12 +43,11 @@ public class GameManager : MonoBehaviour
     public static event OnGateStateChange onGateStateChange;
     public delegate void OnPlaqueStateChange();
     public static event OnPlaqueStateChange onPlaqueStateChange;
+    public delegate void OnRubbleStateChange();
+    public static event OnRubbleStateChange onRubbleStateChange;
 
     public delegate void OnWindStateChange();
     public static event OnWindStateChange onWindStateChange;
-
-    // Worldstate booleans
-    public bool IsTowerFallen;
 
     //Storing player stats between scenes
     
@@ -65,8 +65,6 @@ public class GameManager : MonoBehaviour
         _isWindy = false;
         _canInteract = false;
         currentInteractable = null;
-
-        IsTowerFallen = false;
     }
 
     public static GameManager Instance

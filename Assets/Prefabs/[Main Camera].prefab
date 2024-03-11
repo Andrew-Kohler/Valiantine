@@ -135,6 +135,8 @@ MonoBehaviour:
   lowerX: {fileID: 0}
   upperZ: {fileID: 0}
   lowerZ: {fileID: 0}
+  isYBound: 0
+  upperY: {fileID: 0}
   player: {fileID: 0}
   inventoryX: 3.5
   inventoryY: -5
@@ -145,7 +147,10 @@ MonoBehaviour:
   hereStandsPos: {x: 0, y: 12, z: -8}
   savePos0: {x: 25, y: 10, z: -25}
   savePos1: {x: -10, y: 10, z: -15}
+  savePos3: {x: 2, y: 10, z: -6}
+  savePos5: {x: 5, y: 0, z: -10}
   standardAngle: {x: 20.51, y: 0, z: 0}
+  standardAngle2: {x: -10.51, y: 0, z: 0}
   battleAngle: {x: 20.51, y: 0, z: 0}
   inventoryAngle: {x: 8, y: 0, z: 0}
   saveStatueAngle: {x: -20, y: -20, z: 0}
@@ -154,6 +159,8 @@ MonoBehaviour:
   hereStandsAngle: {x: 20, y: 0, z: 0}
   saveAngle0: {x: 20.51, y: 0, z: 0}
   saveAngle1: {x: 30, y: 0, z: 0}
+  saveAngle3: {x: -30.51, y: 0, z: 0}
+  saveAngle5: {x: 10.51, y: 5, z: 0}
   battleStep: 0.25
   inventoryStep: 0.5
   battleYOffset: 0

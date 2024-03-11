@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraControl : MonoBehaviour
 {
@@ -8,23 +9,32 @@ public class CameraControl : MonoBehaviour
     [SerializeField] GameObject lowerX;
     [SerializeField] GameObject upperZ;
     [SerializeField] GameObject lowerZ;
+    [SerializeField] bool isYBound = false;
+    [SerializeField] GameObject upperY;
     [SerializeField] GameObject player; // The player, whose position is Important
 
     [SerializeField] float inventoryX = 3.5f;   // X, Y, and Z position modifers for camera position in inventory
     [SerializeField] float inventoryY = -6f;
+    float inventoryY2 = 3f;
     [SerializeField] float inventoryZ = 8f;
 
     // X, Y, and Z camera position modifers (relative to the player) for different interactions in the game
+    [Header("Camera Positions")]
     [SerializeField] Vector3 saveStatuePos = new Vector3(5f, -9f, 12f);
     [SerializeField] Vector3 chestPos = new Vector3(0f, -3f, 2f);
     [SerializeField] Vector3 castleEntryPos = new Vector3(0f, -3f, 0f);
     [SerializeField] Vector3 hereStandsPos = new Vector3(0f, 12f, -8f);
 
+    [Header("Camera Save Point Positions")]
     [SerializeField] Vector3 savePos0 = new Vector3(10f, 10f, 10f);   // Position modifier of the camera for the save point in the test area
     [SerializeField] Vector3 savePos1 = new Vector3(5f, 10f, 5f);
+    [SerializeField] Vector3 savePos3 = new Vector3(2f, 0f, -6f);
+    [SerializeField] Vector3 savePos5 = new Vector3(5f, 0f, -10f);
 
     // X, Y, and Z camera angles for different interactions in the game
+    [Header("Camera Angles")]
     [SerializeField] Vector3 standardAngle = new Vector3(20.51f, 0f, 0f);
+    [SerializeField] Vector3 standardAngle2 = new Vector3(-10.51f, 0f, 0f); // For rooms 9 and 12
     [SerializeField] Vector3 battleAngle = new Vector3(20.51f, 0f, 0f);
     [SerializeField] Vector3 inventoryAngle = new Vector3(0f, 0f, 0f);
     [SerializeField] Vector3 saveStatueAngle = new Vector3(-20f, -20f, 0f);
@@ -32,9 +42,11 @@ public class CameraControl : MonoBehaviour
     [SerializeField] Vector3 castleEntryAngle = new Vector3(-60f, 0f, 0f);
     [SerializeField] Vector3 hereStandsAngle = new Vector3(20f, 0f, 0f);
 
-
+    [Header("Camera Save Point Angles")]
     [SerializeField] Vector3 saveAngle0 = new Vector3(20.51f, 0f, 0f); // Angle of the camera for the save point in the test area
     [SerializeField] Vector3 saveAngle1 = new Vector3(20.51f, 0f, 0f);
+    [SerializeField] Vector3 saveAngle3 = new Vector3(-30.51f, 0f, 0f);
+    [SerializeField] Vector3 saveAngle5 = new Vector3(10.51f, 5f, 0f);
 
     Transform playerTransform;
 
@@ -42,11 +54,13 @@ public class CameraControl : MonoBehaviour
     float lowerXPos;
     float upperZPos;
     float lowerZPos;
+    float upperYPos;
 
     float xValue;
     float yValue;
     float zValue;               // Value of z distance between player and camera (liable to change)
     float yConstant = 6.23f;
+    float yConstant2 = -2.23f; // For rooms 9 and 12
     float zConstant = 18.34f;   // The maximum distance between the player and the camera
 
     [SerializeField] float battleStep = .25f;    // Previously 20f; now a time (sec) value
@@ -91,6 +105,15 @@ public class CameraControl : MonoBehaviour
         lowerXPos = lowerX.transform.position.x;
         upperZPos = upperZ.transform.position.z;
         lowerZPos = lowerZ.transform.position.z;
+        if(isYBound)
+            upperYPos = upperY.transform.position.y;
+
+        if(SceneManager.GetActiveScene().buildIndex == 9)
+        {
+            standardAngle = standardAngle2;
+            yConstant = yConstant2;
+            inventoryY = inventoryY2;
+        }
 
         activeCoroutine = false;
     }
@@ -123,6 +146,11 @@ public class CameraControl : MonoBehaviour
         if (zValue < lowerZPos)
         {
             zValue = lowerZPos;
+        }
+        if(isYBound)
+        {
+            if (yValue > upperYPos)
+                yValue = upperYPos;
         }
 
         tempPos.x = xValue;
@@ -217,6 +245,16 @@ public class CameraControl : MonoBehaviour
             {
                 Vector3 targetPos = new Vector3(playerTransform.position.x + savePos1.x, playerTransform.position.y + yConstant + savePos1.y, playerTransform.position.z - zConstant + savePos1.z);
                 StartCoroutine(DoCamPosition(targetPos, inventoryStep * 3.0f, saveAngle1));
+            }
+            else if (currentPoint == 3)
+            {
+                Vector3 targetPos = new Vector3(playerTransform.position.x + savePos3.x, playerTransform.position.y + yConstant + savePos3.y, playerTransform.position.z - zConstant + savePos3.z);
+                StartCoroutine(DoCamPosition(targetPos, inventoryStep * 3.0f, saveAngle3));
+            }
+            else if (currentPoint == 5)
+            {
+                Vector3 targetPos = new Vector3(playerTransform.position.x + savePos5.x, playerTransform.position.y + yConstant + savePos5.y, playerTransform.position.z - zConstant + savePos5.z);
+                StartCoroutine(DoCamPosition(targetPos, inventoryStep * 3.0f, saveAngle5));
             }
             else
             {

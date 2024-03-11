@@ -6,6 +6,39 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Game Scenes/0_Exterior.unity
+    guid: a1e33b0ea85a29e4e95a01287534103e
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/1_HereStands.unity
+    guid: edb203fba03406e4da1ecdd77cc651bd
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/2_Fountain.unity
+    guid: 35f62dc818e614e43bd2c1e8d952c93a
+  - enabled: 1
+    path: Assets/Scenes/3_JailCell.unity
+    guid: 2a4f8c7757d69134d9e066e53e26053d
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/4_YAxisBeginnings.unity
+    guid: 3f742ee3dd61e69489d6c654d49491f7
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/5_Sunbeam.unity
+    guid: f448e37cae9826e4faff0f4a8af4b1b7
+  - enabled: 1
+    path: Assets/Scenes/6_Garden.unity
+    guid: 7d24456cd4001a0478225231ce17a341
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/7_OvergrownPlaza.unity
+    guid: c98c33c5165689d4db91eb55ae79670a
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/8_FloodedTower.unity
+    guid: 24b958388e654c24ba70f2285823e467
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/9_NovelAngleAscent.unity
+    guid: fcc1ab3859871814b940fa44314e3e4e
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/10_HoleInWall.unity
+    guid: 652937f262d09a94cb528a92ad0708e4
+  - enabled: 1
     path: Assets/Scenes/Test Scenes/TestArea.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
