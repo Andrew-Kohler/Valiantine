@@ -5,12 +5,15 @@ For:    Manages the state of the game and tells everything else what's going on
 */
 
 using System.Collections;
-using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+//using Extras;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager _instance; // = new GameManager();   // Look at this again, b/c I'm pretty sure awake should be doing this?
+    public static GameManager _instance; // = new GameManager();   // Look at this again, b/c I'm pretty sure awake should be doing this?
     private bool activeCoroutine;
     public bool towerfall = false;
 
@@ -29,6 +32,7 @@ public class GameManager : MonoBehaviour
     private GameObject currentInteractable;
 
     // All the events that broadcast when a moment of change occurs (currently used primarily for camera)
+    #region STATE CHANGE EVENTS
     public delegate void OnInventoryStateChange();
     public static event OnInventoryStateChange onInventoryStateChange;
     public delegate void OnBattleStateChange();
@@ -48,9 +52,28 @@ public class GameManager : MonoBehaviour
 
     public delegate void OnWindStateChange();
     public static event OnWindStateChange onWindStateChange;
+    #endregion
 
     //Storing player stats between scenes
-    
+    [System.Serializable]
+    private class SaveData
+    {
+        public int LastScene;   // The index of the last scene the player was in (default 0, Exterior)
+        public int LastPoint;   // The index of the spawn point the player was at (default 0, the origin of Scene 0)
+        public bool[] openedChests; // Every chest has an index; it checks this list to see if it's been opened
+        public bool[] openedGates;  // Every gate has an index; it checks this list to see if it's been opened
+        public bool towerFallen;    // Whether towerfall has occurred
+        public bool bossDefeated;   // Boss doesn't respawn
+        
+        public PlayerStats PlayerStats;             // The inventory, stats, and gems of the player
+        public InventoryHolder InventoryHolder;
+        public GemSystem GemSystem;
+    }
+    private SaveData saveData;
+
+    public bool[] openedChests; // Every chest has an index; it checks this list to see if it's been opened
+    public bool[] openedGates;  // Every gate has an index; it checks this list to see if it's been opened
+    public bool bossDefeated;   // Boss doesn't respawn
 
     private GameManager()
     {
@@ -65,15 +88,18 @@ public class GameManager : MonoBehaviour
         _isWindy = false;
         _canInteract = false;
         currentInteractable = null;
+
     }
 
-    public static GameManager Instance
+    public static GameManager Instance // Used to be static, wonder if that'll break something - yep, it sure did
     {
         get {
             if (_instance == null)
             {
                 GameObject managerHolder = new GameObject("[Game Manager]");
                 managerHolder.AddComponent<GameManager>();
+                DontDestroyOnLoad(managerHolder);
+                //_instance = managerHolder.GetComponent<GameManager>();          
             }
     
             return _instance; 
@@ -83,6 +109,21 @@ public class GameManager : MonoBehaviour
     {
         _instance = this;
         //DontDestroyOnLoad(this.gameObject);
+
+        // initialize and load data
+        saveData = new SaveData();
+        string path = Application.persistentDataPath + "/savedata.json";
+        if (File.Exists(path))
+        {
+            // read json file into data object
+            string json = File.ReadAllText(path);
+            saveData = JsonUtility.FromJson<SaveData>(json);
+        }
+        else // default save file configuration
+        {
+            saveData.LastScene = 0;
+            saveData.LastPoint = 0;
+        }
     }
 
     private void Update()
@@ -93,6 +134,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // ALL of the state check methods
+    #region UNITY METHODS
     public void GameOver(bool flag) // Setter and getter for state of player defeat
     {
         _isGameOver = flag;
@@ -263,9 +306,24 @@ public class GameManager : MonoBehaviour
     {
         return !_isGameOver && !_isInventory && !_isSettings && !_isBattle && !_isInteraction && !_isCutscene;
     }
+    #endregion
 
-    //Coroutines
+    // Save data methods
+    public void WriteSaveData(int sceneNumber, int pointNumber)
+    {
+        saveData.LastScene = sceneNumber;
+        saveData.LastPoint = pointNumber;
+        saveData.towerFallen = this.towerfall;
+        saveData.bossDefeated = this.bossDefeated;
+        saveData.openedChests = this.openedChests;
+        saveData.openedGates = this.openedGates;
+        saveData.PlayerStats = PlayerManager.Instance.PlayerStats();
+        saveData.InventoryHolder = PlayerManager.Instance.PlayerInventory();
+        saveData.GemSystem = PlayerManager.Instance.GemSystem();    
+    }
 
+
+    // Coroutines
     IEnumerator DoWindCycle()
     {
         activeCoroutine = true;

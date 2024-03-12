@@ -51,6 +51,38 @@ public class PlayerStats : Stats
 
     }
 
+    public void SetStats(PlayerStats newStats)
+    {
+        HP = newStats.HP;
+        MaxHP = newStats.MaxHP;
+        MP = newStats.MP;
+        MaxMP = newStats.MaxMP;
+
+        ATK = newStats.ATK;
+        DEF = newStats.DEF;
+        SPD = newStats.SPD;
+
+        LVL = newStats.LVL;
+        XP = newStats.XP;
+        baseXPThreshold = newStats.baseXPThreshold;
+        LVLExponent = newStats.LVLExponent;
+
+        ATKMod = newStats.ATKMod;
+        DEFMod = newStats.DEFMod;
+        SPDMod = newStats.SPDMod;
+        MaxMPMod = newStats.MaxMPMod;
+        MaxHPMod = newStats.MaxHPMod;
+        XPMod = newStats.XPMod;
+
+        GemATKMod = newStats.GemATKMod;
+        GemDEFMod = newStats.GemDEFMod;
+        GemSPDMod = newStats.GemSPDMod;
+        GemMaxMPMod = newStats.GemMaxMPMod;
+        GemMaxHPMod = newStats.GemMaxHPMod;
+
+        down = false;
+    }
+
     private void OnEnable()
     {
         SkullmetMoves.damagePlayer += SetHP;

@@ -36,7 +36,7 @@ public class InventorySlot_UI : MonoBehaviour
             itemSprite.sprite = slot.Data.MenuIcon;
             itemSprite.color = Color.white;
 
-            if (Selected) itemName.fontStyle = FontStyles.Underline;
+            if (Selected) itemName.fontStyle = FontStyles.Bold;
             else itemName.fontStyle = FontStyles.Normal;
 
             itemName.text = slot.Data.DisplayName;

@@ -18,4 +18,13 @@ public class InventoryHolder : MonoBehaviour
         inventorySystem = new InventorySystem(inventorySize);
     }
 
+    public void RefillInventory(InventorySystem newInventory)
+    {
+        for(int i = 0; i < newInventory.InventorySize; i++)
+        {
+            if (newInventory.InventorySlots[i].Data != null)
+                InventorySystem.AddToInventory(newInventory.InventorySlots[i].Data, newInventory.InventorySlots[i].StackSize);
+        }
+    }
+
 }

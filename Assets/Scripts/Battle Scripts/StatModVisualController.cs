@@ -40,12 +40,12 @@ public class StatModVisualController : MonoBehaviour
     private void OnEnable()
     {
         activeCoroutine = false;
-        Debug.Log("Displays are on");
+        //Debug.Log("Displays are on");
     }
 
     private void OnDisable()
     {
-        Debug.Log("Displays are off");
+        //Debug.Log("Displays are off");
         StopAllCoroutines();
         HideAll();
     }

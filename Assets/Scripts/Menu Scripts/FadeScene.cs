@@ -8,6 +8,7 @@ public class FadeScene : MonoBehaviour
     CanvasGroup canvasGroup;
     private void OnEnable()
     {
+        StopAllCoroutines();
         StartCoroutine(DoFadeOut());
         // Explanation so I don't forget: ViewManager initializes and then hides every view on bootup.
         // This wasn't working in SceneLoader because the coroutine was getting started before the in game UI view
@@ -15,11 +16,13 @@ public class FadeScene : MonoBehaviour
     }
     public void SceneFadeIn(string levelToLoad)
     {
+        StopAllCoroutines();
         StartCoroutine(DoFadeIn(levelToLoad));
     }
 
     public void SceneFadeOut()
     {
+        StopAllCoroutines();
         StartCoroutine(DoFadeOut());
     }
 

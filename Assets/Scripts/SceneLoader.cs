@@ -19,15 +19,19 @@ public class SceneLoader : MonoBehaviour
     GameObject transitionPanel;
     FadeScene fade;
 
+    private PlayerStats playerS;
+    private InventoryHolder playerI;
+    private GemSystem playerG;
+
     public static SceneLoader Instance
     {
         get { 
             if(_instance == null)   
             {
                 Debug.Log("Scene Loader is null!");
-                /*Debug.Log("New Scene Loader 2");
+                Debug.Log("New Scene Loader 2");
                 GameObject loaderHolder = new GameObject("[Scene Loader]");
-                loaderHolder.AddComponent<SceneLoader>();*/
+                loaderHolder.AddComponent<SceneLoader>();
             }
             return _instance; 
         }
@@ -37,6 +41,11 @@ public class SceneLoader : MonoBehaviour
     {
         lastGate = gateName;
         GameManager.Instance.Transition(true);  // Informs the game manager we're in a transition state
+
+        // Save all the player's stuff
+        playerS = PlayerManager.Instance.PlayerStats();
+        playerI = PlayerManager.Instance.PlayerInventory();
+        playerG = PlayerManager.Instance.GemSystem();
 
         transitionPanel = GameObject.Find("Black Panel");   // Fade out to black before loading the next scene
         fade = transitionPanel.GetComponent<FadeScene>();
@@ -72,6 +81,10 @@ public class SceneLoader : MonoBehaviour
     {
         // When the level is loaded:
         GameObject player = GameObject.Find("Player");  // Find the player gameObject
+        // Set the player's stats and inventory to be correct
+        
+        StartCoroutine(DoLoadScene());
+
         Gateway[] allGates = FindObjectsOfType<Gateway>();  // Find all gateways
         foreach(Gateway gateway in allGates)    // Iterate through them
         {
@@ -81,11 +94,26 @@ public class SceneLoader : MonoBehaviour
             }
         }
 
+        transitionPanel = GameObject.Find("Black Panel");   // Fade us into this new room of adventure!
+        fade = transitionPanel.GetComponent<FadeScene>();
+        fade.SceneFadeOut();
+
     }
 
     private void OnDisable()
     {    
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private IEnumerator DoLoadScene()
+    {
+        yield return new WaitForEndOfFrame();
+        //if(playerS != null)
+        PlayerManager.Instance.PlayerStats().SetStats(playerS);
+        //if (playerI != null)
+        PlayerManager.Instance.PlayerInventory().RefillInventory(playerI.InventorySystem);
+        //if (playerG != null)
+        PlayerManager.Instance.GemSystem().RefillGems(playerG);
     }
 
 }

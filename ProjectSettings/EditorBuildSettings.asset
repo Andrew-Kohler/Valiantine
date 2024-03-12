@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Game Scenes/23_MainMenu.unity
+    guid: a4899305543927b4383d4ef4f60834e0
+  - enabled: 1
     path: Assets/Scenes/Game Scenes/0_Exterior.unity
     guid: a1e33b0ea85a29e4e95a01287534103e
   - enabled: 1
@@ -15,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Game Scenes/2_Fountain.unity
     guid: 35f62dc818e614e43bd2c1e8d952c93a
   - enabled: 1
-    path: Assets/Scenes/3_JailCell.unity
+    path: Assets/Scenes/Game Scenes/3_JailCell.unity
     guid: 2a4f8c7757d69134d9e066e53e26053d
   - enabled: 1
     path: Assets/Scenes/Game Scenes/4_YAxisBeginnings.unity
@@ -24,7 +27,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Game Scenes/5_Sunbeam.unity
     guid: f448e37cae9826e4faff0f4a8af4b1b7
   - enabled: 1
-    path: Assets/Scenes/6_Garden.unity
+    path: Assets/Scenes/Game Scenes/6_Garden.unity
     guid: 7d24456cd4001a0478225231ce17a341
   - enabled: 1
     path: Assets/Scenes/Game Scenes/7_OvergrownPlaza.unity
@@ -38,6 +41,42 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game Scenes/10_HoleInWall.unity
     guid: 652937f262d09a94cb528a92ad0708e4
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/11_TowerTerrace.unity
+    guid: 08924eb694ca1ed428c191b649b72074
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/12_NovelAngleDescent.unity
+    guid: a1c9b27bc1ef21b44a5fe7d6247d0b2e
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/13_BossBridge.unity
+    guid: 4d53236f2a6297b40b9882457f8ef334
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/14_DarkLever.unity
+    guid: c02c8d0229b119d4284d106b6b41ae81
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/15_HealStatue1.unity
+    guid: efdf9cd842a96b44dabbc2e9a861f0e5
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/16_Heart.unity
+    guid: 0fd21eb5a32d2cd4486e07ebff024e34
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/17_LostWoods.unity
+    guid: 0f9f4540697a6a34a879eab37293140c
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/18_BeforeBoss.unity
+    guid: 89380cdab65798d4093f0d8d81438696
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/19_BossRoom.unity
+    guid: 43b306e77b11f5b4fb6f6be01c8ab32b
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/20_BeforeHeartsong.unity
+    guid: 67ca01c4b8bf7bc41b1310ce33106308
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/21_Heartsong.unity
+    guid: 8f7f1349195f5fa4baad203ad85aaf6b
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/22_GreatPatience.unity
+    guid: 634aa62037fbaf44b95d3293e81ee119
   - enabled: 1
     path: Assets/Scenes/Test Scenes/TestArea.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab

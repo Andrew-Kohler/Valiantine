@@ -7,14 +7,6 @@ using UnityEngine;
 [System.Serializable]
 public class GemSystem : MonoBehaviour
 {
-    bool hasWill;
-    bool hasCourage;
-    bool hasConstitution;
-    bool hasPatience;
-    bool hasGreatPatience;
-    bool hasCunning;
-    bool hasHeart;
-
     // Current order in these lists: 
     // Will (starter)
     // Courage
@@ -28,6 +20,7 @@ public class GemSystem : MonoBehaviour
     public List<GemStatBlock> GemStats => gemStats;
 
     GemStatBlock currentGem;    // The gem that's currently equipped
+    public int currentGemIndex = -1;        // Index for display
     ItemData currentGemText;
     public GemStatBlock CurrentGem => currentGem;   // Getter for current gem
     public ItemData CurrentGemText => currentGemText;   // Getter for current gem item data
@@ -49,15 +42,28 @@ public class GemSystem : MonoBehaviour
 
     private void Start()
     {
+
         heldGemList = new ItemData[7];
         if(currentGem == null)
         {
             currentGem = gemStats[0];
         }
-        
+       
         playerStats = PlayerManager.Instance.PlayerStats();
     }
 
+    public void RefillGems(GemSystem newGems)   // For scene transitions
+    {
+        if(heldGemList != null)
+        {
+            for (int i = 0; i < heldGemList.Length; i++)
+            {
+                obtainGem(newGems.heldGemList[i]);
+            }
+            currentGem = newGems.currentGem;
+        }
+        
+    }
 
     public void obtainGem(ItemData data) // Method for adding a gem to player inventory
     {
@@ -68,6 +74,7 @@ public class GemSystem : MonoBehaviour
     {
         currentGem = gemStats[index];
         currentGemText = heldGemList[index];
+        //currentGemIndex = index;
         // TODO: Update Player Stats with all its new mods
         playerStats.SetGemATKMod(currentGem.ATKMod);
         playerStats.SetGemDEFMod(currentGem.DEFMod);

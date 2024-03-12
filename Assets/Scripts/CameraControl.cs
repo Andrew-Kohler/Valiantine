@@ -22,6 +22,7 @@ public class CameraControl : MonoBehaviour
     [Header("Camera Positions")]
     [SerializeField] Vector3 saveStatuePos = new Vector3(5f, -9f, 12f);
     [SerializeField] Vector3 chestPos = new Vector3(0f, -3f, 2f);
+    Vector3 chestPos2 = new Vector3(0f, 2.23f, 0f);
     [SerializeField] Vector3 castleEntryPos = new Vector3(0f, -3f, 0f);
     [SerializeField] Vector3 hereStandsPos = new Vector3(0f, 12f, -8f);
 
@@ -39,6 +40,7 @@ public class CameraControl : MonoBehaviour
     [SerializeField] Vector3 inventoryAngle = new Vector3(0f, 0f, 0f);
     [SerializeField] Vector3 saveStatueAngle = new Vector3(-20f, -20f, 0f);
     [SerializeField] Vector3 chestAngle = new Vector3(10f, 0f, 0f);
+    Vector3 chestAngle2 = new Vector3(0f, 0f, 0f);
     [SerializeField] Vector3 castleEntryAngle = new Vector3(-60f, 0f, 0f);
     [SerializeField] Vector3 hereStandsAngle = new Vector3(20f, 0f, 0f);
 
@@ -108,11 +110,13 @@ public class CameraControl : MonoBehaviour
         if(isYBound)
             upperYPos = upperY.transform.position.y;
 
-        if(SceneManager.GetActiveScene().buildIndex == 9)
+        if(SceneManager.GetActiveScene().buildIndex == 10 || SceneManager.GetActiveScene().buildIndex == 13)
         {
             standardAngle = standardAngle2;
             yConstant = yConstant2;
             inventoryY = inventoryY2;
+            chestAngle = chestAngle2;
+            chestPos = chestPos2;
         }
 
         activeCoroutine = false;

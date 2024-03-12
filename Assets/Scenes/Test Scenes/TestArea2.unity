@@ -513,7 +513,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3510521687597023680, guid: 4bc45c8efa7c68840a10743132bdae17, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.6
+      value: -70.5
       objectReference: {fileID: 0}
     - target: {fileID: 3510521687597023680, guid: 4bc45c8efa7c68840a10743132bdae17, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1222,8 +1222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c11c40ce7e456014892a461895bc07ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gatewayName: Gateway 2
-  levelToLoad: TestArea2
+  gatewayName: 2
+  levelToLoad: TestArea
   spawnPoint: {fileID: 854278558}
 --- !u!65 &444966973
 BoxCollider:
@@ -7486,7 +7486,7 @@ GameObject:
   m_Layer: 0
   m_Name: Spawn Point 2
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
@@ -7498,7 +7498,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 854278557}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.3, y: -0.054, z: 0}
+  m_LocalPosition: {x: 28.3, y: -0.054, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

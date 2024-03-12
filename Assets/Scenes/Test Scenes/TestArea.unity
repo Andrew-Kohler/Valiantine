@@ -9874,6 +9874,8 @@ MonoBehaviour:
   lowerX: {fileID: 808535954}
   upperZ: {fileID: 1514909810}
   lowerZ: {fileID: 388552229}
+  isYBound: 0
+  upperY: {fileID: 0}
   player: {fileID: 908275599}
   inventoryX: 3.5
   inventoryY: -5
@@ -9883,7 +9885,11 @@ MonoBehaviour:
   castleEntryPos: {x: 0, y: -3, z: 0}
   hereStandsPos: {x: 0, y: 12, z: -8}
   savePos0: {x: 25, y: 10, z: -25}
+  savePos1: {x: 5, y: 10, z: 5}
+  savePos3: {x: 2, y: 0, z: -6}
+  savePos5: {x: 5, y: 0, z: -10}
   standardAngle: {x: 20.51, y: 0, z: 0}
+  standardAngle2: {x: -10.51, y: 0, z: 0}
   battleAngle: {x: 20.51, y: 0, z: 0}
   inventoryAngle: {x: 8, y: 0, z: 0}
   saveStatueAngle: {x: -20, y: -20, z: 0}
@@ -9891,6 +9897,9 @@ MonoBehaviour:
   castleEntryAngle: {x: -60, y: 0, z: 0}
   hereStandsAngle: {x: 20, y: 0, z: 0}
   saveAngle0: {x: 20.51, y: 0, z: 0}
+  saveAngle1: {x: 20.51, y: 0, z: 0}
+  saveAngle3: {x: -30.51, y: 0, z: 0}
+  saveAngle5: {x: 10.51, y: 5, z: 0}
   battleStep: 0.25
   inventoryStep: 0.5
   battleYOffset: 0
@@ -11449,7 +11458,7 @@ GameObject:
   m_Layer: 0
   m_Name: Spawn Point 2
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
@@ -11461,7 +11470,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1443731472}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.3, y: -0.054, z: 0}
+  m_LocalPosition: {x: 30.6, y: -0.054, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11659,7 +11668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c11c40ce7e456014892a461895bc07ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gatewayName: Gateway 2
+  gatewayName: 2
   levelToLoad: TestArea2
   spawnPoint: {fileID: 1443731473}
 --- !u!65 &1466675336
@@ -11733,7 +11742,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1466675334}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -94.3, y: 3.2905781, z: -12.53}
+  m_LocalPosition: {x: -31.61, y: 3.2905781, z: -12.53}
   m_LocalScale: {x: 0.27839, y: 6.58116, z: 5.4327297}
   m_ConstrainProportionsScale: 0
   m_Children:

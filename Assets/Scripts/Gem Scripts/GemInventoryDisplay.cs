@@ -50,7 +50,7 @@ public class GemInventoryDisplay : MonoBehaviour
     private void Start()
     {
         selectorArrow = selectArrow.GetComponent<InventoryArrow>();
-        Init();
+        //Init();
         
         selectedSlot = 0;
         equippedSlot = -1;
@@ -236,6 +236,8 @@ public class GemInventoryDisplay : MonoBehaviour
                 gemDisplays[i].GetComponent<GemDisplay>().showGem();
             }
         }
+        StartCoroutine(DoBootupEquip(gemSystem.currentGemIndex));
+
     }
 
     // Coroutines ----------------------------------
@@ -310,6 +312,22 @@ public class GemInventoryDisplay : MonoBehaviour
         selectArrow.SetActive(false);
         yield return new WaitForSeconds(5f);
         activeCoroutine = false;
+    }
+
+    IEnumerator DoBootupEquip(int equippedSlot)
+    {
+        yield return new WaitForEndOfFrame();
+        /*selectedSlot = gemSystem.currentGemIndex;
+
+        if (equippedSlot != -1) // TODO: Find a way to give the player the Gem of Will and have it equipped already when the game begins
+        {
+            gemDisplays[equippedSlot].GetComponent<GemDisplay>().equipGem(false); // Turn off the outline on the old selected one
+        }
+        gemSystem.equipGem(selectedSlot);                                       // Alert the backend gem system that a change has been made
+        gemDisplays[selectedSlot].GetComponent<GemDisplay>().equipGem(true);    // Turn on the outline on the new selected one
+        equippedSlot = selectedSlot;
+        UpdateStatDisplay();    // Alert the stat display that a change has been made
+        currentIttyBitty.sprite = ittyBitty[equippedSlot];      // Alert the itty bitty gem that a change has been made*/
     }
 
 }
