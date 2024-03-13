@@ -8,8 +8,12 @@ public class FadeScene : MonoBehaviour
     CanvasGroup canvasGroup;
     private void OnEnable()
     {
-        StopAllCoroutines();
-        StartCoroutine(DoFadeOut());
+        if(SceneManager.GetActiveScene().name != "0_Exterior")
+        {
+            StopAllCoroutines();
+            StartCoroutine(DoFadeOut());
+        }
+        
         // Explanation so I don't forget: ViewManager initializes and then hides every view on bootup.
         // This wasn't working in SceneLoader because the coroutine was getting started before the in game UI view
         // was ever actually shown. It got to run for a frame before getting turned off and on again.

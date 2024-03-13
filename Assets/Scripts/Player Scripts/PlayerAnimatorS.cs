@@ -212,6 +212,7 @@ public class PlayerAnimatorS : MonoBehaviour
             {
                 animationSpeed = 5.4f;
                 idleTimer -= Time.deltaTime; // Time to switch to another idle
+                
                 if (direction == 0)
                 {
                     if (idleTimer <= 0)
@@ -291,6 +292,16 @@ public class PlayerAnimatorS : MonoBehaviour
     }
 
     // Public methods -------------------------------------------------------------
+
+    public int GetDirection()
+    {
+        return direction;
+    }
+
+    public void SetDirection(int newDir)
+    {
+        direction = newDir;
+    }
     public void PlayRedPotionDrink()
     {
         StopAllCoroutines();

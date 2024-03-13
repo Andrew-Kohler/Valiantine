@@ -11,6 +11,8 @@ using UnityEngine;
 public class Gateway : MonoBehaviour
 {
    [SerializeField] public string gatewayName; // This should match for both gateways
+   [SerializeField] public bool lostWoods = false;
+   [SerializeField] public string destinationName;
    [SerializeField] public string levelToLoad; // The level the gateway leads to
    [SerializeField] public Transform spawnPoint;   // Where the player should spawn
 
@@ -18,7 +20,10 @@ public class Gateway : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            SceneLoader.Instance.OnEnterGateway(gatewayName, levelToLoad);
+            if(lostWoods)
+                SceneLoader.Instance.OnEnterGateway(destinationName, levelToLoad, lostWoods);
+            else
+                SceneLoader.Instance.OnEnterGateway(gatewayName, levelToLoad, lostWoods);
         }
     }
 }

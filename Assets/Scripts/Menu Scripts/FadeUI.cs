@@ -40,7 +40,6 @@ public class FadeUI : MonoBehaviour
         canvasGroup.blocksRaycasts = true;
         while (canvasGroup.alpha < 1f)
         {
-          //  Debug.Log("Right foot in");
             canvasGroup.alpha += Time.deltaTime * modifier;
             yield return null;
         }

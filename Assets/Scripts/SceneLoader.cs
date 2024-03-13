@@ -7,6 +7,7 @@ For:    A singleton that handles how scene transitions play out and contains met
 
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -38,7 +39,7 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    public void OnEnterGateway(string gateName, string levelToLoad)
+    public void OnEnterGateway(string gateName, string levelToLoad, bool lostWoods)
     {
         lastGate = gateName;
         GameManager.Instance.Transition(true);  // Informs the game manager we're in a transition state
@@ -48,15 +49,62 @@ public class SceneLoader : MonoBehaviour
         playerI = PlayerManager.Instance.PlayerInventory();
         playerG = PlayerManager.Instance.GemSystem();
 
+
         GameObject.Find("Player Sprite").GetComponent<PlayerAnimatorS>().standStill = true;
+        GameManager.Instance.transitionDirection = GameObject.Find("Player Sprite").GetComponent<PlayerAnimatorS>().GetDirection();
         transitionPanel = GameObject.Find("Black Panel");   // Fade out to black before loading the next scene
         fade = transitionPanel.GetComponent<FadeScene>();
-        fade.SceneFadeIn(levelToLoad);
+        if (lostWoods)
+        {
+            GameManager.Instance.lostWoodsEscapeTracker.Add(Int32.Parse(gateName));
+            //Debug.Log(Int32.Parse(gateName));
+            if (GameManager.Instance.lostWoodsEscapeTracker.Count == 5)
+            {
+                lastGate = "3";
+                if (GameManager.Instance.LostWoodsClearCheck())
+                {
+                    fade.SceneFadeIn("18_BeforeBoss");
+                }
+                else if (GameManager.Instance.LostWoodsSecretCheck())
+                {
+
+                    fade.SceneFadeIn("22_GreatPatience");
+                }
+                else
+                {
+                    
+                    fade.SceneFadeIn("2_Fountain");
+                }
+                GameManager.Instance.lostWoodsEscapeTracker.Clear();
+            }
+            else
+            {
+                
+                fade.SceneFadeIn(levelToLoad);
+            }
+        }
+        else
+        {
+            fade.SceneFadeIn(levelToLoad);
+        }
+        
     }
 
     public void OnForcedTransition(string levelToLoad) // For when we need to load a scene WITHOUT caring about a player!
     {
         transitionPanel = GameObject.Find("Black Panel");   // Fade out to black before loading the next scene
+        fade = transitionPanel.GetComponent<FadeScene>();
+        fade.SceneFadeIn(levelToLoad);
+    }
+
+    public void OnForcedPlayerTransition(string levelToLoad) // For when we need to care a little about a player
+    {
+        // Save all the player's stuff
+        playerS = PlayerManager.Instance.PlayerStats();
+        playerI = PlayerManager.Instance.PlayerInventory();
+        playerG = PlayerManager.Instance.GemSystem();
+
+        transitionPanel = GameObject.Find("Black Panel");   
         fade = transitionPanel.GetComponent<FadeScene>();
         fade.SceneFadeIn(levelToLoad);
     }
@@ -84,7 +132,9 @@ public class SceneLoader : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) // Not really sure about these paramenters, but they're required, so sure?
     {
         // When the level is loaded:
+        GameManager.Instance.Cutscene(false);
         GameObject player = GameObject.Find("Player");  // Find the player gameObject
+        GameObject.Find("Player Sprite").GetComponent<PlayerAnimatorS>().SetDirection(GameManager.Instance.transitionDirection);
         // Set the player's stats and inventory to be correct
         
         if(loadCount > 0 && player != null)
@@ -99,11 +149,18 @@ public class SceneLoader : MonoBehaviour
             }
         }
 
-        transitionPanel = GameObject.Find("Black Panel");   // Fade us into this new room of adventure!
-        fade = transitionPanel.GetComponent<FadeScene>();
-        fade.SceneFadeOut();
-
+        if (SceneManager.GetActiveScene().name == "0_Exterior")
+        {
+            StartCoroutine(DoIntroCutscene());
+        }
+        else
+        {
+            transitionPanel = GameObject.Find("Black Panel");   // Fade us into this new room of adventure!
+            fade = transitionPanel.GetComponent<FadeScene>();
+            fade.SceneFadeOut();
+        }
         loadCount++;
+
 
     }
 
@@ -121,6 +178,18 @@ public class SceneLoader : MonoBehaviour
             PlayerManager.Instance.PlayerInventory().RefillInventory(playerI.InventorySystem);
         //if (playerG != null)
             PlayerManager.Instance.GemSystem().RefillGems(playerG);
+    }
+
+    private IEnumerator DoIntroCutscene()
+    {
+        yield return new WaitForEndOfFrame();
+        ViewManager.GetView<InGameUIView>().playIntroConvo();
+        yield return new WaitForSeconds(24f);
+
+        transitionPanel = GameObject.Find("Black Panel");   // Fade us into this new room of adventure!
+        fade = transitionPanel.GetComponent<FadeScene>();
+        fade.SceneFadeOut();
+        yield return null;
     }
 
 }

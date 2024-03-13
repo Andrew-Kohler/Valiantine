@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager _instance; // = new GameManager();   // Look at this again, b/c I'm pretty sure awake should be doing this?
     private bool activeCoroutine;
-    public bool towerfall = false;
+    public bool towerfall = true;
 
     private bool _isGameOver;   // Has the player been defeated?
     private bool _isInventory;  // Are we in the inventory?
@@ -75,6 +75,11 @@ public class GameManager : MonoBehaviour
     public bool[] openedGates;  // Every gate has an index; it checks this list to see if it's been opened
     public bool bossDefeated;   // Boss doesn't respawn
 
+    public int transitionDirection; // The way we were facing when we went into a scene
+
+    public ArrayList lostWoodsEscapeTracker;    // The list of traversed gates we check to see if escape from lost woods is possible
+    private ArrayList lostWoodsNormalEscape;// = new ArrayList { 1, 4, 2, 3, 1 };
+    private ArrayList lostWoodsWeirdEscape;// = new ArrayList { 1, 3, 2, 4, 1 };
     private GameManager()
     {
         activeCoroutine = false;
@@ -89,9 +94,12 @@ public class GameManager : MonoBehaviour
         _canInteract = false;
         currentInteractable = null;
 
+        lostWoodsEscapeTracker = new ArrayList();
+        lostWoodsNormalEscape = new ArrayList { 3, 2, 4, 1, 3 };
+        lostWoodsWeirdEscape = new ArrayList { 1, 4, 2, 3, 1 };
     }
 
-    public static GameManager Instance // Used to be static, wonder if that'll break something - yep, it sure did
+    public static GameManager Instance 
     {
         get {
             if (_instance == null)
@@ -328,6 +336,31 @@ public class GameManager : MonoBehaviour
     public string SavedScene()
     {
         return saveData.LastScene;
+    }
+
+    public bool LostWoodsClearCheck()
+    {
+        for(int i = 0; i < 5; i++)
+        {
+            
+            if (lostWoodsEscapeTracker[i].ToString() != lostWoodsNormalEscape[i].ToString())
+            {
+                //Debug.Log(lostWoodsEscapeTracker[i] + " is not equal to " + lostWoodsNormalEscape[i]);
+                return false;
+            }
+                
+        }
+        return true;
+    }
+
+    public bool LostWoodsSecretCheck()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            if (lostWoodsEscapeTracker[i].ToString() != lostWoodsWeirdEscape[i].ToString())
+                return false;
+        }
+        return true;
     }
 
 
