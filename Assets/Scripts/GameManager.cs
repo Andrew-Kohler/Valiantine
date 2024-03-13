@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     private class SaveData
     {
-        public int LastScene;   // The index of the last scene the player was in (default 0, Exterior)
+        public string LastScene;   // The index of the last scene the player was in (default 0, Exterior)
         public int LastPoint;   // The index of the spawn point the player was at (default 0, the origin of Scene 0)
         public bool[] openedChests; // Every chest has an index; it checks this list to see if it's been opened
         public bool[] openedGates;  // Every gate has an index; it checks this list to see if it's been opened
@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
         }
         else // default save file configuration
         {
-            saveData.LastScene = 0;
+            saveData.LastScene = "0_Exterior";
             saveData.LastPoint = 0;
         }
     }
@@ -309,9 +309,9 @@ public class GameManager : MonoBehaviour
     #endregion
 
     // Save data methods
-    public void WriteSaveData(int sceneNumber, int pointNumber)
+    public void WriteSaveData(string sceneName, int pointNumber)
     {
-        saveData.LastScene = sceneNumber;
+        saveData.LastScene = sceneName;
         saveData.LastPoint = pointNumber;
         saveData.towerFallen = this.towerfall;
         saveData.bossDefeated = this.bossDefeated;
@@ -319,7 +319,15 @@ public class GameManager : MonoBehaviour
         saveData.openedGates = this.openedGates;
         saveData.PlayerStats = PlayerManager.Instance.PlayerStats();
         saveData.InventoryHolder = PlayerManager.Instance.PlayerInventory();
-        saveData.GemSystem = PlayerManager.Instance.GemSystem();    
+        saveData.GemSystem = PlayerManager.Instance.GemSystem();
+
+        string json = JsonUtility.ToJson(saveData);
+        File.WriteAllText(Application.persistentDataPath + "/savedata.json", json);
+    }
+
+    public string SavedScene()
+    {
+        return saveData.LastScene;
     }
 
 

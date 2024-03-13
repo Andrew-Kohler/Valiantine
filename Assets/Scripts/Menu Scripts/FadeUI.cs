@@ -27,10 +27,17 @@ public class FadeUI : MonoBehaviour
         StartCoroutine(DoFadeOutUI());
     }
 
+    public void UIFadeOutPiece()
+    {
+        StopAllCoroutines();
+        StartCoroutine(DoFadeOutUIPiece());
+    }
+
     IEnumerator DoFadeInUI()
     {
         canvasGroup = GetComponent<CanvasGroup>();
-
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
         while (canvasGroup.alpha < 1f)
         {
           //  Debug.Log("Right foot in");
@@ -71,6 +78,21 @@ public class FadeUI : MonoBehaviour
             
         }
         yield return null;    
+    }
+
+    IEnumerator DoFadeOutUIPiece() // So, for fading in, it's better to switch using the view manager and then call the coroutine
+    {                           // But for fading out, we don't want to deactivate until this is done, so it's better to do the call in here
+        canvasGroup = GetComponent<CanvasGroup>();
+
+        while (canvasGroup.alpha > 0f)
+        {
+            canvasGroup.alpha -= Time.deltaTime * modifier;
+            yield return null;
+        }
+
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+
     }
 }
 

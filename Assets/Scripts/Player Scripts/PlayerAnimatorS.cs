@@ -29,6 +29,7 @@ public class PlayerAnimatorS : MonoBehaviour
     private float idleTimer;
 
     public bool dealDamage = false;         // A boolean flipped on and off to indicate when in the animation damage should be dealt to the player to keep things lined up
+    public bool standStill = false;         // A bool to make the player quit their moving when something important is happening
 
     private int _AttackIndex = 23;
     private int _DefeatIndex = 22;
@@ -205,6 +206,61 @@ public class PlayerAnimatorS : MonoBehaviour
                 StopCoroutine(DoSecondIdleAnim(2));
                 StopCoroutine(DoSecondIdleAnim(3));
 
+            }
+
+            else if (GameManager.Instance.isTransition())
+            {
+                animationSpeed = 5.4f;
+                idleTimer -= Time.deltaTime; // Time to switch to another idle
+                if (direction == 0)
+                {
+                    if (idleTimer <= 0)
+                    {
+                        StartCoroutine(DoSecondIdleAnim(0));
+                    }
+                    else
+                    {
+                        animationIndex = _ActiveIdleRIndex;
+                        frameLoop = 5;
+                    }
+
+                }
+                else if (direction == 1)
+                {
+                    if (idleTimer <= 0)
+                    {
+                        StartCoroutine(DoSecondIdleAnim(1));
+                    }
+                    else
+                    {
+                        animationIndex = _ActiveIdleLIndex;
+                        frameLoop = 5;
+                    }
+                }
+                else if (direction == 2)
+                {
+                    if (idleTimer <= 0)
+                    {
+                        StartCoroutine(DoSecondIdleAnim(2));
+                    }
+                    else
+                    {
+                        animationIndex = _ActiveIdleBackwardsIndex;
+                        frameLoop = 5;
+                    }
+                }
+                else if (direction == 3)
+                {
+                    if (idleTimer <= 0)
+                    {
+                        StartCoroutine(DoSecondIdleAnim(3));
+                    }
+                    else
+                    {
+                        animationIndex = _ActiveIdleForwardsIndex;
+                        frameLoop = 5;
+                    }
+                }
             }
 
             string clipKey, frameKey;

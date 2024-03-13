@@ -20,7 +20,7 @@ public class GemSystem : MonoBehaviour
     public List<GemStatBlock> GemStats => gemStats;
 
     GemStatBlock currentGem;    // The gem that's currently equipped
-    public int currentGemIndex = -1;        // Index for display
+    public int currentGemIndex = 0;        // Index for display
     ItemData currentGemText;
     public GemStatBlock CurrentGem => currentGem;   // Getter for current gem
     public ItemData CurrentGemText => currentGemText;   // Getter for current gem item data
@@ -47,6 +47,7 @@ public class GemSystem : MonoBehaviour
         if(currentGem == null)
         {
             currentGem = gemStats[0];
+            currentGemIndex = 0;
         }
        
         playerStats = PlayerManager.Instance.PlayerStats();
@@ -58,10 +59,12 @@ public class GemSystem : MonoBehaviour
         {
             for (int i = 0; i < heldGemList.Length; i++)
             {
-                obtainGem(newGems.heldGemList[i]);
+                if(newGems.heldGemList[i] != null)
+                    obtainGem(newGems.heldGemList[i]);
             }
             currentGem = newGems.currentGem;
         }
+        currentGemIndex = newGems.currentGemIndex;
         
     }
 
