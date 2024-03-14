@@ -21,7 +21,8 @@ MonoBehaviour:
   MPRestore: 0
   InventoryDescription: 'WILL: A shining gem imbuned in your sword.'
   UseDescription: 'SPELL: Heart Aflame - Raise player ATK, DEF, and SPD by 10%, and
-    attack 1 enemy for 150% of ATK.'
+    attack 1 enemy for 150% of ATK. (5 MP)'
   BattleUseDescription: 
   SingleObtainDescription: You found the Gem of ... Will? Didn't you already have
     this?
+  MultipleObtainDescription: 

@@ -21,7 +21,8 @@ MonoBehaviour:
   MPRestore: 6
   InventoryDescription: 'HEART: HP and MP are combined into a single stat.'
   UseDescription: 'SPELL: Take Heart - The next time you would be hurt, heal for
-    the damage dealt to you.'
+    the damage dealt to you. (4 MP)'
   BattleUseDescription: 
   SingleObtainDescription: You found the Gem of Heart! It looks like it fits perfectly
     in the hilt of your sword.
+  MultipleObtainDescription: 

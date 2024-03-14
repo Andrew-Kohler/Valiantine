@@ -19,9 +19,19 @@ public class PlayerMoves : MonoBehaviour
         StartCoroutine(DoAttack(enemy));
     }
 
-    public void SpellOfWill()
+    public void SpellOfWill(GameObject enemy)
     {
-        StartCoroutine(DoWill());
+        StartCoroutine(DoWill(enemy));
+    }
+
+    public void SpellOfCourage(GameObject enemy)
+    {
+        StartCoroutine(DoCourage(enemy));
+    }
+
+    public void SpellOfConstitution(GameObject[] enemies)
+    {
+        StartCoroutine(DoConstitution(enemies));
     }
 
 
@@ -50,8 +60,67 @@ public class PlayerMoves : MonoBehaviour
         yield return null;
     }
 
-    protected virtual IEnumerator DoWill() // I will add all of the spells...
+    protected virtual IEnumerator DoWill(GameObject enemy) // I will add all of the spells...
     {
+        moveInProgress = true;
+        
+
+        moveInProgress = false;
+        animator.dealDamage = false;
+        yield return null;
+    }
+
+    protected virtual IEnumerator DoCourage(GameObject enemy) 
+    {
+        moveInProgress = true;
+
+        moveInProgress = false;
+        animator.dealDamage = false;
+        yield return null;
+    }
+
+    protected virtual IEnumerator DoConstitution(GameObject[] enemies) 
+    {
+        moveInProgress = true;
+
+        moveInProgress = false;
+        animator.dealDamage = false;
+        yield return null;
+    }
+
+    protected virtual IEnumerator DoPatience()
+    {
+        moveInProgress = true;
+
+        moveInProgress = false;
+        animator.dealDamage = false;
+        yield return null;
+    }
+
+    protected virtual IEnumerator DoGreatPatience()
+    {
+        moveInProgress = true;
+
+        moveInProgress = false;
+        animator.dealDamage = false;
+        yield return null;
+    }
+
+    protected virtual IEnumerator DoCunning()
+    {
+        moveInProgress = true;
+
+        moveInProgress = false;
+        animator.dealDamage = false;
+        yield return null;
+    }
+
+    protected virtual IEnumerator DoHeart()
+    {
+        moveInProgress = true;
+
+        moveInProgress = false;
+        animator.dealDamage = false;
         yield return null;
     }
 

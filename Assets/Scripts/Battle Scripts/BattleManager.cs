@@ -20,6 +20,7 @@ public class BattleManager : MonoBehaviour
     private bool activeCoroutine;
 
     private int currentTurn;
+    private int attackType;         // 0 = regular attack, 1 = Will spell, 2 = Courage spell
     private bool newLoop;           // A boolean for doing things once at the start of a new turn cycle
     private bool playerTurn;        // A boolean for doing things once at the start of a player's turn
 
@@ -248,9 +249,97 @@ public class BattleManager : MonoBehaviour
                                     }
                                     else if (indAction.GetLeadBox() == "SPL")
                                     {
-                                        status = MenuStatus.Spell;
-                                        StartCoroutine(indAction.DoFlashOut(true));
-                                        ViewManager.GetView<BattleUIView>().setText("This will be...complicated, and will need to function on a per-gem basis.");
+                                        
+                                        if(playerGemSys.CurrentGem.name == "Will")
+                                        {
+                                            if(playerStats.GetMP() >= 5)
+                                            {
+                                                status = MenuStatus.Spell;
+                                                StartCoroutine(indAction.DoFlashOut(true));
+                                                CreateSelectionArrow(); // Create the arrow for picking your fight
+                                                ViewManager.GetView<BattleUIView>().setText("Which enemy will you cast Heart Aflame on?");
+                                            }
+                                            else
+                                            {
+                                                ViewManager.GetView<BattleUIView>().setText("Not enough mana for that spell!");
+                                            }
+                                           
+                                        }
+                                        else if(playerGemSys.CurrentGem.name == "Courage")
+                                        {
+                                            if (playerStats.GetMP() >= 6)
+                                            {
+                                                status = MenuStatus.Spell;
+                                                StartCoroutine(indAction.DoFlashOut(true));
+                                                CreateSelectionArrow(); // Create the arrow for picking your fight
+                                                ViewManager.GetView<BattleUIView>().setText("Which enemy will you Seize The Blade against?");
+                                            }
+                                            else
+                                            {
+                                                ViewManager.GetView<BattleUIView>().setText("Not enough mana for that spell!");
+                                            }
+                                            
+                                        }
+                                        else if (playerGemSys.CurrentGem.name == "Constitution")
+                                        {
+                                            if (playerStats.GetMP() >= 6)
+                                            {
+                                                status = MenuStatus.Spell;
+                                                StartCoroutine(indAction.DoFlashOut(true));
+                                                ViewManager.GetView<BattleUIView>().setText("Temp - Constitution is an insta cast");
+                                            }
+                                            else
+                                            {
+                                                ViewManager.GetView<BattleUIView>().setText("Not enough mana for that spell!");
+                                            }
+                                            
+                                        }
+                                        else if (playerGemSys.CurrentGem.name == "Patience")
+                                        {
+                                            if (playerStats.GetMP() >= 4)
+                                            {
+                                                status = MenuStatus.Spell;
+                                                StartCoroutine(indAction.DoFlashOut(true));
+                                                ViewManager.GetView<BattleUIView>().setText("Temp - Patience is an insta cast");
+                                            }
+                                            else
+                                            {
+                                                ViewManager.GetView<BattleUIView>().setText("Not enough mana for that spell!");
+                                            }
+                                        }
+                                        else if (playerGemSys.CurrentGem.name == "Great Patience")
+                                        {
+                                            if (playerStats.GetMP() >= 6)
+                                            {
+                                                status = MenuStatus.Spell;
+                                                StartCoroutine(indAction.DoFlashOut(true));
+                                                ViewManager.GetView<BattleUIView>().setText("Temp - GP is an insta cast");
+                                            }
+                                            else
+                                            {
+                                                ViewManager.GetView<BattleUIView>().setText("Not enough mana for that spell!");
+                                            }
+                                            
+                                        }
+                                        else if (playerGemSys.CurrentGem.name == "Cunning")
+                                        {
+                                            ViewManager.GetView<BattleUIView>().setText("Temp - IDEK how I'm gonna do cunning");
+                                        }
+                                        else if (playerGemSys.CurrentGem.name == "Heart")
+                                        {
+                                            if (playerStats.GetMP() >= 4)
+                                            {
+                                                status = MenuStatus.Spell;
+                                                StartCoroutine(indAction.DoFlashOut(true));
+                                                ViewManager.GetView<BattleUIView>().setText("Temp - Heart is an insta cast");
+                                            }
+                                            else
+                                            {
+                                                ViewManager.GetView<BattleUIView>().setText("Not enough mana for that spell!");
+                                            }
+                                            
+                                        }
+
                                     }
                                     else if (indAction.GetLeadBox() == "ITM")
                                     {
@@ -280,7 +369,45 @@ public class BattleManager : MonoBehaviour
                             else if (status == MenuStatus.Spell) // If the player has chosen to cast a spell
                             {
                                 indAction.enabled = false;
+                                if (Input.GetButtonDown("Inventory"))   // For backing out - TODO, change backout input
+                                {
+                                    if(enemySelectArrow != null)
+                                        DestroySelectionArrow();
+                                    StartCoroutine(indAction.DoFlashIn(false));
+                                    status = MenuStatus.Selecting;
+                                }
                                 // All spells should have a target enum so I know what to do here
+                                if (playerGemSys.CurrentGem.name == "Will")
+                                {
+
+
+                                }
+                                else if (playerGemSys.CurrentGem.name == "Courage")
+                                {
+
+
+                                }
+                                else if (playerGemSys.CurrentGem.name == "Constitution")
+                                {
+
+
+                                }
+                                else if (playerGemSys.CurrentGem.name == "Patience")
+                                {
+
+                                }
+                                else if (playerGemSys.CurrentGem.name == "Great Patience")
+                                {
+
+                                }
+                                else if (playerGemSys.CurrentGem.name == "Cunning")
+                                {
+
+                                }
+                                else if (playerGemSys.CurrentGem.name == "Heart")
+                                {
+
+                                }
 
                             }
                             else if (status == MenuStatus.Inventory) // If the player has chosen to open the inventory
@@ -682,6 +809,66 @@ public class BattleManager : MonoBehaviour
             }
         }
         
+
+        status = MenuStatus.Inactive;  // Get rid of the menu
+        activeCoroutine = false;
+        yield return null;
+    }
+
+    IEnumerator DoTurnAdvanceSpell(GameObject targetedEnemy)
+    {
+        activeCoroutine = true;
+        toggleStatDisplays(false);
+        StartCoroutine(indAction.DoFlashOutSelected()); // Flash out the attack indicator
+        // Starting bit ^ ------------------------------------------------------------
+        if (playerGemSys.CurrentGem.name == "Will")
+        {
+            playerMoves.SpellOfWill(targetedEnemy);
+        }
+        else if (playerGemSys.CurrentGem.name == "Courage")
+        {
+
+        }
+        else if (playerGemSys.CurrentGem.name == "Constitution")
+        {
+
+        }
+        else if (playerGemSys.CurrentGem.name == "Patience")
+        {
+
+        }
+        else if (playerGemSys.CurrentGem.name == "Great Patience")
+        {
+
+        }
+        else if (playerGemSys.CurrentGem.name == "Cunning")
+        {
+
+        }
+        else if (playerGemSys.CurrentGem.name == "Heart")
+        {
+
+        }
+        yield return new WaitUntil(() => combatants[currentTurn].GetComponent<PlayerMoves>().moveInProgress == false);
+        yield return new WaitForSeconds(.5f);
+
+        // Ending bit \/ --------------------------------------
+        if (cunningSecondTurn)
+        {
+            cunningSecondTurn = false;
+        }
+        else
+        {
+            if (currentTurn != turnArray.Length - 1) // Advance the turn
+            {
+                currentTurn++;
+            }
+            else
+            {
+                currentTurn = 0;
+            }
+        }
+
 
         status = MenuStatus.Inactive;  // Get rid of the menu
         activeCoroutine = false;

@@ -21,7 +21,9 @@ MonoBehaviour:
   MPRestore: 1
   InventoryDescription: 'COURAGE: Reduced HP and DEF in exchange for higher ATK and
     MP.'
-  UseDescription: 'SPELL: Seize the Blade - Attack one enemy for 250% of ATK.'
+  UseDescription: 'SPELL: Seize the Blade - Attack one enemy for 250% of ATK. (6
+    MP)'
   BattleUseDescription: 
   SingleObtainDescription: You found the Gem of Courage! It looks like it fits in
     the hilt of your sword...
+  MultipleObtainDescription: 

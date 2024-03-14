@@ -22,7 +22,8 @@ MonoBehaviour:
   InventoryDescription: 'GREAT PATIENCE: Greatly reduces player stats in exchange
     for fantastic victory yields.'
   UseDescription: 'SPELL: Great Things Come - Next turn, all stats are x4 their normal
-    values and items are applied triply.'
+    values and items are applied triply. (6 MP)'
   BattleUseDescription: 
   SingleObtainDescription: You found the Gem of Great Patience! You feel like a true
     treasure hunter.
+  MultipleObtainDescription: 

@@ -23,7 +23,9 @@ MonoBehaviour:
     ATK and SPD.
 
 '
-  UseDescription: 'SPELL: Weather the Storm - Attack all enemies for 75% of ATK.'
+  UseDescription: 'SPELL: Weather the Storm - Attack all enemies for 75% of ATK.
+    (6 MP)'
   BattleUseDescription: 
   SingleObtainDescription: You found the Gem of Constitution! It looks like it fits
     in the hilt of your sword...
+  MultipleObtainDescription: 
