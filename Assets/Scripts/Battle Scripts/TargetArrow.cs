@@ -21,6 +21,8 @@ public class TargetArrow : MonoBehaviour
     private bool keepGoingCheck;
     float rotationStep = 0f;
 
+    public int type;
+
 
     // Start is called before the first frame update
     void Start()

@@ -257,6 +257,7 @@ public class BattleManager : MonoBehaviour
                                                 status = MenuStatus.Spell;
                                                 StartCoroutine(indAction.DoFlashOut(true));
                                                 CreateSelectionArrow(); // Create the arrow for picking your fight
+                                                enemySelectArrow.GetComponent<TargetArrow>().type = 1;
                                                 ViewManager.GetView<BattleUIView>().setText("Which enemy will you cast Heart Aflame on?");
                                             }
                                             else
@@ -272,7 +273,8 @@ public class BattleManager : MonoBehaviour
                                                 status = MenuStatus.Spell;
                                                 StartCoroutine(indAction.DoFlashOut(true));
                                                 CreateSelectionArrow(); // Create the arrow for picking your fight
-                                                ViewManager.GetView<BattleUIView>().setText("Which enemy will you Seize The Blade against?");
+                                                enemySelectArrow.GetComponent<TargetArrow>().type = 2;
+                                                ViewManager.GetView<BattleUIView>().setText("Which enemy will you cast against?");
                                             }
                                             else
                                             {
@@ -331,7 +333,6 @@ public class BattleManager : MonoBehaviour
                                             {
                                                 status = MenuStatus.Spell;
                                                 StartCoroutine(indAction.DoFlashOut(true));
-                                                ViewManager.GetView<BattleUIView>().setText("Temp - Heart is an insta cast");
                                             }
                                             else
                                             {
@@ -369,7 +370,7 @@ public class BattleManager : MonoBehaviour
                             else if (status == MenuStatus.Spell) // If the player has chosen to cast a spell
                             {
                                 indAction.enabled = false;
-                                if (Input.GetButtonDown("Inventory"))   // For backing out - TODO, change backout input
+                                if (Input.GetButtonDown("Inventory"))   // For backing out
                                 {
                                     if(enemySelectArrow != null)
                                         DestroySelectionArrow();
@@ -379,13 +380,11 @@ public class BattleManager : MonoBehaviour
                                 // All spells should have a target enum so I know what to do here
                                 if (playerGemSys.CurrentGem.name == "Will")
                                 {
-
-
+                                    // Will spawns an arrow
                                 }
                                 else if (playerGemSys.CurrentGem.name == "Courage")
                                 {
-
-
+                                    // Courage spawns an arrow
                                 }
                                 else if (playerGemSys.CurrentGem.name == "Constitution")
                                 {
@@ -406,7 +405,7 @@ public class BattleManager : MonoBehaviour
                                 }
                                 else if (playerGemSys.CurrentGem.name == "Heart")
                                 {
-
+                                    StartCoroutine(DoTurnAdvanceSpell(null));
                                 }
 
                             }
@@ -501,11 +500,16 @@ public class BattleManager : MonoBehaviour
 
     public void SetAttackTarget(GameObject targetedEnemy)   // Sets the target for the player's attack
     {
+        int type = enemySelectArrow.GetComponent<TargetArrow>().type;
         DestroySelectionArrow();
         // For testing purposes, let's find a way to change the text in the battle UI
         //Debug.Log(targetedEnemy.name); 
-        StartCoroutine(DoTurnAdvancePlayerAttack(targetedEnemy));   // Pass this along to a coroutine for the player attacking
 
+        if(type == 0)
+            StartCoroutine(DoTurnAdvancePlayerAttack(targetedEnemy));   // Pass this along to a coroutine for the player attacking
+
+        else if(type == 1 || type == 2)
+            StartCoroutine(DoTurnAdvanceSpell(targetedEnemy));
     }
 
     public GameObject[] GetBattlingEnemies()    // For when enemies need to buff their pals <3
@@ -823,31 +827,37 @@ public class BattleManager : MonoBehaviour
         // Starting bit ^ ------------------------------------------------------------
         if (playerGemSys.CurrentGem.name == "Will")
         {
+            ViewManager.GetView<BattleUIView>().setText("The magic within you sets your Heart Aflame!");
             playerMoves.SpellOfWill(targetedEnemy);
         }
         else if (playerGemSys.CurrentGem.name == "Courage")
         {
-
+            ViewManager.GetView<BattleUIView>().setText("You Seize the Blade against your foe!");
+            playerMoves.SpellOfCourage(targetedEnemy);
         }
         else if (playerGemSys.CurrentGem.name == "Constitution")
         {
-
+            ViewManager.GetView<BattleUIView>().setText("You steel yourself to Weather The Storm ahead!");
+            playerMoves.SpellOfConstitution(battlingEnemies);
         }
         else if (playerGemSys.CurrentGem.name == "Patience")
         {
-
+            ViewManager.GetView<BattleUIView>().setText("Good Things Come to those who wait!");
+            playerMoves.SpellOfPatience();
         }
         else if (playerGemSys.CurrentGem.name == "Great Patience")
         {
-
+            ViewManager.GetView<BattleUIView>().setText("Great Things Come to brave treasure hunters!");
+            playerMoves.SpellOfGreatPatience();
         }
         else if (playerGemSys.CurrentGem.name == "Cunning")
         {
-
+            playerMoves.SpellOfCunning();
         }
         else if (playerGemSys.CurrentGem.name == "Heart")
         {
-
+            ViewManager.GetView<BattleUIView>().setText("You Take Heart against your foes!");
+            playerMoves.SpellOfHeart();
         }
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<PlayerMoves>().moveInProgress == false);
         yield return new WaitForSeconds(.5f);
@@ -905,7 +915,7 @@ public class BattleManager : MonoBehaviour
         activeCoroutine = true;
         //toggleStatDisplaysE(true);
         ViewManager.GetView<BattleUIView>().setText(GetCurrentTurnName() + " moves to attack!");
-        combatants[currentTurn].GetComponent<EnemyMoves>().Move4(playerStats);
+        combatants[currentTurn].GetComponent<EnemyMoves>().Move1(playerStats);
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<EnemyMoves>().moveInProgress == false);
 
         if (currentTurn != turnArray.Length - 1) // Advance the turn

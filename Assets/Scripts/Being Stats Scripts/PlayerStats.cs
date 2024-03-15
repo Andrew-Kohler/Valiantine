@@ -171,6 +171,7 @@ public class PlayerStats : Stats
                 if (down)
                 {
                     // The game over sequence is Something I Have To Do
+                    // This should probs be an event
                 }
                 else
                 {

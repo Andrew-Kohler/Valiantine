@@ -5484,6 +5484,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e1714a222e68c36498c9ae522be674a1, type: 2}
   - {fileID: 11400000, guid: e0aebcea8311a944582aa62829d0fb7a, type: 2}
   - {fileID: 11400000, guid: 563d97bdf3003f545ac2c7e19f70c6a5, type: 2}
+  currentGemIndex: 0
   heldGemList: []
 --- !u!114 &3510521687597023695
 MonoBehaviour:
@@ -11656,7 +11657,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3510521688710238640}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -11709,6 +11710,8 @@ MonoBehaviour:
   animationIndex: 5
   activeCoroutine: 0
   dealDamage: 0
+  standStill: 0
+  spellshinePrefab: {fileID: 9150785055850194188, guid: 8ce039fc364311641baaec60db144348, type: 3}
 --- !u!1 &3510521688830730601
 GameObject:
   m_ObjectHideFlags: 0

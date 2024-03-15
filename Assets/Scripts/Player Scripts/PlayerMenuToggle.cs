@@ -7,6 +7,7 @@ For:    Allows the player to open and close relevant in-game menus
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMenuToggle : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class PlayerMenuToggle : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Inventory") )    // If the player presses Q, it should toggle the inventory
+        if (Input.GetButtonDown("Inventory") && !(SceneManager.GetActiveScene().name == "21_Heartsong"))    // If the player presses Q, it should toggle the inventory
         {
             if (!GameManager.Instance.isInventory() && GameManager.Instance.canMove() && !GameManager.Instance.isCutscene())
             {
@@ -35,7 +36,7 @@ public class PlayerMenuToggle : MonoBehaviour
                 GameManager.Instance.Inventory(false);
             }
         }
-        else if (Input.GetButtonDown("Settings / Back") && !GameManager.Instance.isTransition() && !GameManager.Instance.isCutscene() && !GameManager.Instance.isInteraction()) // If the player presses Esc, it should toggle the settings
+        else if (Input.GetButtonDown("Settings / Back") && !GameManager.Instance.isTransition() && !GameManager.Instance.isCutscene() && !GameManager.Instance.isInteraction() && !(SceneManager.GetActiveScene().name == "21_Heartsong")) // If the player presses Esc, it should toggle the settings
         {
             if (!GameManager.Instance.isSettings())
             {

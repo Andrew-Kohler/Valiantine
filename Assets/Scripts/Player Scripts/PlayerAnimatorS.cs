@@ -59,6 +59,8 @@ public class PlayerAnimatorS : MonoBehaviour
     private int _WalkRIndex = 1;
     private int _WalkForwardsIndex = 0;
 
+    [SerializeField] private GameObject spellshinePrefab;
+
     // All of the event controls that trigger special animations
     private void OnEnable()
     {
@@ -346,6 +348,12 @@ public class PlayerAnimatorS : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(DoHurtAnim());
+    }
+
+    public void PlaySpell(int index)
+    {
+        StopAllCoroutines();
+        StartCoroutine(DoSpellAnim(index));
     }
 
 
@@ -816,6 +824,53 @@ public class PlayerAnimatorS : MonoBehaviour
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        activeCoroutine = false;
+        yield return null;
+    }
+
+    private IEnumerator DoSpellAnim(int index)
+    {
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        bool shinespawn = false;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _SpellcastIndex;
+        animationSpeed = 5.4f;
+        frameLoop = 13;
+
+        // Content ----------------------------------------------
+        // Play the animation
+        int frame = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            if(frame == 6 && !shinespawn)
+            {
+                shinespawn = true;
+                // Spawn the little prefab glimmer and make sure it's the correct color
+                GameObject shine = Instantiate(spellshinePrefab, 
+                    new Vector3(PlayerManager.Instance.PlayerTransform().position.x + 2.29f, 
+                    PlayerManager.Instance.PlayerTransform().position.y + 5.18f,
+                    PlayerManager.Instance.PlayerTransform().position.z - .1f), spellshinePrefab.transform.rotation);
+                shine.GetComponent<SpellshineAnimatorS>().animationIndex = index;
+            }
             yield return null;
         }
 

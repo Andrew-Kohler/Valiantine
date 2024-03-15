@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GateInteractable : Interactable
 {
@@ -68,7 +69,10 @@ public class GateInteractable : Interactable
         {
             if (PlayerManager.Instance.PlayerInventory().InventorySystem.ContainsItem(key))
             {
-                lines.Add("The " + key.DisplayName + " fits right in the lock. You hear a click as you turn it.");
+                if(SceneManager.GetActiveScene().name == "14_DarkLever")
+                    lines.Add("You ram the gate with your shoulder, knocking the rust of ages loose from the lock. The gate swings open.");
+                else
+                    lines.Add("The " + key.DisplayName + " fits right in the lock. You hear a click as you turn it.");
                 validKey = true;
             }
             else

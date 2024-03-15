@@ -25,6 +25,7 @@ public class CameraControl : MonoBehaviour
     Vector3 chestPos2 = new Vector3(0f, 2.23f, 0f);
     [SerializeField] Vector3 castleEntryPos = new Vector3(0f, -3f, 0f);
     [SerializeField] Vector3 hereStandsPos = new Vector3(0f, 12f, -8f);
+    [SerializeField] Vector3 endCutscenePos = new Vector3(0, 5f, 0f);
 
     [Header("Camera Save Point Positions")]
     [SerializeField] Vector3 savePos0 = new Vector3(10f, 10f, 10f);   // Position modifier of the camera for the save point in the test area
@@ -284,6 +285,12 @@ public class CameraControl : MonoBehaviour
         {
             CamReset(battleStep);
         }*/
+    }
+
+    public void SetCamEndingCutscene()
+    {
+        Vector3 targetPos = new Vector3(playerTransform.position.x + endCutscenePos.x, playerTransform.position.y + yConstant + endCutscenePos.y, playerTransform.position.z - zConstant + endCutscenePos.z);
+        StartCoroutine(DoCamPosition(targetPos, inventoryStep * 4, standardAngle));
     }
 
     private void SetCamHereStands()

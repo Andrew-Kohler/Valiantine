@@ -18,6 +18,11 @@ public class InGameUIView : View
     [SerializeField] FadeUI openingText3;
     [SerializeField] FadeUI openingText4;
 
+    [SerializeField] FadeUI closingText1;
+    [SerializeField] FadeUI closingText2;
+    [SerializeField] FadeUI closingText3;
+    [SerializeField] FadeUI closingText4;
+
     //bool menuOpen;              // Whether or not the interaction sub-menu is open
     //bool activeCoroutine;       // Whether or not a coroutine is active
     public bool textReadout;    // Whether or not TextRevealer has finished reading the current text block
@@ -80,6 +85,11 @@ public class InGameUIView : View
         StartCoroutine(DoOpeningConvo());
     }
 
+    public void playClosingConvo()
+    {
+        StartCoroutine(DoClosingConvo());
+    }
+
     private void AdvanceText()
     {
         if (textReadout)    // We can only advance to the next bit if it's all read out
@@ -139,7 +149,7 @@ public class InGameUIView : View
     private IEnumerator DoOpeningConvo()
     {
         int readtime = 5;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(6f);
 
         openingText1.UIFadeIn();
         yield return new WaitForSeconds(readtime);
@@ -156,7 +166,20 @@ public class InGameUIView : View
 
     private IEnumerator DoClosingConvo()
     {
-        yield return null;
+        int readtime = 5;
+        yield return new WaitForSeconds(2f);
+
+        closingText1.UIFadeIn();
+        yield return new WaitForSeconds(readtime);
+
+        closingText2.UIFadeIn();
+        yield return new WaitForSeconds(readtime);
+
+        closingText3.UIFadeIn();
+        yield return new WaitForSeconds(readtime);
+
+        closingText4.UIFadeIn();
+        yield return new WaitForSeconds(readtime - 1f);
     }
 
 }

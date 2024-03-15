@@ -100,9 +100,12 @@ public class SceneLoader : MonoBehaviour
     public void OnForcedPlayerTransition(string levelToLoad) // For when we need to care a little about a player
     {
         // Save all the player's stuff
-        playerS = PlayerManager.Instance.PlayerStats();
-        playerI = PlayerManager.Instance.PlayerInventory();
-        playerG = PlayerManager.Instance.GemSystem();
+        if(levelToLoad != "23_MainMenu" && levelToLoad != "24_Credits")
+        {
+            playerS = PlayerManager.Instance.PlayerStats();
+            playerI = PlayerManager.Instance.PlayerInventory();
+            playerG = PlayerManager.Instance.GemSystem();
+        }
 
         transitionPanel = GameObject.Find("Black Panel");   
         fade = transitionPanel.GetComponent<FadeScene>();
@@ -133,21 +136,27 @@ public class SceneLoader : MonoBehaviour
     {
         // When the level is loaded:
         GameManager.Instance.Cutscene(false);
-        GameObject player = GameObject.Find("Player");  // Find the player gameObject
-        GameObject.Find("Player Sprite").GetComponent<PlayerAnimatorS>().SetDirection(GameManager.Instance.transitionDirection);
-        // Set the player's stats and inventory to be correct
-        
-        if(loadCount > 0 && player != null)
-            StartCoroutine(DoLoadScene());
-
-        Gateway[] allGates = FindObjectsOfType<Gateway>();  // Find all gateways
-        foreach(Gateway gateway in allGates)    // Iterate through them
+        if(SceneManager.GetActiveScene().name != "23_MainMenu" && SceneManager.GetActiveScene().name != "24_Credits")
         {
-            if(gateway.gatewayName == lastGate) // If a gateway name matches lastGate
+            GameObject player = GameObject.Find("Player");  // Find the player gameObject
+            GameObject.Find("Player Sprite").GetComponent<PlayerAnimatorS>().SetDirection(GameManager.Instance.transitionDirection);
+
+            // Set the player's stats and inventory to be correct
+
+            if (loadCount > 0 && player != null)
+                StartCoroutine(DoLoadScene());
+
+            Gateway[] allGates = FindObjectsOfType<Gateway>();  // Find all gateways
+            foreach (Gateway gateway in allGates)    // Iterate through them
             {
-                player.transform.position = gateway.spawnPoint.position;  // player.transform.position = position of that gate's spawn point
+                if (gateway.gatewayName == lastGate) // If a gateway name matches lastGate
+                {
+                    player.transform.position = gateway.spawnPoint.position;  // player.transform.position = position of that gate's spawn point
+                }
             }
         }
+        
+        
 
         if (SceneManager.GetActiveScene().name == "0_Exterior")
         {

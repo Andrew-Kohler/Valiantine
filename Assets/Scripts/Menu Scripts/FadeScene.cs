@@ -8,7 +8,7 @@ public class FadeScene : MonoBehaviour
     CanvasGroup canvasGroup;
     private void OnEnable()
     {
-        if(SceneManager.GetActiveScene().name != "0_Exterior")
+        if(SceneManager.GetActiveScene().name != "0_Exterior" || SceneManager.GetActiveScene().name != "24_Credits")
         {
             StopAllCoroutines();
             StartCoroutine(DoFadeOut());
@@ -22,6 +22,12 @@ public class FadeScene : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(DoFadeIn(levelToLoad));
+    }
+
+    public void NoLoadSceneFadeIn()
+    {
+        StopAllCoroutines();
+        StartCoroutine(DoNoLoadFadeIn());
     }
 
     public void SceneFadeOut()
@@ -41,6 +47,17 @@ public class FadeScene : MonoBehaviour
         }
         SceneManager.LoadScene(levelToLoad);
         yield return null;
+    }
+
+    IEnumerator DoNoLoadFadeIn()
+    {
+        canvasGroup = GetComponent<CanvasGroup>();
+
+        while (canvasGroup.alpha < 1f)
+        {
+            canvasGroup.alpha += Time.deltaTime / 2f;
+            yield return null;
+        }
     }
 
     IEnumerator DoFadeOut()

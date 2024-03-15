@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class RubbleInteractable : Interactable
 {
-    
+    [SerializeField] string singleLine = "Rubble from collapsed ruins blocks the way. It looks like something stronger than you could shake it loose.";
 
     // Start is called before the first frame update
     void Start()
     {
-        lines.Add("Rubble from collapsed ruins blocks the way. It looks like something stronger than you could shake it loose.");
+        lines.Add(singleLine);
     }
 
     // Update is called once per frame

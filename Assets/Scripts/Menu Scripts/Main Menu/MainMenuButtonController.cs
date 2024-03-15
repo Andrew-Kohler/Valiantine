@@ -17,6 +17,7 @@ public class MainMenuButtonController : MonoBehaviour
         {
             contText.color = new Color(.6f, .6f, .6f);
         }
+        GameManager.Instance.Cutscene(false);
     }
     private void Update()
     {
