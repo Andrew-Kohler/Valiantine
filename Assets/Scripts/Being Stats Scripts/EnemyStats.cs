@@ -42,6 +42,16 @@ public class EnemyStats : Stats
         enemyAnimator = GetComponentInChildren<EnemyAnimatorS>();
     }
 
+    private void OnEnable()
+    {
+        base.OnEnable();
+    }
+
+    private void OnDisable()
+    {
+        base.OnDisable();
+    }
+
     protected override void LVLUp()
     {
         // These should probably change between enemies? E.g. Petal Golems level DEF faster 

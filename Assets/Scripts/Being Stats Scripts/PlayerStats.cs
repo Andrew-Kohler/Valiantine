@@ -30,7 +30,7 @@ public class PlayerStats : Stats
         SPD = 5;
 
         LVL = 1;
-        XP = 6;
+        XP = 0;
         baseXPThreshold = 15;
         LVLExponent = 1.4f;
 
@@ -85,11 +85,13 @@ public class PlayerStats : Stats
 
     private void OnEnable()
     {
+        base.OnEnable();
         SkullmetMoves.damagePlayer += SetHP;
     }
 
     private void OnDisable()
     {
+        base.OnDisable();
         SkullmetMoves.damagePlayer -= SetHP;
     }
 
@@ -269,6 +271,11 @@ public class PlayerStats : Stats
         return (int)(SPD * SPDMod * GemSPDMod);
     }
 
+    public float GetXPMod()
+    {
+        return XPMod;
+    }
+
     // Setters for all of the gem modifiers
     public void SetGemMaxHPMod(float changeVal)
     {
@@ -289,6 +296,11 @@ public class PlayerStats : Stats
     public void SetGemSPDMod(float changeVal)
     {
         GemSPDMod = changeVal;
+    }
+
+    public void SetXPMod(float changeVal)
+    {
+        XPMod = changeVal;
     }
 
     // Unique setters to facilitate unique gem qualities - these are for ACTIVE SPELLS
@@ -381,6 +393,16 @@ public class PlayerStats : Stats
         }
 
         return crit;
+    }
+
+    public override int CalculateDMG(int oppoDef) // Calculate the damage you are going to do to your opponent
+    {
+        int dmgDone = this.GetATK() - oppoDef;
+        if (dmgDone <= 0)
+        {
+            dmgDone = 1;
+        }
+        return dmgDone;
     }
 
     public string GetLVLUpText()

@@ -25,6 +25,10 @@ public class BattleManager : MonoBehaviour
     private bool playerTurn;        // A boolean for doing things once at the start of a player's turn
 
     private bool cunningSecondTurn; // A boolean for applying the special effect of the Gem of Cunning
+    private int patienceCounter = -1;
+    public int PatienceCounter => patienceCounter;
+    private int greatPatienceCounter = -1;
+    public int GreatPatienceCounter => greatPatienceCounter;
 
     public enum MenuStatus { Selecting, Attack, Spell, Inventory, Run, Inactive };
     MenuStatus status;
@@ -210,8 +214,29 @@ public class BattleManager : MonoBehaviour
                             cunningSecondTurn = true;
                         }
 
-                        // If the Patience timers are greater than 0, decrement them
+                        // If the Patience timers are greater than -1, decrement them
+                        // The -1 is just so that they have an idle that doesn't trigger the effects every turn
+                        if(patienceCounter > -1)
+                            patienceCounter--;
+                        if(greatPatienceCounter > -1)
+                            greatPatienceCounter--;
+
                         // if the Patience timers hit 0 after being decremented, apply their buffs
+                        if (patienceCounter == 0)
+                        {
+                            playerStats.UpdateStatMods(new StatMod(1, 0, 2));
+                            playerStats.UpdateStatMods(new StatMod(1, 1, 2));
+                            playerStats.UpdateStatMods(new StatMod(1, 2, 2));
+                        }
+
+                        if (greatPatienceCounter == 0)
+                        {
+                            playerStats.UpdateStatMods(new StatMod(1, 0, 4));
+                            playerStats.UpdateStatMods(new StatMod(1, 1, 4));
+                            playerStats.UpdateStatMods(new StatMod(1, 2, 4));
+                        }
+
+                        
                         newLoop = false;
                     }
                     if (currentTurn == 1)
@@ -302,7 +327,7 @@ public class BattleManager : MonoBehaviour
                                             {
                                                 status = MenuStatus.Spell;
                                                 StartCoroutine(indAction.DoFlashOut(true));
-                                                ViewManager.GetView<BattleUIView>().setText("Temp - Patience is an insta cast");
+                                                //ViewManager.GetView<BattleUIView>().setText("Temp - Patience is an insta cast");
                                             }
                                             else
                                             {
@@ -315,7 +340,7 @@ public class BattleManager : MonoBehaviour
                                             {
                                                 status = MenuStatus.Spell;
                                                 StartCoroutine(indAction.DoFlashOut(true));
-                                                ViewManager.GetView<BattleUIView>().setText("Temp - GP is an insta cast");
+                                                //ViewManager.GetView<BattleUIView>().setText("Temp - GP is an insta cast");
                                             }
                                             else
                                             {
@@ -393,11 +418,11 @@ public class BattleManager : MonoBehaviour
                                 }
                                 else if (playerGemSys.CurrentGem.name == "Patience")
                                 {
-
+                                    StartCoroutine(DoTurnAdvanceSpell(null));
                                 }
                                 else if (playerGemSys.CurrentGem.name == "Great Patience")
                                 {
-
+                                    StartCoroutine(DoTurnAdvanceSpell(null));
                                 }
                                 else if (playerGemSys.CurrentGem.name == "Cunning")
                                 {
@@ -473,11 +498,7 @@ public class BattleManager : MonoBehaviour
     } // End of update
 
     // Public methods ------------------------------------------------------
-    public void SetTarget(GameObject enemy)
-    {
-        currentEnemy = enemy;
-    }
-
+    #region GETTERS
     public float GetCamX()  // For setting initial camera position in battle
     {
         return camX;
@@ -498,6 +519,18 @@ public class BattleManager : MonoBehaviour
         return combatants[currentTurn].GetComponent<EnemyStats>().enemyName;
     }
 
+    public GameObject[] GetBattlingEnemies()    // For when enemies need to buff their pals <3
+    {
+        return battlingEnemies;
+    }
+    #endregion
+
+    #region SETTERS
+    public void SetTarget(GameObject enemy)
+    {
+        currentEnemy = enemy;
+    }
+
     public void SetAttackTarget(GameObject targetedEnemy)   // Sets the target for the player's attack
     {
         int type = enemySelectArrow.GetComponent<TargetArrow>().type;
@@ -512,10 +545,16 @@ public class BattleManager : MonoBehaviour
             StartCoroutine(DoTurnAdvanceSpell(targetedEnemy));
     }
 
-    public GameObject[] GetBattlingEnemies()    // For when enemies need to buff their pals <3
+    public void SetPatienceTimer()
     {
-        return battlingEnemies;
+        patienceCounter = 2;
     }
+
+    public void SetGreatPatienceTimer()
+    {
+        greatPatienceCounter = 1;
+    }
+    #endregion
 
     // Private methods -----------------------------------------------------
 
@@ -597,7 +636,8 @@ public class BattleManager : MonoBehaviour
         {
             xpGain += enemy.GetComponent<EnemyStats>().GetXPValue();
         }
-        return xpGain;
+
+        return (int)(xpGain * playerStats.GetXPMod());
     }
 
     private void destroySpawnedEnemies()

@@ -15,6 +15,6 @@ public class GemStatBlock : ScriptableObject
     public int targetType;  // 1 = Single target, 2 = Multi-target, 3 = Self-target/non-offensive
     public string gemName;
 
-    public float ActiveATKMod;    // The active modifier to attack when the spell is cast
+    //public float ActiveATKMod;    // The active modifier to attack when the spell is cast
 
 }

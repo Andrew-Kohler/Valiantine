@@ -113,7 +113,7 @@ public class InventoryMenuView : View
                 {
                     if (!fadeOut) // Only calls this once so we don't go ZOOOOMM
                     {
-                        Debug.Log("Left foot out");
+                        //Debug.Log("Left foot out");
                         GetComponent<FadeUI>().UIFadeOut();
                         fadeOut = true;
                     }

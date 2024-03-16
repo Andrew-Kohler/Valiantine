@@ -32,12 +32,12 @@ public abstract class Stats : MonoBehaviour
     // Because we'd need 2, right?
     // We're popping them off one and pushing them onto another every time we check
 
-    private void OnEnable()
+    protected void OnEnable()
     {
         BattleManager.battleNewTurn += DecrementStatMods;
     }
 
-    private void OnDisable()
+    protected void OnDisable()
     {
         BattleManager.battleNewTurn -= DecrementStatMods;
     }
@@ -229,7 +229,7 @@ public abstract class Stats : MonoBehaviour
         }
     }
 
-    public int CalculateDMG(int oppoDef) // Calculate the damage you are going to do to your opponent
+    public virtual int CalculateDMG(int oppoDef) // Calculate the damage you are going to do to your opponent
     {
         int dmgDone = this.GetATK() - oppoDef;
         if(dmgDone <= 0)
@@ -255,15 +255,15 @@ public abstract class Stats : MonoBehaviour
     {
         int type = newMod.getType();
         if (type == 0)
-            ATKMod += newMod.getStatMod();
+            ATKMod *= newMod.getStatMod();
         else if (type == 1)
-            DEFMod += newMod.getStatMod();
+            DEFMod *= newMod.getStatMod();
         else if (type == 2)
-            SPDMod += newMod.getStatMod();
+            SPDMod *= newMod.getStatMod();
         else if (type == 3)
-            MaxHPMod += newMod.getStatMod();
+            MaxHPMod *= newMod.getStatMod();
         else if (type == 4)
-            MaxMPMod += newMod.getStatMod();
+            MaxMPMod *= newMod.getStatMod();
 
 /*        if(newMod.getStatMod() > 0)
         {

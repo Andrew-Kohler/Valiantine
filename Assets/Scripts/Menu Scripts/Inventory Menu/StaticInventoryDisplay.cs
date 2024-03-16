@@ -129,14 +129,28 @@ public class StaticInventoryDisplay : InventoryDisplay //
                     
                     if (slots[selectedSlot].AssignedInventorySlot.Data.Consumable) // If the item is consumable, we want to (a) carry out its effects and (b) remove it from the inventory
                     {
+                        int multiplier = 1;
                         // (a) carry out effects
-                        PlayerManager.Instance.PlayerStats().SetHP(slots[selectedSlot].AssignedInventorySlot.Data.HPRestore, false);
+                        if (GameManager.Instance.isBattle())
+                        {
+                            if(BattleManager.Instance.PatienceCounter == 0)
+                            {
+                                multiplier *= 2;
+                            }
+                            if(BattleManager.Instance.GreatPatienceCounter == 0)
+                            {
+                                multiplier *= 3;
+                            }
+                        }
+
+                        PlayerManager.Instance.PlayerStats().SetHP(slots[selectedSlot].AssignedInventorySlot.Data.HPRestore * multiplier, false);
+                        Debug.Log(slots[selectedSlot].AssignedInventorySlot.Data.HPRestore * multiplier);
                         if (slots[selectedSlot].AssignedInventorySlot.Data.HPRestore > 0)
                         {
                             onHealthPotDrink?.Invoke();
                         }
-                        PlayerManager.Instance.PlayerStats().SetMP(slots[selectedSlot].AssignedInventorySlot.Data.MPRestore);
-                        if(slots[selectedSlot].AssignedInventorySlot.Data.MPRestore > 0)
+                        PlayerManager.Instance.PlayerStats().SetMP(slots[selectedSlot].AssignedInventorySlot.Data.MPRestore * multiplier);
+                        if (slots[selectedSlot].AssignedInventorySlot.Data.MPRestore > 0)
                         {
                             onManaPotDrink?.Invoke();
                         }

@@ -139,6 +139,11 @@ public class PlayerMoves : MonoBehaviour
         stats.SetMP(-4);
         // Play the spellcast animation
         animator.PlaySpell(3);
+
+        // Set a timer so that on the turn after next (if this is turn 0, effect on turn 2)
+        // All stats are x2 their normal values
+        // Items are applied doubly
+        BattleManager.Instance.SetPatienceTimer();
         yield return new WaitUntil(() => animator.activeCoroutine == false);
 
         moveInProgress = false;
@@ -150,7 +155,10 @@ public class PlayerMoves : MonoBehaviour
     {
         moveInProgress = true;
         // Play the spellcast animation
+        stats.SetMP(-6);
         animator.PlaySpell(1);
+
+        BattleManager.Instance.SetGreatPatienceTimer();
         yield return new WaitUntil(() => animator.activeCoroutine == false);
 
         moveInProgress = false;
@@ -162,6 +170,7 @@ public class PlayerMoves : MonoBehaviour
     {
         moveInProgress = true;
         // Play the spellcast animation
+        // Set mana cost
         animator.PlaySpell(0);
         yield return new WaitUntil(() => animator.activeCoroutine == false);
 
