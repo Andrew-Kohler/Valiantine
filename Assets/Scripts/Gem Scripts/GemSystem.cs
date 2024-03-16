@@ -68,6 +68,11 @@ public class GemSystem : MonoBehaviour
         
     }
 
+    public int GetRandomGemIndex()
+    {
+
+    }
+
     public void obtainGem(ItemData data) // Method for adding a gem to player inventory
     {
         heldGemList[data.MPRestore] = data;
@@ -103,14 +108,14 @@ public class GemSystem : MonoBehaviour
             playerStats.SetHPDir(avg);
         }
 
-        if(currentGem.name == "Cunning")
+/*        if(currentGem.name == "Cunning")
         {
 
         }
         else
         {
 
-        }
+        }*/
     }
 
 

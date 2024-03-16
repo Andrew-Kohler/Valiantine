@@ -313,7 +313,7 @@ public class BattleManager : MonoBehaviour
                                             {
                                                 status = MenuStatus.Spell;
                                                 StartCoroutine(indAction.DoFlashOut(true));
-                                                ViewManager.GetView<BattleUIView>().setText("Temp - Constitution is an insta cast");
+                                                //ViewManager.GetView<BattleUIView>().setText("Temp - Constitution is an insta cast");
                                             }
                                             else
                                             {
@@ -395,7 +395,7 @@ public class BattleManager : MonoBehaviour
                             else if (status == MenuStatus.Spell) // If the player has chosen to cast a spell
                             {
                                 indAction.enabled = false;
-                                if (Input.GetButtonDown("Inventory"))   // For backing out
+                                if (Input.GetButtonDown("Inventory"))   
                                 {
                                     if(enemySelectArrow != null)
                                         DestroySelectionArrow();
@@ -409,11 +409,11 @@ public class BattleManager : MonoBehaviour
                                 }
                                 else if (playerGemSys.CurrentGem.name == "Courage")
                                 {
-                                    // Courage spawns an arrow
+                                    // Courage spawns an arrow - DONE
                                 }
                                 else if (playerGemSys.CurrentGem.name == "Constitution")
                                 {
-
+                                    StartCoroutine(DoTurnAdvanceSpell(null));
 
                                 }
                                 else if (playerGemSys.CurrentGem.name == "Patience")
@@ -542,7 +542,11 @@ public class BattleManager : MonoBehaviour
             StartCoroutine(DoTurnAdvancePlayerAttack(targetedEnemy));   // Pass this along to a coroutine for the player attacking
 
         else if(type == 1 || type == 2)
+        {
             StartCoroutine(DoTurnAdvanceSpell(targetedEnemy));
+            
+        }
+            
     }
 
     public void SetPatienceTimer()
@@ -618,17 +622,6 @@ public class BattleManager : MonoBehaviour
         playerM.ForceDeactiveCoroutine();
     }
 
-    private void fadeSpawnedEnemies()
-    {
-        foreach (GameObject enemy in battlingEnemies)
-        {
-            if (!enemy.GetComponent<EnemyStats>().remainOnPlayerFlight && enemy.GetComponent<FadeEnemy>() != null) // Get rid of the lackeys
-            {
-                enemy.GetComponent<FadeEnemy>().FadeOut();
-            }
-        }
-    }
-
     private int totalXpGain()
     {
         int xpGain = 0;
@@ -638,6 +631,18 @@ public class BattleManager : MonoBehaviour
         }
 
         return (int)(xpGain * playerStats.GetXPMod());
+    }
+
+    #region END OF BATTLE ENEMY REMOVAL
+    private void fadeSpawnedEnemies()
+    {
+        foreach (GameObject enemy in battlingEnemies)
+        {
+            if (!enemy.GetComponent<EnemyStats>().remainOnPlayerFlight && enemy.GetComponent<FadeEnemy>() != null) // Get rid of the lackeys
+            {
+                enemy.GetComponent<FadeEnemy>().FadeOut();
+            }
+        }
     }
 
     private void destroySpawnedEnemies()
@@ -668,6 +673,7 @@ public class BattleManager : MonoBehaviour
             
         }
     }
+    #endregion
 
     private void toggleStatDisplays(bool on) // Turns buff and debuff displays on and off
     {
@@ -703,7 +709,7 @@ public class BattleManager : MonoBehaviour
 
         if (PlayerManager.Instance.PlayerTransform().position.x <= currentEnemy.transform.position.x)    // If the player is left of the enemy
         {
-            Debug.Log("Player is left of the enemy");
+            //Debug.Log("Player is left of the enemy");
             PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleEnter(true);
 
             if (battlingEnemies.Length == 1)
@@ -724,7 +730,7 @@ public class BattleManager : MonoBehaviour
         }
         else // If the player is right of the enemy
         {
-            Debug.Log("Player is right of the enemy");
+            //Debug.Log("Player is right of the enemy");
             PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleEnter(false);
             if (battlingEnemies.Length == 1)
             {

@@ -7411,12 +7411,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawn: 1
-  numberToSpawn: 0
+  numberToSpawn: 2
   additionalEnemies:
   - {fileID: 5453430861041070570, guid: 06602d666ec5b0f4789c269951cbceba, type: 3}
   - {fileID: 5453430861041070570, guid: 06602d666ec5b0f4789c269951cbceba, type: 3}
   lowerLVLBound: 1
-  upperLVLBound: 1
+  upperLVLBound: 2
   additionalEnemyLevels: 
   spawnpoint: {fileID: 443298022}
 --- !u!114 &443298026
@@ -20760,7 +20760,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3510521687597023680, guid: 4bc45c8efa7c68840a10743132bdae17, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.49000025
+      value: 1.11
       objectReference: {fileID: 0}
     - target: {fileID: 3510521687597023680, guid: 4bc45c8efa7c68840a10743132bdae17, type: 3}
       propertyPath: m_LocalPosition.y

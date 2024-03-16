@@ -84,8 +84,24 @@ public class PlayerMoves : MonoBehaviour
     {
         moveInProgress = true;
         stats.SetMP(-5);
-        // Play the spellcast animation
+        animator.PlaySpell(6);
+        // When it's time to do damage, get fancy
+        yield return new WaitUntil(() => animator.dealDamage);  // Wait until it is time to deal damage
 
+        Object fire = Resources.Load("Fire");
+
+        // Spawn the cool effect
+        Instantiate(fire, enemy.transform.position, Quaternion.Euler(0, 0, 0));
+        // Deal damage
+        int dmgDealt = (int)(stats.CalculateDMG(enemy.GetComponent<EnemyStats>().GetDEF()) * 1.5f); // Calculate damage being dealt 
+        if (stats.GetCrit())
+        {
+            enemy.GetComponent<EnemyStats>().SetHP(-dmgDealt * 2, true);
+        }
+        else
+        {
+            enemy.GetComponent<EnemyStats>().SetHP(-dmgDealt, false);
+        }
 
         moveInProgress = false;
         animator.dealDamage = false;
@@ -126,6 +142,28 @@ public class PlayerMoves : MonoBehaviour
         moveInProgress = true;
         // Play the spellcast animation
         animator.PlaySpell(4);
+
+        // When it's time to do damage, get fancy
+        yield return new WaitUntil(() => animator.dealDamage);  // Wait until it is time to deal damage
+
+        Object lighting = Resources.Load("Lightning");
+        foreach (GameObject enemy in enemies)
+        {
+            // Spawn the cool effect
+            Instantiate(lighting, enemy.transform.position, Quaternion.Euler(90,0,-180));
+            // Deal damage
+            int dmgDealt = (int)(stats.CalculateDMG(enemy.GetComponent<EnemyStats>().GetDEF()) * .75f); // Calculate damage being dealt 
+            if (stats.GetCrit())
+            {
+                enemy.GetComponent<EnemyStats>().SetHP(-dmgDealt * 2, true);
+            }
+            else
+            {
+                enemy.GetComponent<EnemyStats>().SetHP(-dmgDealt, false);
+            }
+        }
+        
+
         yield return new WaitUntil(() => animator.activeCoroutine == false);
 
         moveInProgress = false;
