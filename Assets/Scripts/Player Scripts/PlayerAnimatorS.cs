@@ -356,6 +356,18 @@ public class PlayerAnimatorS : MonoBehaviour
         StartCoroutine(DoSpellAnim(index));
     }
 
+    public void PlayBattleWin()
+    {
+        StopAllCoroutines();
+        StartCoroutine(DoWinAnim());
+    }
+
+    public void PlayBattleExit()
+    {
+        StopAllCoroutines();
+        StartCoroutine(DoBattleExitAnim());
+    }
+
 
     // Private methods ----------------------------------------------------------
 
@@ -875,6 +887,95 @@ public class PlayerAnimatorS : MonoBehaviour
         }
 
         activeCoroutine = false;
+        yield return null;
+    }
+
+    private IEnumerator DoWinAnim()
+    {
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _BattleExitIndex;
+        animationSpeed = 5.4f;
+        frameLoop = 10;
+        int frameLoop2 = 12;
+
+        // Content ----------------------------------------------
+        // Play the animation
+        int frame = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        animationSpeed = 2f;
+        while (frame < frameLoop2)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 10 + (int)(deltaT * (animationSpeed));
+            if(frame >= frameLoop2)
+            {
+                deltaT = 0;
+                frame = 10;
+            }
+            yield return null;
+        }
+
+        yield return null;
+    }
+
+    private IEnumerator DoBattleExitAnim()
+    {
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        bool shinespawn = false;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _BattleExitIndex;
+        animationSpeed = 5.4f;
+        frameLoop = 17;
+
+        // Content ----------------------------------------------
+        // Play the animation
+        int frame = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 12 + (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        activeCoroutine = false;
+
         yield return null;
     }
 

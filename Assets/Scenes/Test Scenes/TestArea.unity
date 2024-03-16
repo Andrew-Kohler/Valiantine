@@ -2412,7 +2412,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &422081913
 GameObject:
@@ -7411,12 +7411,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawn: 1
-  numberToSpawn: 2
+  numberToSpawn: 0
   additionalEnemies:
   - {fileID: 5453430861041070570, guid: 06602d666ec5b0f4789c269951cbceba, type: 3}
   - {fileID: 5453430861041070570, guid: 06602d666ec5b0f4789c269951cbceba, type: 3}
-  lowerLVLBound: 5
-  upperLVLBound: 7
+  lowerLVLBound: 1
+  upperLVLBound: 2
   additionalEnemyLevels: 
   spawnpoint: {fileID: 443298022}
 --- !u!114 &443298026
@@ -7443,7 +7443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04d29dcff5d4b40418f0d190387b91e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LVL: 5
+  LVL: 1
   isBattling: 0
   remainOnPlayerFlight: 1
   enemyName: Skullmet
@@ -8981,7 +8981,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 57.223, y: -30, z: 0}
 --- !u!114 &705507996
 MonoBehaviour:
@@ -9909,7 +9909,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 20.51, y: 0, z: 0}
 --- !u!114 &963194230
 MonoBehaviour:
@@ -9970,6 +9970,7 @@ MonoBehaviour:
   chestPos: {x: 0, y: -3, z: 2}
   castleEntryPos: {x: 0, y: -3, z: 0}
   hereStandsPos: {x: 0, y: 12, z: -8}
+  endCutscenePos: {x: 0, y: 5, z: 0}
   savePos0: {x: 25, y: 10, z: -25}
   savePos1: {x: 5, y: 10, z: 5}
   savePos3: {x: 2, y: 0, z: -6}
@@ -14249,7 +14250,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1937578028
 GameObject:
@@ -20492,6 +20493,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3464300808954078363, guid: 927bd6486dbec7d46ae2957c2d2b0a73, type: 3}
+      propertyPath: m_text
+      value: '> Press ESC to resume'
+      objectReference: {fileID: 0}
     - target: {fileID: 3464300808998420133, guid: 927bd6486dbec7d46ae2957c2d2b0a73, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -20526,7 +20531,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3464300809667368022, guid: 927bd6486dbec7d46ae2957c2d2b0a73, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3464300809667368022, guid: 927bd6486dbec7d46ae2957c2d2b0a73, type: 3}
       propertyPath: m_AnchorMax.x
@@ -20751,7 +20756,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3510521687597023680, guid: 4bc45c8efa7c68840a10743132bdae17, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3510521687597023680, guid: 4bc45c8efa7c68840a10743132bdae17, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21580,7 +21585,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 9150785055850194184, guid: 8ce039fc364311641baaec60db144348, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9150785055850194184, guid: 8ce039fc364311641baaec60db144348, type: 3}
       propertyPath: m_LocalPosition.x

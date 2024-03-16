@@ -107,8 +107,11 @@ public class SceneLoader : MonoBehaviour
             playerG = PlayerManager.Instance.GemSystem();
         }
 
-        transitionPanel = GameObject.Find("Black Panel");   
-        fade = transitionPanel.GetComponent<FadeScene>();
+        fade = ViewManager.GetView<InGameUIView>().gameObject.GetComponentsInChildren<FadeScene>()[0];//GameObject.Find("Black Panel");
+        /*ViewM
+        fade.gameObject.SetActive(true);*/
+        //fade = transitionPanel.GetComponent<FadeScene>();
+
         fade.SceneFadeIn(levelToLoad);
     }
 
@@ -160,10 +163,12 @@ public class SceneLoader : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "0_Exterior")
         {
+            
             StartCoroutine(DoIntroCutscene());
         }
         else
         {
+            Debug.Log("What gives");
             transitionPanel = GameObject.Find("Black Panel");   // Fade us into this new room of adventure!
             fade = transitionPanel.GetComponent<FadeScene>();
             fade.SceneFadeOut();

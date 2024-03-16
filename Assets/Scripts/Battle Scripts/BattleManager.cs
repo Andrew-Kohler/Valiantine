@@ -455,12 +455,12 @@ public class BattleManager : MonoBehaviour
             {
                 if (endResult == EndStatus.Win)
                 {
-                    Debug.Log("Win");
+
                     StartCoroutine(DoBattleWin());
                 }
                 else if (endResult == EndStatus.Loss)
                 {
-
+                    Debug.Log("L");
                 }
                 else if (endResult == EndStatus.Run)
                 {
@@ -938,6 +938,8 @@ public class BattleManager : MonoBehaviour
         toggleStatDisplays(false);
         clearStatMods();
 
+        PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleWin();
+
         int xpGain = totalXpGain();
         ViewManager.GetView<BattleUIView>().setText("You win, and gain " + xpGain + " experience points!");
         yield return new WaitUntil(() => Input.GetButtonDown("Interact")); // Wait so the player can read the text box
@@ -950,12 +952,15 @@ public class BattleManager : MonoBehaviour
         }
 
         battleUI.GetComponent<FadeUI>().UIFadeOut();
+        GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle (this also pulls the camera back)
+        PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleExit();
+        yield return new WaitForSeconds(1.2f);
 
         playerReenable();                                   // Reenable player movement
         allEnemyReenable(currentEnemy);                     // Reenable enemies that weren't in the fight
         battleShowEnemies?.Invoke();
         fadeAllBattlingEnemies();
-        GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle (this also pulls the camera back)
+        
 
         yield return new WaitForSeconds(1f);
 

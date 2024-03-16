@@ -8,7 +8,7 @@ public class FadeScene : MonoBehaviour
     CanvasGroup canvasGroup;
     private void OnEnable()
     {
-        if(SceneManager.GetActiveScene().name != "0_Exterior" || SceneManager.GetActiveScene().name != "24_Credits")
+        if(SceneManager.GetActiveScene().name != "0_Exterior" && SceneManager.GetActiveScene().name != "24_Credits")
         {
             StopAllCoroutines();
             StartCoroutine(DoFadeOut());
