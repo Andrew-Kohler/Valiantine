@@ -25,6 +25,10 @@ public class SceneLoader : MonoBehaviour
     private InventoryHolder playerI = null;
     private GemSystem playerG = null;
 
+    private GameManager.SavedPlayerStats savedPlayerStats = null;
+    private GameManager.SavedInventoryContents savedInventory = null;
+    private GameManager.SavedGems savedGems = null; 
+
     public static SceneLoader Instance
     {
         get { 
@@ -38,7 +42,7 @@ public class SceneLoader : MonoBehaviour
             return _instance; 
         }
     }
-
+    #region SCENE TRANSITION METHODS
     public void OnEnterGateway(string gateName, string levelToLoad, bool lostWoods)
     {
         lastGate = gateName;
@@ -114,6 +118,7 @@ public class SceneLoader : MonoBehaviour
 
         fade.SceneFadeIn(levelToLoad);
     }
+    #endregion
 
     private void Awake()
     {
@@ -183,15 +188,38 @@ public class SceneLoader : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    public void SetCurrentPlayerData(GameManager.SavedPlayerStats stats, GameManager.SavedInventoryContents holder, GameManager.SavedGems sys)
+    {
+        savedPlayerStats = stats;
+        savedInventory = holder;
+        savedGems = sys;
+    }
+
+    // Private methods -------------------------------------------------
+
     private IEnumerator DoLoadScene()
     {
         yield return new WaitForEndOfFrame();
-        //if(playerS != null)
-            PlayerManager.Instance.PlayerStats().SetStats(playerS);
-        //if (playerI != null)
-            PlayerManager.Instance.PlayerInventory().RefillInventory(playerI.InventorySystem);
-        //if (playerG != null)
-            PlayerManager.Instance.GemSystem().RefillGems(playerG);
+        if(savedPlayerStats != null)
+        {
+            PlayerManager.Instance.PlayerStats().SetStatsFromSaveData(savedPlayerStats);
+            PlayerManager.Instance.PlayerInventory().RefillInventoryFromSaveData(savedInventory);
+            PlayerManager.Instance.GemSystem().RefillGemsFromSaveData(savedGems);
+
+            savedPlayerStats = null;
+            savedInventory = null;
+            savedGems = null;
+        }
+        else
+        {
+            if(playerS != null)
+                PlayerManager.Instance.PlayerStats().SetStats(playerS);
+            if (playerI != null)
+                PlayerManager.Instance.PlayerInventory().RefillInventory(playerI.InventorySystem);
+            if (playerG != null)
+                PlayerManager.Instance.GemSystem().RefillGems(playerG);
+        }
+        
     }
 
     private IEnumerator DoIntroCutscene()

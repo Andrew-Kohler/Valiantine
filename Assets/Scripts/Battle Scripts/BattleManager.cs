@@ -350,7 +350,16 @@ public class BattleManager : MonoBehaviour
                                         }
                                         else if (playerGemSys.CurrentGem.name == "Cunning")
                                         {
-                                            ViewManager.GetView<BattleUIView>().setText("Temp - IDEK how I'm gonna do cunning");
+                                            if (playerStats.GetMP() >= 8)
+                                            {
+                                                status = MenuStatus.Spell;
+                                                StartCoroutine(indAction.DoFlashOut(true));
+                                                //ViewManager.GetView<BattleUIView>().setText("Temp - GP is an insta cast");
+                                            }
+                                            else
+                                            {
+                                                ViewManager.GetView<BattleUIView>().setText("Not enough mana for that spell!");
+                                            }
                                         }
                                         else if (playerGemSys.CurrentGem.name == "Heart")
                                         {
@@ -426,7 +435,7 @@ public class BattleManager : MonoBehaviour
                                 }
                                 else if (playerGemSys.CurrentGem.name == "Cunning")
                                 {
-
+                                    StartCoroutine(DoTurnAdvanceSpell(null));
                                 }
                                 else if (playerGemSys.CurrentGem.name == "Heart")
                                 {
@@ -779,6 +788,20 @@ public class BattleManager : MonoBehaviour
         Destroy(enemySelectArrow);
     }
 
+    private GameObject GetFirstAliveEnemy()
+    {
+        GameObject livingEnemy = null;
+        foreach(GameObject enemy in battlingEnemies)
+        {
+            if (!enemy.GetComponent<Stats>().getDowned())
+            {
+                livingEnemy = enemy;
+                break;
+            }
+        }
+        return livingEnemy;
+    }
+
     private bool CheckForWin()
     {
         foreach (GameObject enemy in battlingEnemies)
@@ -871,37 +894,71 @@ public class BattleManager : MonoBehaviour
         toggleStatDisplays(false);
         StartCoroutine(indAction.DoFlashOutSelected()); // Flash out the attack indicator
         // Starting bit ^ ------------------------------------------------------------
-        if (playerGemSys.CurrentGem.name == "Will")
+        if (playerGemSys.CurrentGem.name == "Cunning")
         {
+            playerStats.SetMP(-8);
+            ViewManager.GetView<BattleUIView>().setText("You make a Clever Ploy, and cast another spell!");
+            int anotherSpell = playerGemSys.GetRandomGemIndex();
+            if(anotherSpell == 0)
+            {
+                playerMoves.SpellOfWill(GetFirstAliveEnemy());
+            }
+            else if (anotherSpell == 1)
+            {
+                playerMoves.SpellOfCourage(GetFirstAliveEnemy());
+            }
+            else if (anotherSpell == 2)
+            {
+                playerMoves.SpellOfConstitution(battlingEnemies);
+            }
+            else if (anotherSpell == 3)
+            {
+                playerMoves.SpellOfPatience();
+            }
+            else if (anotherSpell == 5)
+            {
+                playerMoves.SpellOfGreatPatience();
+            }
+            else if (anotherSpell == 6)
+            {
+                playerMoves.SpellOfHeart();
+            }
+
+
+        }
+        else if (playerGemSys.CurrentGem.name == "Will")
+        {
+            playerStats.SetMP(-5);
             ViewManager.GetView<BattleUIView>().setText("The magic within you sets your Heart Aflame!");
             playerMoves.SpellOfWill(targetedEnemy);
         }
         else if (playerGemSys.CurrentGem.name == "Courage")
         {
+            playerStats.SetMP(-6);
             ViewManager.GetView<BattleUIView>().setText("You Seize the Blade against your foe!");
             playerMoves.SpellOfCourage(targetedEnemy);
         }
         else if (playerGemSys.CurrentGem.name == "Constitution")
         {
+            playerStats.SetMP(-6);
             ViewManager.GetView<BattleUIView>().setText("You steel yourself to Weather The Storm ahead!");
             playerMoves.SpellOfConstitution(battlingEnemies);
         }
         else if (playerGemSys.CurrentGem.name == "Patience")
         {
+            playerStats.SetMP(-4);
             ViewManager.GetView<BattleUIView>().setText("Good Things Come to those who wait!");
             playerMoves.SpellOfPatience();
         }
         else if (playerGemSys.CurrentGem.name == "Great Patience")
         {
+            playerStats.SetMP(-6);
             ViewManager.GetView<BattleUIView>().setText("Great Things Come to brave treasure hunters!");
             playerMoves.SpellOfGreatPatience();
         }
-        else if (playerGemSys.CurrentGem.name == "Cunning")
-        {
-            playerMoves.SpellOfCunning();
-        }
         else if (playerGemSys.CurrentGem.name == "Heart")
         {
+            playerStats.SetMP(-4);
             ViewManager.GetView<BattleUIView>().setText("You Take Heart against your foes!");
             playerMoves.SpellOfHeart();
         }

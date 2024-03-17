@@ -882,7 +882,8 @@ public class PlayerAnimatorS : MonoBehaviour
                     PlayerManager.Instance.PlayerTransform().position.y + 5.18f,
                     PlayerManager.Instance.PlayerTransform().position.z - .1f), spellshinePrefab.transform.rotation);
                 shine.GetComponent<SpellshineAnimatorS>().animationIndex = index;
-                dealDamage = true;
+                if(index != 5)
+                    dealDamage = true;
             }
             yield return null;
         }

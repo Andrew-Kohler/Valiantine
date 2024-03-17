@@ -85,6 +85,8 @@ public class MainMenuButtonController : MonoBehaviour
 
     private IEnumerator LoadNewGame()
     {
+        // Add a method to GameManager to do some kind of overwrite on existing save data and call it here
+        GameManager.Instance.WipeSaveData();
         camControl.CamToNew();
         yield return new WaitForSeconds(.35f);
         SceneLoader.Instance.OnForcedTransition("0_Exterior");
@@ -94,7 +96,8 @@ public class MainMenuButtonController : MonoBehaviour
     private IEnumerator LoadSavedGame()
     {
         camControl.CamToCont();
-        SceneLoader.Instance.OnForcedTransition(GameManager.Instance.SavedScene());
+        yield return new WaitForSeconds(.35f);
+        GameManager.Instance.ReadInSaveData();
         yield return null;
     }
 

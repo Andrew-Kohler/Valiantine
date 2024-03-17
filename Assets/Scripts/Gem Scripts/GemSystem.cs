@@ -44,7 +44,7 @@ public class GemSystem : MonoBehaviour
     {
 
         heldGemList = new ItemData[7];
-        if(currentGem == null)
+        if(currentGem == null && heldGemList[0] != null)
         {
             currentGem = gemStats[0];
             currentGemIndex = 0;
@@ -68,9 +68,39 @@ public class GemSystem : MonoBehaviour
         
     }
 
+    public void RefillGemsFromSaveData(GameManager.SavedGems gems)
+    {
+        for(int i = 0; i < gems.heldGems.Length; i++)
+        {
+            if (gems.heldGems[i]) // If we had this gem last we saved, re-add it to our inventory
+            {
+                obtainGem(Resources.Load<ItemData>("Gems/"+gemStats[i].name));
+            }
+        }
+
+        if(heldGemList[gems.equippedGemIndex] != null)
+        {
+            equipGem(gems.equippedGemIndex); // Re-equip whatever we had on at the time
+        }
+        
+    }
+
     public int GetRandomGemIndex()
     {
+        int val;
+        int index = Random.Range(0, heldGemList.Length);
+        if (heldGemList[index] != null)
+        {
+            if (heldGemList[index].name != "Cunning")
+                val = index;
+            else
+                val = GetRandomGemIndex();
+        }
+            
+        else
+            val = GetRandomGemIndex();
 
+        return val;
     }
 
     public void obtainGem(ItemData data) // Method for adding a gem to player inventory
@@ -78,11 +108,12 @@ public class GemSystem : MonoBehaviour
         heldGemList[data.MPRestore] = data;
     }
 
+
     public void equipGem(int index)  // Method for changing which gem is equipped
     {
         currentGem = gemStats[index];
         currentGemText = heldGemList[index];
-        //currentGemIndex = index;
+        currentGemIndex = index;
         // TODO: Update Player Stats with all its new mods
         playerStats.SetGemATKMod(currentGem.ATKMod);
         playerStats.SetGemDEFMod(currentGem.DEFMod);
@@ -107,15 +138,19 @@ public class GemSystem : MonoBehaviour
             playerStats.SetMPDir(avg);
             playerStats.SetHPDir(avg);
         }
+    }
 
-/*        if(currentGem.name == "Cunning")
+    public bool[] GetGemContents() // Returns a true/false array of which gems we have or don't
+    {
+        bool[] contents = new bool[7];
+        for(int i = 0; i < heldGemList.Length; i++)
         {
-
+            if(heldGemList[i] != null)
+            {
+                contents[i] = true; 
+            }
         }
-        else
-        {
-
-        }*/
+        return contents;
     }
 
 

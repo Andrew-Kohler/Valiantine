@@ -83,7 +83,7 @@ public class PlayerMoves : MonoBehaviour
     protected virtual IEnumerator DoWill(GameObject enemy) // I will add all of the spells...
     {
         moveInProgress = true;
-        stats.SetMP(-5);
+        
         animator.PlaySpell(6);
         // When it's time to do damage, get fancy
         yield return new WaitUntil(() => animator.dealDamage);  // Wait until it is time to deal damage
@@ -111,7 +111,7 @@ public class PlayerMoves : MonoBehaviour
     protected virtual IEnumerator DoCourage(GameObject enemy) 
     {
         moveInProgress = true;
-        stats.SetMP(-6);
+
         // Play the spellcast animation
         animator.PlaySpell(5);
         yield return new WaitUntil(() => animator.activeCoroutine == false);
@@ -174,7 +174,7 @@ public class PlayerMoves : MonoBehaviour
     protected virtual IEnumerator DoPatience()
     {
         moveInProgress = true;
-        stats.SetMP(-4);
+
         // Play the spellcast animation
         animator.PlaySpell(3);
 
@@ -193,7 +193,7 @@ public class PlayerMoves : MonoBehaviour
     {
         moveInProgress = true;
         // Play the spellcast animation
-        stats.SetMP(-6);
+
         animator.PlaySpell(1);
 
         BattleManager.Instance.SetGreatPatienceTimer();
@@ -220,7 +220,7 @@ public class PlayerMoves : MonoBehaviour
     protected virtual IEnumerator DoHeart()
     {
         moveInProgress = true;
-        stats.SetMP(-4);
+
         // Play the spellcast animation
         animator.PlaySpell(2);
         stats.SetHeartSpell(); // Teehee, this one is easy because I did it already

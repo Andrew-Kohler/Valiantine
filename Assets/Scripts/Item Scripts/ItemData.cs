@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+
 
 [CreateAssetMenu(menuName = "Inventory System/Item")]
 public class ItemData : ScriptableObject

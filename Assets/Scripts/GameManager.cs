@@ -56,20 +56,70 @@ public class GameManager : MonoBehaviour
 
     //Storing player stats between scenes
     [System.Serializable]
+    public class SavedPlayerStats
+    {
+        public int HP;
+        public int MaxHP;
+        public int MP;
+        public int MaxMP;
+
+        public int ATK;
+        public int DEF;
+        public int SPD;
+
+        public int LVL;
+        public int XP;
+        public int baseXPThreshold;
+
+        /*public float ATKMod;
+        public float DEFMod;
+        public float SPDMod;
+        public float MaxMPMod;
+        public float MaxHPMod;
+        public float XPMod;
+
+        public float GemATKMod;
+        public float GemDEFMod;
+        public float GemSPDMod;
+        public float GemMaxMPMod;
+        public float GemMaxHPMod;*/
+
+        public bool down;
+    }
+    [System.Serializable]
+    public class SavedInventoryContents
+    {
+        public string[] itemNames; // The names of the items in the slots
+        public int[] itemCounts;// How many items were in the correspoinding slot
+    }
+    [System.Serializable]
+    public class SavedGems
+    {
+        public bool[] heldGems; // Whether we hold each of the 7 gems
+        public int equippedGemIndex;    // The index in heldGems of the one we had equipped
+    }
+
+    [System.Serializable]
     private class SaveData
     {
-        public string LastScene;   // The index of the last scene the player was in (default 0, Exterior)
-        public int LastPoint;   // The index of the spawn point the player was at (default 0, the origin of Scene 0)
+        public string LastScene = "0_Exterior";   // The index of the last scene the player was in (default 0, Exterior)
+        public int LastPoint = 0;   // The index of the spawn point the player was at (default 0, the origin of Scene 0)
         public bool[] openedChests; // Every chest has an index; it checks this list to see if it's been opened
         public bool[] openedGates;  // Every gate has an index; it checks this list to see if it's been opened
-        public bool towerFallen;    // Whether towerfall has occurred
-        public bool bossDefeated;   // Boss doesn't respawn
+        public bool towerFallen = false;    // Whether towerfall has occurred
+        public bool bossDefeated = false;   // Boss doesn't respawn
         
-        public PlayerStats PlayerStats;             // The inventory, stats, and gems of the player
-        public InventoryHolder InventoryHolder;
-        public GemSystem GemSystem;
+        public SavedPlayerStats PlayerStats;             // The inventory, stats, and gems of the player
+        public SavedInventoryContents InventoryHolder;
+        public SavedGems GemSystem;
     }
+
+    
+    private SavedPlayerStats savedPlayerStats;
+    private SavedInventoryContents savedInventoryContents;
+    private SavedGems savedGems;
     private SaveData saveData;
+    
 
     public bool[] openedChests; // Every chest has an index; it checks this list to see if it's been opened
     public bool[] openedGates;  // Every gate has an index; it checks this list to see if it's been opened
@@ -120,6 +170,9 @@ public class GameManager : MonoBehaviour
 
         // initialize and load data
         saveData = new SaveData();
+        savedPlayerStats = new SavedPlayerStats();
+        savedInventoryContents = new SavedInventoryContents();
+        savedGems = new SavedGems();
         string path = Application.persistentDataPath + "/savedata.json";
         if (File.Exists(path))
         {
@@ -317,20 +370,89 @@ public class GameManager : MonoBehaviour
     #endregion
 
     // Save data methods
-    public void WriteSaveData(string sceneName, int pointNumber)
+    public void WriteSaveData(string sceneName, int pointNumber) // Call this at save points
     {
+        // Writing the simple values
         saveData.LastScene = sceneName;
         saveData.LastPoint = pointNumber;
         saveData.towerFallen = this.towerfall;
         saveData.bossDefeated = this.bossDefeated;
         saveData.openedChests = this.openedChests;
         saveData.openedGates = this.openedGates;
-        saveData.PlayerStats = PlayerManager.Instance.PlayerStats();
-        saveData.InventoryHolder = PlayerManager.Instance.PlayerInventory();
-        saveData.GemSystem = PlayerManager.Instance.GemSystem();
+
+        // Writing in player stats
+        PlayerStats stats = PlayerManager.Instance.PlayerStats();
+        savedPlayerStats.HP = stats.GetHP();
+
+        savedPlayerStats.MaxHP = stats.GetMaxHPRaw();
+        savedPlayerStats.MP = stats.GetMP();
+        savedPlayerStats.MaxMP = stats.GetMaxMPRaw();
+
+        savedPlayerStats.ATK = stats.GetATKRaw();
+        savedPlayerStats.DEF = stats.GetDEFRaw();
+        savedPlayerStats.SPD = stats.GetSPDRaw();
+
+        savedPlayerStats.LVL = stats.GetLVL();
+        savedPlayerStats.XP = stats.GetXP();
+        savedPlayerStats.baseXPThreshold = stats.GetXPThreshold();
+
+        // We don't save the non-gem modifiers b/c they're battle exclusive
+        // We don't save the gem modifiers b/c they'll be set when we re-equip the previously equipped gem
+        savedPlayerStats.down = false;  // We do save this to make save loading resets easier
+
+        saveData.PlayerStats = savedPlayerStats;
+
+        // Writing in inventory contents
+        ArrayList retrievedContents = PlayerManager.Instance.PlayerInventory().GetInventoryContents();
+        ArrayList retrievedStacks = PlayerManager.Instance.PlayerInventory().GetInventoryStackSizes();
+
+        savedInventoryContents.itemNames = new string[retrievedContents.Count];
+        savedInventoryContents.itemCounts = new int[retrievedStacks.Count];
+
+        for(int i = 0; i < retrievedStacks.Count; i++)
+        {
+            savedInventoryContents.itemNames[i] = (string)retrievedContents[i];
+            savedInventoryContents.itemCounts[i] = (int)retrievedStacks[i];
+        }
+
+        saveData.InventoryHolder = savedInventoryContents;
+
+        // Writing in gem contents
+        savedGems.heldGems = PlayerManager.Instance.GemSystem().GetGemContents();
+        savedGems.equippedGemIndex = PlayerManager.Instance.GemSystem().currentGemIndex;
+
+        saveData.GemSystem = savedGems;
+
+        //saveData.PlayerStats = PlayerManager.Instance.PlayerStats();
+        //saveData.InventoryHolder = PlayerManager.Instance.PlayerInventory();
+        //saveData.GemSystem = PlayerManager.Instance.GemSystem();
 
         string json = JsonUtility.ToJson(saveData);
         File.WriteAllText(Application.persistentDataPath + "/savedata.json", json);
+    }
+
+    public void WipeSaveData() // For starting a new game
+    {
+        saveData = new SaveData();
+        savedPlayerStats = new SavedPlayerStats();
+        savedInventoryContents = new SavedInventoryContents();
+        savedGems = new SavedGems();
+
+        string json = JsonUtility.ToJson(saveData);
+        File.WriteAllText(Application.persistentDataPath + "/savedata.json", json);
+    }
+
+    public void ReadInSaveData() // Call this when continuing a game or loading to a previous save point
+    {
+        towerfall = saveData.towerFallen;
+        bossDefeated = saveData.bossDefeated;
+        openedChests = saveData.openedChests;
+        openedGates = saveData.openedGates;
+        
+        // Read in player stats, inventory contents, and gems
+        SceneLoader.Instance.SetCurrentPlayerData(saveData.PlayerStats, saveData.InventoryHolder, saveData.GemSystem);
+
+        SceneLoader.Instance.OnForcedTransition(saveData.LastScene);
     }
 
     public string SavedScene()

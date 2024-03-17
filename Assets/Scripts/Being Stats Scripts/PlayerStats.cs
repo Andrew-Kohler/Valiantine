@@ -53,6 +53,7 @@ public class PlayerStats : Stats
 
     public void SetStats(PlayerStats newStats)
     {
+
         HP = newStats.HP;
         MaxHP = newStats.MaxHP;
         MP = newStats.MP;
@@ -80,6 +81,23 @@ public class PlayerStats : Stats
         GemMaxMPMod = newStats.GemMaxMPMod;
         GemMaxHPMod = newStats.GemMaxHPMod;
 
+        down = false;
+    }
+
+    public void SetStatsFromSaveData(GameManager.SavedPlayerStats newStats)
+    {
+        HP = newStats.HP;
+        MaxHP = newStats.MaxHP;
+        MP = newStats.MP;
+        MaxMP = newStats.MaxMP;
+
+        ATK = newStats.ATK;
+        DEF = newStats.DEF;
+        SPD = newStats.SPD;
+
+        LVL = newStats.LVL;
+        XP = newStats.XP;
+        baseXPThreshold = newStats.baseXPThreshold;
         down = false;
     }
 
@@ -243,19 +261,27 @@ public class PlayerStats : Stats
     // Overrides for all of the stat getters to account for the passive modifications of the gems
     public new int GetMaxHP()
     {
-        if (GetComponent<GemSystem>().CurrentGem.name == "Heart")
+        if(GetComponent<GemSystem>().CurrentGem != null)
         {
-            return (int)(MaxHP * MaxHPMod * GemMaxHPMod) + (int)(MaxMP * MaxMPMod * GemMaxMPMod);
+            if (GetComponent<GemSystem>().CurrentGem.name == "Heart")
+            {
+                return (int)(MaxHP * MaxHPMod * GemMaxHPMod) + (int)(MaxMP * MaxMPMod * GemMaxMPMod);
+            }
         }
+        
         return (int)(MaxHP * MaxHPMod * GemMaxHPMod);
     }
     public new int GetMaxMP()
     {
-        if (GetComponent<GemSystem>().CurrentGem.name == "Heart")
+        if (GetComponent<GemSystem>().CurrentGem != null)
         {
-            return (int)(MaxHP * MaxHPMod * GemMaxHPMod) + (int)(MaxMP * MaxMPMod * GemMaxMPMod);
+            if (GetComponent<GemSystem>().CurrentGem.name == "Heart")
+            {
+                return (int)(MaxHP * MaxHPMod * GemMaxHPMod) + (int)(MaxMP * MaxMPMod * GemMaxMPMod);
 
+            }
         }
+        
         return (int)(MaxMP * MaxMPMod * GemMaxMPMod);
     }
     public new int GetATK()
