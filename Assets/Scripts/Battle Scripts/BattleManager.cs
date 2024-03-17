@@ -209,10 +209,14 @@ public class BattleManager : MonoBehaviour
                         // Send out an event so that buffs and debuffs know that it's time to check their timers
                         battleNewTurn?.Invoke();
                         // Gem of Cunning 2nd turn reset
-                        if (playerGemSys.CurrentGem.name == "Cunning")
+                        if(playerGemSys.CurrentGem != null)
                         {
-                            cunningSecondTurn = true;
+                            if (playerGemSys.CurrentGem.name == "Cunning")
+                            {
+                                cunningSecondTurn = true;
+                            }
                         }
+                        
 
                         // If the Patience timers are greater than -1, decrement them
                         // The -1 is just so that they have an idle that doesn't trigger the effects every turn

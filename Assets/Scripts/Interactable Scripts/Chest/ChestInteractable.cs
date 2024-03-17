@@ -5,13 +5,19 @@ using UnityEngine.SceneManagement;
 
 public class ChestInteractable : Interactable
 {
+    [Header("Save Index")]
+    public int saveIndex;
+    [Header("Contents")]
     [SerializeField] ItemData chestItem;
     [SerializeField] int numItems;
     [SerializeField] GameObject trigger;
+    UsePrompt prompt;
+    [Header("Sprites")]
     [SerializeField] GameObject chestSprite;
     [SerializeField] GameObject itemSprite;
 
-    UsePrompt prompt;
+    
+    [Header("Animation")]
     ChestAnimatorS chestAnimator;
     ChestItemDisplay chestItemDisplay;
 
@@ -34,6 +40,11 @@ public class ChestInteractable : Interactable
         else
         {
             lines.Add(chestItem.MultipleObtainDescription);
+        }
+
+        if (GameManager.Instance.openedChests[saveIndex]) // If this chest has been opened, it shall not be re-opened for additional gain
+        {
+            AlreadyOpened();
         }
         
     }
@@ -74,6 +85,14 @@ public class ChestInteractable : Interactable
         GameManager.Instance.Animating(true);
 
         opened = true;
+        GameManager.Instance.openedChests[saveIndex] = true; // Save that we have opened this chest
         yield return null;
+    }
+
+    private void AlreadyOpened()
+    {
+        chestAnimator.SetOpen();
+        opened = true;
+        trigger.SetActive(false);
     }
 }

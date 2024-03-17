@@ -25,4 +25,5 @@ MonoBehaviour:
   BattleUseDescription: Mana restored!
   SingleObtainDescription: You found a Mana Potion! You can use it to restore your
     MP.
-  MultipleObtainDescription: 
+  MultipleObtainDescription: You found some Mana Potions! You can use them to restore
+    your MP.

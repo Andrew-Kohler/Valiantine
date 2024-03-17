@@ -42,12 +42,12 @@ public class EnemyStats : Stats
         enemyAnimator = GetComponentInChildren<EnemyAnimatorS>();
     }
 
-    private void OnEnable()
+    new private void OnEnable()
     {
         base.OnEnable();
     }
 
-    private void OnDisable()
+    new private void OnDisable()
     {
         base.OnDisable();
     }

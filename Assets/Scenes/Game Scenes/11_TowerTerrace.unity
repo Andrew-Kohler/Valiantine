@@ -2662,6 +2662,10 @@ PrefabInstance:
       propertyPath: chestItem
       value: 
       objectReference: {fileID: 11400000, guid: 23c58783ac447f842afc5f877b90ce91, type: 2}
+    - target: {fileID: 5672687844709875289, guid: fcc240d17a166644fb5e630542774483, type: 3}
+      propertyPath: saveIndex
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5672687845499156267, guid: fcc240d17a166644fb5e630542774483, type: 3}
       propertyPath: m_SortingOrder
       value: 1
@@ -5770,11 +5774,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3510521687597023680, guid: 4bc45c8efa7c68840a10743132bdae17, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.21
+      value: 2.72
       objectReference: {fileID: 0}
     - target: {fileID: 3510521687597023680, guid: 4bc45c8efa7c68840a10743132bdae17, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -85.7
+      value: -82.94
       objectReference: {fileID: 0}
     - target: {fileID: 3510521687597023680, guid: 4bc45c8efa7c68840a10743132bdae17, type: 3}
       propertyPath: m_LocalRotation.w

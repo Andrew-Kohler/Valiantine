@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager _instance; // = new GameManager();   // Look at this again, b/c I'm pretty sure awake should be doing this?
     private bool activeCoroutine;
-    public bool towerfall = true;
+    public bool towerfall = false;
 
     private bool _isGameOver;   // Has the player been defeated?
     private bool _isInventory;  // Are we in the inventory?
@@ -143,6 +143,9 @@ public class GameManager : MonoBehaviour
         _isWindy = false;
         _canInteract = false;
         currentInteractable = null;
+
+        openedChests = new bool[16];    // Indicies 0-15
+        openedGates = new bool[4];     // Indicies 0-3
 
         lostWoodsEscapeTracker = new ArrayList();
         lostWoodsNormalEscape = new ArrayList { 3, 2, 4, 1, 3 };

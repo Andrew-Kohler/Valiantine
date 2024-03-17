@@ -145,9 +145,12 @@ MonoBehaviour:
   chestPos: {x: 0, y: -3, z: 2}
   castleEntryPos: {x: 0, y: -3, z: 0}
   hereStandsPos: {x: 0, y: 12, z: -8}
+  endCutscenePos: {x: 0, y: 5, z: 0}
   savePos0: {x: 25, y: 10, z: -25}
   savePos1: {x: -10, y: 10, z: -15}
+  savePos2: {x: -7, y: -5, z: -30}
   savePos3: {x: 2, y: 10, z: -6}
+  savePos4: {x: 0, y: -2, z: 4}
   savePos5: {x: 5, y: 0, z: -10}
   standardAngle: {x: 20.51, y: 0, z: 0}
   standardAngle2: {x: -10.51, y: 0, z: 0}
@@ -159,7 +162,9 @@ MonoBehaviour:
   hereStandsAngle: {x: 20, y: 0, z: 0}
   saveAngle0: {x: 20.51, y: 0, z: 0}
   saveAngle1: {x: 30, y: 0, z: 0}
+  saveAngle2: {x: 6.51, y: 0, z: 0}
   saveAngle3: {x: -30.51, y: 0, z: 0}
+  saveAngle4: {x: 20.51, y: 0, z: 0}
   saveAngle5: {x: 10.51, y: 5, z: 0}
   battleStep: 0.25
   inventoryStep: 0.5

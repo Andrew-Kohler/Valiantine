@@ -629,6 +629,10 @@ PrefabInstance:
       propertyPath: chestItem
       value: 
       objectReference: {fileID: 11400000, guid: 02fbd019d95f61e4180bc49159b5eec1, type: 2}
+    - target: {fileID: 5672687844709875289, guid: fcc240d17a166644fb5e630542774483, type: 3}
+      propertyPath: saveIndex
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fcc240d17a166644fb5e630542774483, type: 3}
 --- !u!1001 &728846740

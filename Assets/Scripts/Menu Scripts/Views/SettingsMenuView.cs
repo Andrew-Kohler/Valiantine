@@ -16,10 +16,6 @@ public class SettingsMenuView : View
     [SerializeField] private GameObject mainConfirm;
     [SerializeField] private GameObject loadConfirm;
     [SerializeField] private GameObject quitConfirm;
-    public bool goMain;
-
-    /*public delegate void GoToMain();
-    public static event GoToMain goToMain;*/
 
     public override void Initialize()
     {
@@ -28,7 +24,15 @@ public class SettingsMenuView : View
         loadConfirm.SetActive(false);
         mainConfirm.SetActive(false);
         options.SetActive(false);
-        goMain = false;
+    }
+
+    private void OnEnable()
+    {
+        regular.SetActive(true);
+        quitConfirm.SetActive(false);
+        loadConfirm.SetActive(false);
+        mainConfirm.SetActive(false);
+        options.SetActive(false);
     }
 
     private void Update()
@@ -47,7 +51,9 @@ public class SettingsMenuView : View
 
     public void LoadLastSave()
     {
-
+        loadConfirm.SetActive(false);
+        Time.timeScale = 1;
+        GameManager.Instance.ReadInSaveData();
     }
 
     public void ReturnToMainButton()
@@ -58,13 +64,9 @@ public class SettingsMenuView : View
 
     public void ReturnToMain()
     {
-        goMain = true;
-        //goToMain?.Invoke();
         mainConfirm.SetActive(false);
         Time.timeScale = 1;
-        GameManager.Instance.Settings(false);
-        
-        
+        SceneLoader.Instance.OnForcedPlayerTransition("23_MainMenu");
     }
 
     public void QuitButton()

@@ -1376,6 +1376,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Small Chest
       objectReference: {fileID: 0}
+    - target: {fileID: 5672687844709875289, guid: fcc240d17a166644fb5e630542774483, type: 3}
+      propertyPath: saveIndex
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 5672687845499156267, guid: fcc240d17a166644fb5e630542774483, type: 3}
       propertyPath: m_SortingOrder
       value: 1

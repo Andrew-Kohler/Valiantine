@@ -28,10 +28,12 @@ public class CameraControl : MonoBehaviour
     [SerializeField] Vector3 endCutscenePos = new Vector3(0, 5f, 0f);
 
     [Header("Camera Save Point Positions")]
-    [SerializeField] Vector3 savePos0 = new Vector3(10f, 10f, 10f);   // Position modifier of the camera for the save point in the test area
-    [SerializeField] Vector3 savePos1 = new Vector3(5f, 10f, 5f);
-    [SerializeField] Vector3 savePos3 = new Vector3(2f, 0f, -6f);
-    [SerializeField] Vector3 savePos5 = new Vector3(5f, 0f, -10f);
+    [SerializeField] Vector3 savePos0 = new Vector3(10f, 10f, 10f); // Position modifier of the camera for the save point in the test area
+    [SerializeField] Vector3 savePos1 = new Vector3(5f, 10f, 5f);   // Fountain
+    [SerializeField] Vector3 savePos2 = new Vector3(-7f, -5f, -30f);   // Garden
+    [SerializeField] Vector3 savePos3 = new Vector3(2f, 0f, -6f);   // Terrace before towerfall
+    [SerializeField] Vector3 savePos4 = new Vector3(0f, -2f, 4f);   // Before boss
+    [SerializeField] Vector3 savePos5 = new Vector3(5f, 0f, -10f);  // Terrace after towerfall
 
     // X, Y, and Z camera angles for different interactions in the game
     [Header("Camera Angles")]
@@ -48,7 +50,9 @@ public class CameraControl : MonoBehaviour
     [Header("Camera Save Point Angles")]
     [SerializeField] Vector3 saveAngle0 = new Vector3(20.51f, 0f, 0f); // Angle of the camera for the save point in the test area
     [SerializeField] Vector3 saveAngle1 = new Vector3(20.51f, 0f, 0f);
+    [SerializeField] Vector3 saveAngle2 = new Vector3(6.51f, 0f, 0f);
     [SerializeField] Vector3 saveAngle3 = new Vector3(-30.51f, 0f, 0f);
+    [SerializeField] Vector3 saveAngle4 = new Vector3(20.51f, 0f, 0f);
     [SerializeField] Vector3 saveAngle5 = new Vector3(10.51f, 5f, 0f);
 
     Transform playerTransform;
@@ -251,10 +255,20 @@ public class CameraControl : MonoBehaviour
                 Vector3 targetPos = new Vector3(playerTransform.position.x + savePos1.x, playerTransform.position.y + yConstant + savePos1.y, playerTransform.position.z - zConstant + savePos1.z);
                 StartCoroutine(DoCamPosition(targetPos, inventoryStep * 3.0f, saveAngle1));
             }
+            else if (currentPoint == 2)
+            {
+                Vector3 targetPos = new Vector3(playerTransform.position.x + savePos2.x, playerTransform.position.y + yConstant + savePos2.y, playerTransform.position.z - zConstant + savePos2.z);
+                StartCoroutine(DoCamPosition(targetPos, inventoryStep * 3.0f, saveAngle2));
+            }
             else if (currentPoint == 3)
             {
                 Vector3 targetPos = new Vector3(playerTransform.position.x + savePos3.x, playerTransform.position.y + yConstant + savePos3.y, playerTransform.position.z - zConstant + savePos3.z);
                 StartCoroutine(DoCamPosition(targetPos, inventoryStep * 3.0f, saveAngle3));
+            }
+            else if (currentPoint == 4)
+            {
+                Vector3 targetPos = new Vector3(playerTransform.position.x + savePos4.x, playerTransform.position.y + yConstant + savePos4.y, playerTransform.position.z - zConstant + savePos4.z);
+                StartCoroutine(DoCamPosition(targetPos, inventoryStep * 3.0f, saveAngle4));
             }
             else if (currentPoint == 5)
             {

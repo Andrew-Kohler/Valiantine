@@ -111,10 +111,10 @@ public class SceneLoader : MonoBehaviour
             playerG = PlayerManager.Instance.GemSystem();
         }
 
-        fade = ViewManager.GetView<InGameUIView>().gameObject.GetComponentsInChildren<FadeScene>()[0];//GameObject.Find("Black Panel");
+        transitionPanel = GameObject.Find("Black Panel");
         /*ViewM
         fade.gameObject.SetActive(true);*/
-        //fade = transitionPanel.GetComponent<FadeScene>();
+        fade = transitionPanel.GetComponent<FadeScene>();
 
         fade.SceneFadeIn(levelToLoad);
     }
@@ -144,7 +144,13 @@ public class SceneLoader : MonoBehaviour
     {
         // When the level is loaded:
         GameManager.Instance.Cutscene(false);
-        if(SceneManager.GetActiveScene().name != "23_MainMenu" && SceneManager.GetActiveScene().name != "24_Credits")
+        GameManager.Instance.Inventory(false);
+        GameManager.Instance.Battle(false);
+        GameManager.Instance.Settings(false);
+
+        // We don't need to worry about resetting BattleManager because it isn't persistent between scenes
+
+        if (SceneManager.GetActiveScene().name != "23_MainMenu" && SceneManager.GetActiveScene().name != "24_Credits")
         {
             GameObject player = GameObject.Find("Player");  // Find the player gameObject
             GameObject.Find("Player Sprite").GetComponent<PlayerAnimatorS>().SetDirection(GameManager.Instance.transitionDirection);

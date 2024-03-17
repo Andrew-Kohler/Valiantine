@@ -28,22 +28,40 @@ public class ChestAnimatorS : MonoBehaviour
         StartCoroutine(DoOpenAnimation());
     }
 
+    public void SetOpen()
+    {
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        meshRenderer.material.SetFloat(clipKey, animationIndex);
+        meshRenderer.material.SetFloat(frameKey, frameLoop - 1);
+    }
+
     private IEnumerator DoOpenAnimation()
     {
         int frame = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
         while (frameLoop > frame)
         {
-            string clipKey, frameKey;
-            if (axis == AnimationAxis.Rows)
-            {
-                clipKey = rowProperty;
-                frameKey = colProperty;
-            }
-            else
-            {
-                clipKey = colProperty;
-                frameKey = rowProperty;
-            }
+           
 
             // Animate
             frame = (int)(deltaT * animationSpeed);

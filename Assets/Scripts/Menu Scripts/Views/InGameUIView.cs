@@ -57,11 +57,6 @@ public class InGameUIView : View
 
     void Update()
     {
-        if (ViewManager.GetView<SettingsMenuView>().goMain)
-        {
-            ViewManager.GetView<SettingsMenuView>().goMain = false;
-            SceneLoader.Instance.OnForcedPlayerTransition("23_MainMenu");
-        }
         if (GameManager.Instance.isInventory())
         {
             ViewManager.ShowFade<InventoryMenuView>(true);

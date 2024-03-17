@@ -5,14 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class GateInteractable : Interactable
 {
+    [Header("Save Index")]
+    public int saveIndex = 0;
+
+    [Header("Gate Components")]
     [SerializeField] GameObject leftGate;       // The gates, their pivot points, and the interaction trigger
     [SerializeField] GameObject leftGatePivot;
     [SerializeField] GameObject rightGate;
     [SerializeField] GameObject rightGatePivot;
     [SerializeField] GameObject trigger;
 
+    [Header("Gate Key")]
     [SerializeField] ItemData key;  // The item required to open the gates
 
+    [Header("Additional Considerations")]
     [SerializeField] public bool mainDoors;
     [SerializeField] float gateOpenSpeed;   // Speed at which the gates open
 
@@ -32,6 +38,18 @@ public class GateInteractable : Interactable
     private void OnDisable()
     {
         InGameUIView.onInteractionEnd -= GateCheck;
+    }
+
+    private void Start()
+    {
+        if (!mainDoors)
+        {
+            if (GameManager.Instance.openedGates[saveIndex])
+            {
+                StartCoroutine(DoSceneLoadGateOpen());
+            }
+        }
+        
     }
 
     public override void Interact()
@@ -111,13 +129,29 @@ public class GateInteractable : Interactable
         }
         count = 0;
         validInteraction = false;
+        
 
         if (mainDoors)
         {
             onCastleEnter?.Invoke();
         }
+        else
+        {
+            GameManager.Instance.openedGates[saveIndex] = true;
+        }
         
         yield return null;
         
+    }
+
+    private IEnumerator DoSceneLoadGateOpen()
+    {
+        trigger.SetActive(false);   // Disable the ability to interact with the gate; it's open, we're done
+
+        leftGate.transform.RotateAround(leftGatePivot.transform.position, Vector3.up, -85);
+        rightGate.transform.RotateAround(rightGatePivot.transform.position, Vector3.up, 85);
+        yield return null;
+
+        validInteraction = false;
     }
 }
