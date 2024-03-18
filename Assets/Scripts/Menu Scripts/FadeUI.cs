@@ -33,6 +33,12 @@ public class FadeUI : MonoBehaviour
         StartCoroutine(DoFadeOutUIPiece());
     }
 
+    public void HurryUp()
+    {
+        canvasGroup = GetComponent<CanvasGroup>();
+        canvasGroup.alpha = 1f;
+    }
+
     IEnumerator DoFadeInUI()
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -93,6 +99,7 @@ public class FadeUI : MonoBehaviour
         canvasGroup.blocksRaycasts = false;
 
     }
+
 }
 
 

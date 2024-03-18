@@ -9255,8 +9255,6 @@ MonoBehaviour:
   mainConfirm: {fileID: 1664117192105779646}
   loadConfirm: {fileID: 1336382592950643534}
   quitConfirm: {fileID: 1042274389034707915}
-  goMain: 0
-  load: 0
 --- !u!1 &3464300809840856894
 GameObject:
   m_ObjectHideFlags: 0

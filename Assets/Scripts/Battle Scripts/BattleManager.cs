@@ -418,7 +418,7 @@ public class BattleManager : MonoBehaviour
                                 // All spells should have a target enum so I know what to do here
                                 if (playerGemSys.CurrentGem.name == "Will")
                                 {
-                                    // Will spawns an arrow
+                                    // Will spawns an arrow - DONE
                                 }
                                 else if (playerGemSys.CurrentGem.name == "Courage")
                                 {
@@ -765,7 +765,6 @@ public class BattleManager : MonoBehaviour
 
     private void EndTurnInventory()
     {
-        Debug.Log("Successful turn end");
         StartCoroutine(DoTurnAdvanceInven());
     }
 
@@ -1085,6 +1084,17 @@ public class BattleManager : MonoBehaviour
 
         endResult = EndStatus.None;
         status = MenuStatus.Inactive;
+
+        yield return null;
+    }
+
+    IEnumerator DoBattleLoss()
+    {
+        activeCoroutine = true;
+        toggleStatDisplays(false);
+        clearStatMods();
+
+        PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleLoss();
 
         yield return null;
     }
