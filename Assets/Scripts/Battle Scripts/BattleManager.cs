@@ -108,11 +108,13 @@ public class BattleManager : MonoBehaviour
     private void OnEnable()
     {
         InventoryMenuView.onBattleInvenExit += EndTurnInventory;
+        PlayerStats.onDefeat += TriggerLoss;
     }
 
     private void OnDisable()
     {
         InventoryMenuView.onBattleInvenExit -= EndTurnInventory;
+        PlayerStats.onDefeat -= TriggerLoss;
     }
 
     private void Start()
@@ -493,12 +495,11 @@ public class BattleManager : MonoBehaviour
             {
                 if (endResult == EndStatus.Win)
                 {
-
                     StartCoroutine(DoBattleWin());
                 }
                 else if (endResult == EndStatus.Loss)
                 {
-                    Debug.Log("L");
+                    StartCoroutine(DoBattleLoss());
                 }
                 else if (endResult == EndStatus.Run)
                 {
@@ -766,6 +767,14 @@ public class BattleManager : MonoBehaviour
     private void EndTurnInventory()
     {
         StartCoroutine(DoTurnAdvanceInven());
+    }
+
+    private void TriggerLoss()
+    {
+        battleActive = false;
+        endResult = EndStatus.Loss;
+
+        StartCoroutine(DoBattleLoss());
     }
 
     private void CreateSelectionArrow() // Creates an arrow to let the player select which enemy to attack
@@ -1093,8 +1102,14 @@ public class BattleManager : MonoBehaviour
         activeCoroutine = true;
         toggleStatDisplays(false);
         clearStatMods();
+        battleUI.GetComponent<FadeUI>().UIFadeOut();
 
-        PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleLoss();
+        //Play the defeat animation
+        //PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleLost();
+        yield return new WaitUntil(()=> PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().defeated);
+
+        // Once that's done, load the credits scene
+        SceneLoader.Instance.OnForcedTransition("25_GameOver");
 
         yield return null;
     }

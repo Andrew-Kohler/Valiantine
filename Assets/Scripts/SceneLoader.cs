@@ -150,7 +150,7 @@ public class SceneLoader : MonoBehaviour
 
         // We don't need to worry about resetting BattleManager because it isn't persistent between scenes
 
-        if (SceneManager.GetActiveScene().name != "23_MainMenu" && SceneManager.GetActiveScene().name != "24_Credits")
+        if (SceneManager.GetActiveScene().name != "23_MainMenu" && SceneManager.GetActiveScene().name != "24_Credits" && SceneManager.GetActiveScene().name != "25_GameOver")
         {
             GameObject player = GameObject.Find("Player");  // Find the player gameObject
             GameObject.Find("Player Sprite").GetComponent<PlayerAnimatorS>().SetDirection(GameManager.Instance.transitionDirection);

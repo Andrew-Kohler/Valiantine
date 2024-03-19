@@ -24,6 +24,7 @@ public class PlayerAnimatorS : MonoBehaviour
     private int frameLoop = 0;  // A value to hold the number of the frame that the current animation loops on (e.g. after frame 13, loop it)
     private int frameReset = 0; // A value to hold the number of the frame that the current animation loops back to (e.g. the loop starts on frame 0)
     public bool activeCoroutine = false;    // The classic boolean to use when Update() needs to be quiet during a coroutine
+    public bool defeated = false;
 
     private float timeToIdle = 7f;
     private float idleTimer;
@@ -367,6 +368,13 @@ public class PlayerAnimatorS : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(DoBattleExitAnim());
     }
+
+    public void PlayBattleLost()
+    {
+        StopAllCoroutines();
+        StartCoroutine(DoDefeatAnim());
+    }
+
 
 
     // Private methods ----------------------------------------------------------
@@ -809,6 +817,7 @@ public class PlayerAnimatorS : MonoBehaviour
 
     private IEnumerator DoHurtAnim()
     {
+        Debug.Log("?");
         // Setup ----------------------------------------------
         activeCoroutine = true;
         deltaT = 0;
@@ -983,6 +992,67 @@ public class PlayerAnimatorS : MonoBehaviour
 
     private IEnumerator DoDefeatAnim()
     {
+        Debug.Log("x");
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _DefeatIndex;
+        animationSpeed = 5.4f;
+        frameLoop = 17;
+
+        // Content ----------------------------------------------
+        // Play the animation
+        int frame = 0;
+        while (frame < 4)
+        {
+            
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+
+            yield return null;
+        }
+
+        deltaT = 0;
+        animationSpeed = 1.6f;
+        while (frame < 9)
+        {
+
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 4 + (int)(deltaT * (animationSpeed));
+
+            yield return null;
+        }
+
+        deltaT = 0;
+        animationSpeed = 5.4f;
+        while (frame < frameLoop)
+        {
+
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 9 + (int)(deltaT * (animationSpeed));
+
+            yield return null;
+        }
+
+        defeated = true;
+
         yield return null;
     }
 

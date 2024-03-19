@@ -18,9 +18,12 @@ public class PlayerStats : Stats
 
     [SerializeField] GameObject dmgNums;
 
+    public delegate void OnDefeat();
+    public static event OnDefeat onDefeat;
+
     public PlayerStats()
     {
-        HP = 15;
+        HP = 1;
         MaxHP = 20;
         MP = 3;
         MaxMP = 15;
@@ -153,7 +156,8 @@ public class PlayerStats : Stats
                 ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, -1, crit);
                 if (down)
                 {
-                    // The game over sequence is Something I Have To Do
+                    animator.PlayBattleLost();
+                    onDefeat?.Invoke();
                 }
                 else
                 {
@@ -190,8 +194,8 @@ public class PlayerStats : Stats
                 ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, -1, crit);
                 if (down)
                 {
-                    // The game over sequence is Something I Have To Do
-                    // This should probs be an event
+                    animator.PlayBattleLost();
+                    onDefeat?.Invoke();
                 }
                 else
                 {
@@ -235,7 +239,8 @@ public class PlayerStats : Stats
                 ouch.GetComponent<DamageNumbers>().SetValues(7f, changeVal, -1, false);
                 if (down)
                 {
-                    // The game over sequence is Something I Have To Do
+                    animator.PlayBattleLost();
+                    onDefeat?.Invoke();
                 }
                 /*else  We don't play the hurt anim on an MP related loss because it might interfere with spellcast stuff
                 {
