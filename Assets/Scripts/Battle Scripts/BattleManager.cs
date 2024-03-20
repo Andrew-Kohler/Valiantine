@@ -1030,7 +1030,8 @@ public class BattleManager : MonoBehaviour
         activeCoroutine = true;
         //toggleStatDisplaysE(true);
         ViewManager.GetView<BattleUIView>().setText(GetCurrentTurnName() + " moves to attack!");
-        combatants[currentTurn].GetComponent<EnemyMoves>().Move1(playerStats);
+        yield return new WaitUntil(() => combatants[currentTurn].GetComponentInChildren<EnemyAnimatorS>().activeCoroutine == false);
+        combatants[currentTurn].GetComponent<EnemyMoves>().Move3(playerStats);
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<EnemyMoves>().moveInProgress == false);
 
         if (currentTurn != turnArray.Length - 1) // Advance the turn

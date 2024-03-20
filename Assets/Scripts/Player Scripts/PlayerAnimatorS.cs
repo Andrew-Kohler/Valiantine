@@ -992,7 +992,6 @@ public class PlayerAnimatorS : MonoBehaviour
 
     private IEnumerator DoDefeatAnim()
     {
-        Debug.Log("x");
         // Setup ----------------------------------------------
         activeCoroutine = true;
         deltaT = 0;

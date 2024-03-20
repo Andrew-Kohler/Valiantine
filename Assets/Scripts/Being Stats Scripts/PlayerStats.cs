@@ -23,7 +23,7 @@ public class PlayerStats : Stats
 
     public PlayerStats()
     {
-        HP = 1;
+        HP = 16;
         MaxHP = 20;
         MP = 3;
         MaxMP = 15;
@@ -108,12 +108,14 @@ public class PlayerStats : Stats
     {
         base.OnEnable();
         SkullmetMoves.damagePlayer += SetHP;
+        LoverMoves.damagePlayer += SetHP;
     }
 
     private void OnDisable()
     {
         base.OnDisable();
         SkullmetMoves.damagePlayer -= SetHP;
+        LoverMoves.damagePlayer -= SetHP;
     }
 
     private void Start()

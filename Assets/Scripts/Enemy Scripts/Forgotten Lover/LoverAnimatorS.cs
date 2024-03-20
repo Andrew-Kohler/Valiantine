@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LoverAnimatorS : EnemyAnimatorS
 {
+    [SerializeField] private GameObject vinePrefab;
     private LoverMovement loverMovement;
 
     private int _AttackIndex = 12;
@@ -34,65 +35,35 @@ public class LoverAnimatorS : EnemyAnimatorS
     {
         if (!activeCoroutine && !GameManager.Instance.isSettings())   // If one of our special animations isn't going on and we aren't paused
         {
-            // Determining which animation should be playing ----------------------------------------------------------------
-            if (GameManager.Instance.enemyCanMove())    // Non-battle animation
+            if (!GameManager.Instance.isBattle())
             {
-                frameLoop = 7;
-                if (!loverMovement.LurchingAround) // If we are stationary
+                // Determining which animation should be playing ----------------------------------------------------------------
+                if (GameManager.Instance.enemyCanMove())    // Non-battle animation
                 {
-                    if (animationIndex == _WalkForwardsIndex)
+                    frameLoop = 7;
+                    if (!loverMovement.LurchingAround) // If we are stationary
                     {
-                        animationIndex = _IdleForwardsIndex;
+                        if (animationIndex == _WalkForwardsIndex)
+                        {
+                            animationIndex = _IdleForwardsIndex;
+                        }
+                        if (animationIndex == _WalkBackwardsIndex)
+                        {
+                            animationIndex = _IdleBackwardsIndex;
+                        }
+                        if (animationIndex == _WalkLIndex)
+                        {
+                            animationIndex = _IdleLIndex;
+                        }
+                        if (animationIndex == _WalkRIndex)
+                        {
+                            animationIndex = _IdleRIndex;
+                        }
                     }
-                    if (animationIndex == _WalkBackwardsIndex)
-                    {
-                        animationIndex = _IdleBackwardsIndex;
-                    }
-                    if (animationIndex == _WalkLIndex)
-                    {
-                        animationIndex = _IdleLIndex;
-                    }
-                    if (animationIndex == _WalkRIndex)
-                    {
-                        animationIndex = _IdleRIndex;
-                    }
-                }
 
-                else // If we are moving, we do the moving animations
-                {
-                    if (Mathf.Abs(rb.velocity.z) >= Mathf.Abs(rb.velocity.x)) // Allows the higher velocity to always take priority
+                    else // If we are moving, we do the moving animations
                     {
-                        if (rb.velocity.z < -.05) // Moving forwards
-                        {
-                            animationIndex = _WalkForwardsIndex;
-                        }
-                        else if (rb.velocity.z > 0.05) // Moving backwards
-                        {
-                            animationIndex = _WalkBackwardsIndex;
-                        }
-                        else // Moving left or right
-                        {
-                            if (rb.velocity.x < -0.05) // Moving left
-                            {
-                                animationIndex = _WalkLIndex;
-                            }
-                            else if (rb.velocity.x > 0.05) // Moving right
-                            {
-                                animationIndex = _WalkRIndex;
-                            }
-                        }
-                    }
-                    else if (Mathf.Abs(rb.velocity.z) < Mathf.Abs(rb.velocity.x))
-                    {
-                        if (rb.velocity.x < -0.05) // Moving left
-                        {
-                            animationIndex = _WalkLIndex;
-                        }
-                        else if (rb.velocity.x > 0.05) // Moving right
-                        {
-                            animationIndex = _WalkRIndex;
-                        }
-                        else
+                        if (Mathf.Abs(rb.velocity.z) >= Mathf.Abs(rb.velocity.x)) // Allows the higher velocity to always take priority
                         {
                             if (rb.velocity.z < -.05) // Moving forwards
                             {
@@ -102,11 +73,45 @@ public class LoverAnimatorS : EnemyAnimatorS
                             {
                                 animationIndex = _WalkBackwardsIndex;
                             }
+                            else // Moving left or right
+                            {
+                                if (rb.velocity.x < -0.05) // Moving left
+                                {
+                                    animationIndex = _WalkLIndex;
+                                }
+                                else if (rb.velocity.x > 0.05) // Moving right
+                                {
+                                    animationIndex = _WalkRIndex;
+                                }
+                            }
+                        }
+                        else if (Mathf.Abs(rb.velocity.z) < Mathf.Abs(rb.velocity.x))
+                        {
+                            if (rb.velocity.x < -0.05) // Moving left
+                            {
+                                animationIndex = _WalkLIndex;
+                            }
+                            else if (rb.velocity.x > 0.05) // Moving right
+                            {
+                                animationIndex = _WalkRIndex;
+                            }
+                            else
+                            {
+                                if (rb.velocity.z < -.05) // Moving forwards
+                                {
+                                    animationIndex = _WalkForwardsIndex;
+                                }
+                                else if (rb.velocity.z > 0.05) // Moving backwards
+                                {
+                                    animationIndex = _WalkBackwardsIndex;
+                                }
+                            }
                         }
                     }
                 }
+            
+                
             }
-
             else if (GameManager.Instance.isBattle())
             {
                 //  Battle idle
@@ -114,6 +119,7 @@ public class LoverAnimatorS : EnemyAnimatorS
                 animationSpeed = _NormalAnimationSpeed;
                 animationIndex = _IdleLIndex;
             }
+
 
             // Actually playing the chosen animation ------------------------------------------------------------------
             string clipKey, frameKey;
@@ -267,8 +273,53 @@ public class LoverAnimatorS : EnemyAnimatorS
     // 1st combat move
     protected override IEnumerator DoMove1Anim()
     {
+        // Setup ----------------------------------------------
         activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _AttackIndex;
+        animationSpeed = 5.4f;
+        frameLoop = 18;
 
+        // Content ----------------------------------------------
+        // Play the animation
+        int frame = 0;
+        while (frame < 10)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        // Spawn the vine for a cool effect
+        GameObject vine = Instantiate(vinePrefab,
+            new Vector3(PlayerManager.Instance.PlayerTransform().position.x + .96f,
+            PlayerManager.Instance.PlayerTransform().position.y + 2.66f,
+            PlayerManager.Instance.PlayerTransform().position.z - .4f), vinePrefab.transform.rotation);
+        dealDamage = true;
+        yield return new WaitForSeconds(.3f);
+
+        deltaT = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 10 + (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
 
         activeCoroutine = false;
         yield return null;
@@ -283,6 +334,55 @@ public class LoverAnimatorS : EnemyAnimatorS
     // 3rd combat move
     protected override IEnumerator DoMove3Anim()
     {
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _AttackIndex;
+        animationSpeed = 5.4f;
+        frameLoop = 18;
+
+        // Content ----------------------------------------------
+        // Play the animation
+        int frame = 0;
+        while (frame < 10)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        // Spawn the vine for a cool effect
+        GameObject vine = Instantiate(vinePrefab,
+            new Vector3(PlayerManager.Instance.PlayerTransform().position.x + .96f,
+            PlayerManager.Instance.PlayerTransform().position.y + 2.66f,
+            PlayerManager.Instance.PlayerTransform().position.z - .4f), vinePrefab.transform.rotation);
+        dealDamage = true;
+        yield return new WaitForSeconds(.3f);
+
+        deltaT = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 10 + (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        activeCoroutine = false;
         yield return null;
     }
 
