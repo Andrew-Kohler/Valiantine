@@ -7993,8 +7993,8 @@ MonoBehaviour:
   additionalEnemies:
   - {fileID: 5453430861041070570, guid: 06602d666ec5b0f4789c269951cbceba, type: 3}
   - {fileID: 5453430861041070570, guid: 06602d666ec5b0f4789c269951cbceba, type: 3}
-  lowerLVLBound: 1
-  upperLVLBound: 2
+  lowerLVLBound: 7
+  upperLVLBound: 10
   additionalEnemyLevels: 
   spawnpoint: {fileID: 443298022}
 --- !u!114 &443298026
@@ -24179,7 +24179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04d29dcff5d4b40418f0d190387b91e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LVL: 1
+  LVL: 7
   isBattling: 0
   remainOnPlayerFlight: 1
   enemyName: Forgotten Lover
@@ -24230,7 +24230,7 @@ MonoBehaviour:
   numberToSpawn: 0
   additionalEnemies: []
   lowerLVLBound: 7
-  upperLVLBound: 10
+  upperLVLBound: 8
   additionalEnemyLevels: 
   spawnpoint: {fileID: 0}
 --- !u!114 &1720770012

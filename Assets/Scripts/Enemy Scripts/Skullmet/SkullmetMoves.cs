@@ -52,7 +52,7 @@ public class SkullmetMoves : EnemyMoves
         yield return new WaitForSeconds(.6f);
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);  // Wait until it is time to deal damage
         dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF()); // Calculate damage being dealt (in this case, ATK power is a clean 100%)
-        playerStats.UpdateStatMods(new StatMod(3, 1, -.1f));    // Drop player DEF by 10% for 3 turns
+        playerStats.UpdateStatMods(new StatMod(3, 1, -1.1f));    // Drop player DEF by 10% for 3 turns
         if (enemyStats.GetCrit())
         {
             damagePlayer?.Invoke((int)(-dmgDealt * 2 * .3f), true);                              // Send that via an event

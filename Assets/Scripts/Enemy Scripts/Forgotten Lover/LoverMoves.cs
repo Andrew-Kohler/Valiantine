@@ -38,31 +38,15 @@ public class LoverMoves : EnemyMoves
     {
         moveInProgress = true;                  // Lets other classes know a move is going on 
         enemyAnimatorS.PlayMove2();             // Play the attack animation
-        yield return new WaitUntil(() => enemyAnimatorS.dealDamage);  // Wait until it is time to deal damage
-        playerStats.UpdateStatMods(new StatMod(3, 1, -.1f));    // Drop player DEF by 10% for 3 turns
-        int dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF()); // Calculate damage being dealt (in this case, ATK power is a clean 100%)
-        if (enemyStats.GetCrit())
-        {
-            damagePlayer?.Invoke((int)(-dmgDealt * 2 * 1.3f), true);                              // Send that via an event
-        }
-        else
-        {
-            damagePlayer?.Invoke((int)(-dmgDealt * 1.3f), false);      // PlayerStats receives the initial event, and then sends an animation event to PlayerAnimatorS
-                                                                       // once it determines whether Emily lives or dies                        
-        }
 
-        yield return new WaitForSeconds(.6f);
-        yield return new WaitUntil(() => enemyAnimatorS.dealDamage);  // Wait until it is time to deal damage
-        dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF()); // Calculate damage being dealt (in this case, ATK power is a clean 100%)
-        playerStats.UpdateStatMods(new StatMod(3, 1, -.1f));    // Drop player DEF by 10% for 3 turns
-        if (enemyStats.GetCrit())
+       // Buff all living enemies' ATK by 15% for 3 turns and heal them for 15%
+        foreach (GameObject enemy in BattleManager.Instance.GetBattlingEnemies())
         {
-            damagePlayer?.Invoke((int)(-dmgDealt * 2 * .3f), true);                              // Send that via an event
-        }
-        else
-        {
-            damagePlayer?.Invoke((int)(-dmgDealt * .3f), false);      // PlayerStats receives the initial event, and then sends an animation event to PlayerAnimatorS
-                                                                      // once it determines whether Emily lives or dies                        
+            if (!enemy.GetComponent<EnemyStats>().getDowned())
+            {
+                enemy.GetComponent<EnemyStats>().UpdateStatMods(new StatMod(3, 0, .15f));
+                enemy.GetComponent<EnemyStats>().SetHP((int)(enemy.GetComponent<EnemyStats>().GetMaxHPRaw() * .15f), false);
+            }
         }
 
         yield return new WaitUntil(() => enemyAnimatorS.activeCoroutine == false);   // Wait out the rest of the animation
@@ -83,7 +67,6 @@ public class LoverMoves : EnemyMoves
         else
         {
             damagePlayer?.Invoke((int)(-dmgDealt * .75f), false);
-
         }
         playerStats.UpdateStatMods(new StatMod(2, 0, -.2f));    // Drop player ATK by 20% for 2 turns
         playerStats.UpdateStatMods(new StatMod(2, 2, -.2f));    // Drop player DEF by 20% for 2 turns
@@ -98,20 +81,30 @@ public class LoverMoves : EnemyMoves
         moveInProgress = true;
         enemyAnimatorS.PlayMove4();
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);
-
-        // Buff all living enemies' ATK, DEF, and SPD stats by 15% for 3 turns
-        foreach (GameObject enemy in BattleManager.Instance.GetBattlingEnemies())
+        // Damage the player
+        int dmgDealt = (int)(enemyStats.CalculateDMG(playerStats.GetDEF()) * .5f);
+        if(dmgDealt == 0)
         {
-            if (!enemy.GetComponent<EnemyStats>().getDowned())
-            {
-                enemy.GetComponent<EnemyStats>().UpdateStatMods(new StatMod(3, 0, .15f));
-                enemy.GetComponent<EnemyStats>().UpdateStatMods(new StatMod(3, 1, .15f));
-                enemy.GetComponent<EnemyStats>().UpdateStatMods(new StatMod(3, 2, .15f));
-            }
+            dmgDealt = 1;
         }
+        if (enemyStats.GetCrit())
+        {
+            damagePlayer?.Invoke((-dmgDealt * 2), true);
+            this.GetComponent<EnemyStats>().SetHP((int)(dmgDealt * 2), false);
+        }
+        else
+        {
+            damagePlayer?.Invoke((-dmgDealt), false);
+            this.GetComponent<EnemyStats>().SetHP((int)(dmgDealt), false);
+        }
+        Debug.Log(this.GetComponent<EnemyStats>().GetATK());
+        Debug.Log(dmgDealt);
+        // Heal for however much we damaged them
+        // Increase speed by 20%
+        
+        this.GetComponent<EnemyStats>().UpdateStatMods(new StatMod(1, 2, .2f));
 
         yield return new WaitUntil(() => enemyAnimatorS.activeCoroutine == false);
-        yield return new WaitForSeconds(.8f);
         moveInProgress = false;
         enemyAnimatorS.dealDamage = false;
     }

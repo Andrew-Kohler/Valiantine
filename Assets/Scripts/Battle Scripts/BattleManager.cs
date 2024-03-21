@@ -230,16 +230,16 @@ public class BattleManager : MonoBehaviour
                         // if the Patience timers hit 0 after being decremented, apply their buffs
                         if (patienceCounter == 0)
                         {
-                            playerStats.UpdateStatMods(new StatMod(1, 0, 2));
-                            playerStats.UpdateStatMods(new StatMod(1, 1, 2));
-                            playerStats.UpdateStatMods(new StatMod(1, 2, 2));
+                            playerStats.UpdateStatMods(new StatMod(1, 0, 1));
+                            playerStats.UpdateStatMods(new StatMod(1, 1, 1));
+                            playerStats.UpdateStatMods(new StatMod(1, 2, 1));
                         }
 
                         if (greatPatienceCounter == 0)
                         {
-                            playerStats.UpdateStatMods(new StatMod(1, 0, 4));
-                            playerStats.UpdateStatMods(new StatMod(1, 1, 4));
-                            playerStats.UpdateStatMods(new StatMod(1, 2, 4));
+                            playerStats.UpdateStatMods(new StatMod(1, 0, 3));
+                            playerStats.UpdateStatMods(new StatMod(1, 1, 3));
+                            playerStats.UpdateStatMods(new StatMod(1, 2, 3));
                         }
 
                         
@@ -1031,7 +1031,9 @@ public class BattleManager : MonoBehaviour
         //toggleStatDisplaysE(true);
         ViewManager.GetView<BattleUIView>().setText(GetCurrentTurnName() + " moves to attack!");
         yield return new WaitUntil(() => combatants[currentTurn].GetComponentInChildren<EnemyAnimatorS>().activeCoroutine == false);
-        combatants[currentTurn].GetComponent<EnemyMoves>().Move3(playerStats);
+
+        combatants[currentTurn].GetComponent<EnemyMoves>().Move4(playerStats);
+
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<EnemyMoves>().moveInProgress == false);
 
         if (currentTurn != turnArray.Length - 1) // Advance the turn

@@ -16,12 +16,12 @@ public abstract class Stats : MonoBehaviour
     protected int baseXPThreshold;
     protected float LVLExponent;
 
-    protected float ATKMod;
-    protected float DEFMod;
-    protected float SPDMod;
-    protected float MaxHPMod;
-    protected float MaxMPMod;
-    protected float XPMod;
+    protected float ATKMod = 1;
+    protected float DEFMod = 1;
+    protected float SPDMod = 1;
+    protected float MaxHPMod = 1;
+    protected float MaxMPMod = 1;
+    protected float XPMod = 1;
 
     protected bool down;
 
@@ -255,15 +255,15 @@ public abstract class Stats : MonoBehaviour
     {
         int type = newMod.getType();
         if (type == 0)
-            ATKMod *= newMod.getStatMod();
+            ATKMod += newMod.getStatMod();
         else if (type == 1)
-            DEFMod *= newMod.getStatMod();
+            DEFMod += newMod.getStatMod();
         else if (type == 2)
-            SPDMod *= newMod.getStatMod();
+            SPDMod += newMod.getStatMod();
         else if (type == 3)
-            MaxHPMod *= newMod.getStatMod();
+            MaxHPMod += newMod.getStatMod();
         else if (type == 4)
-            MaxMPMod *= newMod.getStatMod();
+            MaxMPMod += newMod.getStatMod();
 
 /*        if(newMod.getStatMod() > 0)
         {
@@ -279,7 +279,6 @@ public abstract class Stats : MonoBehaviour
     {
 
         AddStatMod(newMod);
-
         if (stack1.Count == 0) // Just whichever foot we're on - determines the correct one to add it to
         {
             stack2.Push(newMod);
