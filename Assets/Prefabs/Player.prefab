@@ -5447,7 +5447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f34ba221cf0722429ba9cbff3a20cb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LVL: 3
+  LVL: 1
   dmgNums: {fileID: 6470322771213101756, guid: a2d36344f55aacf40be8b212749f9503, type: 3}
 --- !u!114 &3510521687597023691
 MonoBehaviour:
@@ -11619,6 +11619,7 @@ GameObject:
   - component: {fileID: 3510521688710238643}
   - component: {fileID: 3510521688710238642}
   - component: {fileID: 3510521688710238645}
+  - component: {fileID: 3510521687833947730}
   m_Layer: 0
   m_Name: Player Sprite
   m_TagString: Untagged
@@ -11708,10 +11709,122 @@ MonoBehaviour:
   axis: 0
   animationSpeed: 5.4
   animationIndex: 5
+  playerSounds:
+  - {fileID: 8300000, guid: ebcc53896fdd1c14ca429d43dda66a18, type: 3}
+  - {fileID: 8300000, guid: ee2f9db84bd2f624fa87f0fcad72acd6, type: 3}
+  - {fileID: 8300000, guid: 4780b832116f9d343ba51193c131fca0, type: 3}
+  - {fileID: 8300000, guid: 244786da0b75df040b8bffd061592439, type: 3}
+  - {fileID: 8300000, guid: f5edec09872322842ba815f1bbca8b29, type: 3}
+  - {fileID: 8300000, guid: 7c64a79a5de92ed4f8841215494989e7, type: 3}
+  - {fileID: 8300000, guid: f0d3763074e690644a7256be00696a53, type: 3}
+  - {fileID: 8300000, guid: c6192d9853bcc8d43949d7f4eb3199ad, type: 3}
+  - {fileID: 8300000, guid: 926ef9419b4950649bddb3fcd1bd49d0, type: 3}
+  - {fileID: 8300000, guid: aa3d4a1f21262284a998e187502cd8eb, type: 3}
+  - {fileID: 8300000, guid: 41c53e909a2fcb3458060193d354fe2c, type: 3}
+  - {fileID: 8300000, guid: de5f158b505ab204a8a0899622915417, type: 3}
+  - {fileID: 8300000, guid: b7dbee02732ca6d40a1fda6867c39cad, type: 3}
+  - {fileID: 8300000, guid: 3b5aa295a79299442bc1d3855d5f74f1, type: 3}
   activeCoroutine: 0
+  defeated: 0
   dealDamage: 0
   standStill: 0
   spellshinePrefab: {fileID: 9150785055850194188, guid: 8ce039fc364311641baaec60db144348, type: 3}
+--- !u!82 &3510521687833947730
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3510521688710238640}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3510521688830730601
 GameObject:
   m_ObjectHideFlags: 0

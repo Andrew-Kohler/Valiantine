@@ -13,6 +13,9 @@ public class StaticInventoryDisplay : InventoryDisplay //
     [SerializeField] float arrowSpeed = .1f;
     float arrowXOffset = 330;
 
+    [SerializeField] private List<AudioClip> sounds;
+    private AudioSource audioS;
+
     private float verticalInput;
     private int selectedSlot;
 
@@ -50,6 +53,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
         AssignSlot(inventorySystem);
         selectedSlot = 0;
         selectorArrow = selectArrow.GetComponent<InventoryArrow>();
+        audioS = GetComponent<AudioSource>();
     }
 
     private void OnEnable()
@@ -96,6 +100,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
                // currentText = slots[selectedSlot].AssignedInventorySlot.Data.InventoryDescription;
                 if (Input.GetButtonDown("Interact")) 
                 {
+                    audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                     selectorArrow.selectorSwap();
                     slots[selectedSlot].Selected = true;
                     slots[selectedSlot].UpdateUISlot();
@@ -118,6 +123,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
             {
                 if (Input.GetButtonDown("Interact")) // If we choose to use that item
                 {
+                    audioS.PlayOneShot(sounds[1], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                     if (GameManager.Instance.isBattle())
                     {
                         currentText = slots[selectedSlot].AssignedInventorySlot.Data.BattleUseDescription;
@@ -185,6 +191,7 @@ public class StaticInventoryDisplay : InventoryDisplay //
                 }
                 else if (Input.GetButtonDown("Return"))
                 {
+                    audioS.PlayOneShot(sounds[2], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                     selectorArrow.selectorSwap();                // Back out of the selection sub-menu
                     slots[selectedSlot].Selected = false;
                     slots[selectedSlot].UpdateUISlot();

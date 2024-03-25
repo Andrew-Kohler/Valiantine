@@ -24,6 +24,9 @@ public class GemInventoryDisplay : MonoBehaviour
     private float waitReset = 7.0f;
     private float waitTime;
 
+    [SerializeField] private List<AudioClip> sounds;
+    private AudioSource audioS;
+
     private bool activeCoroutine;
     private bool showSpell;
     private bool gemChosen;
@@ -57,6 +60,7 @@ public class GemInventoryDisplay : MonoBehaviour
         UpdateText();
         UpdateStatDisplay();
         currentIttyBitty.sprite = ittyBitty[0];
+        audioS = GetComponent<AudioSource>();
     }
     private void OnEnable()
     {
@@ -115,6 +119,7 @@ public class GemInventoryDisplay : MonoBehaviour
                 }
                 else if (Input.GetButtonDown("Interact"))   // Start the thing where we ask if they player wants to equip the gem
                 {
+                    audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                     if (gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemHeld && !gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemEquipped)
                     {
                         gemChosen = true;
@@ -136,6 +141,7 @@ public class GemInventoryDisplay : MonoBehaviour
                 waitTime = waitReset; // Player is interacting, that's a no-no for the gem shine and we reset the time
                 if (Input.GetButtonDown("Interact")) // If we choose to equip that gem
                 {
+                    audioS.PlayOneShot(sounds[1], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                     if (equippedSlot != -1) // TODO: Find a way to give the player the Gem of Will and have it equipped already when the game begins
                     {
                         gemDisplays[equippedSlot].GetComponent<GemDisplay>().equipGem(false); // Turn off the outline on the old selected one
@@ -162,6 +168,7 @@ public class GemInventoryDisplay : MonoBehaviour
                 else if (Input.GetButtonDown("Return"))
                 {
                     // Revert the changes made to the indicator
+                    audioS.PlayOneShot(sounds[2], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                     selectorArrow.selectorSwap();
                     gemChosen = false;
                 }

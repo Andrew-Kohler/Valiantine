@@ -356,23 +356,191 @@ public class GolemAnimatorS : EnemyAnimatorS
     // 3rd combat move
     protected override IEnumerator DoMove3Anim()
     {
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _SitIndex;
+        animationSpeed = 5.4f;
+        frameLoop = 9;
+
+        // Content ----------------------------------------------
+        // Play the animation
+        // Sit down
+        frame = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        // Do a sleep cycle
+        animationIndex = _SleepIndex;
+        frameLoop = 14;
+        deltaT = 0;
+        frame = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        // Wake up
+        animationIndex = _WakeUpIndex;
+        frameLoop = 24;
+        deltaT = 0;
+        frame = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+        activeCoroutine = false;
+        yield return null;
+        
+
+        
+
+        
         yield return null;
     }
 
     // 4th combat move
     protected override IEnumerator DoMove4Anim()
     {
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _SpellcastIndex;
+        animationSpeed = 5.4f;
+        frameLoop = 8;
+
+        // Content ----------------------------------------------
+        // Play the animation
+        frame = 0;
+        while (frame < frameLoop - 1)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        frame = 0;
+        deltaT = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        activeCoroutine = false;
         yield return null;
     }
 
     // Getting hurt
     protected override IEnumerator DoHurtAnim()
     {
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _HurtIndex;
+        animationSpeed = 5.4f;
+        frameLoop = 4;
+
+        // Content ----------------------------------------------
+        // Play the animation
+        frame = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
+        activeCoroutine = false;
         yield return null;
     }
     //Dying
     protected override IEnumerator DoDieAnim()
     {
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        animationIndex = _DieIndex;
+        animationSpeed = 5.4f;
+        frameLoop = 24;
+
+        // Content ----------------------------------------------
+        // Play the animation
+        frame = 0;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
+
         yield return null;
     }
 }

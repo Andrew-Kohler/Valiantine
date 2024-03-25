@@ -11,7 +11,9 @@ public class CardinalController : MonoBehaviour
     private CardinalStateChange cardinalStateChange;
     
     Rigidbody rb;
-    
+    [SerializeField] private List<AudioClip> sounds;
+    private AudioSource audioS;
+
     public bool flyingAway;
 
     private bool activeCoroutine;
@@ -30,6 +32,7 @@ public class CardinalController : MonoBehaviour
         activeCoroutine = false;
         flyingAway = false;
         rb = GetComponent<Rigidbody>();
+        audioS = GetComponent<AudioSource>();
         cardinalAnimator = cardinalSprite.GetComponent<CardinalAnimatorS>();
         cardinalStateChange = trigger.GetComponent<CardinalStateChange>();
 
@@ -74,6 +77,9 @@ public class CardinalController : MonoBehaviour
             cardinalAnimator.dir = 1;
             rb.velocity = new Vector3(-xHopVelocity, yHopVelocity, 0f);
         }
+        dir = Random.Range(0, 3);
+        audioS.PlayOneShot(sounds[(int)dir], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+
         yield return new WaitForSeconds(.5f);
         rb.velocity = new Vector3(0f, 0f, 0f);
         yield return new WaitForSeconds(Random.Range(2f, 6f));    // Randomizes hop time to de-sync groups of birds
@@ -99,7 +105,7 @@ public class CardinalController : MonoBehaviour
 
         float count = flightTime / .05f;
         yFlightVelocity = 1.2f;
-
+        audioS.PlayOneShot(sounds[3], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (count > 0) // Flies the cardinal away until it's out of camera view and good to de-load
         {
             rb.velocity = new Vector3(xFlightVelocity * signF, yFlightVelocity, 0f);

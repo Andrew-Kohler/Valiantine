@@ -177,9 +177,9 @@ public class SceneLoader : MonoBehaviour
             
             StartCoroutine(DoIntroCutscene());
         }
-        else
+        else if (SceneManager.GetActiveScene().name != "23_MainMenu")
         {
-            Debug.Log("What gives");
+
             transitionPanel = GameObject.Find("Black Panel");   // Fade us into this new room of adventure!
             fade = transitionPanel.GetComponent<FadeScene>();
             fade.SceneFadeOut();

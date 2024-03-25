@@ -9,11 +9,13 @@ public class PlayerAnimatorS : MonoBehaviour
     private MeshRenderer meshRenderer;
     private Rigidbody rb;
     private PlayerMovement playerMovement;
+    private AudioSource audioSource;
     [SerializeField] private string rowProperty = "_CurrRow", colProperty = "_CurrCol";
 
     [SerializeField] private AnimationAxis axis;
     [SerializeField] private float animationSpeed = 5.4f;
     [SerializeField] private int animationIndex = 0;
+    [SerializeField] private List<AudioClip> playerSounds;
 
     private float deltaT;
     float horizontalInput;
@@ -98,6 +100,7 @@ public class PlayerAnimatorS : MonoBehaviour
         idleTimer = 7f;
         rb = GetComponentInParent<Rigidbody>();
         playerMovement = GetComponentInParent<PlayerMovement>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -309,12 +312,14 @@ public class PlayerAnimatorS : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(DoPotionAnim(true));
+        
     }
 
     public void PlayBluePotionDrink()
     {
         StopAllCoroutines();
         StartCoroutine(DoPotionAnim(false));
+        
     }
 
     public void PlayItemGet1()
@@ -336,6 +341,7 @@ public class PlayerAnimatorS : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(DoBattleEnterAnim(leftOfEnemy));
+        audioSource.PlayOneShot(playerSounds[4]);
     }
 
     public void PlayAttack(Transform enemyTransform)
@@ -349,6 +355,7 @@ public class PlayerAnimatorS : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(DoHurtAnim());
+        audioSource.PlayOneShot(playerSounds[8]);
     }
 
     public void PlaySpell(int index)
@@ -373,6 +380,7 @@ public class PlayerAnimatorS : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(DoDefeatAnim());
+        audioSource.PlayOneShot(playerSounds[8]);
     }
 
 
@@ -526,9 +534,15 @@ public class PlayerAnimatorS : MonoBehaviour
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
+            
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * animationSpeed);
+            if (frame == 5 && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 5))
+            {
+                audioSource.PlayOneShot(playerSounds[9]);
+            }
+
             yield return null;
         }
 
@@ -672,6 +686,7 @@ public class PlayerAnimatorS : MonoBehaviour
         rb.velocity = new Vector3(0f, 0f, 0f);
 
         // Play the landing animation
+        audioSource.PlayOneShot(playerSounds[13]);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
@@ -712,6 +727,10 @@ public class PlayerAnimatorS : MonoBehaviour
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if (frame == 3 && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 3))
+            {
+                audioSource.PlayOneShot(playerSounds[1]);
+            }
             yield return null;
         }
 
@@ -741,6 +760,7 @@ public class PlayerAnimatorS : MonoBehaviour
 
         // Play the attack animation
         deltaT = 0;
+        audioSource.PlayOneShot(playerSounds[2]);
         while (frame < 14)
         {
             deltaT += Time.deltaTime;
@@ -776,6 +796,7 @@ public class PlayerAnimatorS : MonoBehaviour
         // Play the landing animation
         deltaT = 0;
         frame = 16;
+        audioSource.PlayOneShot(playerSounds[0]);
         while (frame < 18 && !playerMovement.GettingClose)
         {
             deltaT += Time.deltaTime;
@@ -1039,6 +1060,7 @@ public class PlayerAnimatorS : MonoBehaviour
 
         deltaT = 0;
         animationSpeed = 5.4f;
+        audioSource.PlayOneShot(playerSounds[5]);
         while (frame < frameLoop)
         {
 

@@ -11,7 +11,15 @@ public class TextRevealer : MonoBehaviour
 	bool skipToEnd;
 	bool activeCoroutine;
 
-	private void OnEnable()
+	[SerializeField] private List<AudioClip> sounds;
+	private AudioSource audioS;
+
+    private void Start()
+    {
+        audioS = GetComponent<AudioSource>();
+    }
+
+    private void OnEnable()
 	{
 		skipToEnd = false;
 		activeCoroutine = false;
@@ -51,6 +59,7 @@ public class TextRevealer : MonoBehaviour
 			}
 
 			text.text = originalString.Substring(0, numCharsRevealed);
+			audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
 
 			yield return new WaitForSeconds(0.07f);
 		}

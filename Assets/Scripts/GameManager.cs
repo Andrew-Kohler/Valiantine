@@ -31,6 +31,12 @@ public class GameManager : MonoBehaviour
 
     private GameObject currentInteractable;
 
+    public float entityVolume = 1;
+    public float environmentVolume = 1;
+    public float musicVolume = 1;
+    public float uiVolume = 1;
+    public float masterVolume = 1;
+
     // All the events that broadcast when a moment of change occurs (currently used primarily for camera)
     #region STATE CHANGE EVENTS
     public delegate void OnInventoryStateChange();

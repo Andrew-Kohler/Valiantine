@@ -6,12 +6,18 @@ using UnityEngine.SceneManagement;
 public class FadeScene : MonoBehaviour
 {
     CanvasGroup canvasGroup;
+    [SerializeField] private float rate = 2f;
     private void OnEnable()
     {
-        if(SceneManager.GetActiveScene().name != "0_Exterior" && SceneManager.GetActiveScene().name != "24_Credits")
+        if(SceneManager.GetActiveScene().name == "23_MainMenu")
         {
             StopAllCoroutines();
-            StartCoroutine(DoFadeOut());
+            StartCoroutine(DoFadeOut(7f));
+        }
+        else if(SceneManager.GetActiveScene().name != "0_Exterior" && SceneManager.GetActiveScene().name != "24_Credits")
+        {
+            StopAllCoroutines();
+            StartCoroutine(DoFadeOut(0));
         }
         
         // Explanation so I don't forget: ViewManager initializes and then hides every view on bootup.
@@ -33,7 +39,7 @@ public class FadeScene : MonoBehaviour
     public void SceneFadeOut()
     {
         StopAllCoroutines();
-        StartCoroutine(DoFadeOut());
+        StartCoroutine(DoFadeOut(0));
     }
 
     IEnumerator DoFadeIn(string levelToLoad)
@@ -42,7 +48,7 @@ public class FadeScene : MonoBehaviour
 
         while (canvasGroup.alpha < 1f)
         {
-            canvasGroup.alpha += Time.deltaTime / 2f;
+            canvasGroup.alpha += Time.deltaTime / rate;
             yield return null;
         }
         SceneManager.LoadScene(levelToLoad);
@@ -55,19 +61,19 @@ public class FadeScene : MonoBehaviour
 
         while (canvasGroup.alpha < 1f)
         {
-            canvasGroup.alpha += Time.deltaTime / 2f;
+            canvasGroup.alpha += Time.deltaTime / rate;
             yield return null;
         }
     }
 
-    IEnumerator DoFadeOut()
+    IEnumerator DoFadeOut(float delay)
     {
         GameManager.Instance.Transition(true);
         canvasGroup = GetComponent<CanvasGroup>();
-
+        yield return new WaitForSeconds(delay);
         while (canvasGroup.alpha > 0f)
         {     
-            canvasGroup.alpha -= Time.deltaTime / 2f;
+            canvasGroup.alpha -= Time.deltaTime / rate;
             //Debug.Log("Alpha:" + canvasGroup.alpha);
             yield return null;
         }
