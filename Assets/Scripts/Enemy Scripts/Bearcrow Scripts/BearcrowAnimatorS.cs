@@ -5,6 +5,8 @@ using UnityEngine;
 public class BearcrowAnimatorS : EnemyAnimatorS
 {
     private BearcrowMovement skullmetMovement;
+    [SerializeField] private List<AudioClip> sounds;
+    private AudioSource audioS;
 
     private int _SingleIndex = 0;
 
@@ -13,6 +15,7 @@ public class BearcrowAnimatorS : EnemyAnimatorS
         meshRenderer = GetComponent<MeshRenderer>();
         skullmetMovement = GetComponentInParent<BearcrowMovement>();
         rb = GetComponentInParent<Rigidbody>();
+        audioS = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -48,7 +51,7 @@ public class BearcrowAnimatorS : EnemyAnimatorS
                 frame = frameReset;
             }
             meshRenderer.material.SetFloat(clipKey, animationIndex);
-            meshRenderer.material.SetFloat(frameKey, frame);
+            meshRenderer.material.SetFloat(frameKey, 0);
         }
     }
 
@@ -252,6 +255,7 @@ public class BearcrowAnimatorS : EnemyAnimatorS
 
         int frame = 0;
         deltaT = 0;
+        audioS.PlayOneShot(sounds[0], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
@@ -286,6 +290,7 @@ public class BearcrowAnimatorS : EnemyAnimatorS
 
         int frame = 0;
         deltaT = 0;
+        audioS.PlayOneShot(sounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;

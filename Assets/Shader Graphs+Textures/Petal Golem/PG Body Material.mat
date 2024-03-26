@@ -39,8 +39,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha_Value: 0
-    - _CurrCol: 1
-    - _CurrRow: 1
+    - _CurrCol: 9
+    - _CurrRow: 15
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:

@@ -390,7 +390,7 @@ public class BattleManager : MonoBehaviour
                                     }
                                     else if (indAction.GetLeadBox() == "RUN")
                                     {
-                                        ViewManager.GetView<BattleUIView>().setText("You got away, but just wait until I add speed checks in, you yellow-bellied ninny.");
+                                        ViewManager.GetView<BattleUIView>().setText("You fled the battle...");
                                         status = MenuStatus.Run;
                                     }
                                 }
@@ -1029,10 +1029,10 @@ public class BattleManager : MonoBehaviour
     {
         activeCoroutine = true;
         //toggleStatDisplaysE(true);
-        ViewManager.GetView<BattleUIView>().setText(GetCurrentTurnName() + " moves to attack!");
+        
         yield return new WaitUntil(() => combatants[currentTurn].GetComponentInChildren<EnemyAnimatorS>().activeCoroutine == false);
 
-        combatants[currentTurn].GetComponent<EnemyMoves>().Move3(playerStats);
+        combatants[currentTurn].GetComponent<EnemyMoves>().Move1(playerStats);
 
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<EnemyMoves>().moveInProgress == false);
 

@@ -4,17 +4,17 @@ using UnityEngine;
 
 public abstract class Stats : MonoBehaviour
 {
-    protected int HP;
-    protected int MaxHP;
-    protected int MP;
-    protected int MaxMP;
-    protected int ATK;
-    protected int DEF;
-    protected int SPD;
+    public int HP;
+    public int MaxHP;
+    public int MP;
+    public int MaxMP;
+    public int ATK;
+    public int DEF;
+    public int SPD;
     [SerializeField] protected int LVL;
-    protected int XP;
-    protected int baseXPThreshold;
-    protected float LVLExponent;
+    public int XP;
+    public int baseXPThreshold;
+    public float LVLExponent;
 
     protected float ATKMod = 1;
     protected float DEFMod = 1;

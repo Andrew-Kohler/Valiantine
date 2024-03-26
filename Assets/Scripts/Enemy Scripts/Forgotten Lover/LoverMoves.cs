@@ -14,6 +14,7 @@ public class LoverMoves : EnemyMoves
     protected override IEnumerator DoMove1(PlayerStats playerStats)
     {
         moveInProgress = true;                  // Lets other classes know a move is going on 
+        ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " lashes out!");
         enemyAnimatorS.PlayMove1();             // Play the attack animation
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);  // Wait until it is time to deal damage
         
@@ -38,8 +39,8 @@ public class LoverMoves : EnemyMoves
     {
         moveInProgress = true;                  // Lets other classes know a move is going on 
         enemyAnimatorS.PlayMove2();             // Play the attack animation
-
-       // Buff all living enemies' ATK by 15% for 3 turns and heal them for 15%
+        ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " grows their garden stronger...");
+        // Buff all living enemies' ATK by 15% for 3 turns and heal them for 15%
         foreach (GameObject enemy in BattleManager.Instance.GetBattlingEnemies())
         {
             if (!enemy.GetComponent<EnemyStats>().getDowned())
@@ -58,6 +59,7 @@ public class LoverMoves : EnemyMoves
     {
         moveInProgress = true;
         enemyAnimatorS.PlayMove3();
+        ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " pierces your heart!");
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);
         int dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF());
         if (enemyStats.GetCrit())
@@ -80,6 +82,7 @@ public class LoverMoves : EnemyMoves
     {
         moveInProgress = true;
         enemyAnimatorS.PlayMove4();
+        ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " drains your very soul!");
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);
         // Damage the player
         int dmgDealt = (int)(enemyStats.CalculateDMG(playerStats.GetDEF()) * .5f);

@@ -14,6 +14,7 @@ public class SkullmetMoves : EnemyMoves
     protected override IEnumerator DoMove1(PlayerStats playerStats)
     {
         moveInProgress = true;                  // Lets other classes know a move is going on 
+        ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " takes a bite out of you!");
         enemyAnimatorS.PlayMove1();             // Play the attack animation
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);  // Wait until it is time to deal damage
         int dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF()); // Calculate damage being dealt (in this case, ATK power is a clean 100%)
@@ -36,6 +37,7 @@ public class SkullmetMoves : EnemyMoves
     {
         moveInProgress = true;                  // Lets other classes know a move is going on 
         enemyAnimatorS.PlayMove2();             // Play the attack animation
+        ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " gnaws on you with ghastly teeth!");
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);  // Wait until it is time to deal damage
         playerStats.UpdateStatMods(new StatMod(3, 1, -.1f));    // Drop player DEF by 10% for 3 turns
         int dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF()); // Calculate damage being dealt (in this case, ATK power is a clean 100%)
@@ -71,7 +73,8 @@ public class SkullmetMoves : EnemyMoves
     protected override IEnumerator DoMove3(PlayerStats playerStats)
     {
         moveInProgress = true;                  
-        enemyAnimatorS.PlayMove3();             
+        enemyAnimatorS.PlayMove3();
+        ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " bashes you with its helmet!");
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);  
         int dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF()); 
         if (enemyStats.GetCrit())
@@ -92,6 +95,7 @@ public class SkullmetMoves : EnemyMoves
     protected override IEnumerator DoMove4(PlayerStats playerStats)
     {
         moveInProgress = true;
+        ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " shrieks a war cry!");
         enemyAnimatorS.PlayMove4();
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);
         

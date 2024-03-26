@@ -81,7 +81,7 @@ public class BattleUIView : View
         {
             if (currentBoxName == "ATK")
             {
-                battleText.text = "Attack an enemy for 100% damage.";
+                battleText.text = "Attack an enemy for " + ((int)(((float)PlayerManager.Instance.PlayerStats().GetATK() / (float)PlayerManager.Instance.PlayerStats().GetATKRaw()) * 100)) +  "% of base attack.";
             }
             else if (currentBoxName == "SPL")
             {

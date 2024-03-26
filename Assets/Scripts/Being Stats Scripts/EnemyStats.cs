@@ -9,20 +9,21 @@ public class EnemyStats : Stats
     [SerializeField] public string enemyName;
     [SerializeField] GameObject dmgNums;
 
-    private int XPValue; // How much XP an enemy is worth
+    public int XPValue; // How much XP an enemy is worth
+    public float height;
 
     EnemyAnimatorS enemyAnimator;
     public EnemyStats()
     {
-        HP = 1;
-        MaxHP = 1;
-        MP = 1;
-        MaxMP = 1;
-        ATK = 1;
-        DEF = 1;
-        SPD = 1;
+        HP = 10;
+        MaxHP = 10;
+        MP = 10;
+        MaxMP = 10;
+        ATK = 7;
+        DEF = 5;
+        SPD = 4;
         LVL = 1;
-        XP = 1;
+        XP = 0;
         baseXPThreshold = 2;
         LVLExponent = 1.4f;
         ATKMod = 1f;
@@ -32,7 +33,8 @@ public class EnemyStats : Stats
         MaxHPMod = 1f;
         XPMod = 1f;
         down = false;
-        XPValue = 5;
+        XPValue = 3;
+        height = 1;
 
     }
 

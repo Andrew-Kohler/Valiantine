@@ -108,6 +108,7 @@ public class PlayerStats : Stats
     {
         base.OnEnable();
         SkullmetMoves.damagePlayer += SetHP;
+        GolemMoves.damagePlayer += SetHP;
         LoverMoves.damagePlayer += SetHP;
     }
 
@@ -115,6 +116,7 @@ public class PlayerStats : Stats
     {
         base.OnDisable();
         SkullmetMoves.damagePlayer -= SetHP;
+        GolemMoves.damagePlayer -= SetHP;
         LoverMoves.damagePlayer -= SetHP;
     }
 

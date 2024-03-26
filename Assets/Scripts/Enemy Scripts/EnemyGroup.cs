@@ -26,7 +26,10 @@ public class EnemyGroup : MonoBehaviour
         {
             for (int i = 0; i < numberToSpawn; i++)
             {
-                Instantiate(additionalEnemies[i], spawnpoint.position, additionalEnemies[i].transform.rotation);
+                Instantiate(additionalEnemies[i], new Vector3(spawnpoint.position.x, spawnpoint.position.y - this.GetComponent<EnemyStats>().height + additionalEnemies[i].GetComponent<EnemyStats>().height, spawnpoint.position.z), additionalEnemies[i].transform.rotation);
+                // Given the spawnpoint, we need to subtract the height of the spawning enemy, and add the height of the enemy being spawned
+                //  - this.GetComponent<EnemyStats>().height + additionalEnemies[i].GetComponent<EnemyStats>().height
+
             }
         }
     }

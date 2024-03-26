@@ -6,18 +6,19 @@ public class GolemMoves : EnemyMoves
 {
     public static event DamagePlayer damagePlayer;
     //Golem Moves
-    //1
-    //2
+    // 1
+    // 2 - Restorative Slumber (Fall asleep for one turn, heal 50%)
     // 3 - Persuasive Napping (Drop player speed by 20%)
     // 4 - Strength of Ages (Buff all enemy DEF by 25%)
+    public bool asleep = false;
     protected override IEnumerator DoMove1(PlayerStats playerStats)
     {
         moveInProgress = true;                  // Lets other classes know a move is going on 
-        /*enemyAnimatorS.PlayMove1();             // Play the attack animation
+        ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " puts its left foot in!");
+        enemyAnimatorS.PlayMove1();             // Play the attack animation
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);  // Wait until it is time to deal damage
 
         int dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF()); // Calculate damage being dealt (in this case, ATK power is a clean 100%)
-        Debug.Log(dmgDealt);
         if (enemyStats.GetCrit())
         {
             damagePlayer?.Invoke(-dmgDealt * 2, true);                              // Send that via an event
@@ -25,8 +26,8 @@ public class GolemMoves : EnemyMoves
         else
         {
             damagePlayer?.Invoke(-dmgDealt, false);      // PlayerStats receives the initial event, and then sends an animation event to PlayerAnimatorS
-                                                         // once it determines whether Emily lives or dies  */                      
-        //}
+                                                         // once it determines whether Emily lives or dies                        
+        }
 
         yield return new WaitUntil(() => enemyAnimatorS.activeCoroutine == false);   // Wait out the rest of the animation
         moveInProgress = false;                 // Lets other classes know the move is done 
@@ -35,19 +36,19 @@ public class GolemMoves : EnemyMoves
 
     protected override IEnumerator DoMove2(PlayerStats playerStats)
     {
+        
         moveInProgress = true;                  // Lets other classes know a move is going on 
-        /*enemyAnimatorS.PlayMove2();             // Play the attack animation
-
-        // Buff all living enemies' ATK by 15% for 3 turns and heal them for 15%
-        foreach (GameObject enemy in BattleManager.Instance.GetBattlingEnemies())
+        if (!asleep) // Heal if this is the start of the move
         {
-            if (!enemy.GetComponent<EnemyStats>().getDowned())
-            {
-                enemy.GetComponent<EnemyStats>().UpdateStatMods(new StatMod(3, 0, .15f));
-                enemy.GetComponent<EnemyStats>().SetHP((int)(enemy.GetComponent<EnemyStats>().GetMaxHPRaw() * .15f), false);
-            }
+            ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " has elected to take a nap.");
+            GetComponent<EnemyStats>().SetHP((int)(GetComponent<EnemyStats>().GetMaxHPRaw() * .5f), false);
         }
-        */
+        else
+        {
+            ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " wakes up!");
+        }
+        enemyAnimatorS.PlayMove2();
+
         yield return new WaitUntil(() => enemyAnimatorS.activeCoroutine == false);   // Wait out the rest of the animation
         moveInProgress = false;                 // Lets other classes know the move is done 
         enemyAnimatorS.dealDamage = false;
@@ -56,6 +57,7 @@ public class GolemMoves : EnemyMoves
     protected override IEnumerator DoMove3(PlayerStats playerStats)
     {
         moveInProgress = true;
+        ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " takes a power nap. You feel sleepy...");
         enemyAnimatorS.PlayMove3();
         /*
         playerStats.UpdateStatMods(new StatMod(2, 0, -.2f));    // Drop player ATK by 20% for 2 turns
@@ -70,6 +72,7 @@ public class GolemMoves : EnemyMoves
     protected override IEnumerator DoMove4(PlayerStats playerStats)
     {
         moveInProgress = true;
+        ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " gives its friends the strength of ages!");
         enemyAnimatorS.PlayMove4();
         foreach (GameObject enemy in BattleManager.Instance.GetBattlingEnemies())
         {

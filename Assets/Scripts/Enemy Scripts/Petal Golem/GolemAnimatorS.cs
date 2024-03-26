@@ -5,6 +5,7 @@ using UnityEngine;
 public class GolemAnimatorS : EnemyAnimatorS
 {
     private GolemMovement golemMovement;
+    private GolemMoves golemMoves;
 
     private int _AttackIndex = 15;
 
@@ -39,10 +40,12 @@ public class GolemAnimatorS : EnemyAnimatorS
 
     [SerializeField] private Transform frontFoot;
     [SerializeField] private Transform backFoot;
+    [SerializeField] private GameObject throwableFoot;
     void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
         golemMovement = GetComponentInParent<GolemMovement>();
+        golemMoves = GetComponentInParent<GolemMoves>();
         rb = GetComponentInParent<Rigidbody>();
 
         frontFootPos = new Vector3(0, footFrontYOffset, 0);
@@ -141,9 +144,19 @@ public class GolemAnimatorS : EnemyAnimatorS
             else if (GameManager.Instance.isBattle())
             {
                 //  Battle idle
-                frameLoop = 7;
+                
                 animationSpeed = _NormalAnimationSpeed;
-                animationIndex = _IdleLIndex;
+                if (golemMoves.asleep)
+                {
+                    frameLoop = 14;
+                    animationIndex = _SleepIndex;
+                }
+                    
+                else
+                {
+                    frameLoop = 7;
+                    animationIndex = _IdleLIndex;
+                }
             }
 
             // Actually playing the chosen animation ------------------------------------------------------------------
@@ -259,7 +272,8 @@ public class GolemAnimatorS : EnemyAnimatorS
 
         float yStop = gameObject.GetComponentInParent<Transform>().position.y;
         frame = 0;// (int)(deltaT * animationSpeed);
-
+        frontFoot.localPosition = frontFootPos;
+        backFoot.localPosition = backFootPos;
         // Play the startup animation
         while (frame < 3)
         {
@@ -340,7 +354,65 @@ public class GolemAnimatorS : EnemyAnimatorS
     // 1st combat move
     protected override IEnumerator DoMove1Anim()
     {
+        // Setup ----------------------------------------------
         activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+
+        animationSpeed = 5.4f;
+        animationIndex = _AttackIndex;
+        // Content ----------------------------------------------
+        // Play the animation
+        deltaT = 0;
+        frame = 0;
+        frameLoop = 9;
+        GameObject rock;
+        ThrowableFoot damager = null;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = (int)(deltaT * (animationSpeed));
+            
+            yield return null;
+        }
+
+
+        meshRenderer.material.SetFloat(frameKey, 10);
+        rock = Instantiate(throwableFoot, GetComponentInParent<Transform>(), true);
+            damager = rock.GetComponent<ThrowableFoot>();
+            damager.SetValues(PlayerManager.Instance.PlayerTransform(), GetComponentInParent<Transform>());
+
+        yield return new WaitUntil(() => damager.damage);
+        dealDamage = true;
+
+        yield return new WaitUntil(() => damager.end);
+
+        // After we play it to frame 10, we spawn a prefab at a given offset
+        // This prefab goes from that offset, to an offset from the player, back to that offset
+        // Once that prefab has accomplished its goal, we play the rest of the animation
+        deltaT = 0;
+        frame = 10;
+        frameLoop = 17;
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 10 + (int)(deltaT * (animationSpeed));
+            yield return null;
+        }
 
 
         activeCoroutine = false;
@@ -350,6 +422,60 @@ public class GolemAnimatorS : EnemyAnimatorS
     // 2nd combat move
     protected override IEnumerator DoMove2Anim()
     {
+        // Setup ----------------------------------------------
+        activeCoroutine = true;
+        deltaT = 0;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        
+        animationSpeed = 5.4f;
+        
+
+
+        if (golemMoves.asleep) // If we're asleep, that means we should be waking up
+        {
+            golemMoves.asleep = false;
+            animationIndex = _WakeUpIndex;
+            frameLoop = 24;
+            deltaT = 0;
+            frame = 0;
+
+            while (frame < frameLoop)
+            {
+                deltaT += Time.deltaTime;
+                meshRenderer.material.SetFloat(clipKey, animationIndex);
+                meshRenderer.material.SetFloat(frameKey, frame);
+                frame = (int)(deltaT * (animationSpeed));
+                yield return null;
+            }
+        }
+        else // Otherwise, zzz
+        {
+            golemMoves.asleep = true;
+            animationIndex = _SitIndex;
+            frameLoop = 9;
+
+            deltaT = 0;
+            frame = 0;
+            while (frame < frameLoop)
+            {
+                deltaT += Time.deltaTime;
+                meshRenderer.material.SetFloat(clipKey, animationIndex);
+                meshRenderer.material.SetFloat(frameKey, frame);
+                frame = (int)(deltaT * (animationSpeed));
+                yield return null;
+            }
+        }
+        activeCoroutine = false;
         yield return null;
     }
 
@@ -415,12 +541,6 @@ public class GolemAnimatorS : EnemyAnimatorS
             yield return null;
         }
         activeCoroutine = false;
-        yield return null;
-        
-
-        
-
-        
         yield return null;
     }
 
@@ -506,6 +626,7 @@ public class GolemAnimatorS : EnemyAnimatorS
         }
 
         activeCoroutine = false;
+        golemMoves.asleep = false; // If you hurt the golem, you wake it up
         yield return null;
     }
     //Dying
