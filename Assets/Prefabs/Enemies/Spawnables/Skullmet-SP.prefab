@@ -758,7 +758,7 @@ MonoBehaviour:
   MP: 10
   MaxMP: 10
   ATK: 7
-  DEF: 5
+  DEF: 3
   SPD: 4
   LVL: 1
   XP: 1
@@ -769,6 +769,7 @@ MonoBehaviour:
   enemyName: Skullmet
   dmgNums: {fileID: 6470322771213101756, guid: a2d36344f55aacf40be8b212749f9503, type: 3}
   XPValue: 5
+  XPValueIncrement: 3
   height: 1.98
 --- !u!114 &5829395456381201485
 MonoBehaviour:

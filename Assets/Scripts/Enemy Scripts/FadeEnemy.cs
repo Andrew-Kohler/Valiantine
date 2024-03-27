@@ -58,13 +58,13 @@ public class FadeEnemy : MonoBehaviour
 
     IEnumerator FadeOutEnemy()
     {
-        while(this.GetComponentInChildren<Renderer>().material.GetFloat("_Alpha_Value") < .9f)
+        /*while(this.GetComponentInChildren<Renderer>().material.GetFloat("_Alpha_Value") < .9f)
         {
             float objColor = this.GetComponentInChildren<Renderer>().material.GetFloat("_Alpha_Value");  // Get the current value
             float fadeAmt = objColor + (fadeSpeed * Time.deltaTime);                                    // Add an increment to it
             this.GetComponentInChildren<Renderer>().material.SetFloat("_Alpha_Value", fadeAmt);         // Increment the real thing
             yield return null;
-        }
+        }*/
         this.gameObject.SetActive(false);
         yield return null;
     }
@@ -86,13 +86,13 @@ public class FadeEnemy : MonoBehaviour
 
     IEnumerator FadeInEnemy()
     {
-        while (this.GetComponentInChildren<Renderer>().material.GetFloat("_Alpha_Value") > .01f)
+        /*while (this.GetComponentInChildren<Renderer>().material.GetFloat("_Alpha_Value") > .01f)
         {
             float objColor = this.GetComponentInChildren<Renderer>().material.GetFloat("_Alpha_Value");  // Get the current value
             float fadeAmt = objColor + (fadeSpeed * Time.deltaTime);                                    // Subtract an increment from it
             this.GetComponentInChildren<Renderer>().material.SetFloat("_Alpha_Value", fadeAmt);         // Increment the real thing
             yield return null;
-        }
+        }*/
         
         yield return null;
     }

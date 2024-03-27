@@ -23,7 +23,7 @@ public class PlayerStats : Stats
 
     public PlayerStats()
     {
-        HP = 16;
+        HP = 20;
         MaxHP = 20;
         MP = 3;
         MaxMP = 15;
@@ -348,25 +348,25 @@ public class PlayerStats : Stats
     {
         int dont = UnityEngine.Random.Range(1, 6);  // Randomly choose which stat to not level
         if (dont != 1){
-            ATK += 1;
+            ATK += UnityEngine.Random.Range(2, 4);
         }
         if (dont != 2)
         {
-            DEF += 1;
+            DEF += UnityEngine.Random.Range(1, 4);
         }
         if (dont != 3)
         {
-            SPD += 1;
+            SPD += UnityEngine.Random.Range(2, 4);
         }
         if (dont != 4)
         {
-            HP += 2;
-            MaxHP += 2;
+            HP += 5;
+            MaxHP += 5;
         }
         if (dont != 5)
         {
-            MP += 2;
-            MaxMP += 2; 
+            MP += 5;
+            MaxMP += 5; 
         }
 
         // Give an extra bonus based on which gem is equipped when levelling occurs
@@ -375,25 +375,25 @@ public class PlayerStats : Stats
         {
             if(currentGem.name == "Will")
             {
-                MaxHP += 1;
-                HP += 1;
+                MaxHP += 3;
+                HP += 3;
             }
             else if (currentGem.name == "Courage")
             {
-                ATK += 1;
+                ATK += 2;
             }
             else if (currentGem.name == "Patience")
             {
-                MaxMP += 1;
-                MP += 1;
+                MaxMP += 3;
+                MP += 3;
             }
             else if (currentGem.name == "Constitution")
             {
-                DEF += 1;
+                DEF += 2;
             }
             else if (currentGem.name == "Cunning")
             {
-                SPD += 1;
+                SPD += 2;
             }
             else if (currentGem.name == "Great Patience")
             {
@@ -402,10 +402,10 @@ public class PlayerStats : Stats
             }
             else if (currentGem.name == "Heart")
             {
-                MaxHP += 1;
-                HP += 1;
-                MaxMP += 1;
-                MP += 1;
+                MaxHP += 3;
+                HP += 3;
+                MaxMP += 3;
+                MP += 3;
             }
         }
 

@@ -42,15 +42,17 @@ public class GemSystem : MonoBehaviour
 
     private void Start()
     {
-
+        playerStats = PlayerManager.Instance.PlayerStats();
         heldGemList = new ItemData[7];
-        if(currentGem == null && heldGemList[0] != null)
+        if(currentGem == null && heldGemList[0] == null)
         {
-            currentGem = gemStats[0];
+            obtainGem(Resources.Load<ItemData>("Gems/" + gemStats[0].name));
+            equipGem(0);
+            //currentGem = gemStats[0];
             currentGemIndex = 0;
         }
        
-        playerStats = PlayerManager.Instance.PlayerStats();
+        
     }
 
     public void RefillGems(GemSystem newGems)   // For scene transitions

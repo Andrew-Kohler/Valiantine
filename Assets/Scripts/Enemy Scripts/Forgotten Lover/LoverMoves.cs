@@ -64,11 +64,11 @@ public class LoverMoves : EnemyMoves
         int dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF());
         if (enemyStats.GetCrit())
         {
-            damagePlayer?.Invoke((int)(-dmgDealt * 2 * .75f), true);
+            damagePlayer?.Invoke(Mathf.Min((int)(-dmgDealt * 2 * .75f), -1), true);
         }
         else
         {
-            damagePlayer?.Invoke((int)(-dmgDealt * .75f), false);
+            damagePlayer?.Invoke(Mathf.Min((int)(-dmgDealt * .75f), -1), false);
         }
         playerStats.UpdateStatMods(new StatMod(2, 0, -.2f));    // Drop player ATK by 20% for 2 turns
         playerStats.UpdateStatMods(new StatMod(2, 2, -.2f));    // Drop player DEF by 20% for 2 turns

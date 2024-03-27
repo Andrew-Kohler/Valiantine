@@ -21,9 +21,9 @@ public class SceneLoader : MonoBehaviour
     GameObject transitionPanel;
     FadeScene fade;
 
-    private PlayerStats playerS = null;
-    private InventoryHolder playerI = null;
-    private GemSystem playerG = null;
+    private PlayerStats playerS;
+    private InventoryHolder playerI;
+    private GemSystem playerG;
 
     private GameManager.SavedPlayerStats savedPlayerStats = null;
     private GameManager.SavedInventoryContents savedInventory = null;
@@ -34,8 +34,7 @@ public class SceneLoader : MonoBehaviour
         get { 
             if(_instance == null)   
             {
-                Debug.Log("Scene Loader is null!");
-                Debug.Log("New Scene Loader 2");
+                Debug.Log("Scene Loader is null! Making a new one...");
                 GameObject loaderHolder = new GameObject("[Scene Loader]");
                 loaderHolder.AddComponent<SceneLoader>();
             }
@@ -112,8 +111,6 @@ public class SceneLoader : MonoBehaviour
         }
 
         transitionPanel = GameObject.Find("Black Panel");
-        /*ViewM
-        fade.gameObject.SetActive(true);*/
         fade = transitionPanel.GetComponent<FadeScene>();
 
         fade.SceneFadeIn(levelToLoad);
@@ -128,10 +125,10 @@ public class SceneLoader : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-        else if(Instance != this)
+        /*else if(Instance != this)
         {
             Destroy(gameObject);
-        }
+        }*/
         
     }
 
@@ -169,17 +166,13 @@ public class SceneLoader : MonoBehaviour
                 }
             }
         }
-        
-        
 
         if (SceneManager.GetActiveScene().name == "0_Exterior")
         {
-            
             StartCoroutine(DoIntroCutscene());
         }
         else if (SceneManager.GetActiveScene().name != "23_MainMenu")
         {
-
             transitionPanel = GameObject.Find("Black Panel");   // Fade us into this new room of adventure!
             fade = transitionPanel.GetComponent<FadeScene>();
             fade.SceneFadeOut();
@@ -206,7 +199,8 @@ public class SceneLoader : MonoBehaviour
     private IEnumerator DoLoadScene()
     {
         yield return new WaitForEndOfFrame();
-        if(savedPlayerStats != null)
+        yield return new WaitForEndOfFrame();
+        if (savedPlayerStats != null)
         {
             PlayerManager.Instance.PlayerStats().SetStatsFromSaveData(savedPlayerStats);
             PlayerManager.Instance.PlayerInventory().RefillInventoryFromSaveData(savedInventory);
@@ -218,12 +212,27 @@ public class SceneLoader : MonoBehaviour
         }
         else
         {
-            if(playerS != null)
+            PlayerManager.Instance.PlayerStats().SetStats(playerS);
+            PlayerManager.Instance.PlayerInventory().RefillInventory(playerI.InventorySystem);
+            PlayerManager.Instance.GemSystem().RefillGems(playerG);
+            /*if (playerS != null)
+            {
+                Debug.Log("Stats weren't null");
                 PlayerManager.Instance.PlayerStats().SetStats(playerS);
+            }
+            else{
+                Debug.Log("Stats were null");
+                Debug.Log(playerS.GetATK());
+            }
+                
             if (playerI != null)
                 PlayerManager.Instance.PlayerInventory().RefillInventory(playerI.InventorySystem);
+            else
+                Debug.Log("Inven was null");
             if (playerG != null)
                 PlayerManager.Instance.GemSystem().RefillGems(playerG);
+            else
+                Debug.Log("Gems were null");*/
         }
         
     }

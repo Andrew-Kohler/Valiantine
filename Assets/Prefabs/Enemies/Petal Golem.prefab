@@ -6413,7 +6413,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3976459233786923295
 Transform:
   m_ObjectHideFlags: 0
@@ -6421,7 +6421,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3976459233786923294}
-  m_LocalRotation: {x: -0, y: -0.7071068, z: 0.7071068, w: 0}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
   m_LocalPosition: {x: 30.15, y: 4.57, z: 3.6}
   m_LocalScale: {x: 1.2, y: 1, z: 1.2}
   m_ConstrainProportionsScale: 0
@@ -6495,8 +6495,8 @@ MonoBehaviour:
   MP: 15
   MaxMP: 15
   ATK: 4
-  DEF: 10
-  SPD: 4
+  DEF: 7
+  SPD: 3
   LVL: 1
   XP: 1
   baseXPThreshold: 2
@@ -6505,7 +6505,8 @@ MonoBehaviour:
   remainOnPlayerFlight: 1
   enemyName: Petal Golem
   dmgNums: {fileID: 6470322771213101756, guid: a2d36344f55aacf40be8b212749f9503, type: 3}
-  XPValue: 5
+  XPValue: 6
+  XPValueIncrement: 4
   height: 4.4
 --- !u!114 &3976459233786923286
 MonoBehaviour:
@@ -6519,9 +6520,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21b7068d2ec0ebe459c96728660599a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawn: 0
-  numberToSpawn: 0
-  additionalEnemies: []
+  spawn: 1
+  numberToSpawn: 2
+  additionalEnemies:
+  - {fileID: 4453956704023133171, guid: ec7ca7bb739b15842a9386fff2a0f2e7, type: 3}
+  - {fileID: 4453956704023133171, guid: ec7ca7bb739b15842a9386fff2a0f2e7, type: 3}
   lowerLVLBound: 5
   upperLVLBound: 6
   additionalEnemyLevels: 
@@ -6566,7 +6569,7 @@ MonoBehaviour:
   Move1LVLCap: 2
   Move2LVLCap: 4
   Move3LVLCap: 6
-  Move4LVLCap: 7
+  Move4LVLCap: 8
   moveInProgress: 0
   asleep: 0
 --- !u!114 &3976459233786923285

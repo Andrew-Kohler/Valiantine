@@ -130,14 +130,16 @@ public class BattleManager : MonoBehaviour
         status = MenuStatus.Inactive;
         endResult = EndStatus.None;
 
-
+        StopAllCoroutines();
+        activeCoroutine = true;
+        StartCoroutine(DoBattleIntro());
     }
 
     private void Update()
     {
         if (GameManager.Instance.isBattle())
         {
-            if (battleIntro && !activeCoroutine)    // The fun intro sequence that happens when the battle begins
+            /*if (battleIntro && !activeCoroutine)    // The fun intro sequence that happens when the battle begins
             {
                 StopAllCoroutines();
                 // Get the instances of:
@@ -159,8 +161,9 @@ public class BattleManager : MonoBehaviour
                 battlingEnemies = new GameObject[1 + enemyGroup.numberToSpawn];  // Create list of how many foes Em is facing
                 enemyStats.isBattling = true;   // We are battling the enemy we collided with
                 enemyGroup.SpawnEncounter();    // Beam our new friends in if we have any
+                
                 enemies = GameObject.FindGameObjectsWithTag("Enemy");   // Get all the components in Enemies
-
+                Debug.Log(enemies.Length);
                 int i = 0;
                 foreach (GameObject enemy in enemies)   // Add the active ones to their own list for ease of access
                 {
@@ -192,11 +195,11 @@ public class BattleManager : MonoBehaviour
                 currentTurn = 0;    // Set the current turn to 0 so the first actor goes
 
                 StartCoroutine(DoBattleIntro());    // Use a coroutine to time visual elements (player motion, UI swap)           
-            } // End of battle intro
+            } // End of battle intro*/
 
             // ------------------ The turn loop -----------------------------
 
-            else if (battleActive && !activeCoroutine)  // Primary turn loop
+            if (battleActive && !activeCoroutine)  // Primary turn loop - else if
             {
                 if (CheckForWin()) // Check if player wins
                 {
@@ -612,6 +615,7 @@ public class BattleManager : MonoBehaviour
     private void currentEnemyReenable()
     {
         mainEnemyMovement.enabled = true;
+        enemyStats.isBattling = false;
     }
 
     private void allEnemyReenable(GameObject visible)
@@ -791,7 +795,7 @@ public class BattleManager : MonoBehaviour
                 enemyNum = 1;
             }
         }
-        enemySelectArrow = Instantiate((GameObject)Resources.Load("Target Arrow"), new Vector3(battlingEnemies[enemyNum].transform.position.x, battlingEnemies[enemyNum].transform.position.y * 2 + .7f, battlingEnemies[enemyNum].transform.position.z), Quaternion.identity);
+        enemySelectArrow = Instantiate((GameObject)Resources.Load("Target Arrow"), new Vector3(battlingEnemies[enemyNum].transform.position.x, battlingEnemies[enemyNum].transform.position.y + 2f, battlingEnemies[enemyNum].transform.position.z - .01f), Quaternion.identity);
         enemySelectArrow.GetComponent<TargetArrow>().SetValues(battlingEnemies, enemyNum);
     }
 
@@ -835,6 +839,56 @@ public class BattleManager : MonoBehaviour
     IEnumerator DoBattleIntro()
     {
         activeCoroutine = true;
+        playerStats = PlayerManager.Instance.PlayerStats();                 // Player stats
+        playerMoves = playerStats.gameObject.GetComponent<PlayerMoves>();   // Player moves
+        playerGemSys = playerStats.gameObject.GetComponent<GemSystem>();
+
+        enemyStats = currentEnemy.GetComponent<EnemyStats>(); // Enemy stats
+        enemyGroup = currentEnemy.GetComponent<EnemyGroup>(); // The enemy group that spawns the Gang
+
+        playerRb = PlayerManager.Instance.PlayerRigidbody();    // Get player and enemy RBs
+        enemyRb = currentEnemy.GetComponent<Rigidbody>();
+
+        mainEnemyMovement = currentEnemy.GetComponent<EnemyMovement>();
+
+        camX = (enemyRb.position.x + playerRb.position.x) / 2;  // Tell the camera where to go
+        camZ = playerRb.position.z;
+
+        battlingEnemies = new GameObject[1 + enemyGroup.numberToSpawn];  // Create list of how many foes Em is facing
+        enemyStats.isBattling = true;   // We are battling the enemy we collided with
+        enemyGroup.SpawnEncounter();    // Beam our new friends in if we have any
+
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");   // Get all the components in Enemies
+        int i = 0;
+        foreach (GameObject enemy in enemies)   // Add the active ones to their own list for ease of access
+        {
+            if (enemy.GetComponent<EnemyStats>().isBattling)
+            {
+                battlingEnemies[i] = enemy;
+                i++;
+            }
+        }
+        battleHideEnemies?.Invoke(); // Hide everyone who isn't battling
+
+        // Determine turn order
+        turnArray = new Stats[1 + battlingEnemies.Length];
+        combatants = new GameObject[1 + battlingEnemies.Length];
+        i = 0;
+        foreach (GameObject enemy in enemies)   // Add all the battling enemies' stats to turn array
+        {
+            if (enemy.GetComponent<EnemyStats>().isBattling)
+            {
+                turnArray[i] = enemy.GetComponent<EnemyStats>();
+                turnArray[i].SetLVL(enemyGroup.additionalEnemyLevels[i]);
+                combatants[i] = enemy;
+                i++;
+            }
+        }
+        turnArray[i] = playerStats;
+        combatants[i] = PlayerManager.Instance.GameObject();
+        CalculateTurnOrder(ref turnArray, ref combatants);
+        currentTurn = 0;    // Set the current turn to 0 so the first actor goes
+        // -----------------------------------------------------------------------------------------------
 
         BattleRecoil();                             // Correctly position the player and the enemy
         yield return new WaitForSeconds(.7f);       // Wait for Battle Recoil to finish
@@ -858,6 +912,8 @@ public class BattleManager : MonoBehaviour
         activeCoroutine = false;
         yield return null;
     }
+
+    #region PLAYER TURN COROUTINES
 
     IEnumerator DoTurnAdvancePlayerAttack(GameObject targetedEnemy) // The sequence wherein the player attacks an enemy
     {
@@ -1025,6 +1081,8 @@ public class BattleManager : MonoBehaviour
         activeCoroutine = false;
         yield return null;
     }
+    #endregion
+
     IEnumerator DoTurnAdvanceEnemyTemp()
     {
         activeCoroutine = true;
@@ -1032,7 +1090,7 @@ public class BattleManager : MonoBehaviour
         
         yield return new WaitUntil(() => combatants[currentTurn].GetComponentInChildren<EnemyAnimatorS>().activeCoroutine == false);
 
-        combatants[currentTurn].GetComponent<EnemyMoves>().Move1(playerStats);
+        combatants[currentTurn].GetComponent<EnemyMoves>().Move2(playerStats);
 
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<EnemyMoves>().moveInProgress == false);
 
@@ -1097,6 +1155,7 @@ public class BattleManager : MonoBehaviour
         endResult = EndStatus.None;
         status = MenuStatus.Inactive;
 
+        Destroy(gameObject);
         yield return null;
     }
 
@@ -1146,6 +1205,8 @@ public class BattleManager : MonoBehaviour
 
         endResult = EndStatus.None;
         status = MenuStatus.Inactive;  
+
+        Destroy(gameObject);
 
         yield return null;
     }

@@ -11546,7 +11546,7 @@ MonoBehaviour:
   numberToSpawn: 0
   additionalEnemies: []
   lowerLVLBound: 1
-  upperLVLBound: 2
+  upperLVLBound: 1
   additionalEnemyLevels: 
   spawnpoint: {fileID: 7227792508663951518}
 --- !u!114 &7227792508663951514
@@ -11569,14 +11569,16 @@ MonoBehaviour:
   DEF: 2
   SPD: 1
   LVL: 1
-  XP: 1
-  baseXPThreshold: 2
+  XP: 0
+  baseXPThreshold: 1500
   LVLExponent: 1.4
   isBattling: 0
   remainOnPlayerFlight: 1
   enemyName: Bearcrow
   dmgNums: {fileID: 6470322771213101756, guid: a2d36344f55aacf40be8b212749f9503, type: 3}
   XPValue: 3
+  XPValueIncrement: 5
+  height: 1
 --- !u!114 &7227792508663951494
 MonoBehaviour:
   m_ObjectHideFlags: 0

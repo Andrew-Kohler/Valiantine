@@ -15,9 +15,8 @@ MonoBehaviour:
   ATKMod: 0.7
   DEFMod: 1.2
   HPMod: 1.3
-  MPMod: 0.6
-  SPDMod: 1
+  MPMod: 1
+  SPDMod: 0.6
   XPMod: 1
   targetType: 1
   gemName: Constitution
-  ActiveATKMod: 0.75

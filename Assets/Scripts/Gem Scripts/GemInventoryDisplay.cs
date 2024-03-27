@@ -53,10 +53,10 @@ public class GemInventoryDisplay : MonoBehaviour
     private void Start()
     {
         selectorArrow = selectArrow.GetComponent<InventoryArrow>();
-        Init();
+        //Init();
         
         selectedSlot = 0;
-        equippedSlot = -1;
+        
         UpdateText();
         UpdateStatDisplay();
         currentIttyBitty.sprite = ittyBitty[0];
@@ -65,7 +65,9 @@ public class GemInventoryDisplay : MonoBehaviour
     private void OnEnable()
     {
         selectedSlot = 0;
+        equippedSlot = -1;
         waitTime = waitReset;
+
         gemChosen = false;
         if (showSpell)
         {
@@ -74,8 +76,10 @@ public class GemInventoryDisplay : MonoBehaviour
         showSpell = false;
         pointerUpdated = false;
         activeCoroutine = false;
+
         UpdateText();
         UpdateStatDisplay();
+
         Init();
         onSelectedGemChange?.Invoke();
         selectArrow.SetActive(true);
@@ -144,6 +148,7 @@ public class GemInventoryDisplay : MonoBehaviour
                     audioS.PlayOneShot(sounds[1], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                     if (equippedSlot != -1) // TODO: Find a way to give the player the Gem of Will and have it equipped already when the game begins
                     {
+                        Debug.Log("We had a gem equipped");
                         gemDisplays[equippedSlot].GetComponent<GemDisplay>().equipGem(false); // Turn off the outline on the old selected one
                     }
                     gemSystem.equipGem(selectedSlot);                                       // Alert the backend gem system that a change has been made
@@ -244,6 +249,10 @@ public class GemInventoryDisplay : MonoBehaviour
                 gemDisplays[i].GetComponent<GemDisplay>().showGem();
                 if (i == gemSystem.currentGemIndex)
                 {
+                    if (equippedSlot != -1) // TODO: Find a way to give the player the Gem of Will and have it equipped already when the game begins
+                    {
+                        gemDisplays[equippedSlot].GetComponent<GemDisplay>().equipGem(false); // Turn off the outline on the old selected one
+                    }
                     equippedSlot = i;
                     UpdateStatDisplay();
                     UpdateText();
@@ -257,7 +266,7 @@ public class GemInventoryDisplay : MonoBehaviour
     }
 
     // Coroutines ----------------------------------
-
+    #region COROUTINES
     IEnumerator DoMoveLeft()
     {
         activeCoroutine = true;
@@ -329,5 +338,6 @@ public class GemInventoryDisplay : MonoBehaviour
         yield return new WaitForSeconds(5f);
         activeCoroutine = false;
     }
+    #endregion
 
 }

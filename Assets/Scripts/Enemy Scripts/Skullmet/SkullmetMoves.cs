@@ -39,29 +39,32 @@ public class SkullmetMoves : EnemyMoves
         enemyAnimatorS.PlayMove2();             // Play the attack animation
         ViewManager.GetView<BattleUIView>().setText(BattleManager.Instance.GetCurrentTurnName() + " gnaws on you with ghastly teeth!");
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);  // Wait until it is time to deal damage
+
         playerStats.UpdateStatMods(new StatMod(3, 1, -.1f));    // Drop player DEF by 10% for 3 turns
         int dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF()); // Calculate damage being dealt (in this case, ATK power is a clean 100%)
         if (enemyStats.GetCrit())
         {
-            damagePlayer?.Invoke((int)(-dmgDealt * 2 * 1.3f), true);                              // Send that via an event
+            damagePlayer?.Invoke(Mathf.Min((int)(-dmgDealt * 2 * .5f), -1), true);                              // Send that via an event
         }
         else
         {
-            damagePlayer?.Invoke((int)(-dmgDealt * 1.3f), false);      // PlayerStats receives the initial event, and then sends an animation event to PlayerAnimatorS
+            damagePlayer?.Invoke(Mathf.Min((int)(-dmgDealt * .5f), -1), false);      // PlayerStats receives the initial event, and then sends an animation event to PlayerAnimatorS
                                                          // once it determines whether Emily lives or dies                        
         }
 
         yield return new WaitForSeconds(.6f);
         yield return new WaitUntil(() => enemyAnimatorS.dealDamage);  // Wait until it is time to deal damage
-        dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF()); // Calculate damage being dealt (in this case, ATK power is a clean 100%)
-        playerStats.UpdateStatMods(new StatMod(3, 1, -1.1f));    // Drop player DEF by 10% for 3 turns
+
+        dmgDealt = enemyStats.CalculateDMG(playerStats.GetDEF()); // Calculate damage being dealt
+        playerStats.UpdateStatMods(new StatMod(3, 1, -.1f));    // Drop player DEF by 10% for 3 turns
+
         if (enemyStats.GetCrit())
         {
-            damagePlayer?.Invoke((int)(-dmgDealt * 2 * .3f), true);                              // Send that via an event
+            damagePlayer?.Invoke(Mathf.Min((int)(-dmgDealt * 2 * .3f), -1), true);                              // Send that via an event
         }
         else
         {
-            damagePlayer?.Invoke((int)(-dmgDealt * .3f), false);      // PlayerStats receives the initial event, and then sends an animation event to PlayerAnimatorS
+            damagePlayer?.Invoke(Mathf.Min((int)(-dmgDealt * .3f), -1), false);      // PlayerStats receives the initial event, and then sends an animation event to PlayerAnimatorS
                                                                        // once it determines whether Emily lives or dies                        
         }
 

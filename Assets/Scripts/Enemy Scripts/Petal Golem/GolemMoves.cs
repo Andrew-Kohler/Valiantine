@@ -11,6 +11,14 @@ public class GolemMoves : EnemyMoves
     // 3 - Persuasive Napping (Drop player speed by 20%)
     // 4 - Strength of Ages (Buff all enemy DEF by 25%)
     public bool asleep = false;
+
+    public override void Move(PlayerStats playerStats)
+    {
+        if(!asleep)
+            base.Move(playerStats); 
+        else
+            Move2(playerStats);
+    }
     protected override IEnumerator DoMove1(PlayerStats playerStats)
     {
         moveInProgress = true;                  // Lets other classes know a move is going on 

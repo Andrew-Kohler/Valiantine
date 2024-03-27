@@ -102,6 +102,9 @@ public class PlayerMoves : MonoBehaviour
         {
             enemy.GetComponent<EnemyStats>().SetHP(-dmgDealt, false);
         }
+        stats.UpdateStatMods(new StatMod(3, 0, .1f));
+        stats.UpdateStatMods(new StatMod(3, 1, .1f));
+        stats.UpdateStatMods(new StatMod(3, 2, .1f));
 
         moveInProgress = false;
         animator.dealDamage = false;
@@ -120,7 +123,7 @@ public class PlayerMoves : MonoBehaviour
         animator.PlayAttack(enemy.transform);
         yield return new WaitUntil(() => animator.dealDamage);  // Wait until it is time to deal damage
 
-        int dmgDealt = (int)(stats.CalculateDMG(enemy.GetComponent<EnemyStats>().GetDEF()) * 1.75f); // Calculate damage being dealt 
+        int dmgDealt = (int)(stats.CalculateDMG(enemy.GetComponent<EnemyStats>().GetDEF()) * 2.5f); // Calculate damage being dealt 
         if (stats.GetCrit())
         {
             enemy.GetComponent<EnemyStats>().SetHP(-dmgDealt * 2, true);
@@ -152,7 +155,7 @@ public class PlayerMoves : MonoBehaviour
             // Spawn the cool effect
             Instantiate(lighting, enemy.transform.position, Quaternion.Euler(90,0,-180));
             // Deal damage
-            int dmgDealt = (int)(stats.CalculateDMG(enemy.GetComponent<EnemyStats>().GetDEF()) * .75f); // Calculate damage being dealt 
+            int dmgDealt = Mathf.Max((int)(stats.CalculateDMG(enemy.GetComponent<EnemyStats>().GetDEF())), 1); // Calculate damage being dealt 
             if (stats.GetCrit())
             {
                 enemy.GetComponent<EnemyStats>().SetHP(-dmgDealt * 2, true);

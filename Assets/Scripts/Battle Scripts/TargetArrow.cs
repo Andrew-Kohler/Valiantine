@@ -10,7 +10,7 @@ public class TargetArrow : MonoBehaviour
 
     [SerializeField] private float arrowSpeed = 2f; // How fast the arrow moves
     //[SerializeField] private float delay = 2f;      // How long we hold before the arrow gets to go willy nilly if the player is holding an input
-    [SerializeField] private float heightAdd = .7f;   // How high above the enemy the arrow is
+    [SerializeField] private float heightAdd = 2.5f;   // How high above the enemy the arrow is
     [SerializeField] private float rotationSpeed = .5f;
 
     private GameObject[] options;   // The things we are choosing between
@@ -95,7 +95,7 @@ public class TargetArrow : MonoBehaviour
                 StartCoroutine(UpCoroutine());
             }
         }
-        newPos = new Vector3(options[currentPosition].transform.position.x, options[currentPosition].transform.position.y * 2 + heightAdd, options[currentPosition].transform.position.z);
+        newPos = new Vector3(options[currentPosition].transform.position.x, options[currentPosition].transform.position.y + heightAdd, options[currentPosition].transform.position.z - .01f);
 
         while (Vector3.Distance(this.transform.position, newPos) > .01)    // Move the indicators towards their positions to make it feel natural
         {
@@ -130,7 +130,7 @@ public class TargetArrow : MonoBehaviour
                 StartCoroutine(DownCoroutine());
             }
         }
-        newPos = new Vector3(options[currentPosition].transform.position.x, options[currentPosition].transform.position.y * 2 + heightAdd, options[currentPosition].transform.position.z);
+        newPos = new Vector3(options[currentPosition].transform.position.x, options[currentPosition].transform.position.y + heightAdd, options[currentPosition].transform.position.z - .01f);
 
         while (Vector3.Distance(this.transform.position, newPos) > .01)    // Move the indicators towards their positions to make it feel natural
         {

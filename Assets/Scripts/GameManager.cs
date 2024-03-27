@@ -253,7 +253,8 @@ public class GameManager : MonoBehaviour
     { 
         bool former = _isInteraction;
         _isInteraction = flag;
-        if(_isInteraction == true)  // Start the interaction
+        GameObject.Find("Player Sprite").GetComponent<PlayerAnimatorS>().standStill = !GameObject.Find("Player Sprite").GetComponent<PlayerAnimatorS>().standStill;
+        if (_isInteraction == true)  // Start the interaction
         {
             currentInteractable.GetComponent<Interactable>().Interact();
         }

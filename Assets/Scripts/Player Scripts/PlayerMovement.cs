@@ -130,7 +130,6 @@ public class PlayerMovement : MonoBehaviour
 
         yield return new WaitUntil(()=> Mathf.Abs(this.transform.position.x - point.x) <= distanceFromPoint + .03f);
         GettingClose = true;
-        Debug.Log("made it!");
         activeCoroutine = false;
         yield return null;
         

@@ -10,6 +10,7 @@ public class EnemyStats : Stats
     [SerializeField] GameObject dmgNums;
 
     public int XPValue; // How much XP an enemy is worth
+    public int XPValueIncrement;
     public float height;
 
     EnemyAnimatorS enemyAnimator;
@@ -34,6 +35,7 @@ public class EnemyStats : Stats
         XPMod = 1f;
         down = false;
         XPValue = 3;
+        XPValueIncrement = 5;
         height = 1;
 
     }
@@ -60,27 +62,27 @@ public class EnemyStats : Stats
         int dont = Random.Range(1, 6);  // Randomly choose which stat to not level
         if (dont != 1)
         {
-            ATK += 1;
+            ATK += 2;
         }
         if (dont != 2)
         {
-            DEF += 1;
+            DEF += Random.Range(1, 3);
         }
         if (dont != 3)
         {
-            SPD += 1;
+            SPD += 2;
         }
         if (dont != 4)
         {
-            HP += 2;
-            MaxHP += 2;
+            HP += 3;
+            MaxHP += 3;
         }
         if (dont != 5)
         {
-            MP += 2;
-            MaxMP += 2;
+            MP += 3;
+            MaxMP += 3;
         }
-        XPValue = XPValue * 2;
+        XPValue += XPValueIncrement;
     }
 
     public override void SetHP(int changeVal, bool crit)

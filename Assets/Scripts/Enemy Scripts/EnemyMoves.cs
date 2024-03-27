@@ -23,6 +23,28 @@ public class EnemyMoves : MonoBehaviour
         enemyAnimatorS = GetComponentInChildren<EnemyAnimatorS>();
     }
 
+    public virtual void Move(PlayerStats playerStats)
+    {
+        int move = 0;
+        if(enemyStats.GetLVL() >= Move4LVLCap)
+            move = Random.Range(0,4);
+        else if(enemyStats.GetLVL() >= Move3LVLCap)
+            move = Random.Range(0, 3);
+        else if(enemyStats.GetLVL() >= Move2LVLCap)
+            move = Random.Range(0, 2);
+
+        if(move==0)
+            Move1(playerStats);
+        else if(move==1)
+            Move2(playerStats);
+        else if(move==2)
+            Move3(playerStats);
+        else if (move == 3)
+        {
+            Move4(playerStats);
+        }
+    }
+
     // And then, 4 virtual methods representing 4 moves
     public void Move1(PlayerStats playerStats)
     {

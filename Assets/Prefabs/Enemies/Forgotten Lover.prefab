@@ -6374,7 +6374,7 @@ MonoBehaviour:
   lowerLVLBound: 7
   upperLVLBound: 8
   additionalEnemyLevels: 
-  spawnpoint: {fileID: 0}
+  spawnpoint: {fileID: 8566007766477900581}
 --- !u!114 &8566007766477900586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6391,9 +6391,9 @@ MonoBehaviour:
   MaxHP: 15
   MP: 15
   MaxMP: 15
-  ATK: 10
+  ATK: 7
   DEF: 5
-  SPD: 10
+  SPD: 7
   LVL: 1
   XP: 1
   baseXPThreshold: 2
@@ -6402,7 +6402,8 @@ MonoBehaviour:
   remainOnPlayerFlight: 1
   enemyName: Forgotten Lover
   dmgNums: {fileID: 6470322771213101756, guid: a2d36344f55aacf40be8b212749f9503, type: 3}
-  XPValue: 5
+  XPValue: 7
+  XPValueIncrement: 5
   height: 6.64
 --- !u!114 &8566007766477900582
 MonoBehaviour:

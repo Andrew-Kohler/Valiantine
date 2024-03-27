@@ -6248,9 +6248,9 @@ MonoBehaviour:
   MP: 10
   MaxMP: 10
   ATK: 7
-  DEF: 5
+  DEF: 3
   SPD: 4
-  LVL: 1
+  LVL: 10
   XP: 1
   baseXPThreshold: 2
   LVLExponent: 1.4
@@ -6259,6 +6259,7 @@ MonoBehaviour:
   enemyName: Skullmet
   dmgNums: {fileID: 6470322771213101756, guid: a2d36344f55aacf40be8b212749f9503, type: 3}
   XPValue: 5
+  XPValueIncrement: 3
   height: 1.9
 --- !u!114 &3209926086426793823
 MonoBehaviour:
@@ -6284,13 +6285,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21b7068d2ec0ebe459c96728660599a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawn: 1
-  numberToSpawn: 2
+  spawn: 0
+  numberToSpawn: 0
   additionalEnemies:
-  - {fileID: 4453956704023133171, guid: ec7ca7bb739b15842a9386fff2a0f2e7, type: 3}
-  - {fileID: 5453430861041070570, guid: 06602d666ec5b0f4789c269951cbceba, type: 3}
-  lowerLVLBound: 7
-  upperLVLBound: 10
+  - {fileID: 5829395456381201474, guid: 1462f36527187cb43acf34ae3b8a9fdd, type: 3}
+  - {fileID: 5829395456381201474, guid: 1462f36527187cb43acf34ae3b8a9fdd, type: 3}
+  lowerLVLBound: 1
+  upperLVLBound: 1
   additionalEnemyLevels: 
   spawnpoint: {fileID: 3209926086426793811}
 --- !u!114 &3209926086426793819

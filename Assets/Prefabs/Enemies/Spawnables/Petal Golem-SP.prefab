@@ -5743,8 +5743,8 @@ MonoBehaviour:
   MP: 15
   MaxMP: 15
   ATK: 4
-  DEF: 10
-  SPD: 4
+  DEF: 7
+  SPD: 3
   LVL: 1
   XP: 1
   baseXPThreshold: 2
@@ -5754,6 +5754,7 @@ MonoBehaviour:
   enemyName: Petal Golem
   dmgNums: {fileID: 6470322771213101756, guid: a2d36344f55aacf40be8b212749f9503, type: 3}
   XPValue: 5
+  XPValueIncrement: 5
   height: 4.5
 --- !u!114 &4453956704023133169
 MonoBehaviour:
@@ -5782,7 +5783,7 @@ MonoBehaviour:
   Move1LVLCap: 2
   Move2LVLCap: 4
   Move3LVLCap: 6
-  Move4LVLCap: 7
+  Move4LVLCap: 8
   moveInProgress: 0
   asleep: 0
 --- !u!114 &4453956704023133127

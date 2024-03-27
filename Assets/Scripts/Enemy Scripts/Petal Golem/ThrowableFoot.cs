@@ -39,13 +39,11 @@ public class ThrowableFoot : MonoBehaviour
         StartCoroutine(DoPosition(mid, atkTime));
         
         yield return new WaitUntil(() => !activeCoroutine);
-        Debug.Log("damaged");
         damage = true;
 
         activeCoroutine = true;
         StartCoroutine(DoPosition(startAndEnd, atkTime));
         yield return new WaitUntil(() => !activeCoroutine);
-        Debug.Log("end");
         end = true;
         Destroy(this.gameObject);
     }

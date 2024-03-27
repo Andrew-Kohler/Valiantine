@@ -838,7 +838,6 @@ public class PlayerAnimatorS : MonoBehaviour
 
     private IEnumerator DoHurtAnim()
     {
-        Debug.Log("?");
         // Setup ----------------------------------------------
         activeCoroutine = true;
         deltaT = 0;

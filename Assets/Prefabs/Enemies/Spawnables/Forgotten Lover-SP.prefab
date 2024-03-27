@@ -6267,9 +6267,9 @@ MonoBehaviour:
   MaxHP: 15
   MP: 15
   MaxMP: 15
-  ATK: 10
+  ATK: 7
   DEF: 5
-  SPD: 10
+  SPD: 7
   LVL: 1
   XP: 1
   baseXPThreshold: 2
@@ -6279,6 +6279,7 @@ MonoBehaviour:
   enemyName: Forgotten Lover
   dmgNums: {fileID: 6470322771213101756, guid: a2d36344f55aacf40be8b212749f9503, type: 3}
   XPValue: 5
+  XPValueIncrement: 5
   height: 6.84
 --- !u!114 &7484228312585150609
 MonoBehaviour:
@@ -6328,7 +6329,7 @@ MonoBehaviour:
   Move1LVLCap: 3
   Move2LVLCap: 5
   Move3LVLCap: 7
-  Move4LVLCap: 9
+  Move4LVLCap: 7
   moveInProgress: 0
 --- !u!1 &7484228312721238857
 GameObject:
