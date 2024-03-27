@@ -15,12 +15,17 @@ public class PlayerMovement : MonoBehaviour
     float movementSpeed = 7f;
     public float horizontalInput;
     public float verticalInput;
+    private Vector3 velocity;
 
     public bool activeCoroutine = false;
     public bool GettingClose = false; // For animation purposes when moving to attack
     private Vector3 direction;
     private Vector3 idleBattlePosition; // Where the player landed when battle began
     private Vector3 orderedBattlePosition;  // Where the player is headed when ordered to move
+
+    // So we don't fly off of slopes
+    public bool grounded;
+    private int stepsSinceLastGrounded;
 
     public delegate void OnInteractButton();
     public static event OnInteractButton onInteractButton;
@@ -66,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
         {
             onInteractButton?.Invoke();
         }
+        velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
 
 
     }   // End of Update()
@@ -81,7 +87,13 @@ public class PlayerMovement : MonoBehaviour
         {
             if (GameManager.Instance.canMove())
             {
-                rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
+                stepsSinceLastGrounded++;
+                
+                if (grounded || snapToGround())
+                {
+                    stepsSinceLastGrounded = 0;
+                }
+                rb.velocity = velocity;
             }
             else
             {
@@ -106,6 +118,43 @@ public class PlayerMovement : MonoBehaviour
     {
         return idleBattlePosition;
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.layer == 3) // Level geometry
+        {
+            grounded = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.layer == 3) // Level geometry
+        {
+            grounded = false;
+        }
+    }
+
+    private bool snapToGround()
+    {
+        if(stepsSinceLastGrounded > 1) // If we've been up and about for too long
+        {
+            return false;
+        }
+        if (!Physics.Raycast(rb.position, Vector3.down, out RaycastHit hit)) // If a downwards raycast can't find a home
+        {
+            return false;
+        }
+
+        // If we pass all these conditions, then we actually do need to be snapping
+        float speed = velocity.magnitude;
+        float dot = Vector3.Dot(velocity, hit.normal);  
+        if(dot > 0) // So that we don't waste time realigning a useful velocity
+            velocity = (velocity - hit.normal * dot).normalized * speed;
+        return true;
+    }
+
+    #region CUTSCENE METHODS
 
     public void MovePlayerToPoint(Vector3 point, float distanceFromPoint)
     {
@@ -149,5 +198,6 @@ public class PlayerMovement : MonoBehaviour
         activeCoroutine = false;
         //GameManager.Instance.Cutscene(false);
     }
+    #endregion
 
 }
