@@ -20,13 +20,24 @@ public class EnemyFollow : MonoBehaviour
 
     private bool follow;
     [SerializeField] private int sightRadius;   // The radius a player needs to enter to be seen
-
+    [SerializeField] private bool altBounds;
     void Start()
     {
-        upperX = GameObject.Find("Upper XE").transform; // Locate the boundaries the enemies can operate in
-        lowerX = GameObject.Find("Lower XE").transform;
-        upperZ = GameObject.Find("Upper ZE").transform;
-        lowerZ = GameObject.Find("Lower ZE").transform;
+        if (altBounds)
+        {
+            upperX = GameObject.Find("Upper XE (1)").transform; // Locate the boundaries the enemies can operate in
+            lowerX = GameObject.Find("Lower XE (1)").transform;
+            upperZ = GameObject.Find("Upper ZE (1)").transform;
+            lowerZ = GameObject.Find("Lower ZE (1)").transform;
+        }
+        else
+        {
+            upperX = GameObject.Find("Upper XE").transform; 
+            lowerX = GameObject.Find("Lower XE").transform;
+            upperZ = GameObject.Find("Upper ZE").transform;
+            lowerZ = GameObject.Find("Lower ZE").transform;
+        }
+        
 
         follow = false;
     }
@@ -48,12 +59,10 @@ public class EnemyFollow : MonoBehaviour
 
         if (transform.position.x >= upperX.position.x || transform.position.x <= lowerX.position.x)
         {
-            //Debug.Log("No dice - x");
             return false;
         }
         if (transform.position.z >= upperZ.position.z || transform.position.z <= lowerZ.position.z)
         {
-            //Debug.Log("No dice - z");
             return false;
         }
         return true;

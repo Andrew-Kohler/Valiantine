@@ -17,6 +17,8 @@ public class SettingsMenuView : View
     [SerializeField] private GameObject loadConfirm;
     [SerializeField] private GameObject quitConfirm;
 
+    [SerializeField] private Toggle tutToggle;
+
     [SerializeField] private List<AudioClip> sounds;
     private AudioSource audioS;
 
@@ -30,6 +32,10 @@ public class SettingsMenuView : View
 
     public override void Initialize()
     {
+        if(tutToggle.isOn && !GameManager.Instance.tutorialText)
+        {
+            tutToggle.isOn = false;
+        }
         initing = true;
         regular.SetActive(true);
         quitConfirm.SetActive(false);
@@ -38,6 +44,8 @@ public class SettingsMenuView : View
         options.SetActive(false);
         audioS = GetComponent<AudioSource>();
         initing = false;
+
+
     }
 
     private void OnEnable()
@@ -80,7 +88,25 @@ public class SettingsMenuView : View
             ViewManager.ShowLast();
         }
     }
-    #region BUTTONS
+
+    public void OptionsButton()
+    {
+        regular.SetActive(false);
+        quitConfirm.SetActive(false);
+        loadConfirm.SetActive(false);
+        mainConfirm.SetActive(false);
+        options.SetActive(true);
+    }
+
+    public void ToggleTutorial()
+    {
+        if((tutToggle.isOn && !GameManager.Instance.tutorialText) || (!tutToggle.isOn && GameManager.Instance.tutorialText))
+        {
+            GameManager.Instance.tutorialText = !GameManager.Instance.tutorialText;
+        }
+    }
+
+    #region OTHER BUTTONS
     public void LoadLastSaveButton()
     {
         audioS.PlayOneShot(sounds[2], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);

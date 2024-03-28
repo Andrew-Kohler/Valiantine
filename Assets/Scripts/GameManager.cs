@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public static GameManager _instance; // = new GameManager();   // Look at this again, b/c I'm pretty sure awake should be doing this?
     private bool activeCoroutine;
     public bool towerfall = false;
+    public bool tutorialText = true;
 
     private bool _isGameOver;   // Has the player been defeated?
     private bool _isInventory;  // Are we in the inventory?
@@ -205,7 +206,7 @@ public class GameManager : MonoBehaviour
     }
 
     // ALL of the state check methods
-    #region UNITY METHODS
+    #region STATE CHECK METHODS
     public void GameOver(bool flag) // Setter and getter for state of player defeat
     {
         _isGameOver = flag;

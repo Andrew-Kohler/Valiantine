@@ -275,6 +275,7 @@ public class BattleManager : MonoBehaviour
                                 {
                                     if (indAction.GetLeadBox() == "ATK")
                                     {
+                                        ViewManager.GetView<BattleUIView>().setTutorialText("W & S to move the selection arrow // E to attack // Q to back out");
                                         ViewManager.GetView<BattleUIView>().setText("Which enemy will you attack?");
                                         status = MenuStatus.Attack;
                                         CreateSelectionArrow(); // Create the arrow for picking your fight
@@ -293,6 +294,7 @@ public class BattleManager : MonoBehaviour
                                                 CreateSelectionArrow(); // Create the arrow for picking your fight
                                                 enemySelectArrow.GetComponent<TargetArrow>().type = 1;
                                                 ViewManager.GetView<BattleUIView>().setText("Which enemy will you cast Heart Aflame on?");
+                                                ViewManager.GetView<BattleUIView>().setTutorialText("W & S to move the selection arrow // E to attack // Q to back out");
                                             }
                                             else
                                             {
@@ -308,7 +310,8 @@ public class BattleManager : MonoBehaviour
                                                 StartCoroutine(indAction.DoFlashOut(true));
                                                 CreateSelectionArrow(); // Create the arrow for picking your fight
                                                 enemySelectArrow.GetComponent<TargetArrow>().type = 2;
-                                                ViewManager.GetView<BattleUIView>().setText("Which enemy will you cast against?");
+                                                ViewManager.GetView<BattleUIView>().setText("Which enemy will you cast Seize the Blade against?");
+                                                ViewManager.GetView<BattleUIView>().setTutorialText("W & S to move the selection arrow // E to attack // Q to back out");
                                             }
                                             else
                                             {
@@ -906,6 +909,7 @@ public class BattleManager : MonoBehaviour
         
         battleUI = GameObject.Find("Battle UI");
         battleUI.GetComponent<FadeUI>().UIFadeIn();
+        ViewManager.GetView<BattleUIView>().setTutorialText("A & D to choose an action // E to select an action // Q to back out of an action");
 
         battleIntro = false;                        // Set battleIntro to false and battleActive to true 
         battleActive = true;
@@ -925,6 +929,8 @@ public class BattleManager : MonoBehaviour
         // The text box fades out and the HP/MP bar lowers, letting us get a better look at the action
 
         playerMoves.Attack(targetedEnemy);
+        ViewManager.GetView<BattleUIView>().setText("You leap into the fray against " + targetedEnemy.GetComponent<EnemyStats>().enemyName +"!");
+        ViewManager.GetView<BattleUIView>().setTutorialText("");
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<PlayerMoves>().moveInProgress == false);
 
         // The text box returns as the HP/MP bar comes back up
@@ -961,6 +967,7 @@ public class BattleManager : MonoBehaviour
         activeCoroutine = true;
         toggleStatDisplays(false);
         StartCoroutine(indAction.DoFlashOutSelected()); // Flash out the attack indicator
+        ViewManager.GetView<BattleUIView>().setTutorialText("");
         // Starting bit ^ ------------------------------------------------------------
         if (playerGemSys.CurrentGem.name == "Cunning")
         {
@@ -1087,7 +1094,8 @@ public class BattleManager : MonoBehaviour
     {
         activeCoroutine = true;
         //toggleStatDisplaysE(true);
-        
+        ViewManager.GetView<BattleUIView>().setTutorialText("");
+
         yield return new WaitUntil(() => combatants[currentTurn].GetComponentInChildren<EnemyAnimatorS>().activeCoroutine == false);
 
         combatants[currentTurn].GetComponent<EnemyMoves>().Move2(playerStats);

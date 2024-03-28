@@ -51,6 +51,10 @@ public class GolemAnimatorS : EnemyAnimatorS
         frontFootPos = new Vector3(0, footFrontYOffset, 0);
         midFootPos = Vector3.zero;
         backFootPos = new Vector3(0, footBehindYOffset, 0);
+        if (golemMovement.sleeping) // If the golem is sleeping
+        {
+            animationIndex = _SleepIndex;
+        }
     }
 
     // Update is called once per frame

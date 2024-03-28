@@ -12,6 +12,7 @@ using TMPro;
 public class BattleUIView : View
 {
     [SerializeField] TextMeshProUGUI battleText;
+    [SerializeField] TextMeshProUGUI tutorialText;
     [SerializeField] GameObject actionIndicators;
     [SerializeField] GameObject healthBar;
     [SerializeField] GameObject manaBar;
@@ -29,6 +30,10 @@ public class BattleUIView : View
     public override void Initialize()
     {
         battleText.text = "";
+        if (tutorialText)
+        {
+            tutorialText.text = "A & D to choose an action // E to select an action // Q to back out of an action";
+        }
         indicatorInfo = actionIndicators.GetComponent<IndicatorAction>();
         //playerStats = player.GetComponent<PlayerStats>();
         playerStats = PlayerManager.Instance.PlayerStats();
@@ -72,6 +77,14 @@ public class BattleUIView : View
         battleText.text = text;
     }
 
+    public void setTutorialText(string text)
+    {
+        if (GameManager.Instance.tutorialText)
+        {
+            tutorialText.text = text;
+        }
+    }
+
     void updateText() 
     {
         // This was cute for a while, but I really think I need to shift it all over to a system where it gets passed from BatManager
@@ -79,6 +92,10 @@ public class BattleUIView : View
         BattleManager.MenuStatus status = BattleManager.Instance.GetPlayerStatus();
         if (status == BattleManager.MenuStatus.Selecting)
         {
+            if (GameManager.Instance.tutorialText)
+                tutorialText.text = "A & D to choose an action // E to select an action // Q to back out of an action";
+            else
+                tutorialText.text = "";
             if (currentBoxName == "ATK")
             {
                 battleText.text = "Attack an enemy for " + ((int)(((float)PlayerManager.Instance.PlayerStats().GetATK() / (float)PlayerManager.Instance.PlayerStats().GetATKRaw()) * 100)) +  "% of base attack.";

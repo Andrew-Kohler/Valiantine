@@ -7,6 +7,7 @@ public class InventoryMenuView : View
 {
     [SerializeField] private GameObject itemsTab;   // The two tabs that contain all of their tab's things
     [SerializeField] private GameObject gemsTab;
+    [SerializeField] GameObject tutorialText;   // The line under them
 
     [SerializeField] GameObject itemsTabIndicator;  // The two tab icons
     [SerializeField] GameObject gemsTabIndicator;
@@ -77,6 +78,15 @@ public class InventoryMenuView : View
             if (Input.GetButtonDown("Inv.Tab 2"))
             {
                 Switch(gemsTab);
+            }
+
+            if (GameManager.Instance.tutorialText)
+            {
+                tutorialText.SetActive(true);
+            }
+            else
+            {
+                tutorialText.SetActive(false);
             }
 
             if (GameManager.Instance.isSettings())  // Considerations made for changing to other views

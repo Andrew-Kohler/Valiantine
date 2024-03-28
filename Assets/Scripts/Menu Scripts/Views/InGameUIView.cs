@@ -7,10 +7,15 @@ For:    Marks a game object as the in-game UI that's up while the player is movi
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class InGameUIView : View
 {
     [SerializeField] GameObject interactionMenu;
+    [SerializeField] Image advanceArrow;
+    [SerializeField] TextMeshProUGUI advanceE;
+
     [SerializeField] FadeUI openingLogo;
 
     [SerializeField] FadeUI openingText1;
@@ -126,6 +131,8 @@ public class InGameUIView : View
 
     IEnumerator interactionEnd()    // Fades out the text box
     {
+        advanceArrow.color = new Color(.6f, .6f, .6f);
+        advanceE.color = new Color(.6f, .6f, .6f);
         GameManager.Instance.Interaction(false);
         //activeCoroutine = true;
         interactionMenu.GetComponent<FadeUI>().UIFadeOut();

@@ -16,7 +16,7 @@ public class SpellshineAnimatorS : MonoBehaviour
     private float deltaT;
 
     private int frame;
-    private int frameLoop = 4;  // A value to hold the number of the frame that the current animation loops on (e.g. after frame 13, loop it)
+    [SerializeField] private int frameLoop = 4;  // A value to hold the number of the frame that the current animation loops on (e.g. after frame 13, loop it)
     //private int frameReset = 0; // A value to hold the number of the frame that the current animation loops back to (e.g. the loop starts on frame 0)
     public bool activeCoroutine = false;    // The classic boolean to use when Update() needs to be quiet during a coroutine
 

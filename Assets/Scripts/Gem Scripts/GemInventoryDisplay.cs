@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GemInventoryDisplay : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class GemInventoryDisplay : MonoBehaviour
     [SerializeField] private GameObject equipTag;          // The little arrow that shows what gem you have selected*/
     [SerializeField] private GameObject selectArrow;
     [SerializeField] private GameObject textTabIndicator;   // The little arrow that shows which way to scroll in the text box
-
+    [SerializeField] private TextMeshProUGUI tabText;
     InventoryArrow selectorArrow;
 
     [SerializeField] float arrowSpeed = .5f;
@@ -110,6 +111,7 @@ public class GemInventoryDisplay : MonoBehaviour
                 else if (Input.GetButtonDown("Inventory Up") && showSpell && gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemHeld)  // Change descriptive text
                 {
                     showSpell = false;
+                    tabText.text = "S";
                     UpdateText();
                     textTabIndicator.transform.Rotate(new Vector3(0, 0, 180));
                     waitTime = waitReset; // Player is interacting, that's a no-no for the gem shine and we reset the time
@@ -117,6 +119,7 @@ public class GemInventoryDisplay : MonoBehaviour
                 else if (Input.GetButtonDown("Inventory Down") && !showSpell && gemDisplays[selectedSlot].GetComponent<GemDisplay>().GemHeld)
                 {
                     showSpell = true;
+                    tabText.text = "W";
                     UpdateText();
                     textTabIndicator.transform.Rotate(new Vector3(0, 0, 180));
                     waitTime = waitReset; // Player is interacting, that's a no-no for the gem shine and we reset the time
@@ -198,10 +201,12 @@ public class GemInventoryDisplay : MonoBehaviour
             if (showSpell)
             {
                 currentText = gemSystem.HeldGemList[selectedSlot].UseDescription;
+                tabText.text = "W";
             }
             else
             {
                 currentText = gemSystem.HeldGemList[selectedSlot].InventoryDescription;
+                tabText.text = "S";
             }
             
         }
@@ -209,6 +214,7 @@ public class GemInventoryDisplay : MonoBehaviour
         {
             textTabIndicator.SetActive(false);
             currentText = "Perhaps this blade holds secrets yet...";
+            tabText.text = "";
         }
     }
 

@@ -20,6 +20,7 @@ public class GateInteractable : Interactable
 
     [Header("Additional Considerations")]
     [SerializeField] public bool mainDoors;
+    [SerializeField] public bool finalGate;
     [SerializeField] float gateOpenSpeed;   // Speed at which the gates open
 
     bool validKey;
@@ -57,6 +58,11 @@ public class GateInteractable : Interactable
         StartCoroutine(DoInteraction());
     }
 
+    public void ExternalOpen()
+    {
+        StartCoroutine(DoGateOpen());
+    }
+
     private void GateCheck()
     {
         if (!mainDoors)
@@ -83,11 +89,17 @@ public class GateInteractable : Interactable
 
         // Check for if the player has the item necessary to open the gate
         lines.Clear();
-        if (!mainDoors)
+        if (mainDoors)
+        {
+            lines.Add("The doors hang loose on their hinges, as though they believe there is nothing left to guard.");
+            lines.Add("But you know better.");
+            
+        }
+        else
         {
             if (PlayerManager.Instance.PlayerInventory().InventorySystem.ContainsItem(key))
             {
-                if(SceneManager.GetActiveScene().name == "14_DarkLever")
+                if (SceneManager.GetActiveScene().name == "14_DarkLever")
                     lines.Add("You ram the gate with your shoulder, knocking the rust of ages loose from the lock. The gate swings open.");
                 else
                     lines.Add("The " + key.DisplayName + " fits right in the lock. You hear a click as you turn it.");
@@ -96,13 +108,8 @@ public class GateInteractable : Interactable
             else
             {
                 lines.Add("The gate is locked tight, even after all this time.");
-                lines.Add("The lock looks like a " + key.DisplayName + " would fit right in.");
+                lines.Add("The lock looks like an " + key.DisplayName + " would fit right in.");
             }
-        }
-        else
-        {
-            lines.Add("The doors hang loose on their hinges, as though they believe there is nothing left to guard.");
-            lines.Add("But you know better.");
         }
         
 

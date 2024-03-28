@@ -75,6 +75,7 @@ public class CameraControl : MonoBehaviour
 
     float battleX;
     [SerializeField] float battleYOffset = 0f;
+    float battleYOffset2 = -8.23f;
     float battleZ;
     [SerializeField] float battleZOffset = 0f;
 
@@ -122,6 +123,7 @@ public class CameraControl : MonoBehaviour
             inventoryY = inventoryY2;
             chestAngle = chestAngle2;
             chestPos = chestPos2;
+            battleYOffset = battleYOffset2;
         }
 
         activeCoroutine = false;
