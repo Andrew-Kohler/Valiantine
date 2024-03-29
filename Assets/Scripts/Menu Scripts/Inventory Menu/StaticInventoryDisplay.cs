@@ -110,10 +110,12 @@ public class StaticInventoryDisplay : InventoryDisplay //
 
                 if (Input.GetButtonDown("Inventory Up")) 
                 {
+                    audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                     StartCoroutine(DoMoveUp());
                 }
                 else if (Input.GetButtonDown("Inventory Down"))
                 {
+                    audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                     StartCoroutine(DoMoveDown());
                 }
                 

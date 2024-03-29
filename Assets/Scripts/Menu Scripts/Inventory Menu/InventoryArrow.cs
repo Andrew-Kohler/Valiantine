@@ -13,7 +13,7 @@ public class InventoryArrow : MonoBehaviour
     [SerializeField] private bool hideArrowToggle;  // Whether we want the arrow to be hidden when something is selected
     [SerializeField] private string animName;
     [SerializeField] private List<AudioClip> sounds;
-    private AudioSource audioS;
+
     //[SerializeField] private Vector2 startPos;
 
     private Animator arrowAnim;
@@ -25,7 +25,7 @@ public class InventoryArrow : MonoBehaviour
     private void Start()
     {
         arrowAnim = arrow.GetComponent<Animator>();
-        audioS = GetComponent<AudioSource>();
+
     }
     private void OnEnable()
     {
@@ -41,7 +41,7 @@ public class InventoryArrow : MonoBehaviour
         StartCoroutine(DoPosition(targetPos, step));
         if (spin)
         {
-            audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
+            
             arrowAnim.Play(animName, 0, 0);
         }
             

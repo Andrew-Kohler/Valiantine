@@ -10,6 +10,7 @@ public class MainMenuButtonController : MonoBehaviour
     [SerializeField] FadeUI doubleCheckPanel;
     [SerializeField] TextMeshProUGUI contText;
     [SerializeField] GameObject logo;
+    [SerializeField] GameObject golem;
 
     [SerializeField] private List<AudioClip> sounds;
     private AudioSource audioS;
@@ -23,6 +24,10 @@ public class MainMenuButtonController : MonoBehaviour
         GameManager.Instance.Cutscene(false);
         audioS = GetComponent<AudioSource>();
         StartCoroutine(DoLogoIntro());
+        if (GameManager.Instance.bossDefeated)
+        {
+            Destroy(golem);
+        }
     }
     private void Update()
     {

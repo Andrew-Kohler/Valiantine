@@ -42,7 +42,6 @@ public class LoverMovement : EnemyMovement
 
             if (!active && GameManager.Instance.enemyCanMove()) // If we are not chasing the player
             {
-
                 if(moveRandomlyTimer <= 0) // If our timer has run out, reset it and swap our movement style
                 {
                     moveRandomlyTimer = moveRandomCycleTime;
@@ -89,13 +88,17 @@ public class LoverMovement : EnemyMovement
 
                 moveRandomlyTimer -= Time.deltaTime; // Decrement the timer
             }
-            else if (active && GameManager.Instance.enemyCanMove()) // If chase has been enabled
+            else if (active && GameManager.Instance.enemyCanMove() && enemyFollow.playerInBounds()) // If chase has been enabled
             {
                 Transform playerTransform = PlayerManager.Instance.PlayerTransform();
                 pursuitVector = new Vector3(playerTransform.position.x, transform.position.y, playerTransform.position.z);
-
+                moveRandomly = true;
                 direction = (pursuitVector - this.transform.position).normalized;
                 currentSpeed = chaseMovementSpeed;
+            }
+            else if(active && GameManager.Instance.enemyCanMove() && !enemyFollow.playerInBounds())
+            {
+                direction = new Vector3(0f, 0f, 0f);
             }
         }
     }

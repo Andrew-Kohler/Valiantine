@@ -29,9 +29,9 @@ public class WindController : MonoBehaviour
         }
         else
         {
-            StopCoroutine(DoWindGradual(false));
+            StartCoroutine(DoWindGradual(false));
         }
-        
+
     }
 
     IEnumerator DoWindGradual(bool increase)

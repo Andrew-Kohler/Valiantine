@@ -21,6 +21,9 @@ public class IndicatorAction : Indicator
     bool activeCoroutine;                       // Tells us if a coroutine is active so we don't try and start it every update loop
     bool keepGoingCheck;                        // Boolean that allows us to check if the player has kept holding the horizontal input because they want to spin the indicators
 
+    [SerializeField] private List<AudioClip> sounds;
+    private AudioSource audioS;
+
     new void Start()
     {
         activeCoroutine = false;
@@ -29,6 +32,8 @@ public class IndicatorAction : Indicator
                                             // that looks proportional, indicators must travel 1.582 times as fast
         rotationSpeed = moveSpeed * 360f / 3.5f;  // Establishes rotation speed as proportional to moveSpeed so that only one full rotation occurs (that's why the 3.5 is there)
         rotationStep = 0;
+
+        audioS = GetComponent<AudioSource>();
 
         base.Start();
     }
@@ -89,7 +94,7 @@ public class IndicatorAction : Indicator
     IEnumerator LeftCoroutine() // The timed sequence which rotates the indicators a quarter-circle left
     {
         activeCoroutine = true;
-
+        audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
         while (Vector3.Distance(indicators[0].transform.position, onePos) > .01)    // Move the indicators towards their positions to make it feel natural
         {
             indicators[0].transform.position = Vector3.MoveTowards(indicators[0].transform.position, onePos, moveSpeed2 * Time.deltaTime);
@@ -129,7 +134,7 @@ public class IndicatorAction : Indicator
     IEnumerator RightCoroutine() // The timed sequence which rotates the indicators a quarter-circle right
     {
         activeCoroutine = true;
-
+        audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
         while (Vector3.Distance(indicators[0].transform.position, threePos) > .01)    // Move the indicators towards their positions to make it feel natural
         {
             indicators[0].transform.position = Vector3.MoveTowards(indicators[0].transform.position, threePos, moveSpeed * Time.deltaTime);
@@ -222,6 +227,7 @@ public class IndicatorAction : Indicator
         {
             j = 0;  // If all is true, we flash all of them in/out; if it isn't, we don't flash the front one
             k = true;
+            audioS.PlayOneShot(sounds[2], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
         }
 
         IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
@@ -245,7 +251,7 @@ public class IndicatorAction : Indicator
         if (!all)   // Move Indicator 0 to center position
         {
             //Debug.Log("We should be shmovin?");
-            
+            audioS.PlayOneShot(sounds[1], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
             while (Vector3.Distance(indicators[0].transform.position, centerPos) > .01)
             {
                 indicators[0].transform.position = Vector3.MoveTowards(indicators[0].transform.position, centerPos, alphaStep * Time.deltaTime);
@@ -270,7 +276,7 @@ public class IndicatorAction : Indicator
     public IEnumerator DoFlashOutSelected() // Just flashes out indicator 0
     {
         IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
-
+        audioS.PlayOneShot(sounds[2], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
         activeCoroutine = true;
         flash.enabled = true;
         StartCoroutine(flash.DoFlashOutSelected()); // Start the coroutine for fading the flash effect out (this is what create the flash effect)
@@ -298,7 +304,7 @@ public class IndicatorAction : Indicator
         //Debug.Log("We should be shmovin 2vin?");
 
         IndicatorFlash flash = GameObject.Find("Flash").GetComponent<IndicatorFlash>();
-
+        audioS.PlayOneShot(sounds[3], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
         //flash.Indicator0PosReset();
         while (Vector3.Distance(indicators[0].transform.position, zeroPos) > .01)
         {

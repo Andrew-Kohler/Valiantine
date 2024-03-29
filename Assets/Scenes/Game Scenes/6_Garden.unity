@@ -2011,6 +2011,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ed1fe23e64b6464f9607a545e38643c, type: 3}
+--- !u!1001 &1048972209
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6240224258110981376, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
+      propertyPath: m_RootOrder
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240224258110981376, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.6000023
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240224258110981376, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 11.607775
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240224258110981376, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -107.03187
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240224258110981376, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240224258110981376, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240224258110981376, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240224258110981376, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240224258110981376, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240224258110981376, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240224258110981376, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240224258110981377, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
+      propertyPath: m_Name
+      value: WindZone
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 100a1db7e348209449f48d7ea136b867, type: 3}
 --- !u!1001 &1072072930
 PrefabInstance:
   m_ObjectHideFlags: 0

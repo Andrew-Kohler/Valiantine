@@ -100,11 +100,13 @@ public class GemInventoryDisplay : MonoBehaviour
 
                 if (Input.GetButtonDown("Inventory Left"))  // Move the selection arrow left
                 {
+                    audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                     StartCoroutine(DoMoveLeft());
                     onSelectedGemChange?.Invoke();
                 }
                 else if (Input.GetButtonDown("Inventory Right")) // Move the selection arrow right
                 {
+                    audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                     StartCoroutine(DoMoveRight());
                     onSelectedGemChange?.Invoke();
                 }
@@ -151,7 +153,6 @@ public class GemInventoryDisplay : MonoBehaviour
                     audioS.PlayOneShot(sounds[1], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                     if (equippedSlot != -1) // TODO: Find a way to give the player the Gem of Will and have it equipped already when the game begins
                     {
-                        Debug.Log("We had a gem equipped");
                         gemDisplays[equippedSlot].GetComponent<GemDisplay>().equipGem(false); // Turn off the outline on the old selected one
                     }
                     gemSystem.equipGem(selectedSlot);                                       // Alert the backend gem system that a change has been made

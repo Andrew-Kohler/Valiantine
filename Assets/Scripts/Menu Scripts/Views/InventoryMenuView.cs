@@ -31,6 +31,9 @@ public class InventoryMenuView : View
     private bool fadeOut;
     private bool activeCoroutine;
 
+    [SerializeField] private List<AudioClip> sounds;
+    private AudioSource audioS;
+
     public delegate void OnTabSwitch();
     public static event OnTabSwitch onTabSwitch;
     public delegate void OnBattleInvenExit();
@@ -44,6 +47,7 @@ public class InventoryMenuView : View
         healthBarUI = healthBar.GetComponent<HealthBar>();
         manaBarUI = manaBar.GetComponent<ManaBar>();
         xpUI = XPIndicator.GetComponent<XPDisplay>();
+        audioS = GetComponent<AudioSource>();
         activeCoroutine = false; 
     }
 
@@ -73,10 +77,12 @@ public class InventoryMenuView : View
             updateHPMPXP();
             if (Input.GetButtonDown("Inv.Tab 1"))
             {
+                audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                 Switch(itemsTab);
             }
             if (Input.GetButtonDown("Inv.Tab 2"))
             {
+                audioS.PlayOneShot(sounds[1], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
                 Switch(gemsTab);
             }
 

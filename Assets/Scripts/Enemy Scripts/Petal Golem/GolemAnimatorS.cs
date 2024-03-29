@@ -34,9 +34,9 @@ public class GolemAnimatorS : EnemyAnimatorS
     private float footNeutralYOffset = 0f;
     private float footBehindYOffset = -.2f;
 
-    private Vector3 frontFootPos;
+    private Vector3 frontFootPos = new Vector3(0, .2f, 0);
     private Vector3 midFootPos;
-    private Vector3 backFootPos;
+    private Vector3 backFootPos = new Vector3(0, -.2f, 0);
 
     [SerializeField] private Transform frontFoot;
     [SerializeField] private Transform backFoot;

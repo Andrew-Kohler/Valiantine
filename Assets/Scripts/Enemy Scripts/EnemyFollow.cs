@@ -44,14 +44,18 @@ public class EnemyFollow : MonoBehaviour
 
     private void Update()
     {
-        if(Vector3.Distance(transform.position, PlayerManager.Instance.PlayerTransform().position) <= sightRadius && inBounds())
+        if (PlayerManager.Instance != null)
         {
-            follow = true;
+            if (Vector3.Distance(transform.position, PlayerManager.Instance.PlayerTransform().position) <= sightRadius && inBounds() && playerInBounds())
+            {
+                follow = true;
+            }
+            else
+            {
+                follow = false;
+            }
         }
-        else
-        {
-            follow = false;
-        }
+        
     }
 
     public bool inBounds()    // Checks if we are inside acceptable boundaries
@@ -62,6 +66,19 @@ public class EnemyFollow : MonoBehaviour
             return false;
         }
         if (transform.position.z >= upperZ.position.z || transform.position.z <= lowerZ.position.z)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public bool playerInBounds()
+    {
+        if (PlayerManager.Instance.PlayerTransform().position.x >= upperX.position.x || PlayerManager.Instance.PlayerTransform().position.x <= lowerX.position.x)
+        {
+            return false;
+        }
+        if (PlayerManager.Instance.PlayerTransform().position.z >= upperZ.position.z || PlayerManager.Instance.PlayerTransform().position.z <= lowerZ.position.z)
         {
             return false;
         }

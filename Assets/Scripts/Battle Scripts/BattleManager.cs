@@ -139,65 +139,7 @@ public class BattleManager : MonoBehaviour
     {
         if (GameManager.Instance.isBattle())
         {
-            /*if (battleIntro && !activeCoroutine)    // The fun intro sequence that happens when the battle begins
-            {
-                StopAllCoroutines();
-                // Get the instances of:
-                playerStats = PlayerManager.Instance.PlayerStats();                 // Player stats
-                playerMoves = playerStats.gameObject.GetComponent<PlayerMoves>();   // Player moves
-                playerGemSys = playerStats.gameObject.GetComponent<GemSystem>();
-                
-                enemyStats = currentEnemy.GetComponent<EnemyStats>(); // Enemy stats
-                enemyGroup = currentEnemy.GetComponent<EnemyGroup>(); // The enemy group that spawns the Gang
-
-                playerRb = PlayerManager.Instance.PlayerRigidbody();    // Get player and enemy RBs
-                enemyRb = currentEnemy.GetComponent<Rigidbody>();
-
-                mainEnemyMovement = currentEnemy.GetComponent<EnemyMovement>();
-
-                camX = (enemyRb.position.x + playerRb.position.x) / 2;  // Tell the camera where to go
-                camZ = playerRb.position.z;
-
-                battlingEnemies = new GameObject[1 + enemyGroup.numberToSpawn];  // Create list of how many foes Em is facing
-                enemyStats.isBattling = true;   // We are battling the enemy we collided with
-                enemyGroup.SpawnEncounter();    // Beam our new friends in if we have any
-                
-                enemies = GameObject.FindGameObjectsWithTag("Enemy");   // Get all the components in Enemies
-                Debug.Log(enemies.Length);
-                int i = 0;
-                foreach (GameObject enemy in enemies)   // Add the active ones to their own list for ease of access
-                {
-                    if (enemy.GetComponent<EnemyStats>().isBattling)
-                    {
-                        battlingEnemies[i] = enemy;
-                        i++;
-                    }
-                }
-                battleHideEnemies?.Invoke(); // Hide everyone who isn't battling
-
-                // Determine turn order
-                turnArray = new Stats[1 + battlingEnemies.Length];
-                combatants = new GameObject[1 + battlingEnemies.Length];
-                i = 0;
-                foreach (GameObject enemy in enemies)   // Add all the battling enemies' stats to turn array
-                {
-                    if (enemy.GetComponent<EnemyStats>().isBattling)
-                    {
-                        turnArray[i] = enemy.GetComponent<EnemyStats>(); 
-                        turnArray[i].SetLVL(enemyGroup.additionalEnemyLevels[i]);
-                        combatants[i] = enemy;
-                        i++;
-                    }
-                }
-                turnArray[i] = playerStats;
-                combatants[i] = PlayerManager.Instance.GameObject();
-                CalculateTurnOrder(ref turnArray, ref combatants);
-                currentTurn = 0;    // Set the current turn to 0 so the first actor goes
-
-                StartCoroutine(DoBattleIntro());    // Use a coroutine to time visual elements (player motion, UI swap)           
-            } // End of battle intro*/
-
-            // ------------------ The turn loop -----------------------------
+            // ----------------- The turn loop -----------------------------
 
             if (battleActive && !activeCoroutine)  // Primary turn loop - else if
             {
@@ -206,7 +148,7 @@ public class BattleManager : MonoBehaviour
                     battleActive = false;
                     endResult = EndStatus.Win;
                 }
-                //TODO: Check if player loses
+
                 else // Actual turns going on
                 {
                     if (currentTurn == 0 && newLoop) // If the current turn is 0, we're at the start of a full loop, and need to decrement some timers
@@ -700,7 +642,7 @@ public class BattleManager : MonoBehaviour
     {
         foreach(GameObject combatant in combatants)
         {
-            if (combatant.GetComponent<StatModVisualController>() != null)
+            if (combatant.GetComponent<StatModVisualController>() != null && !combatant.GetComponent<Stats>().getDowned())
                 combatant.GetComponent<StatModVisualController>().SetPlayerTurn(on);
         }
     }
@@ -911,6 +853,7 @@ public class BattleManager : MonoBehaviour
         battleUI.GetComponent<FadeUI>().UIFadeIn();
         ViewManager.GetView<BattleUIView>().setTutorialText("A & D to choose an action // E to select an action // Q to back out of an action");
 
+        PlayerManager.Instance.PlayerMovement().ZeroOutMovement();
         battleIntro = false;                        // Set battleIntro to false and battleActive to true 
         battleActive = true;
         activeCoroutine = false;
@@ -1098,7 +1041,7 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitUntil(() => combatants[currentTurn].GetComponentInChildren<EnemyAnimatorS>().activeCoroutine == false);
 
-        combatants[currentTurn].GetComponent<EnemyMoves>().Move2(playerStats);
+        combatants[currentTurn].GetComponent<EnemyMoves>().Move4(playerStats);
 
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<EnemyMoves>().moveInProgress == false);
 

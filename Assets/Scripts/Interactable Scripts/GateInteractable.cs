@@ -26,6 +26,9 @@ public class GateInteractable : Interactable
     bool validKey;
     bool validInteraction;
 
+    [SerializeField] private List<AudioClip> sounds;
+    private AudioSource audioS;
+
     public delegate void OnCastleInteract();
     public static event OnCastleInteract onCastleInteract;
     public delegate void OnCastleEnter();
@@ -43,6 +46,7 @@ public class GateInteractable : Interactable
 
     private void Start()
     {
+        audioS = GetComponent<AudioSource>();
         if (!mainDoors)
         {
             if (GameManager.Instance.openedGates[saveIndex])
@@ -127,6 +131,7 @@ public class GateInteractable : Interactable
         }
         trigger.SetActive(false);   // Disable the ability to interact with the gate; it's open, we're done
         float count = 0;
+        audioS.PlayOneShot(sounds[0], GameManager.Instance.environmentVolume * GameManager.Instance.masterVolume);
         while (count <= 90)
         {
             leftGate.transform.RotateAround(leftGatePivot.transform.position, Vector3.up, -gateOpenSpeed * Time.deltaTime);
@@ -146,6 +151,7 @@ public class GateInteractable : Interactable
         {
             GameManager.Instance.openedGates[saveIndex] = true;
         }
+
         
         yield return null;
         

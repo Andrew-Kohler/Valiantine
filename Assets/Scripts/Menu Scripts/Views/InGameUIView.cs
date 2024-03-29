@@ -28,6 +28,9 @@ public class InGameUIView : View
     [SerializeField] FadeUI closingText3;
     [SerializeField] FadeUI closingText4;
 
+    [SerializeField] private List<AudioClip> sounds;
+    private AudioSource audioS;
+
     //bool menuOpen;              // Whether or not the interaction sub-menu is open
     //bool activeCoroutine;       // Whether or not a coroutine is active
     public bool textReadout;    // Whether or not TextRevealer has finished reading the current text block
@@ -45,6 +48,7 @@ public class InGameUIView : View
         textAdvance = false;
         //lines.Add(line1);
         //lines.Add(line2);
+        audioS = GetComponent<AudioSource>();
     }
 
     private void OnEnable()
@@ -149,7 +153,8 @@ public class InGameUIView : View
     {
         yield return new WaitForSeconds(1f);
         openingLogo.UIFadeIn();
-        yield return new WaitForSeconds(6.6f);
+        audioS.PlayOneShot(sounds[0], GameManager.Instance.musicVolume * GameManager.Instance.masterVolume);
+        yield return new WaitForSeconds(9f);
         
         SceneLoader.Instance.OnForcedPlayerTransition("1_HereStands");
     }

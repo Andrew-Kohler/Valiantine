@@ -189,6 +189,7 @@ public class GameManager : MonoBehaviour
             // read json file into data object
             string json = File.ReadAllText(path);
             saveData = JsonUtility.FromJson<SaveData>(json);
+            bossDefeated = saveData.bossDefeated;
         }
         else // default save file configuration
         {

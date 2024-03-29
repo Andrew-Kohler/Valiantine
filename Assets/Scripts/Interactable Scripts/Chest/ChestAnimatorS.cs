@@ -17,11 +17,15 @@ public class ChestAnimatorS : MonoBehaviour
 
     private float deltaT;
 
+    [SerializeField] private List<AudioClip> sounds;
+    private AudioSource audioS;
+
     public delegate void OnChestOpen();
     public static event OnChestOpen onChestOpen;
     private void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
+        audioS = GetComponent<AudioSource>();
     }
     public void PlayOpenAnimation()
     {
@@ -59,6 +63,8 @@ public class ChestAnimatorS : MonoBehaviour
             clipKey = colProperty;
             frameKey = rowProperty;
         }
+
+        audioS.PlayOneShot(sounds[0], GameManager.Instance.environmentVolume * GameManager.Instance.masterVolume);
         while (frameLoop > frame)
         {
            

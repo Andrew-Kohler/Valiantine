@@ -341,7 +341,7 @@ public class PlayerAnimatorS : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(DoBattleEnterAnim(leftOfEnemy));
-        audioSource.PlayOneShot(playerSounds[4]);
+        audioSource.PlayOneShot(playerSounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
     }
 
     public void PlayAttack(Transform enemyTransform)
@@ -380,7 +380,7 @@ public class PlayerAnimatorS : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(DoDefeatAnim());
-        audioSource.PlayOneShot(playerSounds[8]);
+        audioSource.PlayOneShot(playerSounds[8], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
     }
 
 
@@ -458,6 +458,7 @@ public class PlayerAnimatorS : MonoBehaviour
         frameLoop = 5;
         deltaT = 0;
         string clipKey, frameKey;
+        audioSource.PlayOneShot(playerSounds[14], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         if (axis == AnimationAxis.Rows)
         {
             clipKey = rowProperty;
@@ -471,7 +472,7 @@ public class PlayerAnimatorS : MonoBehaviour
 
         // Animated component (sprite-based motion corresponding to physical motion)
         int frame = 0;// (int)(deltaT * animationSpeed);
-        while (frame < frameLoop)
+        while (frame < frameLoop && !isMoving(horizontalInput, verticalInput))
         {
             deltaT += Time.deltaTime;
             meshRenderer.material.SetFloat(clipKey, animationIndex);
@@ -479,7 +480,15 @@ public class PlayerAnimatorS : MonoBehaviour
             frame = (int)(deltaT * animationSpeed);
             yield return null;
         }
+        float humTimer = 5f;
+        while(humTimer > 0 && !isMoving(horizontalInput, verticalInput))
+        {
+            humTimer -= Time.deltaTime;
+            yield return null;  
+        }
+        audioSource.PlayOneShot(playerSounds[7], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         yield return new WaitUntil(()=>isMoving(horizontalInput, verticalInput));
+        audioSource.Stop();
         deltaT = 0;
 
         activeCoroutine = false;
@@ -540,7 +549,7 @@ public class PlayerAnimatorS : MonoBehaviour
             frame = (int)(deltaT * animationSpeed);
             if (frame == 5 && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 5))
             {
-                audioSource.PlayOneShot(playerSounds[9]);
+                audioSource.PlayOneShot(playerSounds[9], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
             }
 
             yield return null;
@@ -592,7 +601,7 @@ public class PlayerAnimatorS : MonoBehaviour
         // Lower your arms and set the direction, index, and frame appropriately
         activeCoroutine = true;
         
-        deltaT = 0;
+        
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
         {
@@ -605,6 +614,7 @@ public class PlayerAnimatorS : MonoBehaviour
             frameKey = rowProperty;
         }
         frameLoop = 10;
+        deltaT = 0;
         while (frame < frameLoop)
         {
             
@@ -686,7 +696,7 @@ public class PlayerAnimatorS : MonoBehaviour
         rb.velocity = new Vector3(0f, 0f, 0f);
 
         // Play the landing animation
-        audioSource.PlayOneShot(playerSounds[13]);
+        audioSource.PlayOneShot(playerSounds[13], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
@@ -729,7 +739,7 @@ public class PlayerAnimatorS : MonoBehaviour
             frame = (int)(deltaT * (animationSpeed));
             if (frame == 3 && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 3))
             {
-                audioSource.PlayOneShot(playerSounds[1]);
+                audioSource.PlayOneShot(playerSounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
             }
             yield return null;
         }
@@ -760,7 +770,7 @@ public class PlayerAnimatorS : MonoBehaviour
 
         // Play the attack animation
         deltaT = 0;
-        audioSource.PlayOneShot(playerSounds[2]);
+        audioSource.PlayOneShot(playerSounds[2], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < 14)
         {
             deltaT += Time.deltaTime;
@@ -796,7 +806,7 @@ public class PlayerAnimatorS : MonoBehaviour
         // Play the landing animation
         deltaT = 0;
         frame = 16;
-        audioSource.PlayOneShot(playerSounds[0]);
+        audioSource.PlayOneShot(playerSounds[0], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < 18 && !playerMovement.GettingClose)
         {
             deltaT += Time.deltaTime;
@@ -811,25 +821,6 @@ public class PlayerAnimatorS : MonoBehaviour
 
         deltaT = 0;
         rb.velocity = new Vector3(0f, 0f, 0f);
-
-        
-
-        
-
-        /*frame = 0;                  // Play the attack animation once
-        deltaT = 0;
-        while (frame < frameLoop)
-        {
-            deltaT += Time.deltaTime;
-            meshRenderer.material.SetFloat(clipKey, animationIndex);
-            meshRenderer.material.SetFloat(frameKey, frame);
-            frame = (int)(deltaT * (animationSpeed));
-            if (frame == 4)
-            {
-                dealDamage = true;
-            }
-            yield return null;
-        }*/
 
         deltaT = 0;
         activeCoroutine = false;
@@ -896,6 +887,7 @@ public class PlayerAnimatorS : MonoBehaviour
         // Content ----------------------------------------------
         // Play the animation
         int frame = 0;
+        audioSource.PlayOneShot(playerSounds[11], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
@@ -951,10 +943,17 @@ public class PlayerAnimatorS : MonoBehaviour
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if (frame == 6 && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 6))
+            {
+                audioSource.PlayOneShot(playerSounds[12], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
-
-        animationSpeed = 2f;
+        deltaT = 0;
+        audioSource.volume = GameManager.Instance.entityVolume * GameManager.Instance.masterVolume;
+        audioSource.clip = playerSounds[6];
+        audioSource.Play();
+        animationSpeed = 1.4f;
         while (frame < frameLoop2)
         {
             deltaT += Time.deltaTime;
@@ -968,6 +967,7 @@ public class PlayerAnimatorS : MonoBehaviour
             }
             yield return null;
         }
+        
 
         yield return null;
     }
@@ -992,20 +992,26 @@ public class PlayerAnimatorS : MonoBehaviour
         animationIndex = _BattleExitIndex;
         animationSpeed = 5.4f;
         frameLoop = 17;
+        audioSource.Stop();
+        audioSource.clip = null;
 
         // Content ----------------------------------------------
         // Play the animation
         int frame = 0;
+        audioSource.PlayOneShot(playerSounds[14], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = 12 + (int)(deltaT * (animationSpeed));
+
             yield return null;
         }
 
         activeCoroutine = false;
+        animationIndex = _ActiveIdleRIndex;
+        frameLoop = 5;
 
         yield return null;
     }

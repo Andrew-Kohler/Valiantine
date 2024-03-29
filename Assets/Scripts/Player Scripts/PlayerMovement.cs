@@ -62,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 horizontalInput = 0;
                 verticalInput = 0;
+                velocity = Vector3.zero;
                 //rb.velocity = new Vector3(0f, 0f, 0f);
             }
             
@@ -98,6 +99,9 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 rb.velocity = Vector3.zero;
+                horizontalInput = 0;
+                verticalInput = 0;
+                velocity = Vector3.zero;
             }
         }
         
@@ -108,10 +112,19 @@ public class PlayerMovement : MonoBehaviour
     {
         activeCoroutine = false;
     }
-
+    public void ZeroOutMovement()
+    {
+        horizontalInput = 0;
+        verticalInput = 0;
+        velocity = Vector3.zero;
+    }
     public void SetBattleIdlePosition()
     {
         idleBattlePosition = this.transform.position;
+        horizontalInput = 0;
+        verticalInput = 0;
+        velocity = Vector3.zero;
+
     }
 
     public Vector3 GetBattleIdlePosition()

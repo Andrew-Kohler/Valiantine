@@ -24,6 +24,9 @@ public class ChestInteractable : Interactable
     private bool opened;
     public bool Opened => opened;
 
+    [SerializeField] private List<AudioClip> sounds;
+    private AudioSource audioS;
+
     public delegate void OnChestInteract();
     public static event OnChestInteract onChestInteract;
 
@@ -32,6 +35,7 @@ public class ChestInteractable : Interactable
         prompt = usePrompt.GetComponent<UsePrompt>();
         chestAnimator = chestSprite.GetComponent<ChestAnimatorS>();
         chestItemDisplay = itemSprite.GetComponent<ChestItemDisplay>();
+        audioS = GetComponent<AudioSource>();
 
         if(numItems == 1)
         {
@@ -74,6 +78,7 @@ public class ChestInteractable : Interactable
         // Wait for it to finish
 
         // Start the text readout
+        audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
         ViewManager.GetView<InGameUIView>().startInteractionText(lines);
 
         // Show the item sprite
