@@ -205,9 +205,10 @@ public class StatModVisualController : MonoBehaviour
     private IEnumerator DoIndicatorCycles() // A coroutine that cycles between displays
     {
         activeCoroutine = true;
-
+        particleIndicatorUp.gameObject.SetActive(true);
+        particleIndicatorDown.gameObject.SetActive(true);
         // If there is a difference between stat and raw stat
-        if(stats.GetATK() != stats.GetATKRaw()) 
+        if (stats.GetATK() != stats.GetATKRaw()) 
         {
             ToggleDirection(0, stats.GetATK() > stats.GetATKRaw());// Set the particles in the correct direction
             ATKText.SetActive(true);                            // Show the ATK graphic and hide the SPD one

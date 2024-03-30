@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FadeEnemy : MonoBehaviour
 {
-    float fadeSpeed = 2f;
+    //float fadeSpeed = 2f;
 
     private void OnEnable()
     {

@@ -132,7 +132,8 @@ public class BattleManager : MonoBehaviour
 
         StopAllCoroutines();
         activeCoroutine = true;
-        StartCoroutine(DoBattleIntro());
+        if(!PlayerManager.Instance.PlayerStats().getDowned())
+            StartCoroutine(DoBattleIntro());
     }
 
     private void Update()
@@ -565,15 +566,66 @@ public class BattleManager : MonoBehaviour
 
     private void allEnemyReenable(GameObject visible)
     {
+        if (visible != null)
+        {
+            foreach (GameObject enemy in enemies)
+            {
+                if(enemy != null)
+                {
+                    if (enemy.name != visible.name)
+                    {
+                        enemy.SetActive(true);
+                        /*if (enemy.GetComponent<BattleStart>() != null)
+                        {
+                            enemy.GetComponent<BattleStart>().enabled = false;
+                        }*/
+
+                        //enemy.GetComponent<FadeEnemy>().FadeIn();
+
+                    }
+                }
+                
+            }
+        }
+        else
+        {
+            foreach (GameObject enemy in enemies)
+            {
+                if (enemy != null)
+                {
+
+                        enemy.SetActive(true);
+                        /*if (enemy.GetComponent<BattleStart>() != null)
+                        {
+                            enemy.GetComponent<BattleStart>().enabled = false;
+                        }*/
+
+                        //enemy.GetComponent<FadeEnemy>().FadeIn();
+
+                }
+
+            }
+        }
+        
+    }
+
+    private void allEnemyReenableBattleStart()
+    {
 
         foreach (GameObject enemy in enemies)
         {
-            if (enemy.name != visible.name)
+            if(enemy != null)
             {
-                enemy.SetActive(true);
-                //enemy.GetComponent<FadeEnemy>().FadeIn();
 
+                    if (enemy.GetComponent<BattleStart>() != null)
+                    {
+                        enemy.GetComponent<BattleStart>().enabled = true;
+                    }
+                    //enemy.GetComponent<FadeEnemy>().FadeIn();
+
+                
             }
+            
         }
     }
 
@@ -834,7 +886,7 @@ public class BattleManager : MonoBehaviour
         CalculateTurnOrder(ref turnArray, ref combatants);
         currentTurn = 0;    // Set the current turn to 0 so the first actor goes
         // -----------------------------------------------------------------------------------------------
-
+        MusicBox.Instance.StartBattleFade();
         BattleRecoil();                             // Correctly position the player and the enemy
         yield return new WaitForSeconds(.7f);       // Wait for Battle Recoil to finish
         playerRb.constraints = RigidbodyConstraints.FreezeRotation;
@@ -1041,7 +1093,7 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitUntil(() => combatants[currentTurn].GetComponentInChildren<EnemyAnimatorS>().activeCoroutine == false);
 
-        combatants[currentTurn].GetComponent<EnemyMoves>().Move2(playerStats);
+        combatants[currentTurn].GetComponent<EnemyMoves>().Move(playerStats);
 
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<EnemyMoves>().moveInProgress == false);
 
@@ -1064,7 +1116,7 @@ public class BattleManager : MonoBehaviour
         activeCoroutine = true;
         toggleStatDisplays(false);
         clearStatMods();
-
+        MusicBox.Instance.EndBattleFade();
         PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleWin();
 
         int xpGain = totalXpGain();
@@ -1082,9 +1134,9 @@ public class BattleManager : MonoBehaviour
         GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle (this also pulls the camera back)
         PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleExit();
         yield return new WaitForSeconds(1.2f);
-
+        MusicBox.Instance.ReturnToNormal();
         playerReenable();                                   // Reenable player movement
-        allEnemyReenable(currentEnemy);                     // Reenable enemies that weren't in the fight
+                           // Reenable enemies that weren't in the fight
         battleShowEnemies?.Invoke();
         fadeAllBattlingEnemies();
         
@@ -1106,6 +1158,8 @@ public class BattleManager : MonoBehaviour
         endResult = EndStatus.None;
         status = MenuStatus.Inactive;
 
+        allEnemyReenable(currentEnemy);
+        //allEnemyReenableBattleStart();
         Destroy(gameObject);
         yield return null;
     }
@@ -1116,14 +1170,14 @@ public class BattleManager : MonoBehaviour
         toggleStatDisplays(false);
         clearStatMods();
         battleUI.GetComponent<FadeUI>().UIFadeOut();
-
+        MusicBox.Instance.HardStop();
         //Play the defeat animation
         //PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().PlayBattleLost();
         yield return new WaitUntil(()=> PlayerManager.Instance.GetComponentInChildren<PlayerAnimatorS>().defeated);
 
         // Once that's done, load the credits scene
         SceneLoader.Instance.OnForcedTransition("25_GameOver");
-
+        Destroy(gameObject);
         yield return null;
     }
 
@@ -1133,14 +1187,14 @@ public class BattleManager : MonoBehaviour
         toggleStatDisplays(false);
         clearStatMods();
         enemyStats.Resurrect();
-
+        MusicBox.Instance.EndBattleFade();
         yield return new WaitForSeconds(2f);                // Wait so the player can read the text box
         battleUI.GetComponent<FadeUI>().UIFadeOut();
-
+        MusicBox.Instance.ReturnToNormal();
         GameManager.Instance.Battle(false);                 // Tell the game manager that we're out of battle
 
         playerReenable();                                   // Reenable player movement
-        allEnemyReenable(currentEnemy);                     // Reenable enemies that weren't in the fight
+                             // Reenable enemies that weren't in the fight
         fadeSpawnedEnemies();                               // Get rid of enemies spawned for the battle
        
         yield return new WaitForSeconds(2f);                // Wait for a few moments before letting the current enemy loose again
@@ -1155,8 +1209,10 @@ public class BattleManager : MonoBehaviour
         mainEnemyMovement = null;
 
         endResult = EndStatus.None;
-        status = MenuStatus.Inactive;  
+        status = MenuStatus.Inactive;
 
+        allEnemyReenable(currentEnemy);
+        //allEnemyReenableBattleStart();
         Destroy(gameObject);
 
         yield return null;

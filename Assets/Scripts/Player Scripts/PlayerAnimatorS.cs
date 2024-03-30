@@ -21,6 +21,8 @@ public class PlayerAnimatorS : MonoBehaviour
     private bool faceDirBool;
 
     public int walkType = 0;    // 0 = stone, 1 = earth, 2 = wood, 3 = water
+    private bool footBool1 = false;
+    private bool footBool2 = false;
 
     private float deltaT;
     float horizontalInput;
@@ -320,23 +322,35 @@ public class PlayerAnimatorS : MonoBehaviour
 
             // Animate
             frame = (int)(deltaT * animationSpeed);
-            if ((frame == 3) && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 3) && isMoving(horizontalInput, verticalInput))
+            if(walkType != 3)
             {
-                playFootstep(frame);
+                if ((frame == 3) && !footBool1 && isMoving(horizontalInput, verticalInput))
+                {
+                    footBool1 = true;
+                    playFootstep(frame);
+                }
+                if ((frame == 7) && !footBool2 && isMoving(horizontalInput, verticalInput))
+                {
+                    footBool2 = true;
+                    playFootstep(frame);
+                }
             }
-            if ((frame == 7) && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 7) && isMoving(horizontalInput, verticalInput))
+            else
             {
-                playFootstep(frame);
+                if ((frame == 2) && !footBool1 && isMoving(horizontalInput, verticalInput))
+                {
+                    footBool1 = true;
+                    playFootstep(frame);
+                }
+                if ((frame == 6) && !footBool2 && isMoving(horizontalInput, verticalInput))
+                {
+                    footBool2 = true;
+                    playFootstep(frame);
+                }
             }
+            
 
-            if ((frame == 2) && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 2) && isMoving(horizontalInput, verticalInput))
-            {
-                playFootstep(frame);
-            }
-            if ((frame == 6) && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 6) && isMoving(horizontalInput, verticalInput))
-            {
-                playFootstep(frame);
-            }
+            
             /*if (GameManager.Instance.isInteraction())
             {
                 animationIndex = _ActiveIdleForwardsIndex;
@@ -347,6 +361,8 @@ public class PlayerAnimatorS : MonoBehaviour
             {
                 deltaT = 0;
                 frame = frameReset;
+                footBool1 = false;
+                footBool2 = false;
             }
             //Debug.Log(animationIndex + " " + _ActiveIdleForwardsIndex);
             meshRenderer.material.SetFloat(clipKey, animationIndex);
@@ -622,6 +638,7 @@ public class PlayerAnimatorS : MonoBehaviour
     {
         // Startup stuff
         activeCoroutine = true;
+        bool potBool = false;
         if (red)
         {
             if (GameManager.Instance.isBattle())
@@ -670,8 +687,9 @@ public class PlayerAnimatorS : MonoBehaviour
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * animationSpeed);
-            if (frame == 5 && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 5))
+            if (frame == 5 && !potBool)
             {
+                potBool = true;
                 audioSource.PlayOneShot(playerSounds[9], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
             }
 
@@ -837,6 +855,7 @@ public class PlayerAnimatorS : MonoBehaviour
     {
         // Startup stuff
         activeCoroutine = true;
+        bool atkBool = false;
         int frame = 0;
         deltaT = 0;
         string clipKey, frameKey;
@@ -860,8 +879,9 @@ public class PlayerAnimatorS : MonoBehaviour
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
-            if (frame == 3 && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 3))
+            if (frame == 3 && !atkBool)
             {
+                atkBool = true;
                 audioSource.PlayOneShot(playerSounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
             }
             yield return null;
@@ -1040,6 +1060,7 @@ public class PlayerAnimatorS : MonoBehaviour
     {
         // Setup ----------------------------------------------
         activeCoroutine = true;
+        bool winBool = false;
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
@@ -1066,8 +1087,9 @@ public class PlayerAnimatorS : MonoBehaviour
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
-            if (frame == 6 && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 6))
+            if (frame == 6 && !winBool)
             {
+                winBool = true;
                 audioSource.PlayOneShot(playerSounds[12], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
             }
             yield return null;

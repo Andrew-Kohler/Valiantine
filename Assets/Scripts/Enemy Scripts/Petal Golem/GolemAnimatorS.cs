@@ -33,7 +33,7 @@ public class GolemAnimatorS : EnemyAnimatorS
     private int frame;
 
     private float footFrontYOffset = .2f; // Positions for whether a foot is in front of or behind a golem
-    private float footNeutralYOffset = 0f;
+    //private float footNeutralYOffset = 0f;
     private float footBehindYOffset = -.2f;
 
     private Vector3 frontFootPos = new Vector3(0, .2f, 0);

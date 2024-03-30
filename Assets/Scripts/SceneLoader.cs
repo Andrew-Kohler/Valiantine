@@ -152,7 +152,11 @@ public class SceneLoader : MonoBehaviour
         GameManager.Instance.Inventory(false);
         GameManager.Instance.Battle(false);
         GameManager.Instance.Settings(false);
+
+        StopAllCoroutines();
         StartCoroutine(DoVolumeUp());
+
+        
         // We don't need to worry about resetting BattleManager because it isn't persistent between scenes
 
         if (SceneManager.GetActiveScene().name != "23_MainMenu" && SceneManager.GetActiveScene().name != "24_Credits" && SceneManager.GetActiveScene().name != "25_GameOver")
@@ -186,7 +190,7 @@ public class SceneLoader : MonoBehaviour
             fade.SceneFadeOut();
         }
         loadCount++;
-
+        MusicBox.Instance.newSceneCheck();
 
     }
 
@@ -264,6 +268,7 @@ public class SceneLoader : MonoBehaviour
             GameManager.Instance.masterVolume -= Time.deltaTime  / 2f;
             yield return null;
         }
+        yield return null;
     }
 
     private IEnumerator DoVolumeUp()
@@ -273,6 +278,7 @@ public class SceneLoader : MonoBehaviour
             GameManager.Instance.masterVolume += Time.deltaTime  / 2f;
             yield return null;
         }
+        yield return null;
     }
 
 }

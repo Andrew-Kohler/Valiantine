@@ -7,21 +7,31 @@ public class CreditsMenuController : MonoBehaviour
     float showTime = 4f;
     float showTimer = 0f;
 
-    float creditsTime = 20f;
+    float creditsTime = 120f;
     float creditsTimer;
 
     [SerializeField] FadeUI button;
+    [SerializeField] AudioSource jukebox;
+    [SerializeField] AudioClip lastDraw;
 
     bool showing = false;
     void Start()
     {
         creditsTimer = creditsTime;
+        jukebox.PlayOneShot(lastDraw, GameManager.Instance.masterVolume);
     }
 
     // Update is called once per frame
     void Update()
     {
+        jukebox.volume = GameManager.Instance.masterVolume * GameManager.Instance.musicVolume;
         creditsTimer -= Time.deltaTime;
+
+        if(creditsTimer < creditsTime - 1.5f && !jukebox.isPlaying)
+        {
+            jukebox.Play();
+        }
+
         if(creditsTimer > 0)
         {
             if (showTimer > 0)

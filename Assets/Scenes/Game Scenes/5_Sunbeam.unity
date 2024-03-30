@@ -3002,6 +3002,7 @@ GameObject:
   - component: {fileID: 1946679760}
   - component: {fileID: 1946679759}
   - component: {fileID: 1946679762}
+  - component: {fileID: 1946679763}
   m_Layer: 0
   m_Name: Dead Body
   m_TagString: Untagged
@@ -3087,6 +3088,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 6.145584, y: 0.0000025527145, z: 1.603123}
   m_Center: {x: 1.4587978, y: 0.000009493413, z: 4.1984363}
+--- !u!114 &1946679763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1946679757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8103c57ae4230ae4dbe42009359eb043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 0}
+  axis: 0
+  rowProperty: _CurrRow
+  colProperty: _CurrCol
 --- !u!1 &1999029062
 GameObject:
   m_ObjectHideFlags: 0
