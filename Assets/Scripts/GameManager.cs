@@ -115,7 +115,15 @@ public class GameManager : MonoBehaviour
         public bool[] openedGates;  // Every gate has an index; it checks this list to see if it's been opened
         public bool towerFallen = false;    // Whether towerfall has occurred
         public bool bossDefeated = false;   // Boss doesn't respawn
-        
+        public bool tutorialText = true;
+
+        public float entityVolume = 1;
+        public float environmentVolume = 1;
+        public float musicVolume = 1;
+        public float uiVolume = 1;
+        public float masterVolume = 1;
+
+
         public SavedPlayerStats PlayerStats;             // The inventory, stats, and gems of the player
         public SavedInventoryContents InventoryHolder;
         public SavedGems GemSystem;
@@ -190,6 +198,13 @@ public class GameManager : MonoBehaviour
             string json = File.ReadAllText(path);
             saveData = JsonUtility.FromJson<SaveData>(json);
             bossDefeated = saveData.bossDefeated;
+            tutorialText = saveData.tutorialText;
+            this.entityVolume = saveData.entityVolume;
+            this.environmentVolume = saveData.environmentVolume;
+            this.musicVolume = saveData.musicVolume;
+            this.uiVolume = saveData.uiVolume;
+            this.masterVolume = saveData.masterVolume;
+
         }
         else // default save file configuration
         {
@@ -255,7 +270,8 @@ public class GameManager : MonoBehaviour
     { 
         bool former = _isInteraction;
         _isInteraction = flag;
-        GameObject.Find("Player Sprite").GetComponent<PlayerAnimatorS>().standStill = !GameObject.Find("Player Sprite").GetComponent<PlayerAnimatorS>().standStill;
+        GameObject.Find("Player Sprite").GetComponent<PlayerAnimatorS>().standStill = flag;
+       
         if (_isInteraction == true)  // Start the interaction
         {
             currentInteractable.GetComponent<Interactable>().Interact();
@@ -275,6 +291,10 @@ public class GameManager : MonoBehaviour
         if (currentInteractable.CompareTag("Plaque") && flag != former)
         {
             onPlaqueStateChange?.Invoke();
+        }
+        if (currentInteractable.CompareTag("Rubble") && flag != former)
+        {
+            onRubbleStateChange?.Invoke();
         }
         if (currentInteractable.CompareTag("Save Point") && flag != former)
         {
@@ -391,8 +411,15 @@ public class GameManager : MonoBehaviour
         saveData.bossDefeated = this.bossDefeated;
         saveData.openedChests = this.openedChests;
         saveData.openedGates = this.openedGates;
+        saveData.tutorialText = this.tutorialText;
 
-        // Writing in player stats
+        saveData.entityVolume = this.entityVolume;
+        saveData.environmentVolume = this.environmentVolume;
+        saveData.musicVolume = this.musicVolume;
+        saveData.uiVolume = this.uiVolume;
+        saveData.masterVolume = this.masterVolume;
+
+    // Writing in player stats
         PlayerStats stats = PlayerManager.Instance.PlayerStats();
         savedPlayerStats.HP = stats.GetHP();
 
@@ -460,7 +487,15 @@ public class GameManager : MonoBehaviour
         bossDefeated = saveData.bossDefeated;
         openedChests = saveData.openedChests;
         openedGates = saveData.openedGates;
-        
+
+        this.tutorialText = saveData.tutorialText;
+
+        this.entityVolume = saveData.entityVolume;
+        this.environmentVolume =saveData.environmentVolume;
+        this.musicVolume = saveData.musicVolume;
+        this.uiVolume = saveData.uiVolume;
+        this.masterVolume = saveData.masterVolume;
+
         // Read in player stats, inventory contents, and gems
         SceneLoader.Instance.SetCurrentPlayerData(saveData.PlayerStats, saveData.InventoryHolder, saveData.GemSystem);
 

@@ -17,11 +17,14 @@ public class SkullmetAnimatorS : EnemyAnimatorS
     private int _BattleEnterIndex = 1;
     private int _IdleIndex = 0;
 
+    private bool walkSound;
+
     void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
         skullmetMovement = GetComponentInParent<SkullmetMovement>();
         rb = GetComponentInParent<Rigidbody>();
+        audioS = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -114,8 +117,12 @@ public class SkullmetAnimatorS : EnemyAnimatorS
                     animationSpeed = _NormalAnimationSpeed;
                 }
 
-
-                if(frame == 0 || frame == 5)
+                if ((frame == 5) && !walkSound)
+                {
+                    walkSound = true;
+                    playFootstep();
+                }
+                if (frame == 0 || frame == 5)
                 {
                     skullmetMovement.MovementToggle(false);
                 }
@@ -129,6 +136,7 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             if (frame >= frameLoop)
             {
                 deltaT = 0;
+                walkSound = false;
                 frame = frameReset;
             }
             meshRenderer.material.SetFloat(clipKey, animationIndex);
@@ -136,6 +144,35 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         }
     }
 
+    private void playFootstep()
+    {
+        int rand = Random.Range(0, 2);
+        audioS.Stop();
+        if(rand == 0)
+            audioS.PlayOneShot(sounds[0], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+        else
+            audioS.PlayOneShot(sounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+    }
+
+    private void playHurt()
+    {
+        int rand = Random.Range(0, 2);
+        audioS.Stop();
+        if (rand == 0)
+            audioS.PlayOneShot(sounds[2], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+        else
+            audioS.PlayOneShot(sounds[3], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+    }
+
+    private void playBone()
+    {
+        int rand = Random.Range(0, 2);
+        audioS.Stop();
+        if (rand == 0)
+            audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+        else
+            audioS.PlayOneShot(sounds[5], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+    }
     // Coroutines -------------------------------------------------------
 
     // Entering the battle
@@ -158,7 +195,7 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             frameKey = rowProperty;
         }
         float yStop = gameObject.GetComponentInParent<Transform>().position.y;
-
+        animationSpeed = _NormalAnimationSpeed * 1.3f;
         // Physical component (which angle the Skullmet jumps back at)
         if (playerFromLeft) // If the player came from the left
         {
@@ -208,6 +245,18 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         deltaT = 0;
         rb.velocity = new Vector3(0f, 0f, 0f);
 
+        frame = 5;
+        deltaT = 0;
+        playFootstep();
+        while (frame < frameLoop)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 5 + (int)(deltaT * (1.1f * animationSpeed));
+            yield return null;
+        }
+
         activeCoroutine = false;
         yield return null;
     }
@@ -218,6 +267,7 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         // Startup stuff
         activeCoroutine = true;
         deltaT = 0;
+        bool fall = false;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
         {
@@ -244,8 +294,14 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         skullmetMovement.enabled = true;
 
         int frame = 0;
+        walkSound = false;
         while (!skullmetMovement.arrived)                       // Wait until the skullmet gets where it is going
         {
+            if ((frame == 5) && !walkSound)
+            {
+                walkSound = true;
+                playFootstep();
+            }
             if (frame == 0 || frame == 5)
             {
                 skullmetMovement.BattleMovementToggle(false);
@@ -261,6 +317,7 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             {
                 deltaT = 0;
                 frame = frameReset;
+                walkSound = false;
             }
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
@@ -285,9 +342,15 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
-            if(frame == 4)
+            if(frame == 4 && !dealDamage)
             {
                 dealDamage = true;
+                playBone();
+            }
+            if(frame == 7 && !fall)
+            {
+                fall = true;
+                playFootstep();
             }
             yield return null;
         }      
@@ -300,8 +363,14 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         skullmetMovement.MoveToPoint(skullmetMovement.GetBattleIdlePosition(), .1f);
 
         frame = 0;
+        walkSound = false;
         while (!skullmetMovement.arrived)                       // Wait until the skullmet gets where it is going
         {
+            if ((frame == 5) && !walkSound)
+            {
+                walkSound = true;
+                playFootstep();
+            }
             if (frame == 0 || frame == 5)
             {
                 skullmetMovement.BattleMovementToggle(false);
@@ -317,6 +386,7 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             {
                 deltaT = 0;
                 frame = frameReset;
+                walkSound = false;
             }
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
@@ -340,6 +410,7 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         // Startup stuff
         activeCoroutine = true;
         deltaT = 0;
+        bool fall = false;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
         {
@@ -366,8 +437,14 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         skullmetMovement.enabled = true;
 
         int frame = 0;
+        walkSound = false; 
         while (!skullmetMovement.arrived)                       // Wait until the skullmet gets where it is going
         {
+            if ((frame == 5) && !walkSound)
+            {
+                walkSound = true;
+                playFootstep();
+            }
             if (frame == 0 || frame == 5)
             {
                 skullmetMovement.BattleMovementToggle(false);
@@ -383,6 +460,7 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             {
                 deltaT = 0;
                 frame = frameReset;
+                walkSound = false;
             }
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
@@ -407,17 +485,24 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
-            if (frame == 4)
+            if (frame == 4 && !dealDamage)
             {
                 dealDamage = true;
+                playBone();
             }
             if(frame == 6)
             {
                 dealDamage = false;
             }
+            if (frame == 7 && !fall)
+            {
+                fall = true;
+                playFootstep();
+            }
             yield return null;
         }
 
+        fall = false;
         frame = 0;                 
         deltaT = 0;
         while (frame < frameLoop)
@@ -426,9 +511,15 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
-            if (frame == 4)
+            if (frame == 4 && !dealDamage)
             {
+                playBone();
                 dealDamage = true;
+            }
+            if (frame == 7 && !fall)
+            {
+                fall = true;
+                playFootstep();
             }
             yield return null;
         }
@@ -441,8 +532,14 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         skullmetMovement.MoveToPoint(skullmetMovement.GetBattleIdlePosition(), .1f);
 
         frame = 0;
+        walkSound = false;
         while (!skullmetMovement.arrived)                       // Wait until the skullmet gets where it is going
         {
+            if ((frame == 5) && !walkSound)
+            {
+                walkSound = true;
+                playFootstep();
+            }
             if (frame == 0 || frame == 5)
             {
                 skullmetMovement.BattleMovementToggle(false);
@@ -458,12 +555,13 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             {
                 deltaT = 0;
                 frame = frameReset;
+                walkSound = false;
             }
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             yield return null;
         }
-
+        walkSound = false;
         skullmetMovement.BattleMovementToggle(false);                       // Once we arrive, stop forward motion
         skullmetMovement.arrived = false;
         rb.velocity = new Vector3(0f, 0f, 0f);
@@ -507,8 +605,14 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         skullmetMovement.enabled = true;
 
         int frame = 0;
+        walkSound = false;
         while (!skullmetMovement.arrived)                       // Wait until the skullmet gets where it is going
         {
+            if ((frame == 5) && !walkSound)
+            {
+                walkSound = true;
+                playFootstep();
+            }
             if (frame == 0 || frame == 5)
             {
                 skullmetMovement.BattleMovementToggle(false);
@@ -524,6 +628,7 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             {
                 deltaT = 0;
                 frame = frameReset;
+                walkSound = false;
             }
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
@@ -548,9 +653,15 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
-            if (frame == 5)
+            if (frame == 5 && !dealDamage)
             {
                 dealDamage = true;
+                playFootstep();
+            }
+            if (frame == 11 && dealDamage)
+            {
+                dealDamage = false;
+                playFootstep();
             }
             yield return null;
         }
@@ -563,8 +674,14 @@ public class SkullmetAnimatorS : EnemyAnimatorS
         skullmetMovement.MoveToPoint(skullmetMovement.GetBattleIdlePosition(), .1f);
 
         frame = 0;
+        walkSound = false;
         while (!skullmetMovement.arrived)                       // Wait until the skullmet gets where it is going
         {
+            if ((frame == 5) && !walkSound)
+            {
+                walkSound = true;
+                playFootstep();
+            }
             if (frame == 0 || frame == 5)
             {
                 skullmetMovement.BattleMovementToggle(false);
@@ -580,6 +697,7 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             {
                 deltaT = 0;
                 frame = frameReset;
+                walkSound = false;
             }
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
@@ -626,6 +744,14 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if (frame == 5)
+            {
+                playFootstep();
+            }
+            if (frame == 11)
+            {
+                playFootstep();
+            }
             if (frame == 12)
             {
                 dealDamage = true;
@@ -642,6 +768,8 @@ public class SkullmetAnimatorS : EnemyAnimatorS
     {
         // Startup stuff
         activeCoroutine = true;
+        bool playHurt2 = false;
+        bool playHurt3 = false;
         animationIndex = _HurtIndex; 
         frameLoop = 10;
         deltaT = 0;
@@ -659,12 +787,23 @@ public class SkullmetAnimatorS : EnemyAnimatorS
 
         int frame = 0;                  
         deltaT = 0;
+        playHurt();
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if(frame == 3 && !playHurt2)
+            {
+                playHurt();
+                playHurt2 = true;
+            }
+            if (frame == 7 && !playHurt3)
+            {
+                playFootstep();
+                playHurt3 = false;
+            }
             yield return null;
         }
 
@@ -694,12 +833,28 @@ public class SkullmetAnimatorS : EnemyAnimatorS
 
         int frame = 0;
         deltaT = 0;
+        playHurt();
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if (frame == 3)
+            {
+                playFootstep();
+
+            }
+            if (frame == 7)
+            {
+                playBone();
+                
+            }
+            if (frame == 9)
+            {
+                playBone();
+
+            }
             yield return null;
         }
 
@@ -733,8 +888,19 @@ public class SkullmetAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = 11 - (int)(deltaT * (animationSpeed));
+            if (frame == 3)
+            {
+                playBone();
+
+            }
+            if (frame == 7)
+            {
+                playBone();
+
+            }
             yield return null;
         }
+        playFootstep();
 
         frameLoop = 13;
         animationSpeed = _NormalAnimationSpeed;

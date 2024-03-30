@@ -6,6 +6,7 @@ public class EnvAudioNode : MonoBehaviour
 {
     // Start is called before the first frame update
     AudioSource audioS;
+    public float multiplier = 1f;
     void Start()
     {
      audioS = GetComponent<AudioSource>();   
@@ -14,7 +15,6 @@ public class EnvAudioNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.Instance.isTransition())
-            audioS.volume = GameManager.Instance.environmentVolume * GameManager.Instance.masterVolume;
+       audioS.volume = GameManager.Instance.environmentVolume * GameManager.Instance.masterVolume * multiplier;
     }
 }

@@ -23,6 +23,11 @@ public class EnemyAnimatorS : MonoBehaviour
     public bool activeCoroutine = false;    // The classic boolean to use when Update() needs to be quiet during a coroutine
     public bool dealDamage = false;         // A boolean flipped on and off to indicate when in the animation damage should be dealt to the player to keep things lined up
 
+    [SerializeField] protected List<AudioClip> sounds;
+    protected AudioSource audioS;
+
+    protected float volume;
+
     // Public methods ---------------------------------------------------------
     public void PlayBattleEntrance(int position, bool playerFromLeft)        // Position docs:   5 = Furthest back (3 enemy battle)
     {                                                                   //  4 = Less far back (2 enemy battle)

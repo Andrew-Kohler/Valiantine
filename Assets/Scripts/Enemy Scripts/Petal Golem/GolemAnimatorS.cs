@@ -27,6 +27,8 @@ public class GolemAnimatorS : EnemyAnimatorS
     private int _WalkForwardsIndex = 2;
     private int _WalkLIndex = 1;
     private int _WalkRIndex = 0;
+    private bool step1;
+    private bool step2;
 
     private int frame;
 
@@ -47,6 +49,7 @@ public class GolemAnimatorS : EnemyAnimatorS
         golemMovement = GetComponentInParent<GolemMovement>();
         golemMoves = GetComponentInParent<GolemMoves>();
         rb = GetComponentInParent<Rigidbody>();
+        audioS = GetComponent<AudioSource>();  
 
         frontFootPos = new Vector3(0, footFrontYOffset, 0);
         midFootPos = Vector3.zero;
@@ -233,10 +236,27 @@ public class GolemAnimatorS : EnemyAnimatorS
             }
 
             deltaT += Time.deltaTime;
+            if(!GameManager.Instance.isBattle() && golemMovement.LurchingAround)
+            {
+                if (frame == 1 && !step1)
+                {
+                    step1 = true;
+                    audioS.PlayOneShot(sounds[0], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+                }
+                if (frame == 5 && !step2)
+                {
+                    step2 = true;
+                    audioS.PlayOneShot(sounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+                }
+            }
+            
             if (frame >= frameLoop)
             {
                 deltaT = 0;
                 frame = frameReset;
+                step1 = false;
+                step2 = false;
+
             }
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
@@ -341,6 +361,7 @@ public class GolemAnimatorS : EnemyAnimatorS
         // How is that even possible
 
         // Play the landing animation
+        audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
@@ -360,6 +381,7 @@ public class GolemAnimatorS : EnemyAnimatorS
     {
         // Setup ----------------------------------------------
         activeCoroutine = true;
+        bool animBool = false;
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
@@ -388,11 +410,15 @@ public class GolemAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
-            
+            if (frame == 4 && animBool == false)
+            {
+                animBool = true;
+                audioS.PlayOneShot(sounds[7], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
 
-
+        audioS.PlayOneShot(sounds[7], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         meshRenderer.material.SetFloat(frameKey, 10);
         rock = Instantiate(throwableFoot, GetComponentInParent<Transform>(), true);
             damager = rock.GetComponent<ThrowableFoot>();
@@ -415,9 +441,19 @@ public class GolemAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = 10 + (int)(deltaT * (animationSpeed));
+            if (frame == 10 && animBool == true)
+            {
+                animBool = false;
+                audioS.PlayOneShot(sounds[0], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 12 && !animBool)
+            {
+                animBool = true;
+                audioS.PlayOneShot(sounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
-
+        audioS.PlayOneShot(sounds[0], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
 
         activeCoroutine = false;
         yield return null;
@@ -452,13 +488,33 @@ public class GolemAnimatorS : EnemyAnimatorS
             frameLoop = 24;
             deltaT = 0;
             frame = 0;
-
+            bool wake = false;
             while (frame < frameLoop)
             {
                 deltaT += Time.deltaTime;
                 meshRenderer.material.SetFloat(clipKey, animationIndex);
                 meshRenderer.material.SetFloat(frameKey, frame);
                 frame = (int)(deltaT * (animationSpeed));
+                if (!wake && frame == 7)
+                {
+                    wake = true;
+                    audioS.PlayOneShot(sounds[3], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+                }
+                if (wake && frame == 9)
+                {
+                    wake = false;
+                    audioS.PlayOneShot(sounds[2], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+                }
+                if (!wake && frame == 15)
+                {
+                    wake = true;
+                    audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+                }
+                if (wake && frame == 20)
+                {
+                    wake = false;
+                    audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+                }
                 yield return null;
             }
         }
@@ -467,6 +523,7 @@ public class GolemAnimatorS : EnemyAnimatorS
             golemMoves.asleep = true;
             animationIndex = _SitIndex;
             frameLoop = 9;
+            bool sit = false;
 
             deltaT = 0;
             frame = 0;
@@ -476,6 +533,16 @@ public class GolemAnimatorS : EnemyAnimatorS
                 meshRenderer.material.SetFloat(clipKey, animationIndex);
                 meshRenderer.material.SetFloat(frameKey, frame);
                 frame = (int)(deltaT * (animationSpeed));
+                if (!sit && frame == 2)
+                {
+                    sit = true;
+                    audioS.PlayOneShot(sounds[2], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+                }
+                if (sit && frame == 6)
+                {
+                    sit = false;
+                    audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+                }
                 yield return null;
             }
         }
@@ -489,6 +556,9 @@ public class GolemAnimatorS : EnemyAnimatorS
         // Setup ----------------------------------------------
         activeCoroutine = true;
         deltaT = 0;
+        bool sit = false;
+        bool wake = false;
+        bool up = false;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
         {
@@ -514,6 +584,16 @@ public class GolemAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if(!sit && frame == 2)
+            {
+                sit = true;
+                audioS.PlayOneShot(sounds[2], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (sit && frame == 6)
+            {
+                sit = false;
+                audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
 
@@ -528,6 +608,7 @@ public class GolemAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            
             yield return null;
         }
 
@@ -542,6 +623,26 @@ public class GolemAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if (!wake && frame == 7)
+            {
+                wake = true;
+                audioS.PlayOneShot(sounds[3], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (wake && frame == 9)
+            {
+                wake = false;
+                audioS.PlayOneShot(sounds[2], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (!wake && frame == 15)
+            {
+                wake = true;
+                audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (!up && frame == 20)
+            {
+                up = true;
+                audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
         activeCoroutine = false;
@@ -553,6 +654,7 @@ public class GolemAnimatorS : EnemyAnimatorS
     {
         // Setup ----------------------------------------------
         activeCoroutine = true;
+        bool hop = false;
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
@@ -578,10 +680,16 @@ public class GolemAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if(frame == 4 && !hop)
+            {
+                hop = true;
+                audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
 
         frame = 0;
+        hop = false;
         deltaT = 0;
         while (frame < frameLoop)
         {
@@ -589,6 +697,11 @@ public class GolemAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if (frame == 4 && !hop)
+            {
+                hop = true;
+                audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
 
@@ -620,6 +733,7 @@ public class GolemAnimatorS : EnemyAnimatorS
         // Content ----------------------------------------------
         // Play the animation
         frame = 0;
+        audioS.PlayOneShot(sounds[3], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
@@ -640,6 +754,7 @@ public class GolemAnimatorS : EnemyAnimatorS
         activeCoroutine = true;
         deltaT = 0;
         string clipKey, frameKey;
+        bool fall = false;
         if (axis == AnimationAxis.Rows)
         {
             clipKey = rowProperty;
@@ -657,15 +772,71 @@ public class GolemAnimatorS : EnemyAnimatorS
         // Content ----------------------------------------------
         // Play the animation
         frame = 0;
+        audioS.PlayOneShot(sounds[5], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if(frame == 7 &!fall)
+            {
+                fall = true;
+                audioS.PlayOneShot(sounds[3], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 10 & fall)
+            {
+                fall = false;
+                audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
 
+        yield return null;
+    }
+
+    protected override IEnumerator DoDieReverseAnim()
+    {
+        // Startup stuff
+        activeCoroutine = true;
+        animationIndex = _DieIndex; // The main thing in all of this startup is changing the animation index and frame data
+        frameLoop = 24;
+        deltaT = 0;
+        bool heal = false;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+
+        int frame = 23;
+        deltaT = 0;
+        animationSpeed = _NormalAnimationSpeed * 2;
+        while (frame >= 0)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 23 - (int)(deltaT * (animationSpeed));
+            if (frame == 6 && !heal)
+            {
+                heal = true;
+                audioS.PlayOneShot(sounds[3], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            yield return null;
+        }
+
+
+        frameLoop = 8;
+        animationSpeed = _NormalAnimationSpeed;
+        animationIndex = _IdleRIndex;
+        activeCoroutine = false;
         yield return null;
     }
 }

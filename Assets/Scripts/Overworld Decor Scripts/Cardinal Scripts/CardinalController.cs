@@ -78,7 +78,7 @@ public class CardinalController : MonoBehaviour
             rb.velocity = new Vector3(-xHopVelocity, yHopVelocity, 0f);
         }
         dir = Random.Range(0, 3);
-        audioS.PlayOneShot(sounds[(int)dir], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+        audioS.PlayOneShot(sounds[(int)dir], GameManager.Instance.environmentVolume * GameManager.Instance.masterVolume);
 
         yield return new WaitForSeconds(.5f);
         rb.velocity = new Vector3(0f, 0f, 0f);
@@ -105,7 +105,7 @@ public class CardinalController : MonoBehaviour
 
         float count = flightTime / .05f;
         yFlightVelocity = 1.2f;
-        audioS.PlayOneShot(sounds[3], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+        audioS.PlayOneShot(sounds[3], GameManager.Instance.environmentVolume * GameManager.Instance.masterVolume);
         while (count > 0) // Flies the cardinal away until it's out of camera view and good to de-load
         {
             rb.velocity = new Vector3(xFlightVelocity * signF, yFlightVelocity, 0f);

@@ -24,11 +24,14 @@ public class LoverAnimatorS : EnemyAnimatorS
     private int _WalkLIndex = 1;
     private int _WalkRIndex = 0;
 
+    private bool stepNoise = false;
+
     void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
         loverMovement = GetComponentInParent<LoverMovement>();
         rb = GetComponentInParent<Rigidbody>();
+        audioS = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -157,6 +160,17 @@ public class LoverAnimatorS : EnemyAnimatorS
                     {
                         loverMovement.MovementToggle(false);
                     }
+                    if(frame == 2 && !stepNoise)
+                    {
+                        stepNoise = true;
+                        audioS.PlayOneShot(sounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+                    }
+
+                    if (frame == 4 && stepNoise)
+                    {
+                        stepNoise = false;
+                        audioS.PlayOneShot(sounds[0], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+                    }
                 }
                 
             }
@@ -256,6 +270,7 @@ public class LoverAnimatorS : EnemyAnimatorS
         rb.velocity = new Vector3(0f, 0f, 0f);
 
         // Play the landing animation
+        audioS.PlayOneShot(sounds[6], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
@@ -275,6 +290,7 @@ public class LoverAnimatorS : EnemyAnimatorS
     {
         // Setup ----------------------------------------------
         activeCoroutine = true;
+        bool animB = false;
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
@@ -293,6 +309,7 @@ public class LoverAnimatorS : EnemyAnimatorS
 
         // Content ----------------------------------------------
         // Play the animation
+        audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         int frame = 0;
         while (frame < 10)
         {
@@ -300,6 +317,12 @@ public class LoverAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if(frame == 4 && !animB)
+            {
+                animB = true;
+                audioS.PlayOneShot(sounds[6], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            
             yield return null;
         }
 
@@ -312,6 +335,7 @@ public class LoverAnimatorS : EnemyAnimatorS
         yield return new WaitForSeconds(.3f);
 
         deltaT = 0;
+        audioS.PlayOneShot(sounds[5], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
@@ -330,6 +354,7 @@ public class LoverAnimatorS : EnemyAnimatorS
     {
         // Setup ----------------------------------------------
         activeCoroutine = true;
+        bool animB = false;
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
@@ -355,6 +380,27 @@ public class LoverAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if(frame == 3 && !animB)
+            {
+                animB = true;
+                audioS.PlayOneShot(sounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 5 && animB)
+            {
+                animB = false;
+                audioS.PlayOneShot(sounds[8], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 9 && !animB)
+            {
+                animB = true;
+                audioS.Stop();
+                audioS.PlayOneShot(sounds[9], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 12 && animB)
+            {
+                animB = false;
+                audioS.PlayOneShot(sounds[7], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
 
@@ -367,6 +413,16 @@ public class LoverAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = 13 + (int)(deltaT * (animationSpeed));
+            if (frame == 17 && !animB)
+            {
+                animB = true;
+                audioS.PlayOneShot(sounds[5], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 20 && animB)
+            {
+                animB = false;
+                audioS.PlayOneShot(sounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
 
@@ -379,6 +435,7 @@ public class LoverAnimatorS : EnemyAnimatorS
     {
         // Setup ----------------------------------------------
         activeCoroutine = true;
+        bool animB = false;
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
@@ -397,6 +454,7 @@ public class LoverAnimatorS : EnemyAnimatorS
 
         // Content ----------------------------------------------
         // Play the animation
+        audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         int frame = 0;
         while (frame < 10)
         {
@@ -404,6 +462,12 @@ public class LoverAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if (frame == 4 && !animB)
+            {
+                animB = true;
+                audioS.PlayOneShot(sounds[6], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+
             yield return null;
         }
 
@@ -416,6 +480,7 @@ public class LoverAnimatorS : EnemyAnimatorS
         yield return new WaitForSeconds(.3f);
 
         deltaT = 0;
+        audioS.PlayOneShot(sounds[5], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
@@ -434,6 +499,7 @@ public class LoverAnimatorS : EnemyAnimatorS
     {
         // Setup ----------------------------------------------
         activeCoroutine = true;
+        bool animB = false;
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
@@ -459,6 +525,27 @@ public class LoverAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if (frame == 3 && !animB)
+            {
+                animB = true;
+                audioS.PlayOneShot(sounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 5 && animB)
+            {
+                animB = false;
+                audioS.PlayOneShot(sounds[8], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 9 && !animB)
+            {
+                animB = true;
+                audioS.Stop();
+                audioS.PlayOneShot(sounds[9], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 12 && animB)
+            {
+                animB = false;
+                audioS.PlayOneShot(sounds[7], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
 
@@ -471,6 +558,16 @@ public class LoverAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = 13 + (int)(deltaT * (animationSpeed));
+            if (frame == 17 && !animB)
+            {
+                animB = true;
+                audioS.PlayOneShot(sounds[5], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 20 && animB)
+            {
+                animB = false;
+                audioS.PlayOneShot(sounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
 
@@ -483,6 +580,7 @@ public class LoverAnimatorS : EnemyAnimatorS
     {
         // Setup ----------------------------------------------
         activeCoroutine = true;
+        bool anim = false;
         deltaT = 0;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
@@ -502,12 +600,28 @@ public class LoverAnimatorS : EnemyAnimatorS
         // Content ----------------------------------------------
         // Play the animation
         int frame = 0;
+        audioS.PlayOneShot(sounds[2], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         while (frame < frameLoop)
         {
             deltaT += Time.deltaTime;
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if(frame == 3 && !anim)
+            {
+                anim = true;
+                audioS.PlayOneShot(sounds[3], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if(frame == 7 && anim)
+            {
+                anim = false;
+                audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if(frame == 13 && !anim)
+            {
+                anim = true;
+                audioS.PlayOneShot(sounds[5], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
 
@@ -520,6 +634,7 @@ public class LoverAnimatorS : EnemyAnimatorS
         // Setup ----------------------------------------------
         activeCoroutine = true;
         deltaT = 0;
+        bool animB = false;
         string clipKey, frameKey;
         if (axis == AnimationAxis.Rows)
         {
@@ -537,6 +652,7 @@ public class LoverAnimatorS : EnemyAnimatorS
 
         // Content ----------------------------------------------
         // Play the animation
+        audioS.PlayOneShot(sounds[2], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         int frame = 0;
         while (frame < frameLoop)
         {
@@ -544,9 +660,79 @@ public class LoverAnimatorS : EnemyAnimatorS
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
             frame = (int)(deltaT * (animationSpeed));
+            if(frame == 2 && !animB)
+            {
+                animB = true;
+                audioS.PlayOneShot(sounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 6 && animB)
+            {
+                animB = false;
+                audioS.PlayOneShot(sounds[10], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 16 && !animB) // Body drop 1
+            {
+                animB = true;
+                audioS.PlayOneShot(sounds[12], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if (frame == 23 && animB) // Body drop 2
+            {
+                animB = false;
+                audioS.PlayOneShot(sounds[11], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
             yield return null;
         }
 
+        yield return null;
+    }
+
+    protected override IEnumerator DoDieReverseAnim()
+    {
+        // Startup stuff
+        activeCoroutine = true;
+        animationIndex = _DieIndex; // The main thing in all of this startup is changing the animation index and frame data
+        frameLoop = 26;
+        deltaT = 0;
+        bool heal = false;
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+
+        int frame = 25;
+        deltaT = 0;
+        animationSpeed = _NormalAnimationSpeed * 1.2f;
+        while (frame >= 0)
+        {
+            deltaT += Time.deltaTime;
+            meshRenderer.material.SetFloat(clipKey, animationIndex);
+            meshRenderer.material.SetFloat(frameKey, frame);
+            frame = 25 - (int)(deltaT * (animationSpeed));
+            if (frame == 10 && !heal)
+            {
+                heal = true;
+                audioS.PlayOneShot(sounds[4], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            if(frame == 1 && heal)
+            {
+                heal = false;
+                audioS.PlayOneShot(sounds[1], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            }
+            yield return null;
+        }
+
+
+        frameLoop = 8;
+        animationSpeed = _NormalAnimationSpeed;
+        animationIndex = _IdleRIndex;
+        activeCoroutine = false;
         yield return null;
     }
 }

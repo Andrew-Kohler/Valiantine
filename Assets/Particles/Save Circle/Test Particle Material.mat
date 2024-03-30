@@ -35,9 +35,9 @@ Material:
   stringTagMap:
     RenderType: Transparent
   disabledShaderPasses:
+  - ALWAYS
   - DepthOnly
   - SHADOWCASTER
-  - ALWAYS
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:

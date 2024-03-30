@@ -311,7 +311,6 @@ public class CameraControl : MonoBehaviour
 
     private void SetCamHereStands()
     {
-        Debug.Log("Aw yeah");
         StopAllCoroutines();
         if (GameManager.Instance.isInteraction())
         {

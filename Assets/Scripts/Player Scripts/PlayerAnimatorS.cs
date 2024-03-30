@@ -17,10 +17,16 @@ public class PlayerAnimatorS : MonoBehaviour
     [SerializeField] private int animationIndex = 0;
     [SerializeField] private List<AudioClip> playerSounds;
 
+    private bool faceAwayBool;
+    private bool faceDirBool;
+
+    public int walkType = 0;    // 0 = stone, 1 = earth, 2 = wood, 3 = water
+
     private float deltaT;
     float horizontalInput;
     float verticalInput;
     int direction;
+    
 
     private int frame;
     private int frameLoop = 0;  // A value to hold the number of the frame that the current animation loops on (e.g. after frame 13, loop it)
@@ -67,11 +73,13 @@ public class PlayerAnimatorS : MonoBehaviour
     // All of the event controls that trigger special animations
     private void OnEnable()
     {
-        GameManager.onSaveStatueStateChange += faceAway;
-        GameManager.onGateStateChange += faceAway;
-        ChestInteractable.onChestInteract += faceAway;
+        GameManager.onSaveStatueStateChange += faceAwayToggle;
+        GameManager.onGateStateChange += faceAwayToggle;
+        GameManager.onPlaqueStateChange += faceAwayToggle;
+        GameManager.onRubbleStateChange += faceDirToggle;
+        ChestInteractable.onChestInteract += faceAwayToggle;
         ChestAnimatorS.onChestOpen += PlayItemGet1;
-        GateInteractable.onCastleInteract += faceAway;
+        GateInteractable.onCastleInteract += faceAwayToggle;
 
         InGameUIView.onInteractionEnd += PlayItemGet2;
 
@@ -81,11 +89,13 @@ public class PlayerAnimatorS : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.onSaveStatueStateChange -= faceAway;
-        GameManager.onGateStateChange -= faceAway;
-        ChestInteractable.onChestInteract -= faceAway;
+        GameManager.onSaveStatueStateChange -= faceAwayToggle;
+        GameManager.onGateStateChange -= faceAwayToggle;
+        GameManager.onPlaqueStateChange -= faceAwayToggle;
+        GameManager.onRubbleStateChange -= faceDirToggle;
+        ChestInteractable.onChestInteract -= faceAwayToggle;
         ChestAnimatorS.onChestOpen -= PlayItemGet1;
-        GateInteractable.onCastleInteract -= faceAway;
+        GateInteractable.onCastleInteract -= faceAwayToggle;
 
         InGameUIView.onInteractionEnd -= PlayItemGet2;
 
@@ -105,21 +115,35 @@ public class PlayerAnimatorS : MonoBehaviour
 
     private void Update()
     {
-        horizontalInput = playerMovement.horizontalInput;
-        verticalInput = playerMovement.verticalInput;
+        if (!GameManager.Instance.isInteraction())
+        {
+            horizontalInput = playerMovement.horizontalInput;
+            verticalInput = playerMovement.verticalInput;
+
+        }
+        else
+        {
+            horizontalInput = 0;
+            verticalInput = 0;
+        }
 
         // The logic that determines what animation should be played 
         if (!GameManager.Instance.isSettings() && !activeCoroutine)
         {     
             if (GameManager.Instance.canMove()) // Logic for idle and walk cycles that occur during normal exploration
             {  
-                if (isMoving(horizontalInput, verticalInput)) // If we're walking
+                if (isMoving(horizontalInput, verticalInput) && !GameManager.Instance.isInteraction()) // If we're walking
                 {
                     idleTimer = timeToIdle;
                     setDirection(horizontalInput, verticalInput);
                     frameLoop = 8;
                     frameReset = 0;
-                    animationSpeed = 8f;
+
+                    if (walkType == 3)  // Water go slower
+                        animationSpeed = 4f;
+                    else
+                        animationSpeed = 8f;
+
                     if (direction == 0)
                     {
                         animationIndex = _WalkRIndex;
@@ -270,6 +294,18 @@ public class PlayerAnimatorS : MonoBehaviour
                 }
             }
 
+            else if (GameManager.Instance.isInteraction())
+            {
+                if (faceAwayBool)
+                {
+                    faceAway();
+                }
+                if (faceDirBool)
+                {
+                    faceDir();
+                }
+            }
+
             string clipKey, frameKey;
             if (axis == AnimationAxis.Rows)
             {
@@ -284,6 +320,27 @@ public class PlayerAnimatorS : MonoBehaviour
 
             // Animate
             frame = (int)(deltaT * animationSpeed);
+            if ((frame == 3) && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 3) && isMoving(horizontalInput, verticalInput))
+            {
+                playFootstep(frame);
+            }
+            if ((frame == 7) && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 7) && isMoving(horizontalInput, verticalInput))
+            {
+                playFootstep(frame);
+            }
+
+            if ((frame == 2) && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 2) && isMoving(horizontalInput, verticalInput))
+            {
+                playFootstep(frame);
+            }
+            if ((frame == 6) && ((int)((deltaT - Time.deltaTime) * animationSpeed) < 6) && isMoving(horizontalInput, verticalInput))
+            {
+                playFootstep(frame);
+            }
+            /*if (GameManager.Instance.isInteraction())
+            {
+                animationIndex = _ActiveIdleForwardsIndex;
+            }*/
 
             deltaT += Time.deltaTime;
             if (frame >= frameLoop)
@@ -291,6 +348,7 @@ public class PlayerAnimatorS : MonoBehaviour
                 deltaT = 0;
                 frame = frameReset;
             }
+            //Debug.Log(animationIndex + " " + _ActiveIdleForwardsIndex);
             meshRenderer.material.SetFloat(clipKey, animationIndex);
             meshRenderer.material.SetFloat(frameKey, frame);
         } // End of the settings / activeCoroutine lockout
@@ -419,6 +477,15 @@ public class PlayerAnimatorS : MonoBehaviour
         }
     }
 
+    private void faceAwayToggle()
+    {
+        faceAwayBool = !faceAwayBool;
+    }
+
+    private void faceDirToggle()
+    {
+        faceDirBool = !faceDirBool;
+    }
 
     private void faceAway() // Faces the player in their idle stance away from the camera
     {
@@ -431,6 +498,61 @@ public class PlayerAnimatorS : MonoBehaviour
         }
         
         //GameManager.onChestStateChange -= faceAway; // Prevents from turning back around on next state change; will probably change 
+    }
+
+    private void faceDir() // Faces the player in their idle stance wherever they were looking
+    {
+        if (!activeCoroutine)
+        {
+            if(direction == 0)
+                animationIndex = _ActiveIdleRIndex;
+            if(direction == 1)
+                animationIndex = _ActiveIdleLIndex;
+            if (direction == 2)
+                animationIndex = _ActiveIdleBackwardsIndex;
+            if (direction == 3)
+                animationIndex = _ActiveIdleForwardsIndex;
+            animationSpeed = 5.4f;
+            frameLoop = 5;
+        }
+
+        //GameManager.onChestStateChange -= faceAway; // Prevents from turning back around on next state change; will probably change 
+    }
+
+    private void playFootstep(int frame)
+    {
+        
+        if (walkType == 0) // Stone
+        {
+            audioSource.Stop();
+            if (frame == 3)
+                audioSource.PlayOneShot(playerSounds[15], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            if(frame == 7)
+                audioSource.PlayOneShot(playerSounds[16], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+        }
+        else if (walkType == 1) // Earth
+        {
+            audioSource.Stop();
+            if (frame == 3)
+                audioSource.PlayOneShot(playerSounds[19], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            if (frame == 7)
+                audioSource.PlayOneShot(playerSounds[20], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+        }
+        else if (walkType == 2) // Wood
+        {
+            audioSource.Stop();
+            if (frame == 3)
+                audioSource.PlayOneShot(playerSounds[21], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            if (frame == 7)
+                audioSource.PlayOneShot(playerSounds[22], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+        }
+        else // Water
+        {
+            if (frame == 2)
+                audioSource.PlayOneShot(playerSounds[17], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+            if (frame == 6)
+                audioSource.PlayOneShot(playerSounds[18], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+        }
     }
 
     // Coroutines ------------------------------------------------------------
@@ -484,7 +606,8 @@ public class PlayerAnimatorS : MonoBehaviour
         while(humTimer > 0 && !isMoving(horizontalInput, verticalInput))
         {
             humTimer -= Time.deltaTime;
-            yield return null;  
+            yield return null; 
+
         }
         audioSource.PlayOneShot(playerSounds[7], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         yield return new WaitUntil(()=>isMoving(horizontalInput, verticalInput));

@@ -5521,6 +5521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34a3dea3f368f024789aa48cae5d5224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementSpeed: 7
   horizontalInput: 0
   verticalInput: 0
   activeCoroutine: 0
@@ -11838,6 +11839,15 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b7dbee02732ca6d40a1fda6867c39cad, type: 3}
   - {fileID: 8300000, guid: 3b5aa295a79299442bc1d3855d5f74f1, type: 3}
   - {fileID: 8300000, guid: f1ab0dfe25e91a94c93762c4f418d892, type: 3}
+  - {fileID: 8300000, guid: 5c565e44a1532b14193ab109fa1a9a06, type: 3}
+  - {fileID: 8300000, guid: 754ee698e6951da479f423b9217b4d1e, type: 3}
+  - {fileID: 8300000, guid: d0a3dd5aa670a6846970045f88bf1ddf, type: 3}
+  - {fileID: 8300000, guid: e9dbd81651ebd934ca0492c39ec80dbd, type: 3}
+  - {fileID: 8300000, guid: 5196fac45a2c6af4ebf989c59ba38244, type: 3}
+  - {fileID: 8300000, guid: fd7008de32eb85d49b1e131df44645a6, type: 3}
+  - {fileID: 8300000, guid: a89c7a0f1bbe4de498e63b59d6cb9f11, type: 3}
+  - {fileID: 8300000, guid: cb7705471a03d5c47863ebb677bc276a, type: 3}
+  walkType: 0
   activeCoroutine: 0
   defeated: 0
   dealDamage: 0

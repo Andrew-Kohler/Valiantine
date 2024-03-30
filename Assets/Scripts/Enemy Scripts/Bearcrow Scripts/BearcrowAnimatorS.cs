@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class BearcrowAnimatorS : EnemyAnimatorS
 {
-    private BearcrowMovement skullmetMovement;
-    [SerializeField] private List<AudioClip> sounds;
-    private AudioSource audioS;
+    private BearcrowMovement bearMovement;
+    
 
     private int _SingleIndex = 0;
 
     void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
-        skullmetMovement = GetComponentInParent<BearcrowMovement>();
+        bearMovement = GetComponentInParent<BearcrowMovement>();
         rb = GetComponentInParent<Rigidbody>();
         audioS = GetComponent<AudioSource>();
     }

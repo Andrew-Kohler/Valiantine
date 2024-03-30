@@ -11,6 +11,7 @@ TagManager:
   - Save Point
   - Gate
   - Plaque
+  - Rubble
   layers:
   - Default
   - TransparentFX

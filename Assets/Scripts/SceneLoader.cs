@@ -18,6 +18,8 @@ public class SceneLoader : MonoBehaviour
     private string lastGate;
     private int loadCount = 0;
 
+    private float masterVolumeTemp;
+
     GameObject transitionPanel;
     FadeScene fade;
 
@@ -45,6 +47,8 @@ public class SceneLoader : MonoBehaviour
     public void OnEnterGateway(string gateName, string levelToLoad, bool lostWoods)
     {
         lastGate = gateName;
+        masterVolumeTemp = GameManager.Instance.masterVolume;
+        StartCoroutine(DoVolumeDown());
         GameManager.Instance.Transition(true);  // Informs the game manager we're in a transition state
 
         // Save all the player's stuff
@@ -95,6 +99,8 @@ public class SceneLoader : MonoBehaviour
 
     public void OnForcedTransition(string levelToLoad) // For when we need to load a scene WITHOUT caring about a player!
     {
+        masterVolumeTemp = GameManager.Instance.masterVolume;
+        StartCoroutine(DoVolumeDown());
         transitionPanel = GameObject.Find("Black Panel");   // Fade out to black before loading the next scene
         fade = transitionPanel.GetComponent<FadeScene>();
         fade.SceneFadeIn(levelToLoad);
@@ -102,8 +108,10 @@ public class SceneLoader : MonoBehaviour
 
     public void OnForcedPlayerTransition(string levelToLoad) // For when we need to care a little about a player
     {
+        masterVolumeTemp = GameManager.Instance.masterVolume;
+        StartCoroutine(DoVolumeDown());
         // Save all the player's stuff
-        if(levelToLoad != "23_MainMenu" && levelToLoad != "24_Credits")
+        if (levelToLoad != "23_MainMenu" && levelToLoad != "24_Credits")
         {
             playerS = PlayerManager.Instance.PlayerStats();
             playerI = PlayerManager.Instance.PlayerInventory();
@@ -144,7 +152,7 @@ public class SceneLoader : MonoBehaviour
         GameManager.Instance.Inventory(false);
         GameManager.Instance.Battle(false);
         GameManager.Instance.Settings(false);
-
+        StartCoroutine(DoVolumeUp());
         // We don't need to worry about resetting BattleManager because it isn't persistent between scenes
 
         if (SceneManager.GetActiveScene().name != "23_MainMenu" && SceneManager.GetActiveScene().name != "24_Credits" && SceneManager.GetActiveScene().name != "25_GameOver")
@@ -247,6 +255,24 @@ public class SceneLoader : MonoBehaviour
         fade = transitionPanel.GetComponent<FadeScene>();
         fade.SceneFadeOut();
         yield return null;
+    }
+
+    private IEnumerator DoVolumeDown()
+    {
+        while (GameManager.Instance.masterVolume > 0f)
+        {
+            GameManager.Instance.masterVolume -= Time.deltaTime  / 2f;
+            yield return null;
+        }
+    }
+
+    private IEnumerator DoVolumeUp()
+    {
+        while (GameManager.Instance.masterVolume < masterVolumeTemp)
+        {
+            GameManager.Instance.masterVolume += Time.deltaTime  / 2f;
+            yield return null;
+        }
     }
 
 }

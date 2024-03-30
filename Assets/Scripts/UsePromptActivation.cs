@@ -7,6 +7,8 @@ public class UsePromptActivation : MonoBehaviour
     [SerializeField] GameObject usePrompt;
     [SerializeField] GameObject interactable;
 
+    public bool attachedToInteractable = true;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -22,8 +24,12 @@ public class UsePromptActivation : MonoBehaviour
             }
             else
             {*/
+            if (attachedToInteractable)
+            {
                 interactable.GetComponent<Interactable>().possibleInteraction();
                 GameManager.Instance.CanInteract(true);
+            }
+                
                 usePrompt.GetComponent<UsePrompt>().FadeIn();
             //}
             
@@ -35,7 +41,11 @@ public class UsePromptActivation : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            GameManager.Instance.CanInteract(false);
+            if (attachedToInteractable)
+            {
+                GameManager.Instance.CanInteract(false);
+            }
+            
             usePrompt.GetComponent<UsePrompt>().FadeOut();
         }
 

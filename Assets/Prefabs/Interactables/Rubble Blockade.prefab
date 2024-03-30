@@ -112,6 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usePrompt: {fileID: 3318454440402789536}
   interactable: {fileID: 6340909151450171291}
+  attachedToInteractable: 1
 --- !u!1 &3318454439820395904
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,7 +468,7 @@ GameObject:
   - component: {fileID: 6340909151450171289}
   m_Layer: 0
   m_Name: Rubble Blockade
-  m_TagString: Untagged
+  m_TagString: Rubble
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -503,6 +504,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usePrompt: {fileID: 3318454440402789536}
+  singleLine: Rubble from collapsed ruins blocks the way. It looks like something
+    stronger than you could shake it loose.
 --- !u!1 &6340909152392765343
 GameObject:
   m_ObjectHideFlags: 0

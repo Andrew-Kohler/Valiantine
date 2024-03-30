@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class MainMenuButtonController : MonoBehaviour
@@ -12,8 +13,41 @@ public class MainMenuButtonController : MonoBehaviour
     [SerializeField] GameObject logo;
     [SerializeField] GameObject golem;
 
+    [SerializeField] private Toggle tutToggle;
+
+    [SerializeField] private Slider master;
+    [SerializeField] private Slider ui;
+    [SerializeField] private Slider music;
+    [SerializeField] private Slider environment;
+    [SerializeField] private Slider entity;
+
+    [SerializeField] private AudioSource jukebox;
+
+    private bool allValSet = false;
+
     [SerializeField] private List<AudioClip> sounds;
     private AudioSource audioS;
+
+    private void OnEnable()
+    {
+        if (tutToggle.isOn && !GameManager.Instance.tutorialText)
+        {
+            tutToggle.isOn = false;
+        }
+
+        master.value = GameManager.Instance.masterVolume * 10;
+        ui.value = GameManager.Instance.uiVolume * 10;
+        music.value = GameManager.Instance.musicVolume * 10;
+        entity.value = GameManager.Instance.entityVolume * 10;
+        environment.value = GameManager.Instance.environmentVolume * 10;
+
+        allValSet = true;
+    }
+
+    private void OnDisable()
+    {
+        allValSet = false;
+    }
 
     private void Start()
     {
@@ -31,9 +65,10 @@ public class MainMenuButtonController : MonoBehaviour
     }
     private void Update()
     {
-        
+        jukebox.volume = GameManager.Instance.masterVolume * GameManager.Instance.musicVolume;
     }
 
+    #region MAIN MENU NAVIGATION
     public void NewGame()
     {
         audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
@@ -100,6 +135,63 @@ public class MainMenuButtonController : MonoBehaviour
         audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
         camControl.CamToMain();
     }
+    #endregion
+
+    public void ToggleTutorial()
+    {
+        if ((tutToggle.isOn && !GameManager.Instance.tutorialText) || (!tutToggle.isOn && GameManager.Instance.tutorialText))
+        {
+            GameManager.Instance.tutorialText = !GameManager.Instance.tutorialText;
+        }
+    }
+
+    public void SetMasterVolume()
+    {
+        if (allValSet)
+        {
+            GameManager.Instance.masterVolume = master.value / 10f;
+
+            audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
+        }
+    }
+
+    public void SetUIVolume()
+    {
+        if (allValSet)
+        {
+            GameManager.Instance.uiVolume = ui.value / 10f;
+            audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
+        }
+
+    }
+    public void SetMusicVolume()
+    {
+        if (allValSet)
+        {
+            GameManager.Instance.musicVolume = music.value / 10f;
+
+            audioS.PlayOneShot(sounds[0], GameManager.Instance.musicVolume * GameManager.Instance.masterVolume);
+        }
+    }
+    public void SetEnvironmentVolume()
+    {
+        if (allValSet)
+        {
+            GameManager.Instance.environmentVolume = environment.value / 10f;
+
+            audioS.PlayOneShot(sounds[6], GameManager.Instance.environmentVolume * GameManager.Instance.masterVolume);
+        }
+    }
+
+    public void SetEntityVolume()
+    {
+        if (allValSet)
+        {
+            GameManager.Instance.entityVolume = entity.value / 10f;
+
+            audioS.PlayOneShot(sounds[7], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
+        }
+    }
 
     private IEnumerator LoadNewGame()
     {
@@ -124,10 +216,12 @@ public class MainMenuButtonController : MonoBehaviour
     private IEnumerator DoLogoIntro()
     {
         yield return new WaitForSeconds(.41f);
-        audioS.PlayOneShot(sounds[4], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
+        audioS.PlayOneShot(sounds[4], GameManager.Instance.masterVolume);
         yield return new WaitForSeconds(2.02f);
-        audioS.PlayOneShot(sounds[5], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
-        yield return new WaitForSeconds(10f);
+        audioS.PlayOneShot(sounds[5], GameManager.Instance.masterVolume);
+        yield return new WaitForSeconds(7f);
+        jukebox.Play();
+        yield return new WaitForSeconds(3f);
         Destroy(logo);
         yield return null;
     }

@@ -19,6 +19,14 @@ public class SettingsMenuView : View
 
     [SerializeField] private Toggle tutToggle;
 
+    [SerializeField] private Slider master;
+    [SerializeField] private Slider ui;
+    [SerializeField] private Slider music;
+    [SerializeField] private Slider environment;
+    [SerializeField] private Slider entity;
+
+    private bool allValSet = false;
+
     [SerializeField] private List<AudioClip> sounds;
     private AudioSource audioS;
 
@@ -50,6 +58,13 @@ public class SettingsMenuView : View
 
     private void OnEnable()
     {
+        master.value = GameManager.Instance.masterVolume * 10;
+        ui.value = GameManager.Instance.uiVolume * 10;
+        music.value = GameManager.Instance.musicVolume * 10;
+        entity.value = GameManager.Instance.entityVolume * 10;
+        environment.value = GameManager.Instance.environmentVolume * 10;
+
+        allValSet = true;
         regular.SetActive(true);
         quitConfirm.SetActive(false);
         loadConfirm.SetActive(false);
@@ -59,24 +74,25 @@ public class SettingsMenuView : View
         if (!initing && audioS != null)
         {
             audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
-            mVolStore = GameManager.Instance.musicVolume;
+            /*mVolStore = GameManager.Instance.musicVolume;
             eVolStore = GameManager.Instance.entityVolume;
             envVolStore = GameManager.Instance.environmentVolume;
 
             GameManager.Instance.musicVolume = .1f;
             GameManager.Instance.entityVolume = 0;
-            GameManager.Instance.environmentVolume = 0f;
+            GameManager.Instance.environmentVolume = 0f;*/
             store = true;
         }
     }
 
     private void OnDisable()
     {
+        allValSet = false;
         if (!initing && audioS != null && store)
         {
-            GameManager.Instance.musicVolume = mVolStore;
+            /*GameManager.Instance.musicVolume = mVolStore;
             GameManager.Instance.entityVolume = eVolStore;
-            GameManager.Instance.environmentVolume = envVolStore;
+            GameManager.Instance.environmentVolume = envVolStore;*/
             store = false;
         }
     }
@@ -103,6 +119,54 @@ public class SettingsMenuView : View
         if((tutToggle.isOn && !GameManager.Instance.tutorialText) || (!tutToggle.isOn && GameManager.Instance.tutorialText))
         {
             GameManager.Instance.tutorialText = !GameManager.Instance.tutorialText;
+        }
+    }
+
+    public void SetMasterVolume()
+    {
+        if (allValSet)
+        {
+            GameManager.Instance.masterVolume = master.value / 10f;
+
+            audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
+        }
+    }
+
+    public void SetUIVolume()
+    {
+        if (allValSet)
+        {
+            GameManager.Instance.uiVolume = ui.value / 10f;
+            audioS.PlayOneShot(sounds[0], GameManager.Instance.uiVolume * GameManager.Instance.masterVolume);
+        }
+            
+    }
+    public void SetMusicVolume()
+    {
+        if (allValSet)
+        {
+            GameManager.Instance.musicVolume = music.value / 10f;
+
+            audioS.PlayOneShot(sounds[0], GameManager.Instance.musicVolume * GameManager.Instance.masterVolume);
+        }
+    }
+    public void SetEnvironmentVolume()
+    {
+        if (allValSet)
+        {
+            GameManager.Instance.environmentVolume = environment.value / 10f;
+
+            audioS.PlayOneShot(sounds[6], GameManager.Instance.environmentVolume * GameManager.Instance.masterVolume);
+        }
+    }
+
+    public void SetEntityVolume()
+    {
+        if (allValSet)
+        {
+            GameManager.Instance.entityVolume = entity.value / 10f;
+
+            audioS.PlayOneShot(sounds[5], GameManager.Instance.entityVolume * GameManager.Instance.masterVolume);
         }
     }
 

@@ -8,6 +8,13 @@ public class ThrowableFoot : MonoBehaviour
     private Transform golemTransform;
     private Transform playerTransform;
 
+    [SerializeField] protected MeshRenderer meshRenderer;
+    [SerializeField] protected Rigidbody rb;
+   
+    public enum AnimationAxis { Rows, Columns }
+    [SerializeField] protected AnimationAxis axis;
+
+    [SerializeField] protected string rowProperty = "_CurrRow", colProperty = "_CurrCol";
 
     private Vector3 startAndEnd;
     private Vector3 mid;
@@ -16,10 +23,27 @@ public class ThrowableFoot : MonoBehaviour
     public bool damage = false;
     public bool end = false;
     private bool activeCoroutine = false;
+    // 15 8
 
     void Start()
     {
+        meshRenderer = GetComponent<MeshRenderer>();
+        string clipKey, frameKey;
+        if (axis == AnimationAxis.Rows)
+        {
+            clipKey = rowProperty;
+            frameKey = colProperty;
+        }
+        else
+        {
+            clipKey = colProperty;
+            frameKey = rowProperty;
+        }
+        meshRenderer.material.SetFloat(clipKey, 15);
+        meshRenderer.material.SetFloat(frameKey, 8);
+
         StartCoroutine(DoDuty());   // Do your sole purpose, little rock
+        
     }
 
     // Update is called once per frame

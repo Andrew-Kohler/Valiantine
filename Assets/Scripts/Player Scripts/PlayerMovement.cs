@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
 {
     Rigidbody rb;
 
-    float movementSpeed = 7f;
+    public float movementSpeed = 7f;
     public float horizontalInput;
     public float verticalInput;
     private Vector3 velocity;

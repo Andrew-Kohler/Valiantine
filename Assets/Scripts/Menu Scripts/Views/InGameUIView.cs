@@ -161,6 +161,8 @@ public class InGameUIView : View
 
     private IEnumerator DoOpeningConvo()
     {
+        float tempPlayerVol = GameManager.Instance.entityVolume;
+        GameManager.Instance.entityVolume = 0;
         int readtime = 5;
         yield return new WaitForSeconds(6f);
 
@@ -175,10 +177,18 @@ public class InGameUIView : View
 
         openingText4.UIFadeIn();
         yield return new WaitForSeconds(readtime);
+        GameManager.Instance.entityVolume = tempPlayerVol;
+        openingText1.UIFadeOutPiece();
+        openingText2.UIFadeOutPiece();
+        openingText3.UIFadeOutPiece();
+        openingText4.UIFadeOutPiece();
+
     }
 
     private IEnumerator DoClosingConvo()
     {
+        float tempPlayerVol = GameManager.Instance.entityVolume;
+        GameManager.Instance.entityVolume = 0;
         int readtime = 5;
         yield return new WaitForSeconds(2f);
 
@@ -193,6 +203,7 @@ public class InGameUIView : View
 
         closingText4.UIFadeIn();
         yield return new WaitForSeconds(readtime - 1f);
+        GameManager.Instance.entityVolume = tempPlayerVol;
     }
 
 }

@@ -1041,7 +1041,7 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitUntil(() => combatants[currentTurn].GetComponentInChildren<EnemyAnimatorS>().activeCoroutine == false);
 
-        combatants[currentTurn].GetComponent<EnemyMoves>().Move4(playerStats);
+        combatants[currentTurn].GetComponent<EnemyMoves>().Move2(playerStats);
 
         yield return new WaitUntil(() => combatants[currentTurn].GetComponent<EnemyMoves>().moveInProgress == false);
 

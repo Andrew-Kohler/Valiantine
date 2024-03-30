@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 640322516532187531}
   m_Layer: 0
   m_Name: Bearcrow Interaction
-  m_TagString: Untagged
+  m_TagString: Rubble
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -418,6 +418,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usePrompt: {fileID: 8147022806746755762}
   interactable: {fileID: 640322516532187529}
+  attachedToInteractable: 1
 --- !u!1 &8147022806746755762
 GameObject:
   m_ObjectHideFlags: 0
